@@ -8,12 +8,15 @@ class Token
 public:
     enum class Type
     {
-        WHITESPACE,
         NONE,
 
-        KEYWORD_NONE,
+        TAB,
+        SPACE,
+        NEWLINE,
 
-        IDENTIFIER_NONE,
+        KEYWORD,
+
+        IDENTIFIER,
 
         LITERAL_INTEGER,
         LITERAL_FLOAT,

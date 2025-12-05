@@ -5,7 +5,7 @@
 TokenSpec::TokenSpec()
 {
     // Keyword
-    push("^let", Token::Type::KEYWORD_NONE);
+    push("^let", Token::Type::KEYWORD);
 
     // Operator
     push("^\\=", Token::Type::OPERATOR_ASSIGNMENT);
@@ -17,10 +17,12 @@ TokenSpec::TokenSpec()
     push("^\\d+", Token::Type::LITERAL_INTEGER);
 
     // Identifier
-    push("^[a-zA-Z_]", Token::Type::IDENTIFIER_NONE);
+    push("^[a-zA-Z_]+", Token::Type::IDENTIFIER);
 
     // Other
-    push("^\\s+", Token::Type::WHITESPACE);
+    push("^\t", Token::Type::TAB);
+    push("^ ", Token::Type::SPACE);
+    push("^\n", Token::Type::NEWLINE);
 }
 
 TokenSpec::~TokenSpec()

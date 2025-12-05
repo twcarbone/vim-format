@@ -30,19 +30,40 @@ std::string Token::str() const
 
 std::string Token::toString() const
 {
-    return "[" + TypeToStr(m_eType) + "] " + m_sStr;
+    std::string lsTmp =  "[" + TypeToStr(m_eType) + "]";
+
+    switch (m_eType)
+    {
+        case Type::NEWLINE:
+        {
+            break;
+        }
+        default:
+        {
+            lsTmp += " " + m_sStr;
+        }
+    }
+
+    return lsTmp;
 }
 
 std::string Token::TypeToStr(Type aeType)
 {
     switch (aeType)
     {
-        case Type::WHITESPACE:
-            return "WHITESPACE";
-        case Type::KEYWORD_NONE:
-            return "KEYWORD_NONE";
-        case Type::IDENTIFIER_NONE:
-            return "IDENTIFIER_NONE";
+        case Type::SPACE:
+            return "SPACE";
+        case Type::NEWLINE:
+            return "NEWLINE";
+        case Type::TAB:
+            return "TAB";
+
+        case Type::KEYWORD:
+            return "KEYWORD";
+
+        case Type::IDENTIFIER:
+            return "IDENTIFIER";
+
         case Type::LITERAL_INTEGER:
             return "LITERAL_INTEGER";
         case Type::LITERAL_FLOAT:
@@ -51,6 +72,7 @@ std::string Token::TypeToStr(Type aeType)
             return "LITERAL_CHAR";
         case Type::LITERAL_STRING:
             return "LITERAL_STRING";
+
         case Type::OPERATOR_ARITHMETIC:
             return "OPERATOR_ARITHMETIC";
         case Type::OPERATOR_RELATIONAL:
@@ -63,6 +85,7 @@ std::string Token::TypeToStr(Type aeType)
             return "OPERATOR_BITWISE";
         case Type::OPERATOR_UNARY:
             return "OPERATOR_UNARY";
+
         case Type::SPECIAL_PAREN_OPEN:
             return "SPECIAL_PAREN_OPEN";
         case Type::SPECIAL_PAREN_CLOSED:
@@ -77,6 +100,7 @@ std::string Token::TypeToStr(Type aeType)
             return "SPECIAL_BRACE_CLOSED";
         case Type::SPECIAL_SEMICOLON:
             return "SPECIAL_SEMICOLON";
+
         case Type::NONE:
         default:
             break;
