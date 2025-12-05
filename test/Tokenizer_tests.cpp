@@ -42,6 +42,7 @@ TEST_F(SingleTokenTest, FloatLiteral)
 TEST_F(SingleTokenTest, StringLiteral)
 {
     do_test("'abcd'", Token::Type::LITERAL_STRING);
+    do_test("\"abcd\"", Token::Type::LITERAL_STRING);
 }
 
 TEST(SingleStatementTest, Assignment)
