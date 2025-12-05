@@ -39,6 +39,13 @@ TEST_F(SingleTokenTest, FloatLiteral)
     do_test("-3.1416e+88", Token::Type::LITERAL_FLOAT);
 }
 
+TEST_F(SingleTokenTest, WhiteSpace)
+{
+    do_test("\t", Token::Type::TAB);
+    do_test(" ", Token::Type::SPACE);
+    do_test("\n", Token::Type::NEWLINE);
+}
+
 TEST_F(SingleTokenTest, StringLiteral)
 {
     do_test("'abcd'", Token::Type::LITERAL_STRING);
