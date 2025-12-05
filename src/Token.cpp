@@ -30,7 +30,7 @@ std::string Token::str() const
 
 std::string Token::toString() const
 {
-    std::string lsTmp =  "[" + TypeToStr(m_eType) + "]";
+    std::string lsTmp = "[" + TypeToStr(m_eType) + "]";
 
     switch (m_eType)
     {
@@ -107,4 +107,14 @@ std::string Token::TypeToStr(Type aeType)
     }
 
     return "NONE";
+}
+
+bool operator==(const Token& lhs, const Token& rhs)
+{
+    return lhs.m_eType == rhs.m_eType && lhs.m_sStr == rhs.m_sStr;
+}
+
+bool operator!=(const Token& lhs, const Token& rhs)
+{
+    return !(lhs == rhs);
 }

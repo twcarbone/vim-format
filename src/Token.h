@@ -49,6 +49,9 @@ public:
 
     std::string toString() const;
 
+    friend bool operator==(const Token& lhs, const Token& rhs);
+    friend bool operator!=(const Token& lhs, const Token& rhs);
+
 private:
     Type m_eType;
     std::string m_sStr;
