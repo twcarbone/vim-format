@@ -4,7 +4,13 @@
 
 int main(int argc, char** argv)
 {
-    std::string lsText(argv[1]);
+    char c;
+    std::string lsText;
+    while (std::cin.get(c))
+    {
+        lsText += c;
+    }
+
     Tokenizer lcTokenizer(lsText);
     lcTokenizer.tokenize();
 
