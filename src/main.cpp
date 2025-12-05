@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 
 #include "Tokenizer.h"
@@ -36,12 +37,31 @@ int main(int argc, char** argv)
             usage();
             return 0;
         }
-        else if (lsArg == "-")
+        else if (i == argc - 1)
         {
             char c;
-            while (std::cin.get(c))
+
+            if (lsArg == "-")
             {
-                lsText += c;
+                while (std::cin.get(c))
+                {
+                    lsText += c;
+                }
+            }
+            else
+            {
+                std::ifstream lcIfStream { lsArg };
+
+                if (!lcIfStream.is_open())
+                {
+                    std::cerr << "Error: cannot open for reading: " << lsArg << std::endl;
+                    return 1;
+                }
+
+                while (lcIfStream.get(c))
+                {
+                    lsText += c;
+                }
             }
         }
         else
