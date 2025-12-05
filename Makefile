@@ -9,7 +9,7 @@ build: configure
 	cmake --build build/
 
 test: build
-	cd build/test && ctest
+	cd build/test && ./unittests
 
 clean:
 	rm -rf build/
