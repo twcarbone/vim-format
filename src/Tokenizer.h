@@ -18,6 +18,7 @@ public:
 
     void tokenize();
 
+    const Token& token(size_t i) const;
     std::vector<Token*>* tokens() const;
 
 private:

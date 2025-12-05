@@ -43,6 +43,12 @@ std::vector<Token*>* Tokenizer::tokens() const
     return m_pTokens;
 }
 
+const Token& Tokenizer::token(size_t anIdx) const
+{
+    // TODO: throw IndexError
+    return *m_pTokens->at(anIdx);
+}
+
 Token* Tokenizer::next()
 {
     const std::string& lsRemainingText = m_sText.substr(m_nCursor, -1);
