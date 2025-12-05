@@ -13,8 +13,21 @@ TokenSpec::TokenSpec()
     // Special
     push("^;", Token::Type::SPECIAL_SEMICOLON);
 
-    // Literal
-    push("^\\d+", Token::Type::LITERAL_INTEGER);
+    // String constant                  :h string
+    push("^\"[^\"]*\"", Token::Type::LITERAL_STRING);
+
+    // Literal string                   :h literal-string
+    push("^'[^']*'", Token::Type::LITERAL_STRING);
+
+    // Literal float                    :h floating-point-format
+    push("^[\\+-]?\\d\\.\\d+[Ee][\\+-]?\\d+", Token::Type::LITERAL_FLOAT);
+    push("^[\\+-]?\\d+\\.\\d+", Token::Type::LITERAL_FLOAT);
+
+    // Literal integer                  :h expr-number
+    push("^0[Xx]\\d+", Token::Type::LITERAL_INTEGER);
+    push("^0[Oo]\\d+", Token::Type::LITERAL_INTEGER);
+    push("^0[Bb][01]+", Token::Type::LITERAL_INTEGER);
+    push("^-?\\d+", Token::Type::LITERAL_INTEGER);
 
     // Identifier
     push("^[a-zA-Z_]+", Token::Type::IDENTIFIER);
