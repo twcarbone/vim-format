@@ -8,6 +8,7 @@ class Token
 public:
     enum class Type
     {
+        WHITESPACE,
         NONE,
 
         KEYWORD_NONE,

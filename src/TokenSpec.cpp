@@ -18,6 +18,9 @@ TokenSpec::TokenSpec()
 
     // Identifier
     push("^[a-zA-Z_]", Token::Type::IDENTIFIER_NONE);
+
+    // Other
+    push("^\\s+", Token::Type::WHITESPACE);
 }
 
 TokenSpec::~TokenSpec()

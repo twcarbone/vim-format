@@ -37,6 +37,8 @@ std::string Token::TypeToStr(Type aeType)
 {
     switch (aeType)
     {
+        case Type::WHITESPACE:
+            return "WHITESPACE";
         case Type::KEYWORD_NONE:
             return "KEYWORD_NONE";
         case Type::IDENTIFIER_NONE:
