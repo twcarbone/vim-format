@@ -1,18 +1,57 @@
 #include <gtest/gtest.h>
 
+#include <fstream>
+#include <string>
+
 #include "Token.h"
 #include "Tokenizer.h"
 
-class SingleTokenTest : public testing::Test
+class TokenizerTest : public testing::Test
+{
+protected:
+    Tokenizer m_cTokenizer;
+
+    void tokenize_file(const std::string& asPath)
+    {
+        std::string lsText;
+        std::ifstream lcIfStream(asPath);
+
+        char c;
+        while (lcIfStream.get(c))
+        {
+            lsText += c;
+        }
+
+        tokenize_str(lsText);
+    }
+
+    void tokenize_str(const std::string& asText)
+    {
+        m_cTokenizer.tokenize(asText);
+    }
+
+    void expect_tokens(size_t anCount)
+    {
+        EXPECT_EQ(m_cTokenizer.tokens()->size(), anCount);
+    }
+
+    void expect_token(size_t anIdx, const std::string& asTokenStr, const Token::Type& aeTokenType)
+    {
+        const Token lcExp(aeTokenType, asTokenStr);
+        const Token& lcAct = m_cTokenizer.token(anIdx);
+        EXPECT_EQ(lcAct, lcExp) << "Expected " << lcExp.toString() << ", but got " << lcAct.toString();
+    }
+};
+
+class SingleTokenTest : public TokenizerTest
 {
 protected:
     void do_test(const std::string& asTokenStr, const Token::Type& aeTokenType)
     {
-        Tokenizer lcTokenizer(asTokenStr);
-        lcTokenizer.tokenize();
+        tokenize_str(asTokenStr);
 
-        EXPECT_EQ(lcTokenizer.tokens()->size(), 1);
-        EXPECT_EQ(lcTokenizer.token(0), Token(aeTokenType, asTokenStr));
+        expect_tokens(1);
+        expect_token(0, asTokenStr, aeTokenType);
     }
 };
 
@@ -52,17 +91,18 @@ TEST_F(SingleTokenTest, StringLiteral)
     do_test("\"abcd\"", Token::Type::LITERAL_STRING);
 }
 
-TEST(SingleStatementTest, Assignment)
+TEST_F(TokenizerTest, Test01)
 {
-    Tokenizer lcTokenizer("let i = 42");
-    lcTokenizer.tokenize();
+    // TODO: consider cmake 'configure_file(...)' to copy from src to build
+    tokenize_file("../../test/sample/01.vim");
 
-    EXPECT_EQ(lcTokenizer.tokens()->size(), 7);
-    EXPECT_EQ(lcTokenizer.token(0), Token(Token::Type::KEYWORD, "let"));
-    EXPECT_EQ(lcTokenizer.token(1), Token(Token::Type::SPACE, " "));
-    EXPECT_EQ(lcTokenizer.token(2), Token(Token::Type::IDENTIFIER, "i"));
-    EXPECT_EQ(lcTokenizer.token(3), Token(Token::Type::SPACE, " "));
-    EXPECT_EQ(lcTokenizer.token(4), Token(Token::Type::OPERATOR_ASSIGNMENT, "="));
-    EXPECT_EQ(lcTokenizer.token(5), Token(Token::Type::SPACE, " "));
-    EXPECT_EQ(lcTokenizer.token(6), Token(Token::Type::LITERAL_INTEGER, "42"));
+    expect_tokens(8);
+    expect_token(0, "let", Token::Type::KEYWORD);
+    expect_token(1, " ", Token::Type::SPACE);
+    expect_token(2, "i", Token::Type::IDENTIFIER);
+    expect_token(3, " ", Token::Type::SPACE);
+    expect_token(4, "=", Token::Type::OPERATOR_ASSIGNMENT);
+    expect_token(5, " ", Token::Type::SPACE);
+    expect_token(6, "42", Token::Type::LITERAL_INTEGER);
+    expect_token(7, "\n", Token::Type::NEWLINE);
 }
