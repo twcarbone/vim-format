@@ -13,10 +13,11 @@
 class Tokenizer
 {
 public:
+    Tokenizer();
     Tokenizer(const std::string& text);
     ~Tokenizer();
 
-    void tokenize();
+    void tokenize(const std::string& text = "");
 
     const Token& token(size_t i) const;
     std::vector<Token*>* tokens() const;
@@ -29,6 +30,7 @@ private:
     TokenSpec* m_pTokenSpec;
 
     bool hasMoreTokens() const;
+    void freeTokens() const;
 
     Token* next();
 };

@@ -4,6 +4,11 @@
 #include "Token.h"
 #include "Tokenizer.h"
 
+Tokenizer::Tokenizer() :
+    Tokenizer("")
+{
+}
+
 Tokenizer::Tokenizer(const std::string& asText) :
     m_nCursor { 0 },
     m_sText { asText }
@@ -14,17 +19,24 @@ Tokenizer::Tokenizer(const std::string& asText) :
 
 Tokenizer::~Tokenizer()
 {
-    for (const Token* pToken : *m_pTokens)
-    {
-        delete pToken;
-    }
-    m_pTokens->clear();
-
+    freeTokens();
     delete m_pTokenSpec;
 }
 
-void Tokenizer::tokenize()
+void Tokenizer::tokenize(const std::string& asText)
 {
+    freeTokens();
+    m_nCursor = 0;
+
+    if (!asText.empty())
+    {
+        m_sText = asText;
+    }
+    else if (m_sText.empty())
+    {
+        throw std::runtime_error("Text is empty");
+    }
+
     while (hasMoreTokens())
     {
         Token* pToken = next();
@@ -66,4 +78,14 @@ Token* Tokenizer::next()
 bool Tokenizer::hasMoreTokens() const
 {
     return m_nCursor < m_sText.size();
+}
+
+void Tokenizer::freeTokens() const
+{
+    for (const Token* pToken : *m_pTokens)
+    {
+        delete pToken;
+    }
+
+    m_pTokens->clear();
 }
