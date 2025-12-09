@@ -32,6 +32,13 @@ private:
     bool hasMoreTokens() const;
     void freeTokens() const;
 
+    /**
+     *  @brief
+     *      Return the next Token. Returns nullptr at EOF.
+     *
+     *  @throws
+     *      std::runtime_error if Token is unrecognized.
+     */
     Token* next();
 };
 

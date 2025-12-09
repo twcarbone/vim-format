@@ -28,24 +28,11 @@ void Tokenizer::tokenize(const std::string& asText)
     freeTokens();
     m_nCursor = 0;
 
-    if (!asText.empty())
-    {
-        m_sText = asText;
-    }
-    else if (m_sText.empty())
-    {
-        throw std::runtime_error("Text is empty");
-    }
+    m_sText = asText;
 
-    while (hasMoreTokens())
+    Token* pToken;
+    while ((pToken = next()) != nullptr)
     {
-        Token* pToken = next();
-
-        if (pToken == nullptr)
-        {
-            throw std::runtime_error("Unrecognized token");
-        }
-
         m_pTokens->push_back(pToken);
     }
 }
@@ -63,14 +50,21 @@ const Token& Tokenizer::token(size_t anIdx) const
 
 Token* Tokenizer::next()
 {
+    if (!hasMoreTokens())
+    {
+        return nullptr;
+    }
+
     const std::string& lsRemainingText = m_sText.substr(m_nCursor, -1);
 
     Token* pToken = m_pTokenSpec->match(lsRemainingText);
 
-    if (pToken != nullptr)
+    if (pToken == nullptr)
     {
-        m_nCursor += pToken->str().size();
+        throw std::runtime_error("Unrecognized token");
     }
+
+    m_nCursor += pToken->str().size();
 
     return pToken;
 }
