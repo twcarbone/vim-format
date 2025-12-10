@@ -1,24 +1,27 @@
-#include <iostream>
+#include <vector>
 
 #include "Node.h"
 #include "NodeVisitor.h"
 
-NodeVisitor::NodeVisitor() :
-    m_nDepth { 0 }
+std::vector<const Node*> NodeVisitor::accumulate(const Node* apNode, NodeVisitor::Order aeOrder)
 {
-}
+    std::vector<const Node*> llNodes;
 
-void NodeVisitor::map(const Node* apNode)
-{
-    std::cout << std::string(2 * m_nDepth, ' ');
-    std::cout << apNode->toString() << std::endl;
-
-    m_nDepth++;
-
-    for (const Node* pChildNode : apNode->children())
+    if (aeOrder == Order::PRE)
     {
-        map(pChildNode);
+        llNodes.push_back(apNode);
     }
 
-    m_nDepth--;
+    for (const Node* pChild : apNode->children())
+    {
+        std::vector<const Node*> llAncestors = accumulate(pChild, aeOrder);
+        llNodes.insert(llNodes.end(), llAncestors.begin(), llAncestors.end());
+    }
+
+    if (aeOrder == Order::POST)
+    {
+        llNodes.push_back(apNode);
+    }
+
+    return llNodes;
 }

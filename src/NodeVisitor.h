@@ -1,22 +1,24 @@
 #ifndef NODEVISITOR_H
 #define NODEVISITOR_H
 
-class Node;
+#include <vector>
+
+#include "Node.h"
 
 class NodeVisitor
 {
 public:
-    NodeVisitor();
-    ~NodeVisitor() = default;
+    enum class Order
+    {
+        PRE,
+        POST
+    };
 
     /**
      *  @brief
-     *      Traverse and print all descendants of 'node'.
+     *      Accumulate Nodes from a depth-first 'order' traversal.
      */
-    void map(const Node* node);
-
-private:
-    int m_nDepth;
+    std::vector<const Node*> accumulate(const Node* node, Order order);
 };
 
 #endif  // NODEVISITOR_H
