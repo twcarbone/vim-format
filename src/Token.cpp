@@ -88,10 +88,10 @@ std::string Token::TypeToStr(Type aeType)
         case Type::OPERATOR_UNARY:
             return "OPERATOR_UNARY";
 
-        case Type::SPECIAL_PAREN_OPEN:
-            return "SPECIAL_PAREN_OPEN";
-        case Type::SPECIAL_PAREN_CLOSED:
-            return "SPECIAL_PAREN_CLOSED";
+        case Type::L_PAREN:
+            return "L_PAREN";
+        case Type::R_PAREN:
+            return "R_PAREN";
         case Type::SPECIAL_BRACKET_OPEN:
             return "SPECIAL_BRACKET_OPEN";
         case Type::SPECIAL_BRACKET_CLOSED:

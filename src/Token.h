@@ -31,8 +31,8 @@ public:
         OPERATOR_BITWISE,
         OPERATOR_UNARY,
 
-        SPECIAL_PAREN_OPEN,
-        SPECIAL_PAREN_CLOSED,
+        L_PAREN,
+        R_PAREN,
         SPECIAL_BRACKET_OPEN,
         SPECIAL_BRACKET_CLOSED,
         SPECIAL_BRACE_OPEN,
