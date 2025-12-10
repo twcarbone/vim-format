@@ -50,8 +50,9 @@ protected:
     {
         tokenize_str(asTokenStr);
 
-        expect_tokens(1);
+        expect_tokens(2);
         expect_token(0, asTokenStr, aeTokenType);
+        expect_token(1, "EOF", Token::Type::END);
     }
 };
 
@@ -96,7 +97,7 @@ TEST_F(TokenizerTest, Test01)
     // TODO: consider cmake 'configure_file(...)' to copy from src to build
     tokenize_file("../../test/sample/01.vim");
 
-    expect_tokens(8);
+    expect_tokens(9);
     expect_token(0, "let", Token::Type::KEYWORD);
     expect_token(1, " ", Token::Type::SPACE);
     expect_token(2, "i", Token::Type::IDENTIFIER);
@@ -105,4 +106,5 @@ TEST_F(TokenizerTest, Test01)
     expect_token(5, " ", Token::Type::SPACE);
     expect_token(6, "42", Token::Type::LITERAL_INTEGER);
     expect_token(7, "\n", Token::Type::NEWLINE);
+    expect_token(8, "EOF", Token::Type::END);
 }

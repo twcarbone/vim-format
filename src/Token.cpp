@@ -57,6 +57,8 @@ std::string Token::TypeToStr(Type aeType)
             return "NEWLINE";
         case Type::TAB:
             return "TAB";
+        case Type::END:
+            return "EOF";
 
         case Type::KEYWORD:
             return "KEYWORD";

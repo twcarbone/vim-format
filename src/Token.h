@@ -11,6 +11,7 @@ public:
         NONE,
 
         TAB,
+        END,  // EOF
         SPACE,
         NEWLINE,
 

@@ -28,13 +28,15 @@ void Tokenizer::tokenize(const std::string& asText)
     freeTokens();
     m_nCursor = 0;
 
-    m_sText = asText;
-
-    Token* pToken;
-    while ((pToken = next()) != nullptr)
+    if (!asText.empty())
     {
-        m_pTokens->push_back(pToken);
+        m_sText = asText;
     }
+
+    do
+    {
+        m_pTokens->push_back(next());
+    } while (m_pTokens->back()->type() != Token::Type::END);
 }
 
 std::vector<Token*>* Tokenizer::tokens() const
@@ -52,7 +54,8 @@ Token* Tokenizer::next()
 {
     if (!hasMoreTokens())
     {
-        return nullptr;
+        // TODO: throw exception if EOF has already been returned
+        return new Token(Token::Type::END, "EOF");
     }
 
     const std::string& lsRemainingText = m_sText.substr(m_nCursor, -1);
