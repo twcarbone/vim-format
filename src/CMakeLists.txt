@@ -2,6 +2,7 @@ add_library(
     vimformat
     STATIC
     Node.cpp
+    NodeVisitor.cpp
     Token.cpp
     TokenSpec.cpp
     Tokenizer.cpp
