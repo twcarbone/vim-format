@@ -16,6 +16,7 @@ public:
     virtual ~Node();
 
     void add(Node* node);
+    int level() const;
 
     Node* parent() const;
     std::vector<Node*> children() const;

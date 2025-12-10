@@ -24,6 +24,20 @@ void Node::add(Node* apChild)
     m_lChildren.push_back(apChild);
 }
 
+int Node::level() const
+{
+    int lnLevel = 0;
+    const Node* pCurrent = this;
+
+    while (pCurrent->parent() != nullptr)
+    {
+        pCurrent = pCurrent->parent();
+        lnLevel++;
+    }
+
+    return lnLevel;
+}
+
 Node* Node::parent() const
 {
     return m_pParent;
