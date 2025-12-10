@@ -75,11 +75,6 @@ Token* TokenNode::token() const
 
 TokenNode::~TokenNode()
 {
-    // TODO: Who owns the Token?
-    // If calling Tokenizer::tokenize(), the Tokenizer destructor deletes all of the
-    // buffered Tokens. But it calling Parser::parse(...), The Tokenizer has no buffered
-    // Tokens and we need this delete.
-    delete m_pToken;
 }
 
 std::string TokenNode::toString() const

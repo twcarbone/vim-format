@@ -33,10 +33,15 @@ void Tokenizer::tokenize(const std::string& asText)
         m_sText = asText;
     }
 
-    do
+    while (true)
     {
-        m_pTokens->push_back(next());
-    } while (m_pTokens->back()->type() != Token::Type::END);
+        next();
+
+        if (m_pTokens->back()->type() == Token::Type::END)
+        {
+            break;
+        }
+    }
 }
 
 std::vector<Token*>* Tokenizer::tokens() const
@@ -52,23 +57,28 @@ const Token& Tokenizer::token(size_t anIdx) const
 
 Token* Tokenizer::next()
 {
+    Token* pToken;
+
     if (!hasMoreTokens())
     {
         // TODO: throw exception if EOF has already been returned
-        return new Token(Token::Type::END, "EOF");
+        pToken = new Token(Token::Type::END, "EOF");
     }
-
-    const std::string& lsRemainingText = m_sText.substr(m_nCursor, -1);
-
-    Token* pToken = m_pTokenSpec->match(lsRemainingText);
-
-    if (pToken == nullptr)
+    else
     {
-        throw std::runtime_error("Unrecognized token");
+        const std::string& lsRemainingText = m_sText.substr(m_nCursor, -1);
+
+        pToken = m_pTokenSpec->match(lsRemainingText);
+
+        if (pToken == nullptr)
+        {
+            throw std::runtime_error("Unrecognized token");
+        }
+
+        m_nCursor += pToken->str().size();
     }
 
-    m_nCursor += pToken->str().size();
-
+    m_pTokens->push_back(pToken);
     return pToken;
 }
 
