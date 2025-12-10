@@ -50,14 +50,14 @@ public:
 
     std::string toString() const;
 
+    static std::string TypeToStr(Type type);
+
     friend bool operator==(const Token& lhs, const Token& rhs);
     friend bool operator!=(const Token& lhs, const Token& rhs);
 
 private:
     Type m_eType;
     std::string m_sStr;
-
-    static std::string TypeToStr(Type type);
 };
 
 #endif  // TOKEN_H
