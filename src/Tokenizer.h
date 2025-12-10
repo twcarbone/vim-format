@@ -17,6 +17,22 @@ public:
     Tokenizer(const std::string& text);
     ~Tokenizer();
 
+    /**
+     *  @brief
+     *      Return the next Token. Returns 'END' Token at EOF.
+     *
+     *  @throws
+     *      std::runtime_error if Token is unrecognized.
+     */
+    Token* next();
+
+    /**
+     *  @brief
+     *      Fill buffer of with all Tokens.
+     *
+     *  @throws
+     *      See Tokenizer::next().
+     */
     void tokenize(const std::string& text = "");
 
     const Token& token(size_t i) const;
@@ -31,15 +47,6 @@ private:
 
     bool hasMoreTokens() const;
     void freeTokens() const;
-
-    /**
-     *  @brief
-     *      Return the next Token. Returns nullptr at EOF.
-     *
-     *  @throws
-     *      std::runtime_error if Token is unrecognized.
-     */
-    Token* next();
 };
 
 #endif  // TOKENIZER_H
