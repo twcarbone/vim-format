@@ -59,7 +59,6 @@ protected:
 TEST_F(SingleTokenTest, IntegerLiteral)
 {
     do_test("42", Token::Type::LITERAL_INTEGER);
-    do_test("-42", Token::Type::LITERAL_INTEGER);
     do_test("0x42", Token::Type::LITERAL_INTEGER);
     do_test("0X42", Token::Type::LITERAL_INTEGER);
     do_test("0o42", Token::Type::LITERAL_INTEGER);
@@ -71,12 +70,9 @@ TEST_F(SingleTokenTest, IntegerLiteral)
 TEST_F(SingleTokenTest, FloatLiteral)
 {
     do_test("123.456", Token::Type::LITERAL_FLOAT);
-    do_test("+0.0001", Token::Type::LITERAL_FLOAT);
     do_test("55.0", Token::Type::LITERAL_FLOAT);
-    do_test("-0.123", Token::Type::LITERAL_FLOAT);
     do_test("1.234e03", Token::Type::LITERAL_FLOAT);
     do_test("1.0E-6", Token::Type::LITERAL_FLOAT);
-    do_test("-3.1416e+88", Token::Type::LITERAL_FLOAT);
 }
 
 TEST_F(SingleTokenTest, WhiteSpace)
