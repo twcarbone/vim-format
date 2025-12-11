@@ -49,6 +49,8 @@ public:
 
     ~Token();
 
+    bool ambiguous() const;
+
     Type type() const;
     std::string str() const;
 

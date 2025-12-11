@@ -18,6 +18,18 @@ Token::~Token()
 {
 }
 
+bool Token::ambiguous() const
+{
+    switch (m_eType)
+    {
+        case Type::PLUS:
+        case Type::MINUS:
+            return true;
+        default:
+            return false;
+    }
+}
+
 Token::Type Token::type() const
 {
     return m_eType;
@@ -30,11 +42,17 @@ std::string Token::str() const
 
 std::string Token::toString() const
 {
-    std::string lsTmp = "[" + TypeToStr(m_eType) + "]";
+    std::string lsTmp = "[Token] " + TypeToStr(m_eType);
+
+    if (ambiguous())
+    {
+        lsTmp += " (A)";
+    }
 
     switch (m_eType)
     {
         case Type::NEWLINE:
+        case Type::END:
         {
             break;
         }
