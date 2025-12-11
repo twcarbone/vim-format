@@ -3,8 +3,7 @@
 #include "Token.h"
 
 Token::Token() :
-    m_eType { Token::Type::NONE },
-    m_sStr { "null" }
+    Token(Type::NONE, "null")
 {
 }
 
