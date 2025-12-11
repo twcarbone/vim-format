@@ -57,13 +57,9 @@ std::string Token::toString() const
     {
         case Type::NEWLINE:
         case Type::END:
-        {
             break;
-        }
         default:
-        {
             lsTmp += " " + m_sStr;
-        }
     }
 
     return lsTmp;
