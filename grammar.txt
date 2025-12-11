@@ -1,0 +1,211 @@
+==============================================================================
+1. Tokens
+
+CMD_LET             let
+CMD_ECHO            echo
+CMD_SET             set
+
+GEN_PLUS            +
+GEN_MINUS           -
+GEN_QUESTION        ?
+GEN_NAME            [^0-9][a-zA-Z0-9_]
+
+OP_ADD              +
+OP_SUB              -
+OP_UNARY_PLUS       +
+OP_UNARY_MINUS      -
+OP_MUL              *
+OP_DIV              /
+OP_MODULO           %
+OP_EQUAL            ==
+OP_NEQUAL           !=
+OP_GT               >
+OP_GTE              >=
+OP_LT               <
+OP_LTE              <=
+OP_MATCH            =~
+OP_NMATCH           !~
+OP_IS               is
+OP_ISNOT            isnot
+OP_OR               ||
+OP_AND              &&
+OP_MATCH_CASE       #
+OP_IGNORE_CASE      ?
+OP_TERNARY_IF       ?
+OP_TERNARY_ELSE     :
+OP_FALSEY           ??
+OP_LSHIFT           <<
+OP_RSHIFT           >>
+OP_CAT_OLD          .
+OP_CAT_NEW          ..
+OP_LOGICAL_NOT      !
+OP_OPTION           &
+
+ASSIGN_ADD          +=
+ASSIGN_MINUS        -=
+ASSIGN_MUL          *=
+ASSIGN_DIV          /=
+ASSIGN_EQ           =
+ASSIGN_MODULO       %=
+ASSIGN_CAT_OLD      .=
+ASSIGN_CAT_NEW      ..=
+
+L_PAREN             (
+R_PAREN             )
+L_BRACKET           [
+R_BRACKET           ]
+COMMA               ,
+
+IF                  if
+ELSEIF              elseif
+ELSE                else
+ENDIF               endif
+WHILE               while
+ENDWHILE            endwhile
+FOR                 for
+IN                  in
+ENDFOR              endfor
+BREAK               break
+CONTINUE            continue
+
+END                 End of file
+TAB                 0x09
+NEWLINE             0x0a
+SPACE               0x20
+
+OPTION              [a-z]
+IDENTIFIER          [^0-9][a-zA-Z0-9_]
+
+==============================================================================
+2. Grammar
+
+program
+        : stmt_list
+        | END
+
+stmt_list
+        : stmt NEWLINE
+        | stmt_list stmt NEWLINE
+
+stmt
+        : select_stmt
+        | iteration_stmt
+        | jump_stmt
+        | CMD_LET IDENTIFIER assign_op expr1
+        | CMD_ECHO expr1
+        | CMD_SET OPTION
+
+select_stmt
+        : IF expr1 stmt_list ENDIF
+        | IF expr1 stmt_list else_stmt ENDIF
+        | IF expr1 stmt_list elseif_stmt else_stmt ENDIF
+
+elseif_stmt
+        : ELSEIF expr1 stmt_list
+        : elseif_stmt ELSEIF expr1 stmt_list
+
+else_stmt
+        : ELSE stmt_list
+
+iteration_stmt
+        : WHILE expr1 stmt_list ENDWHILE
+        : FOR IDENTIFIER IN list_expr stmt_list ENDFOR
+
+jump_stmt
+        : BREAK
+        | CONTINUE
+
+assign_op
+        : ASSIGN_ADD
+        | ASSIGN_MINUS
+        | ASSIGN_MUL
+        | ASSIGN_DIV
+        | ASSIGN_EQ
+        | ASSIGN_MODULO
+        | ASSIGN_CAT_NEW
+        | ASSIGN_CAT_OLD
+
+expr1
+        : expr2
+        | expr2 OP_FALSEY expr1
+        | expr2 OP_TERNARY_IF expr1 OP_TERNARY_ELSE expr1
+
+expr2
+        : expr3
+        | expr2 OP_OR expr3
+
+expr3
+        : expr4
+        | expr3 OP_AND expr4
+
+expr4
+        : expr5
+        | expr4 expr4_op expr5
+
+expr4_op
+        : expr4_primary_op
+        | expr4_primary_op OP_MATCH_CASE
+        | expr4_primary_op OP_IGNORE_CASE
+
+expr4_primary_op
+        : OP_EQUAL
+        | OP_NEQUAL
+        | OP_GT
+        | OP_GTE
+        | OP_LT
+        | OP_LTE
+        | OP_MATCH
+        | OP_NMATCH
+        | OP_IS
+        | OP_ISNOT
+
+expr5
+        : expr6
+        | expr5 OP_LSHIFT expr6
+        | expr5 OP_RSHIFT expr6
+
+expr6
+        : expr7
+        | expr6 OP_ADD expr7
+        | expr6 OP_SUB expr7
+        | expr6 OP_CAT_OLD expr7
+        | expr6 OP_CAT_NEW expr7
+
+expr7
+        : expr8
+        | expr7 OP_MUL expr11
+        | expr7 OP_DIV expr11
+        | expr7 OP_MODULO expr11
+
+expr8
+        : expr9
+        | TODO
+
+expr9
+        : expr10
+        | OP_LOGICAL_NOT expr9
+        | OP_UNARY_MINUS expr9
+        | OP_UNARY_PLUS expr9
+
+expr10:
+        : expr11
+        | TODO
+
+expr11
+        : INTEGER
+        | FLOAT
+        | STRING
+        | list_expr
+        | OP_OPTION OPTION
+        | L_PAREN expr1 R_PAREN
+        | IDENTIFIER
+
+list_expr
+        : IDENTIFIER
+        | STRING
+        | L_BRACKET R_BRACKET
+        | L_BRACKET list_items R_BRACKET
+
+list_items
+        : expr1
+        : list_items COMMA expr1
