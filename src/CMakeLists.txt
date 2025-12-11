@@ -3,6 +3,7 @@ add_library(
     STATIC
     Node.cpp
     NodeVisitor.cpp
+    Parser.cpp
     Token.cpp
     TokenSpec.cpp
     Tokenizer.cpp
