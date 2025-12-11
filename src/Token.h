@@ -50,6 +50,7 @@ public:
     ~Token();
 
     bool ambiguous() const;
+    bool whitespace() const;
 
     Type type() const;
     void setType(Type type);

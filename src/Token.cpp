@@ -29,6 +29,19 @@ bool Token::ambiguous() const
     }
 }
 
+bool Token::whitespace() const
+{
+    switch (m_eType)
+    {
+        case Type::TAB:
+        case Type::SPACE:
+        case Type::NEWLINE:
+            return true;
+        default:
+            return false;
+    }
+}
+
 Token::Type Token::type() const
 {
     return m_eType;
