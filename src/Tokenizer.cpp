@@ -75,6 +75,11 @@ Token* Tokenizer::next()
             throw std::runtime_error("Unrecognized token");
         }
 
+        if (pToken->ambiguous() && !disambiguate(pToken))
+        {
+            throw std::runtime_error("Cannot disambiguate " + pToken->toString());
+        }
+
         m_nCursor += pToken->str().size();
     }
 
@@ -95,4 +100,55 @@ void Tokenizer::freeTokens() const
     }
 
     m_pTokens->clear();
+}
+
+bool Tokenizer::disambiguate(Token* apCurrentToken)
+{
+    // MINUS
+
+    if (apCurrentToken->type() == Token::Type::MINUS)
+    {
+        if (m_pTokens->empty())
+        {
+            apCurrentToken->setType(Token::Type::OP_MINUS);
+        }
+        else
+        {
+            switch (m_pTokens->back()->type())
+            {
+                case Token::Type::FLOAT:
+                case Token::Type::INTEGER:
+                case Token::Type::R_PAREN:
+                    apCurrentToken->setType(Token::Type::OP_SUB);
+                    break;
+                default:
+                    apCurrentToken->setType(Token::Type::OP_MINUS);
+            }
+        }
+    }
+
+    // PLUS
+
+    else if (apCurrentToken->type() == Token::Type::PLUS)
+    {
+        if (m_pTokens->empty())
+        {
+            apCurrentToken->setType(Token::Type::OP_PLUS);
+        }
+        else
+        {
+            switch (m_pTokens->back()->type())
+            {
+                case Token::Type::FLOAT:
+                case Token::Type::INTEGER:
+                case Token::Type::R_PAREN:
+                    apCurrentToken->setType(Token::Type::OP_ADD);
+                    break;
+                default:
+                    apCurrentToken->setType(Token::Type::OP_PLUS);
+            }
+        }
+    }
+
+    return !apCurrentToken->ambiguous();
 }

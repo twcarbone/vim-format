@@ -23,6 +23,7 @@ public:
      *
      *  @throws
      *      std::runtime_error if Token is unrecognized.
+     *      std::runtime_error if Token cannot be disambiguated.
      */
     Token* next();
 
@@ -45,8 +46,9 @@ private:
 
     TokenSpec* m_pTokenSpec;
 
-    bool hasMoreTokens() const;
     void freeTokens() const;
+    bool disambiguate(Token* token);
+    bool hasMoreTokens() const;
 };
 
 #endif  // TOKENIZER_H
