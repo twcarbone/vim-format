@@ -8,26 +8,32 @@ TokenSpec::TokenSpec()
     push("^let", Token::Type::KEYWORD);
 
     // Operator
-    push("^\\=", Token::Type::OPERATOR_ASSIGNMENT);
+    push("^\\=", Token::Type::OP_ASSIGN);
+    push("^\\*", Token::Type::OP_MUL);
+    push("^\\/", Token::Type::OP_DIV);
+    push("^\\+", Token::Type::PLUS);
+    push("^\\-", Token::Type::MINUS);
 
     // Special
-    push("^;", Token::Type::SPECIAL_SEMICOLON);
+    push("^;", Token::Type::SEMICOLON);
+    push("^\\(", Token::Type::L_PAREN);
+    push("^\\)", Token::Type::R_PAREN);
 
     // String constant                  :h string
-    push("^\"[^\"]*\"", Token::Type::LITERAL_STRING);
+    push("^\"[^\"]*\"", Token::Type::STRING);
 
     // Literal string                   :h literal-string
-    push("^'[^']*'", Token::Type::LITERAL_STRING);
+    push("^'[^']*'", Token::Type::STRING);
 
     // Literal float                    :h floating-point-format
-    push("^\\d\\.\\d+[Ee][\\+-]?\\d+", Token::Type::LITERAL_FLOAT);
-    push("^\\d+\\.\\d+", Token::Type::LITERAL_FLOAT);
+    push("^\\d\\.\\d+[Ee][\\+-]?\\d+", Token::Type::FLOAT);
+    push("^\\d+\\.\\d+", Token::Type::FLOAT);
 
     // Literal integer                  :h expr-number
-    push("^0[Xx]\\d+", Token::Type::LITERAL_INTEGER);
-    push("^0[Oo]\\d+", Token::Type::LITERAL_INTEGER);
-    push("^0[Bb][01]+", Token::Type::LITERAL_INTEGER);
-    push("^\\d+", Token::Type::LITERAL_INTEGER);
+    push("^0[Xx]\\d+", Token::Type::INTEGER);
+    push("^0[Oo]\\d+", Token::Type::INTEGER);
+    push("^0[Bb][01]+", Token::Type::INTEGER);
+    push("^\\d+", Token::Type::INTEGER);
 
     // Identifier
     push("^[a-zA-Z_]+", Token::Type::IDENTIFIER);

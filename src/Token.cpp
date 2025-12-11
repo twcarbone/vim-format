@@ -58,7 +58,7 @@ std::string Token::TypeToStr(Type aeType)
         case Type::TAB:
             return "TAB";
         case Type::END:
-            return "EOF";
+            return "END";
 
         case Type::KEYWORD:
             return "KEYWORD";
@@ -66,42 +66,49 @@ std::string Token::TypeToStr(Type aeType)
         case Type::IDENTIFIER:
             return "IDENTIFIER";
 
-        case Type::LITERAL_INTEGER:
-            return "LITERAL_INTEGER";
-        case Type::LITERAL_FLOAT:
-            return "LITERAL_FLOAT";
-        case Type::LITERAL_CHAR:
-            return "LITERAL_CHAR";
-        case Type::LITERAL_STRING:
-            return "LITERAL_STRING";
+        case Type::INTEGER:
+            return "INTEGER";
+        case Type::FLOAT:
+            return "FLOAT";
+        case Type::CHAR:
+            return "CHAR";
+        case Type::STRING:
+            return "STRING";
 
-        case Type::OPERATOR_ARITHMETIC:
-            return "OPERATOR_ARITHMETIC";
-        case Type::OPERATOR_RELATIONAL:
-            return "OPERATOR_RELATIONAL";
-        case Type::OPERATOR_LOGICAL:
-            return "OPERATOR_LOGICAL";
-        case Type::OPERATOR_ASSIGNMENT:
-            return "OPERATOR_ASSIGNMENT";
-        case Type::OPERATOR_BITWISE:
-            return "OPERATOR_BITWISE";
-        case Type::OPERATOR_UNARY:
-            return "OPERATOR_UNARY";
+        case Type::OP_MUL:
+            return "OP_MUL";
+        case Type::OP_DIV:
+            return "OP_DIV";
+        case Type::OP_ADD:
+            return "OP_ADD";
+        case Type::OP_SUB:
+            return "OP_SUB";
+        case Type::OP_PLUS:
+            return "OP_PLUS";
+        case Type::OP_MINUS:
+            return "OP_MINUS";
+        case Type::OP_ASSIGN:
+            return "OP_ASSIGN";
 
         case Type::L_PAREN:
             return "L_PAREN";
         case Type::R_PAREN:
             return "R_PAREN";
-        case Type::SPECIAL_BRACKET_OPEN:
-            return "SPECIAL_BRACKET_OPEN";
-        case Type::SPECIAL_BRACKET_CLOSED:
-            return "SPECIAL_BRACKET_CLOSED";
-        case Type::SPECIAL_BRACE_OPEN:
-            return "SPECIAL_BRACE_OPEN";
-        case Type::SPECIAL_BRACE_CLOSED:
-            return "SPECIAL_BRACE_CLOSED";
-        case Type::SPECIAL_SEMICOLON:
-            return "SPECIAL_SEMICOLON";
+        case Type::L_BRACKET:
+            return "L_BRACKET";
+        case Type::R_BRACKET:
+            return "R_BRACKET";
+        case Type::L_BRACE:
+            return "L_BRACE";
+        case Type::R_BRACE:
+            return "R_BRACE";
+        case Type::SEMICOLON:
+            return "SEMICOLON";
+
+        case Type::PLUS:
+            return "PLUS";
+        case Type::MINUS:
+            return "MINUS";
 
         case Type::NONE:
         default:

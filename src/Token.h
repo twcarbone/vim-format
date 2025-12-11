@@ -19,25 +19,29 @@ public:
 
         IDENTIFIER,
 
-        LITERAL_INTEGER,
-        LITERAL_FLOAT,
-        LITERAL_CHAR,
-        LITERAL_STRING,
+        INTEGER,
+        FLOAT,
+        CHAR,
+        STRING,
 
-        OPERATOR_ARITHMETIC,
-        OPERATOR_RELATIONAL,
-        OPERATOR_LOGICAL,
-        OPERATOR_ASSIGNMENT,
-        OPERATOR_BITWISE,
-        OPERATOR_UNARY,
+        OP_MUL,    // Binary *
+        OP_DIV,    // Binary /
+        OP_ADD,    // Binary +
+        OP_SUB,    // Binary -
+        OP_PLUS,   // Unary +
+        OP_MINUS,  // Unary -
+        OP_ASSIGN,
 
         L_PAREN,
         R_PAREN,
-        SPECIAL_BRACKET_OPEN,
-        SPECIAL_BRACKET_CLOSED,
-        SPECIAL_BRACE_OPEN,
-        SPECIAL_BRACE_CLOSED,
-        SPECIAL_SEMICOLON
+        L_BRACKET,
+        R_BRACKET,
+        L_BRACE,
+        R_BRACE,
+        SEMICOLON,
+
+        MINUS,  // Ambiguous
+        PLUS,   // Ambiguous
     };
 
     Token();

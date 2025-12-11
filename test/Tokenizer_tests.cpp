@@ -58,21 +58,21 @@ protected:
 
 TEST_F(SingleTokenTest, IntegerLiteral)
 {
-    do_test("42", Token::Type::LITERAL_INTEGER);
-    do_test("0x42", Token::Type::LITERAL_INTEGER);
-    do_test("0X42", Token::Type::LITERAL_INTEGER);
-    do_test("0o42", Token::Type::LITERAL_INTEGER);
-    do_test("0O42", Token::Type::LITERAL_INTEGER);
-    do_test("0b1101", Token::Type::LITERAL_INTEGER);
-    do_test("0B1101", Token::Type::LITERAL_INTEGER);
+    do_test("42", Token::Type::INTEGER);
+    do_test("0x42", Token::Type::INTEGER);
+    do_test("0X42", Token::Type::INTEGER);
+    do_test("0o42", Token::Type::INTEGER);
+    do_test("0O42", Token::Type::INTEGER);
+    do_test("0b1101", Token::Type::INTEGER);
+    do_test("0B1101", Token::Type::INTEGER);
 }
 
 TEST_F(SingleTokenTest, FloatLiteral)
 {
-    do_test("123.456", Token::Type::LITERAL_FLOAT);
-    do_test("55.0", Token::Type::LITERAL_FLOAT);
-    do_test("1.234e03", Token::Type::LITERAL_FLOAT);
-    do_test("1.0E-6", Token::Type::LITERAL_FLOAT);
+    do_test("123.456", Token::Type::FLOAT);
+    do_test("55.0", Token::Type::FLOAT);
+    do_test("1.234e03", Token::Type::FLOAT);
+    do_test("1.0E-6", Token::Type::FLOAT);
 }
 
 TEST_F(SingleTokenTest, WhiteSpace)
@@ -84,8 +84,8 @@ TEST_F(SingleTokenTest, WhiteSpace)
 
 TEST_F(SingleTokenTest, StringLiteral)
 {
-    do_test("'abcd'", Token::Type::LITERAL_STRING);
-    do_test("\"abcd\"", Token::Type::LITERAL_STRING);
+    do_test("'abcd'", Token::Type::STRING);
+    do_test("\"abcd\"", Token::Type::STRING);
 }
 
 TEST_F(TokenizerTest, Test01)
@@ -98,9 +98,9 @@ TEST_F(TokenizerTest, Test01)
     expect_token(1, " ", Token::Type::SPACE);
     expect_token(2, "i", Token::Type::IDENTIFIER);
     expect_token(3, " ", Token::Type::SPACE);
-    expect_token(4, "=", Token::Type::OPERATOR_ASSIGNMENT);
+    expect_token(4, "=", Token::Type::OP_ASSIGN);
     expect_token(5, " ", Token::Type::SPACE);
-    expect_token(6, "42", Token::Type::LITERAL_INTEGER);
+    expect_token(6, "42", Token::Type::INTEGER);
     expect_token(7, "\n", Token::Type::NEWLINE);
     expect_token(8, "EOF", Token::Type::END);
 }
