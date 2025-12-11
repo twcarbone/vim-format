@@ -35,6 +35,11 @@ Token::Type Token::type() const
     return m_eType;
 }
 
+void Token::setType(Type aeType)
+{
+    m_eType = aeType;
+}
+
 std::string Token::str() const
 {
     return m_sStr;

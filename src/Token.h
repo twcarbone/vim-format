@@ -52,6 +52,8 @@ public:
     bool ambiguous() const;
 
     Type type() const;
+    void setType(Type type);
+
     std::string str() const;
 
     std::string toString() const;
