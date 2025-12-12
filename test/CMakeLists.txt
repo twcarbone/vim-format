@@ -4,6 +4,7 @@ enable_testing()
 
 add_executable(
     unittests
+    Parser_tests.cpp
     Tokenizer_tests.cpp
 )
 

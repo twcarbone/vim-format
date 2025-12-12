@@ -1,7 +1,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "Tokenizer.h"
+#include "Node.h"
+#include "NodeVisitor.h"
+#include "Parser.h"
 
 void usage()
 {
@@ -71,13 +73,13 @@ int main(int argc, char** argv)
         }
     }
 
-    Tokenizer lcTokenizer(lsText);
-    lcTokenizer.tokenize();
+    Parser lcParser;
+    lcParser.parse(lsText);
 
-    std::cout << lcTokenizer.tokens()->size() << " tokens:" << std::endl;
-
-    for (const Token* pToken : *lcTokenizer.tokens())
+    NodeVisitor lcNodeVisitor;
+    for (const Node* pNode : lcNodeVisitor.accumulate(lcParser.root(), NodeVisitor::Order::PRE))
     {
-        std::cout << "    " << pToken->toString() << std::endl;
+        std::cout << std::string(2 * pNode->level(), ' ');
+        std::cout << pNode->toString() << std::endl;
     }
 }

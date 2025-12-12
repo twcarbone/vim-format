@@ -94,11 +94,11 @@ TEST_F(TokenizerTest, Test01)
     tokenize_file("../../test/sample/01.vim");
 
     expect_tokens(9);
-    expect_token(0, "let", Token::Type::KEYWORD);
+    expect_token(0, "let", Token::Type::CMD_LET);
     expect_token(1, " ", Token::Type::SPACE);
     expect_token(2, "i", Token::Type::IDENTIFIER);
     expect_token(3, " ", Token::Type::SPACE);
-    expect_token(4, "=", Token::Type::OP_ASSIGN);
+    expect_token(4, "=", Token::Type::ASSIGN_EQ);
     expect_token(5, " ", Token::Type::SPACE);
     expect_token(6, "42", Token::Type::INTEGER);
     expect_token(7, "\n", Token::Type::NEWLINE);

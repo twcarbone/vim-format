@@ -30,153 +30,147 @@ Node* Parser::root() const
     return m_pRoot;
 }
 
-/**
- *  program
- *          : statement_list END
- */
 void Parser::program()
 {
     RuleNode* pRuleNode = new RuleNode(nullptr, __func__);
 
     m_pRoot = pRuleNode;
 
-    statement_list(pRuleNode);
+    if (m_pCurrToken->type() != Token::Type::END)
+    {
+        stmt_list(pRuleNode);
+    }
+
     consume(pRuleNode, Token::Type::END);
 }
 
-/**
- *  statement_list
- *          : statement
- *          | statement_list statement
- */
-void Parser::statement_list(Node* apParent)
+void Parser::stmt_list(Node* apParent)
 {
     RuleNode* pRuleNode = new RuleNode(apParent, __func__);
     apParent->add(pRuleNode);
-
-    statement(pRuleNode);
 
     while (m_pCurrToken->type() != Token::Type::END)
     {
-        statement_list(pRuleNode);
+        if (m_pCurrToken->type() != Token::Type::NEWLINE)
+        {
+            stmt(pRuleNode);
+        }
+
+        consume(pRuleNode, Token::Type::NEWLINE);
     }
 }
 
-/**
- *  statement
- *          : additive_expr SEMI
- */
-void Parser::statement(Node* apParent)
+void Parser::stmt(Node* apParent)
 {
     RuleNode* pRuleNode = new RuleNode(apParent, __func__);
     apParent->add(pRuleNode);
 
-    additive_expr(pRuleNode);
-
-    consume(pRuleNode, Token::Type::SEMICOLON);
+    if (m_pCurrToken->type() == Token::Type::CMD_ECHO)
+    {
+        consume(pRuleNode, Token::Type::CMD_ECHO);
+        expr6(pRuleNode);
+    }
 }
 
-/**
- *  additive_expr
- *          : multiplicative_expr
- *          | additive_expr OP_ADD multiplicative_expr
- *          | additive_expr OP_SUB multiplicative_expr
- */
-void Parser::additive_expr(Node* apParent)
+void Parser::expr6(Node* apParent)
 {
     RuleNode* pRuleNode = new RuleNode(apParent, __func__);
     apParent->add(pRuleNode);
 
-    multiplicative_expr(pRuleNode);
+    expr7(pRuleNode);
 
     while (true)
     {
-        if (m_pCurrToken->type() == Token::Type::OP_ADD)
+        switch (m_pCurrToken->type())
         {
-            consume(pRuleNode, Token::Type::OP_ADD);
+            case Token::Type::OP_ADD:
+            case Token::Type::OP_SUB:
+            case Token::Type::OP_CAT_OLD:
+            case Token::Type::OP_CAT_NEW:
+                consume(pRuleNode, m_pCurrToken->type());
+                expr7(pRuleNode);
+                break;
+            default:
+                return;
         }
-        else if (m_pCurrToken->type() == Token::Type::OP_SUB)
-        {
-            consume(pRuleNode, Token::Type::OP_SUB);
-        }
-        else
-        {
-            break;
-        }
-
-        additive_expr(pRuleNode);
     }
 }
 
-/**
- *  multiplicative_expr
- *          : factor
- *          | multiplicative_expr OP_MUL factor
- *          | multiplicative_expr OP_DIV factor
- */
-void Parser::multiplicative_expr(Node* apParent)
+void Parser::expr7(Node* apParent)
 {
     RuleNode* pRuleNode = new RuleNode(apParent, __func__);
     apParent->add(pRuleNode);
 
-    factor(pRuleNode);
+    expr8(pRuleNode);
 
     while (true)
     {
-        if (m_pCurrToken->type() == Token::Type::OP_MUL)
+        switch (m_pCurrToken->type())
         {
-            consume(pRuleNode, Token::Type::OP_MUL);
+            case Token::Type::OP_MUL:
+            case Token::Type::OP_DIV:
+            case Token::Type::OP_MODULO:
+                consume(pRuleNode, m_pCurrToken->type());
+                expr8(pRuleNode);
+                break;
+            default:
+                return;
         }
-        else if (m_pCurrToken->type() == Token::Type::OP_DIV)
-        {
-            consume(pRuleNode, Token::Type::OP_DIV);
-        }
-        else
-        {
-            break;
-        }
-
-        multiplicative_expr(pRuleNode);
     }
 }
 
-/**
- *  factor
- *          : OP_PLUS factor
- *          | OP_MINUS factor
- *          | INTEGER
- *          | FLOAT
- *          | L_PAREN additive_expr R_PAREN
- */
-void Parser::factor(Node* apParent)
+void Parser::expr8(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    expr9(pRuleNode);
+}
+
+void Parser::expr9(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    switch (m_pCurrToken->type())
+    {
+        case Token::Type::OP_LOGICAL_NOT:
+        case Token::Type::OP_UNARY_MINUS:
+        case Token::Type::OP_UNARY_PLUS:
+            consume(pRuleNode, m_pCurrToken->type());
+            expr9(pRuleNode);
+            break;
+        default:
+            expr10(pRuleNode);
+    }
+}
+
+void Parser::expr10(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    expr11(pRuleNode);
+}
+
+void Parser::expr11(Node* apParent)
 {
 
     RuleNode* pRuleNode = new RuleNode(apParent, __func__);
     apParent->add(pRuleNode);
 
-    if (m_pCurrToken->type() == Token::Type::OP_MINUS)
+    switch (m_pCurrToken->type())
     {
-        consume(pRuleNode, Token::Type::OP_MINUS);
-        factor(pRuleNode);
-    }
-    else if (m_pCurrToken->type() == Token::Type::OP_PLUS)
-    {
-        consume(pRuleNode, Token::Type::OP_PLUS);
-        factor(pRuleNode);
-    }
-    else if (m_pCurrToken->type() == Token::Type::INTEGER)
-    {
-        consume(pRuleNode, Token::Type::INTEGER);
-    }
-    else if (m_pCurrToken->type() == Token::Type::FLOAT)
-    {
-        consume(pRuleNode, Token::Type::FLOAT);
-    }
-    else
-    {
-        consume(pRuleNode, Token::Type::L_PAREN);
-        additive_expr(pRuleNode);
-        consume(pRuleNode, Token::Type::R_PAREN);
+        case Token::Type::INTEGER:
+        case Token::Type::FLOAT:
+            consume(pRuleNode, m_pCurrToken->type());
+            break;
+        case Token::Type::L_PAREN:
+            consume(pRuleNode, m_pCurrToken->type());
+            expr6(pRuleNode);
+            consume(pRuleNode, m_pCurrToken->type());
+        default:
+            throw std::runtime_error("Expected expr11, got " + Token::TypeToStr(m_pCurrToken->type()));
     }
 }
 
@@ -190,10 +184,17 @@ void Parser::consume(Node* apParent, const Token::Type aeType)
 
     apParent->add(new TokenNode(apParent, m_pCurrToken));
 
-    m_pCurrToken = m_pTokenizer->next();
-
-    while (m_pCurrToken->whitespace())
+    while (true)
     {
         m_pCurrToken = m_pTokenizer->next();
+
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::TAB:
+            case Token::Type::SPACE:
+                break;
+            default:
+                return;
+        }
     }
 }

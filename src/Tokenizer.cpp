@@ -72,7 +72,7 @@ Token* Tokenizer::next()
 
         if (pToken == nullptr)
         {
-            throw std::runtime_error("Unrecognized token");
+            throw std::runtime_error("Unrecognized token at " + std::to_string(m_nCursor));
         }
 
         if (pToken->ambiguous() && !disambiguate(pToken))
@@ -102,15 +102,20 @@ void Tokenizer::freeTokens() const
     m_pTokens->clear();
 }
 
+/**
+ *  @notes
+ *      1.  :h expr9 suggests unary operators apply to List, Dictionary. But we actually
+ *          get E745, E728.
+ */
 bool Tokenizer::disambiguate(Token* apCurrentToken)
 {
-    // MINUS
+    // GEN_MINUS
 
-    if (apCurrentToken->type() == Token::Type::MINUS)
+    if (apCurrentToken->type() == Token::Type::GEN_MINUS)
     {
         if (m_pTokens->empty())
         {
-            apCurrentToken->setType(Token::Type::OP_MINUS);
+            apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
         }
         else
         {
@@ -118,22 +123,25 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
             {
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
+                case Token::Type::STRING:
+                // TODO: Other valid Tokens that precede OP_SUB?
+                // See @note 1
                 case Token::Type::R_PAREN:
                     apCurrentToken->setType(Token::Type::OP_SUB);
                     break;
                 default:
-                    apCurrentToken->setType(Token::Type::OP_MINUS);
+                    apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
             }
         }
     }
 
     // PLUS
 
-    else if (apCurrentToken->type() == Token::Type::PLUS)
+    else if (apCurrentToken->type() == Token::Type::GEN_PLUS)
     {
         if (m_pTokens->empty())
         {
-            apCurrentToken->setType(Token::Type::OP_PLUS);
+            apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
         }
         else
         {
@@ -141,11 +149,35 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
             {
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
+                case Token::Type::STRING:
+                // TODO: Other valid Tokens that precede OP_ADD?
+                // See @note 1
                 case Token::Type::R_PAREN:
                     apCurrentToken->setType(Token::Type::OP_ADD);
                     break;
                 default:
-                    apCurrentToken->setType(Token::Type::OP_PLUS);
+                    apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
+            }
+        }
+    }
+
+    // GEN_NAME
+
+    else if (apCurrentToken->type() == Token::Type::GEN_NAME)
+    {
+        if (m_pTokens->empty())
+        {
+            apCurrentToken->setType(Token::Type::IDENTIFIER);
+        }
+        else
+        {
+            switch (m_pTokens->back()->type())
+            {
+                case Token::Type::OP_OPTION:
+                    apCurrentToken->setType(Token::Type::OPTION);
+                    break;
+                default:
+                    apCurrentToken->setType(Token::Type::IDENTIFIER);
             }
         }
     }

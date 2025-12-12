@@ -24,11 +24,14 @@ private:
     Tokenizer* m_pTokenizer;
 
     void program();
-    void statement(Node* parent);
-    void statement_list(Node* parent);
-    void multiplicative_expr(Node* parent);
-    void additive_expr(Node* parent);
-    void factor(Node* parent);
+    void stmt_list(Node* parent);
+    void stmt(Node* parent);
+    void expr6(Node* parent);
+    void expr7(Node* parent);
+    void expr8(Node* parent);
+    void expr9(Node* parent);
+    void expr10(Node* parent);
+    void expr11(Node* parent);
 
     void consume(Node* parent, const Token::Type type);
 };
