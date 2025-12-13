@@ -121,7 +121,9 @@ void Tokenizer::freeTokens() const
  */
 bool Tokenizer::disambiguate(Token* apCurrentToken)
 {
+    //
     // GEN_MINUS
+    //
 
     if (apCurrentToken->type() == Token::Type::GEN_MINUS)
     {
@@ -147,7 +149,9 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
         }
     }
 
-    // PLUS
+    //
+    // GEN_PLUS
+    //
 
     else if (apCurrentToken->type() == Token::Type::GEN_PLUS)
     {
@@ -173,7 +177,41 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
         }
     }
 
+    //
+    // GEN_QUESTION
+    //
+
+    else if (apCurrentToken->type() == Token::Type::GEN_QUESTION)
+    {
+        if (m_pTokens->empty())
+        {
+            // Nothing
+        }
+        else
+        {
+            switch (m_pTokens->back()->type())
+            {
+                case Token::Type::OP_EQUAL:
+                case Token::Type::OP_NEQUAL:
+                case Token::Type::OP_GT:
+                case Token::Type::OP_GTE:
+                case Token::Type::OP_LT:
+                case Token::Type::OP_LTE:
+                case Token::Type::OP_MATCH:
+                case Token::Type::OP_NMATCH:
+                case Token::Type::OP_IS:
+                case Token::Type::OP_ISNOT:
+                    apCurrentToken->setType(Token::Type::OP_IGNORE_CASE);
+                    break;
+                default:
+                    apCurrentToken->setType(Token::Type::OP_TERNARY_IF);
+            }
+        }
+    }
+
+    //
     // GEN_NAME
+    //
 
     else if (apCurrentToken->type() == Token::Type::GEN_NAME)
     {

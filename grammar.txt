@@ -8,7 +8,7 @@ CMD_SET             set
 GEN_PLUS            +
 GEN_MINUS           -
 GEN_QUESTION        ?
-GEN_NAME            [^0-9][a-zA-Z0-9_]
+GEN_NAME            [a-zA-Z_][a-zA-Z0-9_]*
 
 OP_ADD              +
 OP_SUB              -
@@ -73,19 +73,21 @@ TAB                 0x09
 NEWLINE             0x0a
 SPACE               0x20
 
-OPTION              [a-z]
-IDENTIFIER          [^0-9][a-zA-Z0-9_]
+OPTION              [a-z]+
+IDENTIFIER          [a-zA-Z_][a-zA-Z0-9_]*
+STRING              "..." or '...'
+INTEGER             42, 0xff, 0b1101, etc.
+FLOAT               3.14, 6.022e+23, -1.4E-5, etc.
 
 ==============================================================================
 2. Grammar
 
 program
-        : stmt_list
-        | END
+        : END
+        | stmt_list END
 
 stmt_list
-        : stmt NEWLINE
-        | stmt_list stmt NEWLINE
+        : NEWLINE* (stmt NEWLINE+)* NEWLINE*
 
 stmt
         : select_stmt
@@ -126,56 +128,35 @@ assign_op
         | ASSIGN_CAT_OLD
 
 expr1
-        : expr2
-        | expr2 OP_FALSEY expr1
-        | expr2 OP_TERNARY_IF expr1 OP_TERNARY_ELSE expr1
+        : expr2 (OP_FALSEY expr1)?
+        | expr2 (OP_TERNARY_IF expr1 OP_TERNARY_ELSE expr1)?
 
 expr2
-        : expr3
-        | expr2 OP_OR expr3
+        : expr3 (OP_OR expr3)*
 
 expr3
-        : expr4
-        | expr3 OP_AND expr4
+        : expr4 (OP_AND expr4)*
 
 expr4
-        : expr5
-        | expr4 expr4_op expr5
-
-expr4_op
-        : expr4_primary_op
-        | expr4_primary_op OP_MATCH_CASE
-        | expr4_primary_op OP_IGNORE_CASE
-
-expr4_primary_op
-        : OP_EQUAL
-        | OP_NEQUAL
-        | OP_GT
-        | OP_GTE
-        | OP_LT
-        | OP_LTE
-        | OP_MATCH
-        | OP_NMATCH
-        | OP_IS
-        | OP_ISNOT
+        : expr5 ((OP_EQUAL
+                  | OP_NEQUAL
+                  | OP_GT
+                  | OP_GTE
+                  | OP_LT
+                  | OP_LTE
+                  | OP_MATCH
+                  | OP_NMATCH
+                  | OP_IS
+                  | OP_ISNOT) (OP_MATCH_CASE | OP_IGNORE_CASE)? expr5)?
 
 expr5
-        : expr6
-        | expr5 OP_LSHIFT expr6
-        | expr5 OP_RSHIFT expr6
+        : expr6 (OP_LSHIFT | OP_RSHIFT expr6)*
 
 expr6
-        : expr7
-        | expr6 OP_ADD expr7
-        | expr6 OP_SUB expr7
-        | expr6 OP_CAT_OLD expr7
-        | expr6 OP_CAT_NEW expr7
+        : expr7 ((OP_ADD | OP_SUB | OP_CAT_OLD | OP_CAT_NEW) expr7)*
 
 expr7
-        : expr8
-        | expr7 OP_MUL expr11
-        | expr7 OP_DIV expr11
-        | expr7 OP_MODULO expr11
+        : expr8 ((OP_MUL | OP_DIV | OP_MODULO) expr8)*
 
 expr8
         : expr9
@@ -183,9 +164,7 @@ expr8
 
 expr9
         : expr10
-        | OP_LOGICAL_NOT expr9
-        | OP_UNARY_MINUS expr9
-        | OP_UNARY_PLUS expr9
+        | (OP_LOGICAL_NOT | OP_UNARY_MINUS | OP_UNARY_PLUS) expr9
 
 expr10:
         : expr11

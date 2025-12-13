@@ -26,6 +26,11 @@ private:
     void program();
     void stmt_list(Node* parent);
     void stmt(Node* parent);
+    void expr1(Node* parent);
+    void expr2(Node* parent);
+    void expr3(Node* parent);
+    void expr4(Node* parent);
+    void expr5(Node* parent);
     void expr6(Node* parent);
     void expr7(Node* parent);
     void expr8(Node* parent);
