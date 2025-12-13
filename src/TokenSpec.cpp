@@ -5,22 +5,6 @@
 
 TokenSpec::TokenSpec()
 {
-    push("^let\\b", Token::Type::CMD_LET);
-    push("^echo\\b", Token::Type::CMD_ECHO);
-    push("^set\\b", Token::Type::CMD_SET);
-
-    push("^if\\b", Token::Type::IF);
-    push("^elseif\\b", Token::Type::ELSEIF);
-    push("^else\\b", Token::Type::ELSE);
-    push("^endif\\b", Token::Type::ENDIF);
-    push("^while\\b", Token::Type::WHILE);
-    push("^endwhile\\b", Token::Type::ENDWHILE);
-    push("^for\\b", Token::Type::FOR);
-    push("^in\\b", Token::Type::IN);
-    push("^endfor\\b", Token::Type::ENDFOR);
-    push("^break\\b", Token::Type::BREAK);
-    push("^continue\\b", Token::Type::CONTINUE);
-
     push("^\\+=", Token::Type::ASSIGN_ADD);
     push("^-=", Token::Type::ASSIGN_MINUS);
     push("^\\*=", Token::Type::ASSIGN_MUL);
@@ -49,8 +33,6 @@ TokenSpec::TokenSpec()
     push("^<", Token::Type::OP_LT);
     push("^=~", Token::Type::OP_MATCH);
     push("^!~", Token::Type::OP_NMATCH);
-    push("^isnot\\b", Token::Type::OP_ISNOT);
-    push("^is\\b", Token::Type::OP_IS);
     push("^\\|\\|", Token::Type::OP_OR);
     push("^&&", Token::Type::OP_AND);
     push("^#", Token::Type::OP_MATCH_CASE);
@@ -78,6 +60,30 @@ TokenSpec::TokenSpec()
     push("^\\d+", Token::Type::INTEGER);
 
     push("^[a-zA-Z_][a-zA-Z0-9_]*", Token::Type::GEN_NAME);
+
+    m_mSpec.insert({"let", Token::Type::CMD_LET});
+    m_mSpec.insert({"echo", Token::Type::CMD_ECHO});
+    m_mSpec.insert({"set", Token::Type::CMD_SET});
+    m_mSpec.insert({"if", Token::Type::IF});
+    m_mSpec.insert({"elseif", Token::Type::ELSEIF});
+    m_mSpec.insert({"else", Token::Type::ELSE});
+    m_mSpec.insert({"endif", Token::Type::ENDIF});
+    m_mSpec.insert({"while", Token::Type::WHILE});
+    m_mSpec.insert({"endwhile", Token::Type::ENDWHILE});
+    m_mSpec.insert({"for", Token::Type::FOR});
+    m_mSpec.insert({"in", Token::Type::IN});
+    m_mSpec.insert({"endfor", Token::Type::ENDFOR});
+    m_mSpec.insert({"break", Token::Type::BREAK});
+    m_mSpec.insert({"continue", Token::Type::CONTINUE});
+    m_mSpec.insert({"is", Token::Type::OP_IS});
+    m_mSpec.insert({"isnot", Token::Type::OP_ISNOT});
+
+    m_lSpecKeys.reserve(m_mSpec.size());
+
+    for (const auto& [key, value] : m_mSpec)
+    {
+        m_lSpecKeys.push_back(key);
+    }
 }
 
 TokenSpec::~TokenSpec()
@@ -97,6 +103,14 @@ Token* TokenSpec::match(const std::string& asText)
     else if (startswith(asText, "\t"))
     {
         return new Token(Token::Type::TAB, "\t");
+    }
+
+    for (const std::string& lsKey : m_lSpecKeys)
+    {
+        if (startswith(asText, lsKey + " "))
+        {
+            return new Token(m_mSpec.at(lsKey), lsKey);
+        }
     }
 
     for (auto it = m_lSpec.cbegin(); it != m_lSpec.cend(); ++it)
