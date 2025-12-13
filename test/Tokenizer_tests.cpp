@@ -77,8 +77,6 @@ TEST_F(SingleTokenTest, FloatLiteral)
 
 TEST_F(SingleTokenTest, WhiteSpace)
 {
-    do_test("\t", Token::Type::TAB);
-    do_test(" ", Token::Type::SPACE);
     do_test("\n", Token::Type::NEWLINE);
 }
 
@@ -93,14 +91,11 @@ TEST_F(TokenizerTest, Test01)
     // TODO: consider cmake 'configure_file(...)' to copy from src to build
     tokenize_file("../../test/sample/01.vim");
 
-    expect_tokens(9);
+    expect_tokens(6);
     expect_token(0, "let", Token::Type::CMD_LET);
-    expect_token(1, " ", Token::Type::SPACE);
-    expect_token(2, "i", Token::Type::IDENTIFIER);
-    expect_token(3, " ", Token::Type::SPACE);
-    expect_token(4, "=", Token::Type::ASSIGN_EQ);
-    expect_token(5, " ", Token::Type::SPACE);
-    expect_token(6, "42", Token::Type::INTEGER);
-    expect_token(7, "\n", Token::Type::NEWLINE);
-    expect_token(8, "EOF", Token::Type::END);
+    expect_token(1, "i", Token::Type::IDENTIFIER);
+    expect_token(2, "=", Token::Type::ASSIGN_EQ);
+    expect_token(3, "42", Token::Type::INTEGER);
+    expect_token(4, "\n", Token::Type::NEWLINE);
+    expect_token(5, "EOF", Token::Type::END);
 }
