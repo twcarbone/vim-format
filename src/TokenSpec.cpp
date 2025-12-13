@@ -1,4 +1,5 @@
 #include <regex>
+#include <string_view>
 
 #include "TokenSpec.h"
 
@@ -76,12 +77,7 @@ TokenSpec::TokenSpec()
     push("^0[Bb][01]+", Token::Type::INTEGER);
     push("^\\d+", Token::Type::INTEGER);
 
-    push("^\t", Token::Type::TAB);
-    push("^ ", Token::Type::SPACE);
-    push("^\n", Token::Type::NEWLINE);
-
     push("^[a-zA-Z_][a-zA-Z0-9_]*", Token::Type::GEN_NAME);
-
 }
 
 TokenSpec::~TokenSpec()
@@ -90,6 +86,19 @@ TokenSpec::~TokenSpec()
 
 Token* TokenSpec::match(const std::string& asText)
 {
+    if (startswith(asText, " "))
+    {
+        return new Token(Token::Type::SPACE, " ");
+    }
+    else if (startswith(asText, "\n"))
+    {
+        return new Token(Token::Type::NEWLINE, "\n");
+    }
+    else if (startswith(asText, "\t"))
+    {
+        return new Token(Token::Type::TAB, "\t");
+    }
+
     for (auto it = m_lSpec.cbegin(); it != m_lSpec.cend(); ++it)
     {
         const std::regex& lcRe = it->first;
@@ -103,6 +112,11 @@ Token* TokenSpec::match(const std::string& asText)
     }
 
     return nullptr;
+}
+
+bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix) const
+{
+    return asStr.substr(0, asPrefix.size()) == asPrefix;
 }
 
 void TokenSpec::push(const std::string& asRe, const Token::Type aeType)

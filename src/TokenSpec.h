@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <string_view>
 
 #include "Token.h"
 
@@ -19,6 +20,7 @@ public:
 private:
     std::vector<std::pair<std::regex, Token::Type> > m_lSpec;
 
+    bool startswith(std::string_view str, std::string_view prefix) const;
     void push(const std::string& re, const Token::Type type);
 };
 
