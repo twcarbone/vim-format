@@ -95,7 +95,8 @@ public:
     ~Token();
 
     bool ambiguous() const;
-    bool whitespace() const;
+    bool delimiting_wp() const;
+    bool structural_wp() const;
 
     Type type() const;
     void setType(Type type);

@@ -31,6 +31,23 @@ bool Token::ambiguous() const
     }
 }
 
+bool Token::delimiting_wp() const
+{
+    switch (m_eType)
+    {
+        case Type::TAB:
+        case Type::SPACE:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool Token::structural_wp() const
+{
+    return m_eType == Type::NEWLINE;
+}
+
 Token::Type Token::type() const
 {
     return m_eType;
@@ -50,13 +67,9 @@ std::string Token::toString() const
 {
     std::string lsTmp = "[Token] " + TypeToStr(m_eType);
 
-    switch (m_eType)
+    if (!delimiting_wp() && !structural_wp())
     {
-        case Type::NEWLINE:
-        case Type::END:
-            break;
-        default:
-            lsTmp += " " + m_sStr;
+        lsTmp += " " + m_sStr;
     }
 
     return lsTmp;
