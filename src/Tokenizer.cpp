@@ -57,6 +57,19 @@ const Token& Tokenizer::token(size_t anIdx) const
 
 Token* Tokenizer::next()
 {
+    Token* pToken = do_next();
+
+    while (pToken->delimiting_wp())
+    {
+        pToken = do_next();
+    }
+
+    m_pTokens->push_back(pToken);
+    return pToken;
+}
+
+Token* Tokenizer::do_next()
+{
     Token* pToken;
 
     if (!hasMoreTokens())
@@ -83,7 +96,6 @@ Token* Tokenizer::next()
         m_nCursor += pToken->str().size();
     }
 
-    m_pTokens->push_back(pToken);
     return pToken;
 }
 

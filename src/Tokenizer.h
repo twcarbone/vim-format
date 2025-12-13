@@ -46,6 +46,7 @@ private:
 
     TokenSpec* m_pTokenSpec;
 
+    Token* do_next();
     void freeTokens() const;
     bool disambiguate(Token* token);
     bool hasMoreTokens() const;
