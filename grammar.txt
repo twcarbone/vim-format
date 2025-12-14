@@ -105,16 +105,7 @@ stmt
         | CMD_SET OPTION
 
 select_stmt
-        : IF expr1 stmt_list ENDIF
-        | IF expr1 stmt_list else_stmt ENDIF
-        | IF expr1 stmt_list elseif_stmt else_stmt ENDIF
-
-elseif_stmt
-        : ELSEIF expr1 stmt_list
-        : elseif_stmt ELSEIF expr1 stmt_list
-
-else_stmt
-        : ELSE stmt_list
+        : IF expr1 stmt_list (ELSEIF expr1 stmt_list)* (ELSE stmt_list)? ENDIF
 
 iteration_stmt
         : WHILE expr1 stmt_list ENDWHILE
