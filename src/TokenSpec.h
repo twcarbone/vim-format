@@ -21,8 +21,11 @@ public:
 private:
     std::vector<std::pair<std::regex, Token::Type> > m_lSpec;
 
-    std::map<std::string, Token::Type> m_mSpec;
-    std::vector<std::string> m_lSpecKeys;
+    const std::vector<std::string> m_lDelimitedSpecKeys;
+    const std::map<std::string, Token::Type> m_mDelimitedSpec;
+
+    const std::vector<std::string> m_lFixedWidthSpecKeys;
+    const std::map<std::string, Token::Type> m_mFixedWidthSpec;
 
     bool startswith(std::string_view str, std::string_view prefix) const;
     void push(const std::string& re, const Token::Type type);
