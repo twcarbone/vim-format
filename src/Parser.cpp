@@ -65,10 +65,32 @@ void Parser::stmt(Node* apParent)
     RuleNode* pRuleNode = new RuleNode(apParent, __func__);
     apParent->add(pRuleNode);
 
-    if (m_pCurrToken->type() == Token::Type::CMD_ECHO)
+    switch (m_pCurrToken->type())
     {
-        consume(pRuleNode, Token::Type::CMD_ECHO);
-        expr1(pRuleNode);
+        case Token::Type::CMD_ECHO:
+            consume(pRuleNode, Token::Type::CMD_ECHO);
+            expr1(pRuleNode);
+            break;
+        case Token::Type::CMD_LET:
+            consume(pRuleNode, Token::Type::CMD_LET);
+            consume(pRuleNode, Token::Type::IDENTIFIER);
+            switch (m_pCurrToken->type())
+            {
+                case Token::Type::ASSIGN_ADD:
+                case Token::Type::ASSIGN_MINUS:
+                case Token::Type::ASSIGN_MUL:
+                case Token::Type::ASSIGN_DIV:
+                case Token::Type::ASSIGN_EQ:
+                case Token::Type::ASSIGN_MODULO:
+                case Token::Type::ASSIGN_CAT_NEW:
+                case Token::Type::ASSIGN_CAT_OLD:
+                    consume(pRuleNode, m_pCurrToken->type());
+                    expr1(pRuleNode);
+                default:
+                    break;
+            }
+        default:
+            break;
     }
 }
 

@@ -93,7 +93,14 @@ stmt
         : select_stmt
         | iteration_stmt
         | jump_stmt
-        | CMD_LET IDENTIFIER assign_op expr1
+        | CMD_LET IDENTIFIER (ASSIGN_ADD
+                              | ASSIGN_MINUS
+                              | ASSIGN_MUL
+                              | ASSIGN_DIV
+                              | ASSIGN_EQ
+                              | ASSIGN_MODULO
+                              | ASSIGN_CAT_NEW
+                              | ASSIGN_CAT_OLD) expr1
         | CMD_ECHO expr1
         | CMD_SET OPTION
 
@@ -116,16 +123,6 @@ iteration_stmt
 jump_stmt
         : BREAK
         | CONTINUE
-
-assign_op
-        : ASSIGN_ADD
-        | ASSIGN_MINUS
-        | ASSIGN_MUL
-        | ASSIGN_DIV
-        | ASSIGN_EQ
-        | ASSIGN_MODULO
-        | ASSIGN_CAT_NEW
-        | ASSIGN_CAT_OLD
 
 expr1
         : expr2 (OP_FALSEY expr1)?
