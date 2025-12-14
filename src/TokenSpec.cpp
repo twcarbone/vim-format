@@ -5,14 +5,11 @@
 
 TokenSpec::TokenSpec() :
     m_lReSpec {
-        { std::regex { "^\"[^\"]*\"" }, Token::Type::STRING },
-        { std::regex { "^'[^']*'" }, Token::Type::STRING },
         { std::regex { "^\\d\\.\\d+[Ee][\\+-]?\\d+" }, Token::Type::FLOAT },
         { std::regex { "^\\d+\\.\\d+" }, Token::Type::FLOAT },
         { std::regex { "^0[Xx]\\d+" }, Token::Type::INTEGER },
         { std::regex { "^0[Oo]\\d+" }, Token::Type::INTEGER },
         { std::regex { "^0[Bb][01]+" }, Token::Type::INTEGER },
-        { std::regex { "^\\d+" }, Token::Type::INTEGER },
         { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::GEN_NAME },
     },
     m_lDelimitedSpecKeys {
@@ -130,6 +127,18 @@ TokenSpec::~TokenSpec()
 
 Token* TokenSpec::match(const std::string& asText)
 {
+    std::string_view lsStr;
+
+    if (startswith_str(asText, lsStr))
+    {
+        return new Token(Token::Type::STRING, std::string { lsStr });
+    }
+
+    if (startswith_digits(asText, lsStr))
+    {
+        return new Token(Token::Type::INTEGER, std::string { lsStr });
+    }
+
     for (const std::string& lsKey : m_lDelimitedSpecKeys)
     {
         if (startswith(asText, lsKey + " "))
@@ -164,4 +173,36 @@ Token* TokenSpec::match(const std::string& asText)
 bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix)
 {
     return asStr.substr(0, asPrefix.size()) == asPrefix;
+}
+
+bool TokenSpec::startswith_str(std::string_view asStr, std::string_view& asPrefix)
+{
+    // TODO: Add support for single-quote string tokenizing
+    // TODO: Add support for escaped quotes within a string token
+
+    if (asStr.empty() || !startswith(asStr, "\""))
+    {
+        return false;
+    }
+
+    const size_t lnBegin = 0;
+    const size_t lnEnd = asStr.find('"', 1);
+
+    asPrefix = asStr.substr(0, lnEnd - lnBegin + 1);
+
+    return true;
+}
+
+bool TokenSpec::startswith_digits(std::string_view asStr, std::string_view& asDigits)
+{
+    if (asStr.empty() || asStr[0] < '0' || asStr[0] > '9')
+    {
+        return false;
+    }
+
+    size_t lnEnd = asStr.find_first_not_of(s_lDigits, 1);
+
+    asDigits = asStr.substr(0, lnEnd);
+
+    return true;
 }
