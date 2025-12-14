@@ -44,6 +44,9 @@ TokenSpec::TokenSpec() :
     },
     m_lFixedWidthSpecKeys {
         // clang-format off
+        " ",
+        "\n",
+        "\t",
         "||",
         ",",
         "]",
@@ -104,7 +107,8 @@ TokenSpec::TokenSpec() :
         { ">>", Token::Type::OP_RSHIFT },      { "?", Token::Type::GEN_QUESTION },
         { "??", Token::Type::OP_FALSEY },      { "[", Token::Type::L_BRACKET },
         { "]", Token::Type::R_BRACKET },       { ",", Token::Type::COMMA },
-        { "||", Token::Type::OP_OR },
+        { "||", Token::Type::OP_OR },          { " ", Token::Type::SPACE },
+        { "\n", Token::Type::NEWLINE },        { "\t", Token::Type::TAB },
     }
 {
     push("^\"[^\"]*\"", Token::Type::STRING);
@@ -124,19 +128,6 @@ TokenSpec::~TokenSpec()
 
 Token* TokenSpec::match(const std::string& asText)
 {
-    if (startswith(asText, " "))
-    {
-        return new Token(Token::Type::SPACE, " ");
-    }
-    else if (startswith(asText, "\n"))
-    {
-        return new Token(Token::Type::NEWLINE, "\n");
-    }
-    else if (startswith(asText, "\t"))
-    {
-        return new Token(Token::Type::TAB, "\t");
-    }
-
     for (const std::string& lsKey : m_lDelimitedSpecKeys)
     {
         if (startswith(asText, lsKey + " "))
