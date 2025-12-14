@@ -49,14 +49,21 @@ void Parser::stmt_list(Node* apParent)
     RuleNode* pRuleNode = new RuleNode(apParent, __func__);
     apParent->add(pRuleNode);
 
-    while (m_pCurrToken->type() != Token::Type::END)
+    while (true)
     {
-        if (m_pCurrToken->type() != Token::Type::NEWLINE)
+        switch (m_pCurrToken->type())
         {
-            stmt(pRuleNode);
+            case Token::Type::ELSEIF:
+            case Token::Type::ELSE:
+            case Token::Type::ENDIF:
+            case Token::Type::ENDWHILE:
+            case Token::Type::ENDFOR:
+            case Token::Type::END:
+                return;
+            default:
+                stmt(pRuleNode);
+                consume(pRuleNode, Token::Type::NEWLINE);
         }
-
-        consume(pRuleNode, Token::Type::NEWLINE);
     }
 }
 
