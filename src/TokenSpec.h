@@ -19,7 +19,7 @@ public:
     Token* match(const std::string& text);
 
 private:
-    std::vector<std::pair<std::regex, Token::Type> > m_lSpec;
+    const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
 
     const std::vector<std::string> m_lDelimitedSpecKeys;
     const std::map<std::string, Token::Type> m_mDelimitedSpec;
@@ -28,7 +28,6 @@ private:
     const std::map<std::string, Token::Type> m_mFixedWidthSpec;
 
     bool startswith(std::string_view str, std::string_view prefix) const;
-    void push(const std::string& re, const Token::Type type);
 };
 
 #endif  // TOKENSPEC_H

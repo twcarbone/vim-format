@@ -4,6 +4,17 @@
 #include "TokenSpec.h"
 
 TokenSpec::TokenSpec() :
+    m_lReSpec {
+        { std::regex { "^\"[^\"]*\"" }, Token::Type::STRING },
+        { std::regex { "^'[^']*'" }, Token::Type::STRING },
+        { std::regex { "^\\d\\.\\d+[Ee][\\+-]?\\d+" }, Token::Type::FLOAT },
+        { std::regex { "^\\d+\\.\\d+" }, Token::Type::FLOAT },
+        { std::regex { "^0[Xx]\\d+" }, Token::Type::INTEGER },
+        { std::regex { "^0[Oo]\\d+" }, Token::Type::INTEGER },
+        { std::regex { "^0[Bb][01]+" }, Token::Type::INTEGER },
+        { std::regex { "^\\d+" }, Token::Type::INTEGER },
+        { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::GEN_NAME },
+    },
     m_lDelimitedSpecKeys {
         // clang-format off
         "let",
@@ -111,15 +122,6 @@ TokenSpec::TokenSpec() :
         { "\n", Token::Type::NEWLINE },        { "\t", Token::Type::TAB },
     }
 {
-    push("^\"[^\"]*\"", Token::Type::STRING);
-    push("^'[^']*'", Token::Type::STRING);
-    push("^\\d\\.\\d+[Ee][\\+-]?\\d+", Token::Type::FLOAT);
-    push("^\\d+\\.\\d+", Token::Type::FLOAT);
-    push("^0[Xx]\\d+", Token::Type::INTEGER);
-    push("^0[Oo]\\d+", Token::Type::INTEGER);
-    push("^0[Bb][01]+", Token::Type::INTEGER);
-    push("^\\d+", Token::Type::INTEGER);
-    push("^[a-zA-Z_][a-zA-Z0-9_]*", Token::Type::GEN_NAME);
 }
 
 TokenSpec::~TokenSpec()
@@ -144,7 +146,7 @@ Token* TokenSpec::match(const std::string& asText)
         }
     }
 
-    for (auto it = m_lSpec.cbegin(); it != m_lSpec.cend(); ++it)
+    for (auto it = m_lReSpec.cbegin(); it != m_lReSpec.cend(); ++it)
     {
         const std::regex& lcRe = it->first;
         const Token::Type& leTokenType = it->second;
@@ -162,9 +164,4 @@ Token* TokenSpec::match(const std::string& asText)
 bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix) const
 {
     return asStr.substr(0, asPrefix.size()) == asPrefix;
-}
-
-void TokenSpec::push(const std::string& asRe, const Token::Type aeType)
-{
-    m_lSpec.push_back(std::pair<std::regex, Token::Type> { asRe, aeType });
 }
