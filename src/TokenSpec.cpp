@@ -141,7 +141,7 @@ Token* TokenSpec::match(const std::string& asText)
 
     for (const std::string& lsKey : m_lDelimitedSpecKeys)
     {
-        if (startswith(asText, lsKey + " "))
+        if (startswith(asText, lsKey, " \n"))
         {
             return new Token(m_mDelimitedSpec.at(lsKey), lsKey);
         }
@@ -170,9 +170,10 @@ Token* TokenSpec::match(const std::string& asText)
     return nullptr;
 }
 
-bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix)
+bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix, std::string_view asDelim)
 {
-    return asStr.substr(0, asPrefix.size()) == asPrefix;
+    size_t lnEnd = asDelim.empty() ? asPrefix.size() : asStr.find_first_of(asDelim);
+    return asStr.substr(0, lnEnd) == asPrefix;
 }
 
 bool TokenSpec::startswith_str(std::string_view asStr, std::string_view& asPrefix)

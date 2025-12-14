@@ -29,7 +29,17 @@ private:
 
     static constexpr std::string_view s_lDigits = "0123456789";
 
-    static bool startswith(std::string_view str, std::string_view prefix);
+    /**
+     *  @brief
+     *      Return true if `str` begins with `prefix`, delimited by one of `delim`.
+     *
+     *  @example
+     *      startswith("integer", "int")            => true
+     *      startswith("integer", "int", " ")       => false
+     *      startswith("int i", "int", " ")         => true
+     */
+    static bool startswith(std::string_view str, std::string_view prefix, std::string_view delim = "");
+
     static bool startswith_str(std::string_view str, std::string_view& substr);
     static bool startswith_digits(std::string_view str, std::string_view& digits);
 };
