@@ -332,6 +332,7 @@ void Parser::expr11(Node* apParent)
         case Token::Type::INTEGER:
         case Token::Type::FLOAT:
         case Token::Type::STRING:
+        case Token::Type::IDENTIFIER:
             consume(pRuleNode, m_pCurrToken->type());
             break;
         case Token::Type::L_PAREN:
