@@ -161,7 +161,7 @@ Token* TokenSpec::match(const std::string& asText)
     return nullptr;
 }
 
-bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix) const
+bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix)
 {
     return asStr.substr(0, asPrefix.size()) == asPrefix;
 }

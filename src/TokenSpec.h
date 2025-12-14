@@ -27,7 +27,7 @@ private:
     const std::vector<std::string> m_lFixedWidthSpecKeys;
     const std::map<std::string, Token::Type> m_mFixedWidthSpec;
 
-    bool startswith(std::string_view str, std::string_view prefix) const;
+    static bool startswith(std::string_view str, std::string_view prefix);
 };
 
 #endif  // TOKENSPEC_H
