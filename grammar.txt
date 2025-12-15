@@ -92,7 +92,8 @@ stmt_list
 stmt
         : select_stmt
         | iteration_stmt
-        | jump_stmt
+        | BREAK
+        | CONTINUE
         | CMD_LET IDENTIFIER (ASSIGN_ADD
                               | ASSIGN_MINUS
                               | ASSIGN_MUL
@@ -110,10 +111,6 @@ select_stmt
 iteration_stmt
         : WHILE expr1 stmt_list ENDWHILE
         : FOR IDENTIFIER IN (IDENTIFIER | STRING | list_expr) stmt_list ENDFOR
-
-jump_stmt
-        : BREAK
-        | CONTINUE
 
 expr1
         : expr2 (OP_FALSEY expr1)?

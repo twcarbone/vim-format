@@ -81,6 +81,11 @@ void Parser::stmt(Node* apParent)
         case Token::Type::WHILE:
             iteration_stmt(pRuleNode);
             break;
+        case Token::Type::BREAK:
+        case Token::Type::CONTINUE:
+            // TODO: BREAK and CONTINUE are only allowed during an iteration
+            consume(pRuleNode, m_pCurrToken->type());
+            break;
         case Token::Type::CMD_ECHO:
             consume(pRuleNode, Token::Type::CMD_ECHO);
             expr1(pRuleNode);
