@@ -109,7 +109,7 @@ select_stmt
 
 iteration_stmt
         : WHILE expr1 stmt_list ENDWHILE
-        : FOR IDENTIFIER IN list_expr stmt_list ENDFOR
+        : FOR IDENTIFIER IN (IDENTIFIER | STRING | list_expr) stmt_list ENDFOR
 
 jump_stmt
         : BREAK
@@ -168,11 +168,4 @@ expr11
         | IDENTIFIER
 
 list_expr
-        : IDENTIFIER
-        | STRING
-        | L_BRACKET R_BRACKET
-        | L_BRACKET list_items R_BRACKET
-
-list_items
-        : expr1
-        : list_items COMMA expr1
+        : L_BRACKET (expr1 (COMMA expr1)* COMMA?)? R_BRACKET

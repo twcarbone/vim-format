@@ -27,6 +27,8 @@ private:
     void stmt_list(Node* parent);
     void stmt(Node* parent);
     void select_stmt(Node* parent);
+    void iteration_stmt(Node* parent);
+    void list_expr(Node* parent);
     void expr1(Node* parent);
     void expr2(Node* parent);
     void expr3(Node* parent);

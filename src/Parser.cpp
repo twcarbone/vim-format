@@ -77,6 +77,10 @@ void Parser::stmt(Node* apParent)
         case Token::Type::IF:
             select_stmt(pRuleNode);
             break;
+        case Token::Type::FOR:
+        case Token::Type::WHILE:
+            iteration_stmt(pRuleNode);
+            break;
         case Token::Type::CMD_ECHO:
             consume(pRuleNode, Token::Type::CMD_ECHO);
             expr1(pRuleNode);
@@ -127,6 +131,64 @@ void Parser::select_stmt(Node* apParent)
     }
 
     consume(pRuleNode, Token::Type::ENDIF);
+}
+
+void Parser::iteration_stmt(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    if (m_pCurrToken->type() == Token::Type::WHILE)
+    {
+        consume(pRuleNode, Token::Type::WHILE);
+        expr1(pRuleNode);
+        stmt_list(pRuleNode);
+        consume(pRuleNode, Token::Type::ENDWHILE);
+    }
+    else if (m_pCurrToken->type() == Token::Type::FOR)
+    {
+        consume(pRuleNode, Token::Type::FOR);
+        consume(pRuleNode, Token::Type::IDENTIFIER);
+        consume(pRuleNode, Token::Type::IN);
+
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::STRING:
+            case Token::Type::IDENTIFIER:
+                consume(pRuleNode, m_pCurrToken->type());
+                break;
+            default:
+                list_expr(pRuleNode);
+        }
+
+        stmt_list(pRuleNode);
+        consume(pRuleNode, Token::Type::ENDFOR);
+    }
+}
+
+void Parser::list_expr(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    consume(pRuleNode, Token::Type::L_BRACKET);
+
+    while (true)
+    {
+        if (m_pCurrToken->type() == Token::Type::R_BRACKET)
+        {
+            break;
+        }
+
+        expr1(pRuleNode);
+
+        if (m_pCurrToken->type() != Token::Type::R_BRACKET)
+        {
+            consume(pRuleNode, Token::Type::COMMA);
+        }
+    }
+
+    consume(pRuleNode, Token::Type::R_BRACKET);
 }
 
 void Parser::expr1(Node* apParent)
