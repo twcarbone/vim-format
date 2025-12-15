@@ -402,8 +402,11 @@ void Parser::expr11(Node* apParent)
             expr1(pRuleNode);
             consume(pRuleNode, Token::Type::R_PAREN);
             break;
+        case Token::Type::L_BRACKET:
+            list_expr(pRuleNode);
+            break;
         default:
-            throw std::runtime_error("Expected expr11, got " + Token::TypeToStr(m_pCurrToken->type()));
+            throw std::runtime_error("Invalid expression: " + m_pCurrToken->str());
     }
 }
 
