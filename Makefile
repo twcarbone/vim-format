@@ -8,6 +8,10 @@ configure:
 build: configure
 	cmake --build build/
 
+build-debug:
+	cmake -B build/ -DCMAKE_BUILD_TYPE=Debug
+	cmake --build build/
+
 test: build
 	cd build/test && ./unittests
 
