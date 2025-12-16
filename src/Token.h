@@ -2,6 +2,7 @@
 #define TOKEN_H
 
 #include <string>
+#include <ostream>
 
 class Token
 {
@@ -109,6 +110,7 @@ public:
 
     friend bool operator==(const Token& lhs, const Token& rhs);
     friend bool operator!=(const Token& lhs, const Token& rhs);
+    friend std::ostream& operator<<(std::ostream& os, const Token& obj);
 
 private:
     Type m_eType;

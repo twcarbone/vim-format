@@ -235,3 +235,8 @@ bool operator!=(const Token& lhs, const Token& rhs)
 {
     return !(lhs == rhs);
 }
+
+std::ostream& operator<<(std::ostream& os, const Token& obj)
+{
+    return os << obj.toString();
+}
