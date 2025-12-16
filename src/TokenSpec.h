@@ -40,8 +40,13 @@ private:
      */
     static bool startswith(std::string_view str, std::string_view prefix, std::string_view delim = "");
 
+    /**
+     *  @brief
+     *      Return true if `str` starts with a valid int and set `out` to the int.
+     */
     static bool startswith_str(std::string_view str, std::string_view& substr);
-    static bool startswith_digits(std::string_view str, std::string_view& digits);
+
+    static bool startswith_int(std::string_view str, std::string_view& out);
 
     /**
      *  @brief

@@ -7,9 +7,6 @@
 
 TokenSpec::TokenSpec() :
     m_lReSpec {
-        { std::regex { "^0[Xx]\\d+" }, Token::Type::INTEGER },
-        { std::regex { "^0[Oo]\\d+" }, Token::Type::INTEGER },
-        { std::regex { "^0[Bb][01]+" }, Token::Type::INTEGER },
         { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::GEN_NAME },
     },
     m_lDelimitedSpecKeys {
@@ -151,7 +148,7 @@ Token* TokenSpec::match(const std::string& asText)
     }
 
     // 4. Look for an integer
-    if (startswith_digits(asText, lsStr))
+    if (startswith_int(asText, lsStr))
     {
         return new Token(Token::Type::INTEGER, std::string { lsStr });
     }
@@ -205,17 +202,55 @@ bool TokenSpec::startswith_str(std::string_view asStr, std::string_view& asPrefi
     return true;
 }
 
-bool TokenSpec::startswith_digits(std::string_view asStr, std::string_view& asDigits)
+bool TokenSpec::startswith_int(std::string_view asStr, std::string_view& asOut)
 {
-    if (asStr.empty() || asStr[0] < '0' || asStr[0] > '9')
+    // 1. Start by finding the end any leading digits. Save it for back-tracking.
+    const size_t lnDigitsEnd = asStr.find_first_not_of("0123456789");
+    asOut = asStr.substr(0, lnDigitsEnd);
+
+    // 2. Zero digits means this is not an integer. More than one digit means this is a
+    //    base-10 integer. We can return immediately in either case.
+    if (lnDigitsEnd != 1)
     {
-        return false;
+        return lnDigitsEnd > 0;
     }
 
-    size_t lnEnd = asStr.find_first_not_of(s_lDigits, 1);
+    // 3. Compute the base from the "base character". Return the leading digits if it's
+    //    not a valid base character.
+    int lnBase;
+    switch (asStr[1])
+    {
+        case 'X':
+        case 'x':
+            lnBase = 16;
+            break;
+        case 'O':
+        case 'o':
+            lnBase = 8;
+            break;
+        case 'B':
+        case 'b':
+            lnBase = 2;
+            break;
+        default:
+            return true;
+    }
 
-    asDigits = asStr.substr(0, lnEnd);
+    // 4. Convert the "value" portion (example: 1234 from 0x1234).
+    const size_t lnCandidateEnd = asStr.find_first_not_of("0123456789abcdefABCDEF", 2);
+    const std::string_view lsValue = asStr.substr(2, lnCandidateEnd - 2);
+    const char* pStart = lsValue.data();
+    char* pEnd = nullptr;
+    long l = std::strtol(pStart, &pEnd, lnBase);
 
+    // 5. Zero valid characters, or one invalid character, followed the "base character".
+    //    Return the leading digits.
+    if (pEnd == pStart || pEnd != lsValue.end())
+    {
+        return true;
+    }
+
+    asOut = asStr.substr(0, lnCandidateEnd);
     return true;
 }
 
