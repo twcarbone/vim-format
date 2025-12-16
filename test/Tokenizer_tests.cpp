@@ -125,8 +125,6 @@ TEST_F(TokenizerTest, FloatTokenTest)
     expect_token(1, ".", Token::Type::OP_CAT_OLD);
     expect_token(2, "4.4", Token::Type::FLOAT);
 
-    // TODO: '3e' from '3.3e' should be tokenized as an expression
-
     tokenize_str("5.5e");
     expect_tokens(5);
     expect_token(0, "5", Token::Type::INTEGER);
@@ -160,8 +158,6 @@ TEST_F(TokenizerTest, IntegerTokenTest)
 
 TEST_F(TokenizerTest, Test01)
 {
-    // TODO: consider cmake 'configure_file(...)' to copy from src to build
-
     tokenize_file("../../test/sample/01.vim");
 
     expect_tokens(6);

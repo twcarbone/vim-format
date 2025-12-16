@@ -56,7 +56,7 @@ std::vector<Token*>* Tokenizer::tokens() const
 
 const Token& Tokenizer::token(size_t anIdx) const
 {
-    // TODO: throw IndexError
+    // TODO (gh-7): throw IndexError
     return *m_pTokens->at(anIdx);
 }
 
@@ -79,7 +79,7 @@ Token* Tokenizer::do_next()
 
     if (!hasMoreTokens())
     {
-        // TODO: throw exception if EOF has already been returned
+        // TODO (gh-6): throw exception if EOF has already been returned
         pToken = new Token(Token::Type::END, "EOF");
     }
     else
@@ -143,7 +143,6 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
                 case Token::Type::STRING:
-                // TODO: Other valid Tokens that precede OP_SUB?
                 // See @note 1
                 case Token::Type::R_PAREN:
                     apCurrentToken->setType(Token::Type::OP_SUB);
@@ -171,7 +170,6 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
                 case Token::Type::STRING:
-                // TODO: Other valid Tokens that precede OP_ADD?
                 // See @note 1
                 case Token::Type::R_PAREN:
                     apCurrentToken->setType(Token::Type::OP_ADD);

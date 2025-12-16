@@ -144,7 +144,7 @@ expr7
 
 expr8
         : expr9
-        | TODO
+        | TODO (gh-8)
 
 expr9
         : expr10
@@ -152,7 +152,7 @@ expr9
 
 expr10:
         : expr11
-        | TODO
+        | TODO (gh-9)
 
 expr11
         : INTEGER

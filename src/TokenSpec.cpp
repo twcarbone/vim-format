@@ -186,8 +186,8 @@ bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix, st
 
 bool TokenSpec::startswith_str(std::string_view asStr, std::string_view& asPrefix)
 {
-    // TODO: Add support for single-quote string tokenizing
-    // TODO: Add support for escaped quotes within a string token
+    // TODO (gh-3): Add support for single-quote string tokenizing
+    // TODO (gh-4): Add support for escaped quotes within a string token
 
     if (asStr.empty() || !startswith(asStr, "\""))
     {
