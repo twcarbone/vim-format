@@ -44,6 +44,11 @@ void Tokenizer::tokenize(const std::string& asText)
     }
 }
 
+const std::string& Tokenizer::text() const
+{
+    return m_sText;
+}
+
 std::vector<Token*>* Tokenizer::tokens() const
 {
     return m_pTokens;

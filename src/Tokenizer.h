@@ -36,6 +36,8 @@ public:
      */
     void tokenize(const std::string& text = "");
 
+    const std::string& text() const;
+
     const Token& token(size_t i) const;
     std::vector<Token*>* tokens() const;
 
