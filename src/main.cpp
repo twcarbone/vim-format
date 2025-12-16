@@ -4,6 +4,7 @@
 #include "Node.h"
 #include "NodeVisitor.h"
 #include "Parser.h"
+#include "Tokenizer.h"
 
 void usage()
 {
@@ -17,7 +18,8 @@ void usage()
 
               << "\n\nOPTIONS:\n\n"
 
-              << "  -h, --help       Display this help." << std::endl;
+              << "  -h, --help       Display this help.\n"
+              << "  -t               Stop after tokenizing." << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -28,6 +30,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    bool lbStopAfterTokenizing = false;
     std::string lsText;
 
     for (int i = 1; i < argc; i++)
@@ -38,6 +41,10 @@ int main(int argc, char** argv)
         {
             usage();
             return 0;
+        }
+        else if (lsArg == "-t")
+        {
+            lbStopAfterTokenizing = true;
         }
         else if (i == argc - 1)
         {
@@ -71,6 +78,19 @@ int main(int argc, char** argv)
             std::cerr << "Error: unrecognized argument: " << lsArg << std::endl;
             return 1;
         }
+    }
+
+    if (lbStopAfterTokenizing)
+    {
+        Tokenizer lcTokenizer;
+        lcTokenizer.tokenize(lsText);
+
+        for (const Token* pToken : *lcTokenizer.tokens())
+        {
+            std::cout << *pToken << std::endl;
+        }
+
+        return 0;
     }
 
     Parser lcParser;
