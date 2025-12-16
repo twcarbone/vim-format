@@ -42,6 +42,12 @@ private:
 
     static bool startswith_str(std::string_view str, std::string_view& substr);
     static bool startswith_digits(std::string_view str, std::string_view& digits);
+
+    /**
+     *  @brief
+     *      Return true if `str` starts with a valid float and set `out` to the float.
+     */
+    static bool startswith_float(std::string_view str, std::string_view& out);
 };
 
 #endif  // TOKENSPEC_H

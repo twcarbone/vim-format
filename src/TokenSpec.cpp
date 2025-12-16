@@ -1,12 +1,12 @@
+#include <cstdlib>
 #include <regex>
+#include <string>
 #include <string_view>
 
 #include "TokenSpec.h"
 
 TokenSpec::TokenSpec() :
     m_lReSpec {
-        { std::regex { "^\\d\\.\\d+[Ee][\\+-]?\\d+" }, Token::Type::FLOAT },
-        { std::regex { "^\\d+\\.\\d+" }, Token::Type::FLOAT },
         { std::regex { "^0[Xx]\\d+" }, Token::Type::INTEGER },
         { std::regex { "^0[Oo]\\d+" }, Token::Type::INTEGER },
         { std::regex { "^0[Bb][01]+" }, Token::Type::INTEGER },
@@ -129,24 +129,7 @@ Token* TokenSpec::match(const std::string& asText)
 {
     std::string_view lsStr;
 
-    if (startswith_str(asText, lsStr))
-    {
-        return new Token(Token::Type::STRING, std::string { lsStr });
-    }
-
-    if (startswith_digits(asText, lsStr))
-    {
-        return new Token(Token::Type::INTEGER, std::string { lsStr });
-    }
-
-    for (const std::string& lsKey : m_lDelimitedSpecKeys)
-    {
-        if (startswith(asText, lsKey, " \n"))
-        {
-            return new Token(m_mDelimitedSpec.at(lsKey), lsKey);
-        }
-    }
-
+    // 1. Look for a fixed-width token
     for (const std::string& lsKey : m_lFixedWidthSpecKeys)
     {
         if (startswith(asText, lsKey))
@@ -155,6 +138,34 @@ Token* TokenSpec::match(const std::string& asText)
         }
     }
 
+    // 2. Look for a string
+    if (startswith_str(asText, lsStr))
+    {
+        return new Token(Token::Type::STRING, std::string { lsStr });
+    }
+
+    // 3. Look for a float
+    if (startswith_float(asText, lsStr))
+    {
+        return new Token(Token::Type::FLOAT, std::string { lsStr });
+    }
+
+    // 4. Look for an integer
+    if (startswith_digits(asText, lsStr))
+    {
+        return new Token(Token::Type::INTEGER, std::string { lsStr });
+    }
+
+    // 5. Look for a whitespace-delimited token
+    for (const std::string& lsKey : m_lDelimitedSpecKeys)
+    {
+        if (startswith(asText, lsKey, " \n"))
+        {
+            return new Token(m_mDelimitedSpec.at(lsKey), lsKey);
+        }
+    }
+
+    // 6. Match on a regular expression (slow - last resort)
     for (auto it = m_lReSpec.cbegin(); it != m_lReSpec.cend(); ++it)
     {
         const std::regex& lcRe = it->first;
@@ -204,6 +215,32 @@ bool TokenSpec::startswith_digits(std::string_view asStr, std::string_view& asDi
     size_t lnEnd = asStr.find_first_not_of(s_lDigits, 1);
 
     asDigits = asStr.substr(0, lnEnd);
+
+    return true;
+}
+
+bool TokenSpec::startswith_float(std::string_view asStr, std::string_view& asOut)
+{
+    // 1. The candidate string is everything until the first non-float character
+    const size_t lnCandidateEnd = asStr.find_first_not_of("0123456789eE+-.");
+    asOut = asStr.substr(0, lnCandidateEnd);
+
+    // 2. Do the conversion
+    const char* pStart = asOut.data();
+    char* pEnd = nullptr;
+    float f = std::strtof(pStart, &pEnd);
+
+    // 3. The entire candidate needs to be parsed to make a valid float
+    if (pEnd == pStart || pEnd != asOut.end())
+    {
+        return false;
+    }
+
+    // 4. It might've been an integer that was parsed
+    if (asOut.find('.') == std::string_view::npos)
+    {
+        return false;
+    }
 
     return true;
 }
