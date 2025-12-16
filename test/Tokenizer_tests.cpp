@@ -32,14 +32,16 @@ protected:
 
     void expect_tokens(size_t anCount)
     {
-        EXPECT_EQ(m_cTokenizer.tokens()->size(), anCount);
+        const size_t expected = anCount;
+        const size_t actual = m_cTokenizer.tokens()->size();
+        EXPECT_EQ(actual, expected) << "Text: " << m_cTokenizer.text();
     }
 
     void expect_token(size_t anIdx, const std::string& asTokenStr, const Token::Type& aeTokenType)
     {
-        const Token lcExp(aeTokenType, asTokenStr);
-        const Token& lcAct = m_cTokenizer.token(anIdx);
-        EXPECT_EQ(lcAct, lcExp) << "Expected " << lcExp.toString() << ", but got " << lcAct.toString();
+        const Token expected(aeTokenType, asTokenStr);
+        const Token& actual = m_cTokenizer.token(anIdx);
+        EXPECT_EQ(actual, expected) << "At " << std::to_string(anIdx) << " from: " << m_cTokenizer.text();
     }
 };
 
