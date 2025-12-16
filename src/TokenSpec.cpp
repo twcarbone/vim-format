@@ -1,41 +1,121 @@
+#include <cstdlib>
 #include <regex>
+#include <string>
+#include <string_view>
 
 #include "TokenSpec.h"
 
-TokenSpec::TokenSpec()
+TokenSpec::TokenSpec() :
+    m_lReSpec {
+        { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::GEN_NAME },
+    },
+    m_lDelimitedSpecKeys {
+        // clang-format off
+        "let",
+        "echo",
+        "set",
+        "if",
+        "elseif",
+        "else",
+        "endif",
+        "while",
+        "endwhile",
+        "for",
+        "in",
+        "endfor",
+        "break",
+        "continue",
+        "is",
+        "isnot",
+        // clang-format on
+    },
+    m_mDelimitedSpec {
+        { "let", Token::Type::CMD_LET },
+        { "echo", Token::Type::CMD_ECHO },
+        { "set", Token::Type::CMD_SET },
+        { "if", Token::Type::IF },
+        { "elseif", Token::Type::ELSEIF },
+        { "else", Token::Type::ELSE },
+        { "endif", Token::Type::ENDIF },
+        { "while", Token::Type::WHILE },
+        { "endwhile", Token::Type::ENDWHILE },
+        { "for", Token::Type::FOR },
+        { "in", Token::Type::IN },
+        { "endfor", Token::Type::ENDFOR },
+        { "break", Token::Type::BREAK },
+        { "continue", Token::Type::CONTINUE },
+        { "is", Token::Type::OP_IS },
+        { "isnot", Token::Type::OP_ISNOT },
+    },
+    m_lFixedWidthSpecKeys {
+        // clang-format off
+        " ",
+        "\n",
+        "\t",
+        "||",
+        ",",
+        "[",
+        "]",
+        "??",
+        "?",
+        ">>",
+        ">=",
+        ">",
+        "=~",
+        "==",
+        "=",
+        "<=",
+        "<<",
+        "<",
+        ":",
+        "/=",
+        "/",
+        ".=",
+        "..=",
+        "..",
+        ".",
+        "-=",
+        "-",
+        "+=",
+        "+",
+        "*=",
+        "*",
+        "(",
+        ")",
+        "&&",
+        "&",
+        "%=",
+        "%",
+        "#",
+        "!~",
+        "!=",
+        "!",
+        // clang-format on
+    },
+    m_mFixedWidthSpec {
+        { "!", Token::Type::OP_LOGICAL_NOT },  { "!", Token::Type::OP_LOGICAL_NOT },
+        { "!=", Token::Type::OP_NEQUAL },      { "!~", Token::Type::OP_NMATCH },
+        { "#", Token::Type::OP_MATCH_CASE },   { "%", Token::Type::OP_MODULO },
+        { "%=", Token::Type::ASSIGN_MODULO },  { "&", Token::Type::OP_OPTION },
+        { "&&", Token::Type::OP_AND },         { "(", Token::Type::L_PAREN },
+        { ")", Token::Type::R_PAREN },         { "*", Token::Type::OP_MUL },
+        { "*=", Token::Type::ASSIGN_MUL },     { "+", Token::Type::GEN_PLUS },
+        { "+=", Token::Type::ASSIGN_ADD },     { "-", Token::Type::GEN_MINUS },
+        { "-=", Token::Type::ASSIGN_MINUS },   { ".", Token::Type::OP_CAT_OLD },
+        { "..", Token::Type::OP_CAT_NEW },     { "..=", Token::Type::ASSIGN_CAT_NEW },
+        { ".=", Token::Type::ASSIGN_CAT_OLD }, { "/", Token::Type::OP_DIV },
+        { "/=", Token::Type::ASSIGN_DIV },     { ":", Token::Type::OP_TERNARY_ELSE },
+        { "<", Token::Type::OP_LT },           { "<<", Token::Type::OP_LSHIFT },
+        { "<=", Token::Type::OP_LTE },         { "=", Token::Type::ASSIGN_EQ },
+        { "==", Token::Type::OP_EQUAL },       { "=~", Token::Type::OP_MATCH },
+        { ">", Token::Type::OP_GT },           { ">=", Token::Type::OP_GTE },
+        { ">>", Token::Type::OP_RSHIFT },      { "?", Token::Type::GEN_QUESTION },
+        { "??", Token::Type::OP_FALSEY },      { "[", Token::Type::L_BRACKET },
+        { "]", Token::Type::R_BRACKET },       { ",", Token::Type::COMMA },
+        { "||", Token::Type::OP_OR },          { " ", Token::Type::SPACE },
+        { "\n", Token::Type::NEWLINE },        { "\t", Token::Type::TAB },
+    }
 {
-    // Keyword
-    push("^let", Token::Type::KEYWORD);
-
-    // Operator
-    push("^\\=", Token::Type::OPERATOR_ASSIGNMENT);
-
-    // Special
-    push("^;", Token::Type::SPECIAL_SEMICOLON);
-
-    // String constant                  :h string
-    push("^\"[^\"]*\"", Token::Type::LITERAL_STRING);
-
-    // Literal string                   :h literal-string
-    push("^'[^']*'", Token::Type::LITERAL_STRING);
-
-    // Literal float                    :h floating-point-format
-    push("^[\\+-]?\\d\\.\\d+[Ee][\\+-]?\\d+", Token::Type::LITERAL_FLOAT);
-    push("^[\\+-]?\\d+\\.\\d+", Token::Type::LITERAL_FLOAT);
-
-    // Literal integer                  :h expr-number
-    push("^0[Xx]\\d+", Token::Type::LITERAL_INTEGER);
-    push("^0[Oo]\\d+", Token::Type::LITERAL_INTEGER);
-    push("^0[Bb][01]+", Token::Type::LITERAL_INTEGER);
-    push("^-?\\d+", Token::Type::LITERAL_INTEGER);
-
-    // Identifier
-    push("^[a-zA-Z_]+", Token::Type::IDENTIFIER);
-
-    // Other
-    push("^\t", Token::Type::TAB);
-    push("^ ", Token::Type::SPACE);
-    push("^\n", Token::Type::NEWLINE);
 }
 
 TokenSpec::~TokenSpec()
@@ -44,7 +124,46 @@ TokenSpec::~TokenSpec()
 
 Token* TokenSpec::match(const std::string& asText)
 {
-    for (auto it = m_lSpec.cbegin(); it != m_lSpec.cend(); ++it)
+    std::string_view lsStr;
+
+    // 1. Look for a fixed-width token
+    for (const std::string& lsKey : m_lFixedWidthSpecKeys)
+    {
+        if (startswith(asText, lsKey))
+        {
+            return new Token(m_mFixedWidthSpec.at(lsKey), lsKey);
+        }
+    }
+
+    // 2. Look for a string
+    if (startswith_str(asText, lsStr))
+    {
+        return new Token(Token::Type::STRING, std::string { lsStr });
+    }
+
+    // 3. Look for a float
+    if (startswith_float(asText, lsStr))
+    {
+        return new Token(Token::Type::FLOAT, std::string { lsStr });
+    }
+
+    // 4. Look for an integer
+    if (startswith_int(asText, lsStr))
+    {
+        return new Token(Token::Type::INTEGER, std::string { lsStr });
+    }
+
+    // 5. Look for a whitespace-delimited token
+    for (const std::string& lsKey : m_lDelimitedSpecKeys)
+    {
+        if (startswith(asText, lsKey, " \n"))
+        {
+            return new Token(m_mDelimitedSpec.at(lsKey), lsKey);
+        }
+    }
+
+    // 6. Match on a regular expression (slow - last resort)
+    for (auto it = m_lReSpec.cbegin(); it != m_lReSpec.cend(); ++it)
     {
         const std::regex& lcRe = it->first;
         const Token::Type& leTokenType = it->second;
@@ -59,7 +178,104 @@ Token* TokenSpec::match(const std::string& asText)
     return nullptr;
 }
 
-void TokenSpec::push(const std::string& asRe, const Token::Type aeType)
+bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix, std::string_view asDelim)
 {
-    m_lSpec.push_back(std::pair<std::regex, Token::Type> { asRe, aeType });
+    size_t lnEnd = asDelim.empty() ? asPrefix.size() : asStr.find_first_of(asDelim);
+    return asStr.substr(0, lnEnd) == asPrefix;
+}
+
+bool TokenSpec::startswith_str(std::string_view asStr, std::string_view& asPrefix)
+{
+    // TODO: Add support for single-quote string tokenizing
+    // TODO: Add support for escaped quotes within a string token
+
+    if (asStr.empty() || !startswith(asStr, "\""))
+    {
+        return false;
+    }
+
+    const size_t lnBegin = 0;
+    const size_t lnEnd = asStr.find('"', 1);
+
+    asPrefix = asStr.substr(0, lnEnd - lnBegin + 1);
+
+    return true;
+}
+
+bool TokenSpec::startswith_int(std::string_view asStr, std::string_view& asOut)
+{
+    // 1. Start by finding the end any leading digits. Save it for back-tracking.
+    const size_t lnDigitsEnd = asStr.find_first_not_of("0123456789");
+    asOut = asStr.substr(0, lnDigitsEnd);
+
+    // 2. Zero digits means this is not an integer. More than one digit means this is a
+    //    base-10 integer. We can return immediately in either case.
+    if (lnDigitsEnd != 1)
+    {
+        return lnDigitsEnd > 0;
+    }
+
+    // 3. Compute the base from the "base character". Return the leading digits if it's
+    //    not a valid base character.
+    int lnBase;
+    switch (asStr[1])
+    {
+        case 'X':
+        case 'x':
+            lnBase = 16;
+            break;
+        case 'O':
+        case 'o':
+            lnBase = 8;
+            break;
+        case 'B':
+        case 'b':
+            lnBase = 2;
+            break;
+        default:
+            return true;
+    }
+
+    // 4. Convert the "value" portion (example: 1234 from 0x1234).
+    const size_t lnCandidateEnd = asStr.find_first_not_of("0123456789abcdefABCDEF", 2);
+    const std::string_view lsValue = asStr.substr(2, lnCandidateEnd - 2);
+    const char* pStart = lsValue.data();
+    char* pEnd = nullptr;
+    long l = std::strtol(pStart, &pEnd, lnBase);
+
+    // 5. Zero valid characters, or one invalid character, followed the "base character".
+    //    Return the leading digits.
+    if (pEnd == pStart || pEnd != lsValue.end())
+    {
+        return true;
+    }
+
+    asOut = asStr.substr(0, lnCandidateEnd);
+    return true;
+}
+
+bool TokenSpec::startswith_float(std::string_view asStr, std::string_view& asOut)
+{
+    // 1. The candidate string is everything until the first non-float character
+    const size_t lnCandidateEnd = asStr.find_first_not_of("0123456789eE+-.");
+    asOut = asStr.substr(0, lnCandidateEnd);
+
+    // 2. Do the conversion
+    const char* pStart = asOut.data();
+    char* pEnd = nullptr;
+    float f = std::strtof(pStart, &pEnd);
+
+    // 3. The entire candidate needs to be parsed to make a valid float
+    if (pEnd == pStart || pEnd != asOut.end())
+    {
+        return false;
+    }
+
+    // 4. It might've been an integer that was parsed
+    if (asOut.find('.') == std::string_view::npos)
+    {
+        return false;
+    }
+
+    return true;
 }

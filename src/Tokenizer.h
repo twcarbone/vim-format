@@ -17,7 +17,26 @@ public:
     Tokenizer(const std::string& text);
     ~Tokenizer();
 
+    /**
+     *  @brief
+     *      Return the next Token. Returns 'END' Token at EOF.
+     *
+     *  @throws
+     *      std::runtime_error if Token is unrecognized.
+     *      std::runtime_error if Token cannot be disambiguated.
+     */
+    Token* next();
+
+    /**
+     *  @brief
+     *      Fill buffer of with all Tokens.
+     *
+     *  @throws
+     *      See Tokenizer::next().
+     */
     void tokenize(const std::string& text = "");
+
+    const std::string& text() const;
 
     const Token& token(size_t i) const;
     std::vector<Token*>* tokens() const;
@@ -29,10 +48,10 @@ private:
 
     TokenSpec* m_pTokenSpec;
 
-    bool hasMoreTokens() const;
+    Token* do_next();
     void freeTokens() const;
-
-    Token* next();
+    bool disambiguate(Token* token);
+    bool hasMoreTokens() const;
 };
 
 #endif  // TOKENIZER_H

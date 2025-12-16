@@ -2,6 +2,7 @@
 #define TOKEN_H
 
 #include <string>
+#include <ostream>
 
 class Token
 {
@@ -10,33 +11,83 @@ public:
     {
         NONE,
 
-        TAB,
-        SPACE,
-        NEWLINE,
+        CMD_LET,   // let
+        CMD_ECHO,  // echo
+        CMD_SET,   // set
 
-        KEYWORD,
+        GEN_PLUS,      // +
+        GEN_MINUS,     // -
+        GEN_QUESTION,  // ?
+        GEN_NAME,      // [a-zA-Z_][a-zA-Z0-9_]+
 
-        IDENTIFIER,
+        OP_ADD,           // +
+        OP_SUB,           // -
+        OP_UNARY_PLUS,    // +
+        OP_UNARY_MINUS,   // -
+        OP_MUL,           // *
+        OP_DIV,           // /
+        OP_MODULO,        // %
+        OP_EQUAL,         // ==
+        OP_NEQUAL,        // !=
+        OP_GT,            // >
+        OP_GTE,           // >=
+        OP_LT,            // <
+        OP_LTE,           // <=
+        OP_MATCH,         // =~
+        OP_NMATCH,        // !~
+        OP_IS,            // is
+        OP_ISNOT,         // isnot
+        OP_OR,            // ||
+        OP_AND,           // &&
+        OP_MATCH_CASE,    // #
+        OP_IGNORE_CASE,   // ?
+        OP_TERNARY_IF,    // ?
+        OP_TERNARY_ELSE,  // :
+        OP_FALSEY,        // ??
+        OP_LSHIFT,        // <<
+        OP_RSHIFT,        // >>
+        OP_CAT_OLD,       // .
+        OP_CAT_NEW,       // ..
+        OP_LOGICAL_NOT,   // !
+        OP_OPTION,        // &
 
-        LITERAL_INTEGER,
-        LITERAL_FLOAT,
-        LITERAL_CHAR,
-        LITERAL_STRING,
+        ASSIGN_ADD,      // +=
+        ASSIGN_MINUS,    // -=
+        ASSIGN_MUL,      // *=
+        ASSIGN_DIV,      // /=
+        ASSIGN_EQ,       // =
+        ASSIGN_MODULO,   // %=
+        ASSIGN_CAT_OLD,  // .=
+        ASSIGN_CAT_NEW,  // ..=
 
-        OPERATOR_ARITHMETIC,
-        OPERATOR_RELATIONAL,
-        OPERATOR_LOGICAL,
-        OPERATOR_ASSIGNMENT,
-        OPERATOR_BITWISE,
-        OPERATOR_UNARY,
+        L_PAREN,    // (
+        R_PAREN,    // )
+        L_BRACKET,  // [
+        R_BRACKET,  // ]
+        COMMA,      // ,
 
-        SPECIAL_PAREN_OPEN,
-        SPECIAL_PAREN_CLOSED,
-        SPECIAL_BRACKET_OPEN,
-        SPECIAL_BRACKET_CLOSED,
-        SPECIAL_BRACE_OPEN,
-        SPECIAL_BRACE_CLOSED,
-        SPECIAL_SEMICOLON
+        IF,        // if
+        ELSEIF,    // elseif
+        ELSE,      // else
+        ENDIF,     // endif
+        WHILE,     // while
+        ENDWHILE,  // endwhile
+        FOR,       // for
+        IN,        // in
+        ENDFOR,    // endfor
+        BREAK,     // break
+        CONTINUE,  // continue
+
+        END,      // End of file
+        TAB,      // 0x09
+        NEWLINE,  // 0x0a
+        SPACE,    // 0x20
+
+        OPTION,      // [a-z]+
+        IDENTIFIER,  // [a-zA-Z_][a-zA-Z0-9_]+
+        STRING,      // "..." or '...'
+        INTEGER,     // 42, 0xff, 0b1101, etc.
+        FLOAT,       // 3.14, 6.022e+23, -1.4E-5, etc.
     };
 
     Token();
@@ -44,19 +95,26 @@ public:
 
     ~Token();
 
+    bool ambiguous() const;
+    bool delimiting_wp() const;
+    bool structural_wp() const;
+
     Type type() const;
+    void setType(Type type);
+
     std::string str() const;
 
     std::string toString() const;
 
+    static std::string TypeToStr(Type type);
+
     friend bool operator==(const Token& lhs, const Token& rhs);
     friend bool operator!=(const Token& lhs, const Token& rhs);
+    friend std::ostream& operator<<(std::ostream& os, const Token& obj);
 
 private:
     Type m_eType;
     std::string m_sStr;
-
-    static std::string TypeToStr(Type type);
 };
 
 #endif  // TOKEN_H
