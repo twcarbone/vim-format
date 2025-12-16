@@ -23,6 +23,8 @@ public:
 
     virtual std::string toString() const = 0;
 
+    friend bool operator==(const Node& lhs, const Node& rhs);
+
 protected:
     Node* m_pParent;
     std::vector<Node*> m_lChildren;
@@ -42,6 +44,8 @@ public:
 
     virtual std::string toString() const override;
 
+    friend bool operator==(const RuleNode& lhs, const RuleNode& rhs);
+
 private:
     std::string m_sSymbol;
 };
@@ -59,6 +63,8 @@ public:
     Token* token() const;
 
     virtual std::string toString() const override;
+
+    friend bool operator==(const TokenNode& lhs, const TokenNode& rhs);
 
 private:
     Token* m_pToken;
