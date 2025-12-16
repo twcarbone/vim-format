@@ -25,6 +25,11 @@ void Parser::parse(const std::string& asText)
     program();
 }
 
+const std::string& Parser::text() const
+{
+    return m_pTokenizer->text();
+}
+
 Node* Parser::root() const
 {
     return m_pRoot;

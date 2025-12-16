@@ -16,6 +16,8 @@ public:
 
     void parse(const std::string& program);
 
+    const std::string& text() const;
+
     Node* root() const;
 
 private:
