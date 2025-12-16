@@ -3,18 +3,32 @@
 #include <vector>
 
 #include "Node.h"
-#include "Parser.h"
 #include "NodeVisitor.h"
+#include "Parser.h"
 
-TEST(ParserTest, Simple)
+class ParserTest : public testing::Test
 {
-    Parser lcParser;
-    lcParser.parse("2+3*4\n");
-    Node* pRoot = lcParser.root();
+protected:
+    Parser m_cParser;
+    NodeVisitor m_cNodeVisitor;
+    std::vector<const Node*> m_lNodes;
 
-    NodeVisitor lcNodeVisitor;
+    void parse_str(const std::string& asText)
+    {
+        m_cParser.parse(asText);
+        m_lNodes = m_cNodeVisitor.accumulate(m_cParser.root(), NodeVisitor::Order::PRE);
+    }
 
-    std::vector<const Node*> llNodes = lcNodeVisitor.accumulate(pRoot, NodeVisitor::Order::PRE);
+    void expect_nodes(size_t anCount)
+    {
+        const size_t expected = anCount;
+        const size_t actual = m_lNodes.size();
+        EXPECT_EQ(actual, expected) << "Text: " << m_cParser.text();
+    }
+};
 
-    ASSERT_EQ(18, llNodes.size());
+TEST_F(ParserTest, Test01)
+{
+    parse_str("echo 1 + 2 - 3 . 4 .. 5\n");
+    expect_nodes(46);
 }
