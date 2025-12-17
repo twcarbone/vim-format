@@ -158,10 +158,9 @@ expr11
         : INTEGER
         | FLOAT
         | STRING
-        | list_expr
-        | OP_OPTION OPTION
-        | L_PAREN expr1 R_PAREN
         | IDENTIFIER
+        | L_PAREN expr1 R_PAREN
+        | list_expr
 
 list_expr
         : L_BRACKET (expr1 (COMMA expr1)* COMMA?)? R_BRACKET
