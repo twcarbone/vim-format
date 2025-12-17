@@ -395,7 +395,6 @@ void Parser::expr10(Node* apParent)
 
 void Parser::expr11(Node* apParent)
 {
-
     RuleNode* pRuleNode = new RuleNode(apParent, __func__);
     apParent->add(pRuleNode);
 
