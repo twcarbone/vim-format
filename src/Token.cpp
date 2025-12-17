@@ -25,6 +25,7 @@ bool Token::ambiguous() const
         case Type::GEN_PLUS:
         case Type::GEN_MINUS:
         case Type::GEN_QUESTION:
+        case Type::GEN_EXCLAMATION:
             return true;
         default:
             return false;

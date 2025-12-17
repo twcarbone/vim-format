@@ -14,6 +14,7 @@
         X(GEN_MINUS) \
         X(GEN_QUESTION) \
         X(GEN_NAME) \
+        X(GEN_EXCLAMATION) \
         X(OP_ADD) \
         X(OP_SUB) \
         X(OP_UNARY_PLUS) \
@@ -43,6 +44,7 @@
         X(OP_CAT_OLD) \
         X(OP_CAT_NEW) \
         X(OP_LOGICAL_NOT) \
+        X(OP_BANG) \
         X(OP_OPTION) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \
@@ -68,6 +70,13 @@
         X(ENDFOR) \
         X(BREAK) \
         X(CONTINUE) \
+        X(FUNCTION) \
+        X(ENDFUNCTION) \
+        X(FN_RANGE) \
+        X(FN_ABORT) \
+        X(FN_DICT) \
+        X(FN_CLOSURE) \
+        X(FN_ELLIPSES) \
         X(END) \
         X(TAB) \
         X(NEWLINE) \

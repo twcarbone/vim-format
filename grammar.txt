@@ -8,6 +8,7 @@ CMD_SET             set
 GEN_PLUS            +
 GEN_MINUS           -
 GEN_QUESTION        ?
+GEN_EXCLAMATION     !
 GEN_NAME            [a-zA-Z_][a-zA-Z0-9_]*
 
 OP_ADD              +
@@ -39,6 +40,7 @@ OP_RSHIFT           >>
 OP_CAT_OLD          .
 OP_CAT_NEW          ..
 OP_LOGICAL_NOT      !
+OP_BANG             !
 OP_OPTION           &
 
 ASSIGN_ADD          +=
@@ -67,6 +69,14 @@ IN                  in
 ENDFOR              endfor
 BREAK               break
 CONTINUE            continue
+FUNCTION            function                        (v9.1.0698) src/userfunc.c:4755
+ENDFUNCTION         endfunction                     ``
+
+FN_RANGE            range                           (v9.1.0698) src/structs.h:1931
+FN_ABORT            abort                           ``
+FN_DICT             dict                            ``
+FN_CLOSURE          closure                         ``
+FN_ELLIPSES         ...
 
 END                 End of file
 TAB                 0x09

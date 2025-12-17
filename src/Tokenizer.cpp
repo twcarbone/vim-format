@@ -235,5 +235,27 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
         }
     }
 
+    //
+    // GEN_EXCLAMATION
+    //
+
+    else if (apCurrentToken->type() == Token::Type::GEN_EXCLAMATION)
+    {
+        if (m_pTokens->empty())
+        {
+            apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
+        }
+        else
+        {
+            switch (m_pTokens->back()->type())
+            {
+                case Token::Type::FUNCTION:
+                    apCurrentToken->setType(Token::Type::OP_BANG);
+                    break;
+                default:
+                    apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
+            }
+        }
+    }
     return !apCurrentToken->ambiguous();
 }
