@@ -32,3 +32,42 @@ TEST_F(ParserTest, Test01)
     parse_str("echo 1 + 2 - 3 . 4 .. 5\n");
     expect_nodes(46);
 }
+
+//
+// function_stmt
+//
+
+TEST_F(ParserTest, function_stmt_01)
+{
+    parse_str("function! foo() range abort dict closure\nendfunction\n");
+}
+
+TEST_F(ParserTest, function_stmt_02)
+{
+    parse_str("function! foo(...)\nendfunction\n");
+}
+
+TEST_F(ParserTest, function_stmt_03)
+{
+    parse_str("function! foo(...,)\nendfunction\n");
+}
+
+TEST_F(ParserTest, function_stmt_04)
+{
+    parse_str("function! foo(a)\nendfunction\n");
+}
+
+TEST_F(ParserTest, function_stmt_05)
+{
+    parse_str("function! foo(a,)\nendfunction\n");
+}
+
+TEST_F(ParserTest, function_stmt_06)
+{
+    parse_str("function! foo(a, ...)\nendfunction\n");
+}
+
+TEST_F(ParserTest, function_stmt_07)
+{
+    parse_str("function! foo(a, b = 1)\nendfunction\n");
+}
