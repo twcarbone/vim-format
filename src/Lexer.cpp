@@ -13,7 +13,6 @@ Lexer::Lexer(const std::string& asText) :
     m_nCursor { 0 },
     m_sText { asText }
 {
-    m_pTokens = new std::vector<Token*>;
     m_pTokenSpec = new TokenSpec();
 }
 
@@ -37,7 +36,7 @@ void Lexer::tokenize(const std::string& asText)
     {
         next();
 
-        if (m_pTokens->back()->type() == Token::Type::END)
+        if (m_lTokens.back()->type() == Token::Type::END)
         {
             break;
         }
@@ -49,15 +48,15 @@ const std::string& Lexer::text() const
     return m_sText;
 }
 
-std::vector<Token*>* Lexer::tokens() const
+std::vector<Token*> Lexer::tokens() const
 {
-    return m_pTokens;
+    return m_lTokens;
 }
 
 const Token& Lexer::token(size_t anIdx) const
 {
     // TODO (gh-7): throw IndexError
-    return *m_pTokens->at(anIdx);
+    return *m_lTokens.at(anIdx);
 }
 
 Token* Lexer::next()
@@ -69,7 +68,7 @@ Token* Lexer::next()
         pToken = do_next();
     }
 
-    m_pTokens->push_back(pToken);
+    m_lTokens.push_back(pToken);
     return pToken;
 }
 
@@ -109,14 +108,14 @@ bool Lexer::hasMoreTokens() const
     return m_nCursor < m_sText.size();
 }
 
-void Lexer::freeTokens() const
+void Lexer::freeTokens()
 {
-    for (const Token* pToken : *m_pTokens)
+    for (const Token* pToken : m_lTokens)
     {
         delete pToken;
     }
 
-    m_pTokens->clear();
+    m_lTokens.clear();
 }
 
 /**
@@ -132,13 +131,13 @@ bool Lexer::disambiguate(Token* apCurrentToken)
 
     if (apCurrentToken->type() == Token::Type::GEN_MINUS)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
@@ -159,13 +158,13 @@ bool Lexer::disambiguate(Token* apCurrentToken)
 
     else if (apCurrentToken->type() == Token::Type::GEN_PLUS)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
@@ -186,13 +185,13 @@ bool Lexer::disambiguate(Token* apCurrentToken)
 
     else if (apCurrentToken->type() == Token::Type::GEN_QUESTION)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             // Nothing
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::OP_EQUAL:
                 case Token::Type::OP_NEQUAL:
@@ -218,13 +217,13 @@ bool Lexer::disambiguate(Token* apCurrentToken)
 
     else if (apCurrentToken->type() == Token::Type::GEN_NAME)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             apCurrentToken->setType(Token::Type::IDENTIFIER);
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::OP_OPTION:
                     apCurrentToken->setType(Token::Type::OPTION);
@@ -241,13 +240,13 @@ bool Lexer::disambiguate(Token* apCurrentToken)
 
     else if (apCurrentToken->type() == Token::Type::GEN_EXCLAMATION)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::FUNCTION:
                     apCurrentToken->setType(Token::Type::OP_BANG);

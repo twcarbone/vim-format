@@ -33,7 +33,7 @@ protected:
     void expect_tokens(size_t anCount)
     {
         const size_t expected = anCount;
-        const size_t actual = m_cLexer.tokens()->size();
+        const size_t actual = m_cLexer.tokens().size();
         EXPECT_EQ(actual, expected) << "Text: " << m_cLexer.text();
     }
 

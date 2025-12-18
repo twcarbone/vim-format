@@ -39,17 +39,17 @@ public:
     const std::string& text() const;
 
     const Token& token(size_t i) const;
-    std::vector<Token*>* tokens() const;
+    std::vector<Token*> tokens() const;
 
 private:
     int m_nCursor;
     std::string m_sText;
-    std::vector<Token*>* m_pTokens;
+    std::vector<Token*> m_lTokens;
 
     TokenSpec* m_pTokenSpec;
 
     Token* do_next();
-    void freeTokens() const;
+    void freeTokens();
     bool disambiguate(Token* token);
     bool hasMoreTokens() const;
 };

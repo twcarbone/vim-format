@@ -94,7 +94,7 @@ int main(int argc, char** argv)
             return 1;
         }
 
-        for (const Token* pToken : *lcLexer.tokens())
+        for (const Token* pToken : lcLexer.tokens())
         {
             std::cout << *pToken << std::endl;
         }
