@@ -64,6 +64,7 @@ void Parser::stmt_list(Node* apParent)
             case Token::Type::ENDWHILE:
             case Token::Type::ENDFOR:
             case Token::Type::END:
+            case Token::Type::ENDFUNCTION:
                 return;
             default:
                 stmt(pRuleNode);
@@ -85,6 +86,9 @@ void Parser::stmt(Node* apParent)
         case Token::Type::FOR:
         case Token::Type::WHILE:
             iteration_stmt(pRuleNode);
+            break;
+        case Token::Type::FUNCTION:
+            function_stmt(pRuleNode);
             break;
         case Token::Type::BREAK:
         case Token::Type::CONTINUE:
@@ -172,6 +176,78 @@ void Parser::iteration_stmt(Node* apParent)
 
         stmt_list(pRuleNode);
         consume(pRuleNode, Token::Type::ENDFOR);
+    }
+}
+
+void Parser::function_stmt(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    consume(pRuleNode, Token::Type::FUNCTION);
+    consume_optional(pRuleNode, Token::Type::OP_BANG);
+    consume(pRuleNode, Token::Type::IDENTIFIER);
+    consume(pRuleNode, Token::Type::L_PAREN);
+
+    if (m_pCurrToken->type() != Token::Type::R_PAREN)
+    {
+        arg_list(pRuleNode);
+    }
+
+    consume(pRuleNode, Token::Type::R_PAREN);
+
+    bool lbLoop = true;
+    while (lbLoop)
+    {
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::FN_RANGE:
+            case Token::Type::FN_ABORT:
+            case Token::Type::FN_DICT:
+            case Token::Type::FN_CLOSURE:
+                consume(pRuleNode, m_pCurrToken->type());
+                break;
+            default:
+                lbLoop = false;
+        }
+    }
+
+    stmt_list(pRuleNode);
+    consume(pRuleNode, Token::Type::ENDFUNCTION);
+}
+
+void Parser::arg_list(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    bool lbGotDefaultArg = false;
+    while (m_pCurrToken->type() != Token::Type::R_PAREN)
+    {
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::FN_ELLIPSES:
+                consume(pRuleNode, Token::Type::FN_ELLIPSES);
+                consume_optional(pRuleNode, Token::Type::COMMA);
+                return;
+            case Token::Type::IDENTIFIER:
+                consume(pRuleNode, Token::Type::IDENTIFIER);
+
+                if (consume_optional(pRuleNode, Token::Type::ASSIGN_EQ))
+                {
+                    lbGotDefaultArg = true;
+                    expr1(pRuleNode);
+                }
+                else if (lbGotDefaultArg)
+                {
+                    throw std::runtime_error("Non-default argument follows default argument");
+                }
+
+                consume_optional(pRuleNode, Token::Type::COMMA);
+                break;
+            default:
+                throw std::runtime_error("Expected function argument, got " + m_pCurrToken->toString());
+        }
     }
 }
 
