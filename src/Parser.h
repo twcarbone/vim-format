@@ -44,6 +44,7 @@ private:
     void expr11(Node* parent);
 
     void consume(Node* parent, const Token::Type type);
+    bool consume_optional(Node* parent, const Token::Type type);
 };
 
 #endif  // PARSER_H

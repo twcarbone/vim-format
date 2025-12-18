@@ -134,9 +134,8 @@ void Parser::select_stmt(Node* apParent)
         stmt_list(pRuleNode);
     }
 
-    if (m_pCurrToken->type() == Token::Type::ELSE)
+    if (consume_optional(pRuleNode, Token::Type::ELSE))
     {
-        consume(pRuleNode, Token::Type::ELSE);
         stmt_list(pRuleNode);
     }
 
@@ -443,4 +442,15 @@ void Parser::consume(Node* apParent, const Token::Type aeType)
                 return;
         }
     }
+}
+
+bool Parser::consume_optional(Node* apParent, const Token::Type aeType)
+{
+    if (m_pCurrToken->type() == aeType)
+    {
+        consume(apParent, aeType);
+        return true;
+    }
+
+    return false;
 }
