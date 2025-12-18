@@ -1,6 +1,7 @@
 add_library(
     vimformat
     STATIC
+    Exceptions.cpp
     Node.cpp
     NodeVisitor.cpp
     Parser.cpp
