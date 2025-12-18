@@ -1,10 +1,10 @@
 #include <fstream>
 #include <iostream>
 
+#include "Lexer.h"
 #include "Node.h"
 #include "NodeVisitor.h"
 #include "Parser.h"
-#include "Tokenizer.h"
 
 void usage()
 {
@@ -82,11 +82,11 @@ int main(int argc, char** argv)
 
     if (lbStopAfterTokenizing)
     {
-        Tokenizer lcTokenizer;
+        Lexer lcLexer;
 
         try
         {
-            lcTokenizer.tokenize(lsText);
+            lcLexer.tokenize(lsText);
         }
         catch (const std::runtime_error& e)
         {
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
             return 1;
         }
 
-        for (const Token* pToken : *lcTokenizer.tokens())
+        for (const Token* pToken : *lcLexer.tokens())
         {
             std::cout << *pToken << std::endl;
         }

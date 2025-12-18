@@ -6,7 +6,7 @@
 #include "Node.h"
 #include "Token.h"
 
-class Tokenizer;
+class Lexer;
 
 class Parser
 {
@@ -23,7 +23,7 @@ public:
 private:
     Node* m_pRoot;
     Token* m_pCurrToken;
-    Tokenizer* m_pTokenizer;
+    Lexer* m_pLexer;
 
     void program();
     void stmt_list(Node* parent);

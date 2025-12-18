@@ -10,12 +10,12 @@
 #include "Token.h"
 #include "TokenSpec.h"
 
-class Tokenizer
+class Lexer
 {
 public:
-    Tokenizer();
-    Tokenizer(const std::string& text);
-    ~Tokenizer();
+    Lexer();
+    Lexer(const std::string& text);
+    ~Lexer();
 
     /**
      *  @brief
@@ -32,7 +32,7 @@ public:
      *      Fill buffer of with all Tokens.
      *
      *  @throws
-     *      See Tokenizer::next().
+     *      See Lexer::next().
      */
     void tokenize(const std::string& text = "");
 

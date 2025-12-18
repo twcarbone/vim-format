@@ -1,15 +1,15 @@
 #include <exception>
 #include <string>
 
+#include "Lexer.h"
 #include "Token.h"
-#include "Tokenizer.h"
 
-Tokenizer::Tokenizer() :
-    Tokenizer("")
+Lexer::Lexer() :
+    Lexer("")
 {
 }
 
-Tokenizer::Tokenizer(const std::string& asText) :
+Lexer::Lexer(const std::string& asText) :
     m_nCursor { 0 },
     m_sText { asText }
 {
@@ -17,13 +17,13 @@ Tokenizer::Tokenizer(const std::string& asText) :
     m_pTokenSpec = new TokenSpec();
 }
 
-Tokenizer::~Tokenizer()
+Lexer::~Lexer()
 {
     freeTokens();
     delete m_pTokenSpec;
 }
 
-void Tokenizer::tokenize(const std::string& asText)
+void Lexer::tokenize(const std::string& asText)
 {
     freeTokens();
     m_nCursor = 0;
@@ -44,23 +44,23 @@ void Tokenizer::tokenize(const std::string& asText)
     }
 }
 
-const std::string& Tokenizer::text() const
+const std::string& Lexer::text() const
 {
     return m_sText;
 }
 
-std::vector<Token*>* Tokenizer::tokens() const
+std::vector<Token*>* Lexer::tokens() const
 {
     return m_pTokens;
 }
 
-const Token& Tokenizer::token(size_t anIdx) const
+const Token& Lexer::token(size_t anIdx) const
 {
     // TODO (gh-7): throw IndexError
     return *m_pTokens->at(anIdx);
 }
 
-Token* Tokenizer::next()
+Token* Lexer::next()
 {
     Token* pToken = do_next();
 
@@ -73,7 +73,7 @@ Token* Tokenizer::next()
     return pToken;
 }
 
-Token* Tokenizer::do_next()
+Token* Lexer::do_next()
 {
     Token* pToken;
 
@@ -104,12 +104,12 @@ Token* Tokenizer::do_next()
     return pToken;
 }
 
-bool Tokenizer::hasMoreTokens() const
+bool Lexer::hasMoreTokens() const
 {
     return m_nCursor < m_sText.size();
 }
 
-void Tokenizer::freeTokens() const
+void Lexer::freeTokens() const
 {
     for (const Token* pToken : *m_pTokens)
     {
@@ -124,7 +124,7 @@ void Tokenizer::freeTokens() const
  *      1.  :h expr9 suggests unary operators apply to List, Dictionary. But we actually
  *          get E745, E728.
  */
-bool Tokenizer::disambiguate(Token* apCurrentToken)
+bool Lexer::disambiguate(Token* apCurrentToken)
 {
     //
     // GEN_MINUS

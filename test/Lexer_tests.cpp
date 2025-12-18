@@ -3,13 +3,13 @@
 #include <fstream>
 #include <string>
 
+#include "Lexer.h"
 #include "Token.h"
-#include "Tokenizer.h"
 
-class TokenizerTest : public testing::Test
+class LexerTest : public testing::Test
 {
 protected:
-    Tokenizer m_cTokenizer;
+    Lexer m_cLexer;
 
     void tokenize_file(const std::string& asPath)
     {
@@ -27,25 +27,25 @@ protected:
 
     void tokenize_str(const std::string& asText)
     {
-        m_cTokenizer.tokenize(asText);
+        m_cLexer.tokenize(asText);
     }
 
     void expect_tokens(size_t anCount)
     {
         const size_t expected = anCount;
-        const size_t actual = m_cTokenizer.tokens()->size();
-        EXPECT_EQ(actual, expected) << "Text: " << m_cTokenizer.text();
+        const size_t actual = m_cLexer.tokens()->size();
+        EXPECT_EQ(actual, expected) << "Text: " << m_cLexer.text();
     }
 
     void expect_token(size_t anIdx, const std::string& asTokenStr, const Token::Type& aeTokenType)
     {
         const Token expected(aeTokenType, asTokenStr);
-        const Token& actual = m_cTokenizer.token(anIdx);
-        EXPECT_EQ(actual, expected) << "At " << std::to_string(anIdx) << " from: " << m_cTokenizer.text();
+        const Token& actual = m_cLexer.token(anIdx);
+        EXPECT_EQ(actual, expected) << "At " << std::to_string(anIdx) << " from: " << m_cLexer.text();
     }
 };
 
-class SingleTokenTest : public TokenizerTest
+class SingleTokenTest : public LexerTest
 {
 protected:
     void do_test(const std::string& asTokenStr, const Token::Type& aeTokenType)
@@ -117,7 +117,7 @@ TEST_F(SingleTokenTest, single_string)
 // bad_float
 //
 
-TEST_F(TokenizerTest, bad_float)
+TEST_F(LexerTest, bad_float)
 {
     tokenize_str("2.2.2");
     expect_tokens(4);
@@ -154,7 +154,7 @@ TEST_F(TokenizerTest, bad_float)
 // bad_integer
 //
 
-TEST_F(TokenizerTest, bad_integer)
+TEST_F(LexerTest, bad_integer)
 {
     tokenize_str("0x");
     expect_tokens(3);
@@ -176,7 +176,7 @@ TEST_F(TokenizerTest, bad_integer)
 // select_stmt
 //
 
-TEST_F(TokenizerTest, select_stmt_01)
+TEST_F(LexerTest, select_stmt_01)
 {
     tokenize_str("if 1\n"
                  "  echo 1\n"
@@ -190,7 +190,7 @@ TEST_F(TokenizerTest, select_stmt_01)
     expect_token(6, "endif", Token::Type::ENDIF);
 }
 
-TEST_F(TokenizerTest, select_stmt_02)
+TEST_F(LexerTest, select_stmt_02)
 {
     tokenize_str("if 1\n"
                  "  echo 1\n"
@@ -209,7 +209,7 @@ TEST_F(TokenizerTest, select_stmt_02)
     expect_token(11, "endif", Token::Type::ENDIF);
 }
 
-TEST_F(TokenizerTest, select_stmt_03)
+TEST_F(LexerTest, select_stmt_03)
 {
     tokenize_str("if 1\n"
                  "  echo 1\n"
@@ -229,7 +229,7 @@ TEST_F(TokenizerTest, select_stmt_03)
     expect_token(12, "endif", Token::Type::ENDIF);
 }
 
-TEST_F(TokenizerTest, select_stmt_04)
+TEST_F(LexerTest, select_stmt_04)
 {
     tokenize_str("if 1\n"
                  "  echo 1\n"
@@ -258,7 +258,7 @@ TEST_F(TokenizerTest, select_stmt_04)
 // iteration_stmt
 //
 
-TEST_F(TokenizerTest, iteration_stmt_01)
+TEST_F(LexerTest, iteration_stmt_01)
 {
     tokenize_str("while 1\n"
                  "  echo 1\n"
@@ -274,7 +274,7 @@ TEST_F(TokenizerTest, iteration_stmt_01)
     expect_token(8, "endwhile", Token::Type::ENDWHILE);
 }
 
-TEST_F(TokenizerTest, iteration_stmt_02)
+TEST_F(LexerTest, iteration_stmt_02)
 {
     tokenize_str("for item in items\n"
                  "  continue\n"
@@ -293,7 +293,7 @@ TEST_F(TokenizerTest, iteration_stmt_02)
 // function_stmt
 //
 
-TEST_F(TokenizerTest, function_stmt_01)
+TEST_F(LexerTest, function_stmt_01)
 {
     tokenize_str("function! foo(a, b = 1, ...) range abort dict closure\n"
                  "  echo 1\n"
@@ -325,7 +325,7 @@ TEST_F(TokenizerTest, function_stmt_01)
 // expr1
 //
 
-TEST_F(TokenizerTest, expr1_01)
+TEST_F(LexerTest, expr1_01)
 {
     tokenize_str("1 ?? 2 ? 3 : 4");
 
@@ -343,7 +343,7 @@ TEST_F(TokenizerTest, expr1_01)
 // expr2
 //
 
-TEST_F(TokenizerTest, expr2_01)
+TEST_F(LexerTest, expr2_01)
 {
     tokenize_str("1 || 2");
 
@@ -357,7 +357,7 @@ TEST_F(TokenizerTest, expr2_01)
 // expr3
 //
 
-TEST_F(TokenizerTest, expr3_01)
+TEST_F(LexerTest, expr3_01)
 {
     tokenize_str("1 && 2");
 
@@ -371,7 +371,7 @@ TEST_F(TokenizerTest, expr3_01)
 // expr4
 //
 
-TEST_F(TokenizerTest, expr4_01)
+TEST_F(LexerTest, expr4_01)
 {
     tokenize_str("1 == 2");
 
@@ -381,7 +381,7 @@ TEST_F(TokenizerTest, expr4_01)
     expect_token(2, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_02)
+TEST_F(LexerTest, expr4_02)
 {
     tokenize_str("1 != 2");
 
@@ -391,7 +391,7 @@ TEST_F(TokenizerTest, expr4_02)
     expect_token(2, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_03)
+TEST_F(LexerTest, expr4_03)
 {
     tokenize_str("1 > 2");
 
@@ -401,7 +401,7 @@ TEST_F(TokenizerTest, expr4_03)
     expect_token(2, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_04)
+TEST_F(LexerTest, expr4_04)
 {
     tokenize_str("1 >= 2");
 
@@ -411,7 +411,7 @@ TEST_F(TokenizerTest, expr4_04)
     expect_token(2, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_05)
+TEST_F(LexerTest, expr4_05)
 {
     tokenize_str("1 < 2");
 
@@ -421,7 +421,7 @@ TEST_F(TokenizerTest, expr4_05)
     expect_token(2, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_06)
+TEST_F(LexerTest, expr4_06)
 {
     tokenize_str("1 <= 2");
 
@@ -431,7 +431,7 @@ TEST_F(TokenizerTest, expr4_06)
     expect_token(2, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_07)
+TEST_F(LexerTest, expr4_07)
 {
     tokenize_str("1 =~# 2");
 
@@ -442,7 +442,7 @@ TEST_F(TokenizerTest, expr4_07)
     expect_token(3, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_08)
+TEST_F(LexerTest, expr4_08)
 {
     tokenize_str("1 !~? 2");
 
@@ -453,7 +453,7 @@ TEST_F(TokenizerTest, expr4_08)
     expect_token(3, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_09)
+TEST_F(LexerTest, expr4_09)
 {
     tokenize_str("1 is 2");
 
@@ -463,7 +463,7 @@ TEST_F(TokenizerTest, expr4_09)
     expect_token(2, "2", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr4_10)
+TEST_F(LexerTest, expr4_10)
 {
     tokenize_str("1 isnot 2");
 
@@ -477,7 +477,7 @@ TEST_F(TokenizerTest, expr4_10)
 // expr5
 //
 
-TEST_F(TokenizerTest, expr5_01)
+TEST_F(LexerTest, expr5_01)
 {
     tokenize_str("1 << 2 >> 3");
 
@@ -493,7 +493,7 @@ TEST_F(TokenizerTest, expr5_01)
 // expr6
 //
 
-TEST_F(TokenizerTest, expr6_01)
+TEST_F(LexerTest, expr6_01)
 {
     tokenize_str("1 + 2 - 3 . 4 .. 5");
 
@@ -513,7 +513,7 @@ TEST_F(TokenizerTest, expr6_01)
 // expr7
 //
 
-TEST_F(TokenizerTest, expr7_01)
+TEST_F(LexerTest, expr7_01)
 {
     tokenize_str("1 * 2 / 3 % 4");
 
@@ -531,7 +531,7 @@ TEST_F(TokenizerTest, expr7_01)
 // expr9
 //
 
-TEST_F(TokenizerTest, expr9_01)
+TEST_F(LexerTest, expr9_01)
 {
     tokenize_str("!1");
     expect_tokens(3);
@@ -539,7 +539,7 @@ TEST_F(TokenizerTest, expr9_01)
     expect_token(1, "1", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr9_02)
+TEST_F(LexerTest, expr9_02)
 {
     tokenize_str("-1");
     expect_tokens(3);
@@ -547,7 +547,7 @@ TEST_F(TokenizerTest, expr9_02)
     expect_token(1, "1", Token::Type::INTEGER);
 }
 
-TEST_F(TokenizerTest, expr9_03)
+TEST_F(LexerTest, expr9_03)
 {
     tokenize_str("+1");
     expect_tokens(3);
@@ -559,7 +559,7 @@ TEST_F(TokenizerTest, expr9_03)
 // list_expr
 //
 
-TEST_F(TokenizerTest, list_expr_01)
+TEST_F(LexerTest, list_expr_01)
 {
     tokenize_str("[1, 2, 3]");
 
@@ -573,7 +573,7 @@ TEST_F(TokenizerTest, list_expr_01)
     expect_token(6, "]", Token::Type::R_BRACKET);
 }
 
-TEST_F(TokenizerTest, list_expr_02)
+TEST_F(LexerTest, list_expr_02)
 {
     tokenize_str("[1,]");
 
@@ -584,7 +584,7 @@ TEST_F(TokenizerTest, list_expr_02)
     expect_token(3, "]", Token::Type::R_BRACKET);
 }
 
-TEST_F(TokenizerTest, list_expr_03)
+TEST_F(LexerTest, list_expr_03)
 {
     tokenize_str("[]");
 
@@ -597,7 +597,7 @@ TEST_F(TokenizerTest, list_expr_03)
 // file
 //
 
-TEST_F(TokenizerTest, file_01)
+TEST_F(LexerTest, file_01)
 {
     tokenize_file("../../test/sample/01.vim");
 

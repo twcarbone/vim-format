@@ -1,34 +1,34 @@
 #include <string>
 
 #include "Exceptions.h"
+#include "Lexer.h"
 #include "Parser.h"
 #include "Token.h"
-#include "Tokenizer.h"
 
 Parser::Parser() :
     m_pRoot { nullptr },
     m_pCurrToken { nullptr },
-    m_pTokenizer { nullptr }
+    m_pLexer { nullptr }
 {
 }
 
 Parser::~Parser()
 {
     delete m_pRoot;
-    delete m_pTokenizer;
+    delete m_pLexer;
 }
 
 void Parser::parse(const std::string& asText)
 {
-    m_pTokenizer = new Tokenizer(asText);
-    m_pCurrToken = m_pTokenizer->next();
+    m_pLexer = new Lexer(asText);
+    m_pCurrToken = m_pLexer->next();
 
     program();
 }
 
 const std::string& Parser::text() const
 {
-    return m_pTokenizer->text();
+    return m_pLexer->text();
 }
 
 Node* Parser::root() const
@@ -508,7 +508,7 @@ void Parser::consume(Node* apParent, const Token::Type aeType)
 
     while (true)
     {
-        m_pCurrToken = m_pTokenizer->next();
+        m_pCurrToken = m_pLexer->next();
 
         switch (m_pCurrToken->type())
         {
