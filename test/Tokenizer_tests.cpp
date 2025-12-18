@@ -290,6 +290,38 @@ TEST_F(TokenizerTest, iteration_stmt_02)
 }
 
 //
+// function_stmt
+//
+
+TEST_F(TokenizerTest, function_stmt_01)
+{
+    tokenize_str("function! foo(a, b = 1, ...) range abort dict closure\n"
+                 "  echo 1\n"
+                 "endfunction");
+
+    expect_tokens(22);
+    expect_token(0, "function", Token::Type::FUNCTION);
+    expect_token(1, "!", Token::Type::OP_BANG);
+    expect_token(2, "foo", Token::Type::IDENTIFIER);
+    expect_token(3, "(", Token::Type::L_PAREN);
+    expect_token(4, "a", Token::Type::IDENTIFIER);
+    expect_token(5, ",", Token::Type::COMMA);
+    expect_token(6, "b", Token::Type::IDENTIFIER);
+    expect_token(7, "=", Token::Type::ASSIGN_EQ);
+    expect_token(8, "1", Token::Type::INTEGER);
+    expect_token(9, ",", Token::Type::COMMA);
+    expect_token(10, "...", Token::Type::FN_ELLIPSES);
+    expect_token(11, ")", Token::Type::R_PAREN);
+    expect_token(12, "range", Token::Type::FN_RANGE);
+    expect_token(13, "abort", Token::Type::FN_ABORT);
+    expect_token(14, "dict", Token::Type::FN_DICT);
+    expect_token(15, "closure", Token::Type::FN_CLOSURE);
+    expect_token(17, "echo", Token::Type::CMD_ECHO);
+    expect_token(18, "1", Token::Type::INTEGER);
+    expect_token(20, "endfunction", Token::Type::ENDFUNCTION);
+}
+
+//
 // expr1
 //
 

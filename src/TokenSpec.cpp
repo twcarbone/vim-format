@@ -27,6 +27,12 @@ TokenSpec::TokenSpec() :
         "continue",
         "is",
         "isnot",
+        "function",
+        "endfunction",
+        "range",
+        "abort",
+        "dict",
+        "closure",
         // clang-format on
     },
     m_mDelimitedSpec {
@@ -46,6 +52,12 @@ TokenSpec::TokenSpec() :
         { "continue", Token::Type::CONTINUE },
         { "is", Token::Type::OP_IS },
         { "isnot", Token::Type::OP_ISNOT },
+        { "function", Token::Type::FUNCTION },
+        { "endfunction", Token::Type::ENDFUNCTION },
+        { "range", Token::Type::FN_RANGE },
+        { "abort", Token::Type::FN_ABORT },
+        { "dict", Token::Type::FN_DICT },
+        { "closure", Token::Type::FN_CLOSURE },
     },
     m_lFixedWidthSpecKeys {
         // clang-format off
@@ -72,6 +84,7 @@ TokenSpec::TokenSpec() :
         "/",
         ".=",
         "..=",
+        "...",
         "..",
         ".",
         "-=",
@@ -93,27 +106,50 @@ TokenSpec::TokenSpec() :
         // clang-format on
     },
     m_mFixedWidthSpec {
-        { "!", Token::Type::OP_LOGICAL_NOT },  { "!", Token::Type::OP_LOGICAL_NOT },
-        { "!=", Token::Type::OP_NEQUAL },      { "!~", Token::Type::OP_NMATCH },
-        { "#", Token::Type::OP_MATCH_CASE },   { "%", Token::Type::OP_MODULO },
-        { "%=", Token::Type::ASSIGN_MODULO },  { "&", Token::Type::OP_OPTION },
-        { "&&", Token::Type::OP_AND },         { "(", Token::Type::L_PAREN },
-        { ")", Token::Type::R_PAREN },         { "*", Token::Type::OP_MUL },
-        { "*=", Token::Type::ASSIGN_MUL },     { "+", Token::Type::GEN_PLUS },
-        { "+=", Token::Type::ASSIGN_ADD },     { "-", Token::Type::GEN_MINUS },
-        { "-=", Token::Type::ASSIGN_MINUS },   { ".", Token::Type::OP_CAT_OLD },
-        { "..", Token::Type::OP_CAT_NEW },     { "..=", Token::Type::ASSIGN_CAT_NEW },
-        { ".=", Token::Type::ASSIGN_CAT_OLD }, { "/", Token::Type::OP_DIV },
-        { "/=", Token::Type::ASSIGN_DIV },     { ":", Token::Type::OP_TERNARY_ELSE },
-        { "<", Token::Type::OP_LT },           { "<<", Token::Type::OP_LSHIFT },
-        { "<=", Token::Type::OP_LTE },         { "=", Token::Type::ASSIGN_EQ },
-        { "==", Token::Type::OP_EQUAL },       { "=~", Token::Type::OP_MATCH },
-        { ">", Token::Type::OP_GT },           { ">=", Token::Type::OP_GTE },
-        { ">>", Token::Type::OP_RSHIFT },      { "?", Token::Type::GEN_QUESTION },
-        { "??", Token::Type::OP_FALSEY },      { "[", Token::Type::L_BRACKET },
-        { "]", Token::Type::R_BRACKET },       { ",", Token::Type::COMMA },
-        { "||", Token::Type::OP_OR },          { " ", Token::Type::SPACE },
-        { "\n", Token::Type::NEWLINE },        { "\t", Token::Type::TAB },
+        // clang-format off
+        { "!", Token::Type::GEN_EXCLAMATION },
+        { "...", Token::Type::FN_ELLIPSES },
+        { "!=", Token::Type::OP_NEQUAL },
+        { "!~", Token::Type::OP_NMATCH },
+        { "#", Token::Type::OP_MATCH_CASE },
+        { "%", Token::Type::OP_MODULO },
+        { "%=", Token::Type::ASSIGN_MODULO },
+        { "&", Token::Type::OP_OPTION },
+        { "&&", Token::Type::OP_AND },
+        { "(", Token::Type::L_PAREN },
+        { ")", Token::Type::R_PAREN },
+        { "*", Token::Type::OP_MUL },
+        { "*=", Token::Type::ASSIGN_MUL },
+        { "+", Token::Type::GEN_PLUS },
+        { "+=", Token::Type::ASSIGN_ADD },
+        { "-", Token::Type::GEN_MINUS },
+        { "-=", Token::Type::ASSIGN_MINUS },
+        { ".", Token::Type::OP_CAT_OLD },
+        { "..", Token::Type::OP_CAT_NEW },
+        { "..=", Token::Type::ASSIGN_CAT_NEW },
+        { ".=", Token::Type::ASSIGN_CAT_OLD },
+        { "/", Token::Type::OP_DIV },
+        { "/=", Token::Type::ASSIGN_DIV },
+        { ":", Token::Type::OP_TERNARY_ELSE },
+        { "<", Token::Type::OP_LT },
+        { "<<", Token::Type::OP_LSHIFT },
+        { "<=", Token::Type::OP_LTE },
+        { "=", Token::Type::ASSIGN_EQ },
+        { "==", Token::Type::OP_EQUAL },
+        { "=~", Token::Type::OP_MATCH },
+        { ">", Token::Type::OP_GT },
+        { ">=", Token::Type::OP_GTE },
+        { ">>", Token::Type::OP_RSHIFT },
+        { "?", Token::Type::GEN_QUESTION },
+        { "??", Token::Type::OP_FALSEY },
+        { "[", Token::Type::L_BRACKET },
+        { "]", Token::Type::R_BRACKET },
+        { ",", Token::Type::COMMA },
+        { "||", Token::Type::OP_OR },
+        { " ", Token::Type::SPACE },
+        { "\n", Token::Type::NEWLINE },
+        { "\t", Token::Type::TAB },
+        // clang-format on
     }
 {
 }
@@ -153,10 +189,10 @@ Token* TokenSpec::match(const std::string& asText)
         return new Token(Token::Type::INTEGER, std::string { lsStr });
     }
 
-    // 5. Look for a whitespace-delimited token
+    // 5. Look for a delimited token
     for (const std::string& lsKey : m_lDelimitedSpecKeys)
     {
-        if (startswith(asText, lsKey, " \n"))
+        if (startswith(asText, lsKey, "! \n"))
         {
             return new Token(m_mDelimitedSpec.at(lsKey), lsKey);
         }

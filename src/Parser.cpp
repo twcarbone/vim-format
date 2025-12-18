@@ -1,5 +1,6 @@
 #include <string>
 
+#include "Exceptions.h"
 #include "Parser.h"
 #include "Token.h"
 #include "Tokenizer.h"
@@ -64,6 +65,7 @@ void Parser::stmt_list(Node* apParent)
             case Token::Type::ENDWHILE:
             case Token::Type::ENDFOR:
             case Token::Type::END:
+            case Token::Type::ENDFUNCTION:
                 return;
             default:
                 stmt(pRuleNode);
@@ -85,6 +87,9 @@ void Parser::stmt(Node* apParent)
         case Token::Type::FOR:
         case Token::Type::WHILE:
             iteration_stmt(pRuleNode);
+            break;
+        case Token::Type::FUNCTION:
+            function_stmt(pRuleNode);
             break;
         case Token::Type::BREAK:
         case Token::Type::CONTINUE:
@@ -134,9 +139,8 @@ void Parser::select_stmt(Node* apParent)
         stmt_list(pRuleNode);
     }
 
-    if (m_pCurrToken->type() == Token::Type::ELSE)
+    if (consume_optional(pRuleNode, Token::Type::ELSE))
     {
-        consume(pRuleNode, Token::Type::ELSE);
         stmt_list(pRuleNode);
     }
 
@@ -173,6 +177,78 @@ void Parser::iteration_stmt(Node* apParent)
 
         stmt_list(pRuleNode);
         consume(pRuleNode, Token::Type::ENDFOR);
+    }
+}
+
+void Parser::function_stmt(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    consume(pRuleNode, Token::Type::FUNCTION);
+    consume_optional(pRuleNode, Token::Type::OP_BANG);
+    consume(pRuleNode, Token::Type::IDENTIFIER);
+    consume(pRuleNode, Token::Type::L_PAREN);
+
+    if (m_pCurrToken->type() != Token::Type::R_PAREN)
+    {
+        arg_list(pRuleNode);
+    }
+
+    consume(pRuleNode, Token::Type::R_PAREN);
+
+    bool lbLoop = true;
+    while (lbLoop)
+    {
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::FN_RANGE:
+            case Token::Type::FN_ABORT:
+            case Token::Type::FN_DICT:
+            case Token::Type::FN_CLOSURE:
+                consume(pRuleNode, m_pCurrToken->type());
+                break;
+            default:
+                lbLoop = false;
+        }
+    }
+
+    stmt_list(pRuleNode);
+    consume(pRuleNode, Token::Type::ENDFUNCTION);
+}
+
+void Parser::arg_list(Node* apParent)
+{
+    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
+    apParent->add(pRuleNode);
+
+    bool lbGotDefaultArg = false;
+    while (m_pCurrToken->type() != Token::Type::R_PAREN)
+    {
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::FN_ELLIPSES:
+                consume(pRuleNode, Token::Type::FN_ELLIPSES);
+                consume_optional(pRuleNode, Token::Type::COMMA);
+                return;
+            case Token::Type::IDENTIFIER:
+                consume(pRuleNode, Token::Type::IDENTIFIER);
+
+                if (consume_optional(pRuleNode, Token::Type::ASSIGN_EQ))
+                {
+                    lbGotDefaultArg = true;
+                    expr1(pRuleNode);
+                }
+                else if (lbGotDefaultArg)
+                {
+                    throw VimError("E989");
+                }
+
+                consume_optional(pRuleNode, Token::Type::COMMA);
+                break;
+            default:
+                throw VimError("E125");
+        }
     }
 }
 
@@ -443,4 +519,15 @@ void Parser::consume(Node* apParent, const Token::Type aeType)
                 return;
         }
     }
+}
+
+bool Parser::consume_optional(Node* apParent, const Token::Type aeType)
+{
+    if (m_pCurrToken->type() == aeType)
+    {
+        consume(apParent, aeType);
+        return true;
+    }
+
+    return false;
 }

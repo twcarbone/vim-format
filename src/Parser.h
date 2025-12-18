@@ -30,6 +30,8 @@ private:
     void stmt(Node* parent);
     void select_stmt(Node* parent);
     void iteration_stmt(Node* parent);
+    void function_stmt(Node* parent);
+    void arg_list(Node* parent);
     void list_expr(Node* parent);
     void expr1(Node* parent);
     void expr2(Node* parent);
@@ -44,6 +46,7 @@ private:
     void expr11(Node* parent);
 
     void consume(Node* parent, const Token::Type type);
+    bool consume_optional(Node* parent, const Token::Type type);
 };
 
 #endif  // PARSER_H

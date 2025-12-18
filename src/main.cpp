@@ -83,7 +83,16 @@ int main(int argc, char** argv)
     if (lbStopAfterTokenizing)
     {
         Tokenizer lcTokenizer;
-        lcTokenizer.tokenize(lsText);
+
+        try
+        {
+            lcTokenizer.tokenize(lsText);
+        }
+        catch (const std::runtime_error& e)
+        {
+            std::cerr << e.what() << std::endl;
+            return 1;
+        }
 
         for (const Token* pToken : *lcTokenizer.tokens())
         {
@@ -94,7 +103,16 @@ int main(int argc, char** argv)
     }
 
     Parser lcParser;
-    lcParser.parse(lsText);
+
+    try
+    {
+        lcParser.parse(lsText);
+    }
+    catch (const std::runtime_error& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
 
     NodeVisitor lcNodeVisitor;
     for (const Node* pNode : lcNodeVisitor.accumulate(lcParser.root(), NodeVisitor::Order::PRE))
