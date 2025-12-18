@@ -1,5 +1,6 @@
 #include <string>
 
+#include "Exceptions.h"
 #include "Parser.h"
 #include "Token.h"
 #include "Tokenizer.h"
@@ -240,13 +241,13 @@ void Parser::arg_list(Node* apParent)
                 }
                 else if (lbGotDefaultArg)
                 {
-                    throw std::runtime_error("Non-default argument follows default argument");
+                    throw VimError("E989");
                 }
 
                 consume_optional(pRuleNode, Token::Type::COMMA);
                 break;
             default:
-                throw std::runtime_error("Expected function argument, got " + m_pCurrToken->toString());
+                throw VimError("E125");
         }
     }
 }
