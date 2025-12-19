@@ -1,5 +1,5 @@
 #include <exception>
-#include <string>
+#include <string_view>
 
 #include "Lexer.h"
 #include "Token.h"
@@ -9,7 +9,7 @@ Lexer::Lexer() :
 {
 }
 
-Lexer::Lexer(const std::string& asText) :
+Lexer::Lexer(std::string_view asText) :
     m_nCursor { 0 },
     m_sText { asText }
 {
@@ -22,7 +22,7 @@ Lexer::~Lexer()
     delete m_pTokenSpec;
 }
 
-void Lexer::tokenize(const std::string& asText)
+void Lexer::tokenize(std::string_view asText)
 {
     freeTokens();
     m_nCursor = 0;
@@ -43,7 +43,7 @@ void Lexer::tokenize(const std::string& asText)
     }
 }
 
-const std::string& Lexer::text() const
+std::string_view Lexer::text() const
 {
     return m_sText;
 }
@@ -83,9 +83,7 @@ Token* Lexer::do_next()
     }
     else
     {
-        const std::string& lsRemainingText = m_sText.substr(m_nCursor, -1);
-
-        pToken = m_pTokenSpec->match(lsRemainingText);
+        pToken = m_pTokenSpec->match(m_sText.substr(m_nCursor, -1));
 
         if (pToken == nullptr)
         {

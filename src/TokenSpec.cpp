@@ -158,7 +158,7 @@ TokenSpec::~TokenSpec()
 {
 }
 
-Token* TokenSpec::match(const std::string& asText)
+Token* TokenSpec::match(std::string_view asText)
 {
     std::string_view lsStr;
 
@@ -205,7 +205,8 @@ Token* TokenSpec::match(const std::string& asText)
         const Token::Type& leTokenType = it->second;
 
         std::smatch lcMatch;
-        if (std::regex_search(asText, lcMatch, lcRe))
+        std::string lsText { asText };
+        if (std::regex_search(lsText, lcMatch, lcRe))
         {
             return new Token(leTokenType, lcMatch.str());
         }

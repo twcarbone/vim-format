@@ -16,7 +16,7 @@ public:
     TokenSpec();
     ~TokenSpec();
 
-    Token* match(const std::string& text);
+    Token* match(std::string_view text);
 
 private:
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;

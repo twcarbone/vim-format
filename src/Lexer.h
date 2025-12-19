@@ -3,7 +3,7 @@
 
 #include <list>
 #include <regex>
-#include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -14,7 +14,7 @@ class Lexer
 {
 public:
     Lexer();
-    Lexer(const std::string& text);
+    Lexer(std::string_view text);
     ~Lexer();
 
     /**
@@ -34,16 +34,16 @@ public:
      *  @throws
      *      See Lexer::next().
      */
-    void tokenize(const std::string& text = "");
+    void tokenize(std::string_view text = "");
 
-    const std::string& text() const;
+    std::string_view text() const;
 
     const Token& token(size_t i) const;
     std::vector<Token*> tokens() const;
 
 private:
     int m_nCursor;
-    std::string m_sText;
+    std::string_view m_sText;
     std::vector<Token*> m_lTokens;
 
     TokenSpec* m_pTokenSpec;
