@@ -2,6 +2,7 @@ add_library(
     vimformat
     STATIC
     Context.cpp
+    Controller.cpp
     Exceptions.cpp
     Lexer.cpp
     Node.cpp
