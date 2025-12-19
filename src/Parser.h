@@ -12,9 +12,11 @@ class Parser
 {
 public:
     Parser();
+    Parser(std::vector<Token*> tokens);
     ~Parser();
 
     void parse(const std::string& program);
+    void parse();
 
     const std::string& text() const;
 
@@ -24,6 +26,10 @@ private:
     Node* m_pRoot;
     Token* m_pCurrToken;
     Lexer* m_pLexer;
+
+    size_t m_nCurrTokenIdx { 0 };
+
+    std::vector<Token*> m_lTokens;
 
     void program();
     void stmt_list(Node* parent);
@@ -45,6 +51,7 @@ private:
     void expr10(Node* parent);
     void expr11(Node* parent);
 
+    void next();
     void consume(Node* parent, const Token::Type type);
     bool consume_optional(Node* parent, const Token::Type type);
 };

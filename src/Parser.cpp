@@ -12,6 +12,11 @@ Parser::Parser() :
 {
 }
 
+Parser::Parser(std::vector<Token*> alTokens) :
+    m_lTokens { std::move(alTokens) }
+{
+}
+
 Parser::~Parser()
 {
     delete m_pRoot;
@@ -23,6 +28,12 @@ void Parser::parse(const std::string& asText)
     m_pLexer = new Lexer(asText);
     m_pCurrToken = m_pLexer->next();
 
+    program();
+}
+
+void Parser::parse()
+{
+    next();
     program();
 }
 
@@ -495,6 +506,11 @@ void Parser::expr11(Node* apParent)
     }
 }
 
+void Parser::next()
+{
+    m_pCurrToken = m_lTokens.at(m_nCurrTokenIdx++);
+}
+
 void Parser::consume(Node* apParent, const Token::Type aeType)
 {
     if (m_pCurrToken->type() != aeType)
@@ -506,9 +522,14 @@ void Parser::consume(Node* apParent, const Token::Type aeType)
     Node* pTokenNode = new TokenNode(apParent, m_pCurrToken);
     apParent->add(pTokenNode);
 
+    if (m_pCurrToken->type() == Token::Type::END)
+    {
+        return;
+    }
+
     while (true)
     {
-        m_pCurrToken = m_pLexer->next();
+        next();
 
         switch (m_pCurrToken->type())
         {
