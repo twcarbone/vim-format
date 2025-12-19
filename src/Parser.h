@@ -15,17 +15,13 @@ public:
     Parser(std::vector<Token*> tokens);
     ~Parser();
 
-    void parse(const std::string& program);
     void parse();
-
-    const std::string& text() const;
 
     Node* root() const;
 
 private:
     Node* m_pRoot;
     Token* m_pCurrToken;
-    Lexer* m_pLexer;
 
     size_t m_nCurrTokenIdx { 0 };
 

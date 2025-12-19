@@ -1,14 +1,12 @@
 #include <string>
 
 #include "Exceptions.h"
-#include "Lexer.h"
 #include "Parser.h"
 #include "Token.h"
 
 Parser::Parser() :
     m_pRoot { nullptr },
-    m_pCurrToken { nullptr },
-    m_pLexer { nullptr }
+    m_pCurrToken { nullptr }
 {
 }
 
@@ -20,26 +18,12 @@ Parser::Parser(std::vector<Token*> alTokens) :
 Parser::~Parser()
 {
     delete m_pRoot;
-    delete m_pLexer;
-}
-
-void Parser::parse(const std::string& asText)
-{
-    m_pLexer = new Lexer(asText);
-    m_pCurrToken = m_pLexer->next();
-
-    program();
 }
 
 void Parser::parse()
 {
     next();
     program();
-}
-
-const std::string& Parser::text() const
-{
-    return m_pLexer->text();
 }
 
 Node* Parser::root() const
