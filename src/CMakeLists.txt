@@ -6,6 +6,7 @@ add_library(
     Node.cpp
     NodeVisitor.cpp
     Parser.cpp
+    Settings.cpp
     Token.cpp
     TokenSpec.cpp
 )
