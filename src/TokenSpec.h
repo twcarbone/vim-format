@@ -8,6 +8,7 @@
 #include <utility>
 #include <vector>
 
+#include "Source.h"
 #include "Token.h"
 
 class TokenSpec
@@ -16,7 +17,7 @@ public:
     TokenSpec();
     ~TokenSpec();
 
-    Token* match(const std::string& text);
+    Token* match(const Source& source);
 
 private:
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;

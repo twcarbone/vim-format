@@ -3,32 +3,28 @@
 #include "Exceptions.h"
 #include "Parser.h"
 #include "Token.h"
-#include "Tokenizer.h"
 
 Parser::Parser() :
     m_pRoot { nullptr },
-    m_pCurrToken { nullptr },
-    m_pTokenizer { nullptr }
+    m_pCurrToken { nullptr }
+{
+}
+
+Parser::Parser(const Context& acContext, std::vector<Token*> alTokens) :
+    m_cSource { acContext.source() },
+    m_lTokens { std::move(alTokens) }
 {
 }
 
 Parser::~Parser()
 {
     delete m_pRoot;
-    delete m_pTokenizer;
 }
 
-void Parser::parse(const std::string& asText)
+void Parser::parse()
 {
-    m_pTokenizer = new Tokenizer(asText);
-    m_pCurrToken = m_pTokenizer->next();
-
+    next();
     program();
-}
-
-const std::string& Parser::text() const
-{
-    return m_pTokenizer->text();
 }
 
 Node* Parser::root() const
@@ -241,13 +237,15 @@ void Parser::arg_list(Node* apParent)
                 }
                 else if (lbGotDefaultArg)
                 {
-                    throw VimError("E989");
+                    m_cSource.seek(m_pCurrToken->source_pos());
+                    throw VimError("E989", m_cSource.traceback());
                 }
 
                 consume_optional(pRuleNode, Token::Type::COMMA);
                 break;
             default:
-                throw VimError("E125");
+                m_cSource.seek(m_pCurrToken->source_pos());
+                throw VimError("E125", m_cSource.traceback());
         }
     }
 }
@@ -491,24 +489,35 @@ void Parser::expr11(Node* apParent)
             list_expr(pRuleNode);
             break;
         default:
-            throw std::runtime_error("Invalid expression: " + m_pCurrToken->str());
+            m_cSource.seek(m_pCurrToken->source_pos());
+            throw std::runtime_error("Invalid expression.\n\n" + m_cSource.traceback());
     }
+}
+
+void Parser::next()
+{
+    m_pCurrToken = m_lTokens.at(m_nCurrTokenIdx++);
 }
 
 void Parser::consume(Node* apParent, const Token::Type aeType)
 {
     if (m_pCurrToken->type() != aeType)
     {
-        throw std::runtime_error("Expected " + Token::TypeToStr(aeType) + ", got "
-                                 + Token::TypeToStr(m_pCurrToken->type()));
+        m_cSource.seek(m_pCurrToken->source_pos());
+        throw std::runtime_error("Expected " + Token::TypeToStr(aeType) + ".\n\n" + m_cSource.traceback());
     }
 
     Node* pTokenNode = new TokenNode(apParent, m_pCurrToken);
     apParent->add(pTokenNode);
 
+    if (m_pCurrToken->type() == Token::Type::END)
+    {
+        return;
+    }
+
     while (true)
     {
-        m_pCurrToken = m_pTokenizer->next();
+        next();
 
         switch (m_pCurrToken->type())
         {

@@ -3,19 +3,19 @@
 
 #include <list>
 #include <regex>
-#include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
 #include "Token.h"
+#include "Context.h"
 #include "TokenSpec.h"
 
-class Tokenizer
+class Lexer
 {
 public:
-    Tokenizer();
-    Tokenizer(const std::string& text);
-    ~Tokenizer();
+    Lexer(const Context& context);
+    ~Lexer();
 
     /**
      *  @brief
@@ -32,26 +32,24 @@ public:
      *      Fill buffer of with all Tokens.
      *
      *  @throws
-     *      See Tokenizer::next().
+     *      See Lexer::next().
      */
-    void tokenize(const std::string& text = "");
-
-    const std::string& text() const;
+    void tokenize();
 
     const Token& token(size_t i) const;
-    std::vector<Token*>* tokens() const;
+    std::vector<Token*> tokens() const;
+
+    const Source& source() const;
 
 private:
-    int m_nCursor;
-    std::string m_sText;
-    std::vector<Token*>* m_pTokens;
+    Source m_cSource;
+    std::vector<Token*> m_lTokens;
 
     TokenSpec* m_pTokenSpec;
 
     Token* do_next();
-    void freeTokens() const;
+    void freeTokens();
     bool disambiguate(Token* token);
-    bool hasMoreTokens() const;
 };
 
 #endif  // TOKENIZER_H

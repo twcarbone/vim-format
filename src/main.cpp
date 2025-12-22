@@ -1,10 +1,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "Node.h"
-#include "NodeVisitor.h"
-#include "Parser.h"
-#include "Tokenizer.h"
+#include "Context.h"
+#include "Controller.h"
 
 void usage()
 {
@@ -30,8 +28,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    bool lbStopAfterTokenizing = false;
-    std::string lsText;
+    Context lcContext;
 
     for (int i = 1; i < argc; i++)
     {
@@ -44,7 +41,7 @@ int main(int argc, char** argv)
         }
         else if (lsArg == "-t")
         {
-            lbStopAfterTokenizing = true;
+            lcContext.settings().StopAfterTokenizing = true;
         }
         else if (i == argc - 1)
         {
@@ -52,24 +49,25 @@ int main(int argc, char** argv)
 
             if (lsArg == "-")
             {
+                std::string lsText;
+
                 while (std::cin.get(c))
                 {
                     lsText += c;
                 }
+
+                lcContext.add_text(lsText);
             }
             else
             {
-                std::ifstream lcIfStream { lsArg };
-
-                if (!lcIfStream.is_open())
+                try
                 {
-                    std::cerr << "Error: cannot open for reading: " << lsArg << std::endl;
-                    return 1;
+                    lcContext.add_path(lsArg);
                 }
-
-                while (lcIfStream.get(c))
+                catch (const std::runtime_error& e)
                 {
-                    lsText += c;
+                    std::cerr << e.what() << std::endl;
+                    return 1;
                 }
             }
         }
@@ -80,33 +78,11 @@ int main(int argc, char** argv)
         }
     }
 
-    if (lbStopAfterTokenizing)
-    {
-        Tokenizer lcTokenizer;
-
-        try
-        {
-            lcTokenizer.tokenize(lsText);
-        }
-        catch (const std::runtime_error& e)
-        {
-            std::cerr << e.what() << std::endl;
-            return 1;
-        }
-
-        for (const Token* pToken : *lcTokenizer.tokens())
-        {
-            std::cout << *pToken << std::endl;
-        }
-
-        return 0;
-    }
-
-    Parser lcParser;
+    Controller lcController(lcContext);
 
     try
     {
-        lcParser.parse(lsText);
+        lcController.compile();
     }
     catch (const std::runtime_error& e)
     {
@@ -114,10 +90,5 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    NodeVisitor lcNodeVisitor;
-    for (const Node* pNode : lcNodeVisitor.accumulate(lcParser.root(), NodeVisitor::Order::PRE))
-    {
-        std::cout << std::string(2 * pNode->level(), ' ');
-        std::cout << pNode->toString() << std::endl;
-    }
+    return 0;
 }

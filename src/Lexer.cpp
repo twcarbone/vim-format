@@ -1,66 +1,53 @@
 #include <exception>
-#include <string>
+#include <string_view>
 
+#include "Lexer.h"
 #include "Token.h"
-#include "Tokenizer.h"
 
-Tokenizer::Tokenizer() :
-    Tokenizer("")
+Lexer::Lexer(const Context& acContext) :
+    m_cSource { acContext.source() }
 {
-}
-
-Tokenizer::Tokenizer(const std::string& asText) :
-    m_nCursor { 0 },
-    m_sText { asText }
-{
-    m_pTokens = new std::vector<Token*>;
     m_pTokenSpec = new TokenSpec();
 }
 
-Tokenizer::~Tokenizer()
+Lexer::~Lexer()
 {
     freeTokens();
     delete m_pTokenSpec;
 }
 
-void Tokenizer::tokenize(const std::string& asText)
+void Lexer::tokenize()
 {
     freeTokens();
-    m_nCursor = 0;
-
-    if (!asText.empty())
-    {
-        m_sText = asText;
-    }
 
     while (true)
     {
         next();
 
-        if (m_pTokens->back()->type() == Token::Type::END)
+        if (m_lTokens.back()->type() == Token::Type::END)
         {
             break;
         }
     }
 }
 
-const std::string& Tokenizer::text() const
+std::vector<Token*> Lexer::tokens() const
 {
-    return m_sText;
+    return m_lTokens;
 }
 
-std::vector<Token*>* Tokenizer::tokens() const
+const Source& Lexer::source() const
 {
-    return m_pTokens;
+    return m_cSource;
 }
 
-const Token& Tokenizer::token(size_t anIdx) const
+const Token& Lexer::token(size_t anIdx) const
 {
     // TODO (gh-7): throw IndexError
-    return *m_pTokens->at(anIdx);
+    return *m_lTokens.at(anIdx);
 }
 
-Token* Tokenizer::next()
+Token* Lexer::next()
 {
     Token* pToken = do_next();
 
@@ -69,54 +56,47 @@ Token* Tokenizer::next()
         pToken = do_next();
     }
 
-    m_pTokens->push_back(pToken);
+    m_lTokens.push_back(pToken);
     return pToken;
 }
 
-Token* Tokenizer::do_next()
+Token* Lexer::do_next()
 {
     Token* pToken;
 
-    if (!hasMoreTokens())
+    if (m_cSource.eof())
     {
         // TODO (gh-6): throw exception if EOF has already been returned
-        pToken = new Token(Token::Type::END, "EOF");
+        pToken = new Token(Token::Type::END, "EOF", m_cSource.pos());
     }
     else
     {
-        const std::string& lsRemainingText = m_sText.substr(m_nCursor, -1);
-
-        pToken = m_pTokenSpec->match(lsRemainingText);
+        pToken = m_pTokenSpec->match(m_cSource);
 
         if (pToken == nullptr)
         {
-            throw std::runtime_error("Unrecognized token at " + std::to_string(m_nCursor));
+            throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.traceback());
         }
 
         if (pToken->ambiguous() && !disambiguate(pToken))
         {
-            throw std::runtime_error("Cannot disambiguate " + pToken->toString());
+            throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.traceback());
         }
 
-        m_nCursor += pToken->str().size();
+        m_cSource.advance(pToken->str().size());
     }
 
     return pToken;
 }
 
-bool Tokenizer::hasMoreTokens() const
+void Lexer::freeTokens()
 {
-    return m_nCursor < m_sText.size();
-}
-
-void Tokenizer::freeTokens() const
-{
-    for (const Token* pToken : *m_pTokens)
+    for (const Token* pToken : m_lTokens)
     {
         delete pToken;
     }
 
-    m_pTokens->clear();
+    m_lTokens.clear();
 }
 
 /**
@@ -124,7 +104,7 @@ void Tokenizer::freeTokens() const
  *      1.  :h expr9 suggests unary operators apply to List, Dictionary. But we actually
  *          get E745, E728.
  */
-bool Tokenizer::disambiguate(Token* apCurrentToken)
+bool Lexer::disambiguate(Token* apCurrentToken)
 {
     //
     // GEN_MINUS
@@ -132,13 +112,13 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
 
     if (apCurrentToken->type() == Token::Type::GEN_MINUS)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
@@ -159,13 +139,13 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
 
     else if (apCurrentToken->type() == Token::Type::GEN_PLUS)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
@@ -186,13 +166,13 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
 
     else if (apCurrentToken->type() == Token::Type::GEN_QUESTION)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             // Nothing
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::OP_EQUAL:
                 case Token::Type::OP_NEQUAL:
@@ -218,13 +198,13 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
 
     else if (apCurrentToken->type() == Token::Type::GEN_NAME)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             apCurrentToken->setType(Token::Type::IDENTIFIER);
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::OP_OPTION:
                     apCurrentToken->setType(Token::Type::OPTION);
@@ -241,13 +221,13 @@ bool Tokenizer::disambiguate(Token* apCurrentToken)
 
     else if (apCurrentToken->type() == Token::Type::GEN_EXCLAMATION)
     {
-        if (m_pTokens->empty())
+        if (m_lTokens.empty())
         {
             apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
         }
         else
         {
-            switch (m_pTokens->back()->type())
+            switch (m_lTokens.back()->type())
             {
                 case Token::Type::FUNCTION:
                     apCurrentToken->setType(Token::Type::OP_BANG);

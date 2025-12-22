@@ -3,11 +3,12 @@
 #include "Token.h"
 
 Token::Token() :
-    Token(Type::NONE, "null")
+    Token(Type::NONE, "null", 0)
 {
 }
 
-Token::Token(Token::Type aeType, const std::string& asStr) :
+Token::Token(Token::Type aeType, const std::string& asStr, int anSourcePos) :
+    m_nSourcePos { anSourcePos },
     m_eType { aeType },
     m_sStr { asStr }
 {
@@ -47,6 +48,11 @@ bool Token::delimiting_wp() const
 bool Token::structural_wp() const
 {
     return m_eType == Type::NEWLINE;
+}
+
+int Token::source_pos() const
+{
+    return m_nSourcePos;
 }
 
 Token::Type Token::type() const
@@ -92,7 +98,7 @@ std::string Token::TypeToStr(Type aeType)
 
 bool operator==(const Token& lhs, const Token& rhs)
 {
-    return lhs.m_eType == rhs.m_eType && lhs.m_sStr == rhs.m_sStr;
+    return lhs.m_eType == rhs.m_eType && lhs.m_sStr == rhs.m_sStr && lhs.m_nSourcePos == rhs.m_nSourcePos;
 }
 
 bool operator!=(const Token& lhs, const Token& rhs)

@@ -1,13 +1,17 @@
 add_library(
     vimformat
     STATIC
+    Context.cpp
+    Controller.cpp
     Exceptions.cpp
+    Lexer.cpp
     Node.cpp
     NodeVisitor.cpp
     Parser.cpp
+    Settings.cpp
+    Source.cpp
     Token.cpp
     TokenSpec.cpp
-    Tokenizer.cpp
 )
 
 add_executable(
