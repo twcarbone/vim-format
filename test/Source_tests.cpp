@@ -66,6 +66,16 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.remaining_text(), "");
     EXPECT_EQ(lcSource.line_text(), "");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
+
+    lcSource.seek(23);
+
+    EXPECT_EQ(lcSource.eof(), false);
+    EXPECT_EQ(lcSource.pos(), 23);
+    EXPECT_EQ(lcSource.line(), 1);
+    EXPECT_EQ(lcSource.column(), 7);
+    EXPECT_EQ(lcSource.remaining_text(), "ped over the\nlazy dog\n");
+    EXPECT_EQ(lcSource.line_text(), "fox jumped over the");
+    EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
 }
 
 //

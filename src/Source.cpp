@@ -10,24 +10,48 @@ Source::~Source()
 {
 }
 
-bool Source::eof() const
-{
-    return m_nPos == m_sText.size();
-}
-
-size_t Source::pos() const
+int Source::pos() const
 {
     return m_nPos;
 }
 
-size_t Source::line() const
+int Source::line() const
 {
-    return m_nLine;
+    int lnLine = 0;
+    for (int i = 0; i <= m_nPos; i++)
+    {
+        if (m_sText[i] == '\n' && i < m_sText.size() - 1)
+        {
+            // Advance the line only after \n that is not the last character
+            lnLine++;
+        }
+    }
+
+    return lnLine;
 }
 
-size_t Source::column() const
+int Source::column() const
 {
-    return m_nColumn;
+    int lnColumn = 0;
+    for (int i = 1; i <= m_nPos; i++)
+    {
+        if (m_sText[i - 1] == '\n' && i < m_sText.size() - 1)
+        {
+            // Reset the column only after \n that is not the last character
+            lnColumn = 0;
+        }
+        else if (i != m_sText.size())
+        {
+            lnColumn++;
+        }
+    }
+
+    return lnColumn;
+}
+
+bool Source::eof() const
+{
+    return m_nPos == m_sText.size();
 }
 
 std::string Source::path() const
@@ -44,8 +68,8 @@ std::string Source::traceback() const
 {
     std::string lsTraceback;
 
-    std::string lsLineNum = std::to_string(m_nLine + 1);
-    std::string lsColumnNum = std::to_string(m_nColumn);
+    std::string lsLineNum = std::to_string(line() + 1);
+    std::string lsColumnNum = std::to_string(column());
 
     lsTraceback += path() + ":" + lsLineNum + ":" + lsColumnNum;
     lsTraceback += "\n " + lsLineNum + " | " + std::string(line_text());
@@ -89,24 +113,14 @@ std::string_view Source::remaining_text() const
     return std::string_view(m_sText).substr(m_nPos);
 }
 
-void Source::advance(size_t anCount)
+void Source::seek(int anPos)
 {
-    while (m_nPos < m_sText.size() && anCount > 0)
-    {
-        if (m_sText[m_nPos] != '\n')
-        {
-            m_nColumn++;
-        }
-        else if (m_nPos < m_sText.size() - 1)
-        {
-            // Do not increment the line/column at the final newline
-            m_nLine++;
-            m_nColumn = 0;
-        }
+    m_nPos = anPos;
+}
 
-        anCount--;
-        m_nPos++;
-    }
+void Source::advance(int anCount)
+{
+    m_nPos += anCount;
 }
 
 void Source::read_text(const std::string& asText)

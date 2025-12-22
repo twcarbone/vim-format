@@ -13,10 +13,10 @@ public:
     Source();
     ~Source();
 
+    int pos() const;
+    int line() const;
+    int column() const;
     bool eof() const;
-    size_t pos() const;
-    size_t line() const;
-    size_t column() const;
     std::string path() const;
     std::string traceback() const;
     std::string_view text() const;
@@ -26,12 +26,11 @@ public:
     void read_text(const std::string& text);
     void read_file(const fs::path& path);
 
-    void advance(size_t count);
+    void seek(int pos);
+    void advance(int count);
 
 private:
-    size_t m_nPos = 0;
-    size_t m_nLine = 0;
-    size_t m_nColumn = 0;
+    int m_nPos = 0;
     fs::path m_cPath;
     std::string m_sText;
 };
