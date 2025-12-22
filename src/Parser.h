@@ -5,6 +5,7 @@
 
 #include "Node.h"
 #include "Token.h"
+#include "Context.h"
 
 class Lexer;
 
@@ -12,7 +13,7 @@ class Parser
 {
 public:
     Parser();
-    Parser(std::vector<Token*> tokens);
+    Parser(const Context& context, std::vector<Token*> tokens);
     ~Parser();
 
     void parse();
@@ -22,6 +23,7 @@ public:
 private:
     Node* m_pRoot;
     Token* m_pCurrToken;
+    Source m_cSource;
 
     size_t m_nCurrTokenIdx { 0 };
 

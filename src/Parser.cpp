@@ -10,7 +10,8 @@ Parser::Parser() :
 {
 }
 
-Parser::Parser(std::vector<Token*> alTokens) :
+Parser::Parser(const Context& acContext, std::vector<Token*> alTokens) :
+    m_cSource { acContext.source() },
     m_lTokens { std::move(alTokens) }
 {
 }

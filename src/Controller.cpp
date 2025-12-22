@@ -17,7 +17,7 @@ Controller::~Controller()
 
 void Controller::compile()
 {
-    Lexer lcLexer { m_cContext };
+    Lexer lcLexer(m_cContext);
     lcLexer.tokenize();
 
     if (m_cContext.settings().StopAfterTokenizing)
@@ -30,7 +30,7 @@ void Controller::compile()
         return;
     }
 
-    Parser lcParser(lcLexer.tokens());
+    Parser lcParser(m_cContext, lcLexer.tokens());
     lcParser.parse();
 
     NodeVisitor lcNodeVisitor;

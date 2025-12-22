@@ -24,7 +24,7 @@ protected:
         Lexer lcLexer(lcContext);
         lcLexer.tokenize();
 
-        Parser lcParser(lcLexer.tokens());
+        Parser lcParser(lcContext, lcLexer.tokens());
         lcParser.parse();
 
         NodeVisitor lcNodeVisitor;
