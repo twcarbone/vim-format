@@ -4,14 +4,8 @@
 #include "Lexer.h"
 #include "Token.h"
 
-Lexer::Lexer() :
-    Lexer("")
-{
-}
-
-Lexer::Lexer(std::string_view asText) :
-    m_nCursor { 0 },
-    m_sText { asText }
+Lexer::Lexer(const Context& acContext) :
+    m_cSource { acContext.source() }
 {
     m_pTokenSpec = new TokenSpec();
 }
@@ -22,15 +16,9 @@ Lexer::~Lexer()
     delete m_pTokenSpec;
 }
 
-void Lexer::tokenize(std::string_view asText)
+void Lexer::tokenize()
 {
     freeTokens();
-    m_nCursor = 0;
-
-    if (!asText.empty())
-    {
-        m_sText = asText;
-    }
 
     while (true)
     {
@@ -43,14 +31,14 @@ void Lexer::tokenize(std::string_view asText)
     }
 }
 
-std::string_view Lexer::text() const
-{
-    return m_sText;
-}
-
 std::vector<Token*> Lexer::tokens() const
 {
     return m_lTokens;
+}
+
+const Source& Lexer::source() const
+{
+    return m_cSource;
 }
 
 const Token& Lexer::token(size_t anIdx) const
@@ -76,18 +64,18 @@ Token* Lexer::do_next()
 {
     Token* pToken;
 
-    if (!hasMoreTokens())
+    if (m_cSource.eof())
     {
         // TODO (gh-6): throw exception if EOF has already been returned
         pToken = new Token(Token::Type::END, "EOF");
     }
     else
     {
-        pToken = m_pTokenSpec->match(m_sText.substr(m_nCursor, -1));
+        pToken = m_pTokenSpec->match(m_cSource.remaining_text());
 
         if (pToken == nullptr)
         {
-            throw std::runtime_error("Unrecognized token at " + std::to_string(m_nCursor));
+            throw std::runtime_error("Unrecognized token at " + std::to_string(m_cSource.pos()));
         }
 
         if (pToken->ambiguous() && !disambiguate(pToken))
@@ -95,15 +83,10 @@ Token* Lexer::do_next()
             throw std::runtime_error("Cannot disambiguate " + pToken->toString());
         }
 
-        m_nCursor += pToken->str().size();
+        m_cSource.advance(pToken->str().size());
     }
 
     return pToken;
-}
-
-bool Lexer::hasMoreTokens() const
-{
-    return m_nCursor < m_sText.size();
 }
 
 void Lexer::freeTokens()

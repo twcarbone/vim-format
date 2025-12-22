@@ -29,7 +29,6 @@ int main(int argc, char** argv)
     }
 
     Context lcContext;
-    std::string lsText;
 
     for (int i = 1; i < argc; i++)
     {
@@ -50,24 +49,25 @@ int main(int argc, char** argv)
 
             if (lsArg == "-")
             {
+                std::string lsText;
+
                 while (std::cin.get(c))
                 {
                     lsText += c;
                 }
+
+                lcContext.add_text(lsText);
             }
             else
             {
-                std::ifstream lcIfStream { lsArg };
-
-                if (!lcIfStream.is_open())
+                try
                 {
-                    std::cerr << "Error: cannot open for reading: " << lsArg << std::endl;
-                    return 1;
+                    lcContext.add_path(lsArg);
                 }
-
-                while (lcIfStream.get(c))
+                catch (const std::runtime_error& e)
                 {
-                    lsText += c;
+                    std::cerr << e.what() << std::endl;
+                    return 1;
                 }
             }
         }
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 
     try
     {
-        lcController.compile(lsText);
+        lcController.compile();
     }
     catch (const std::runtime_error& e)
     {

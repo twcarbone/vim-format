@@ -12,7 +12,6 @@ public:
     ~Controller();
 
     void compile();
-    void compile(std::string_view text);
 
 private:
     Context m_cContext;

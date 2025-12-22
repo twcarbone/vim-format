@@ -15,10 +15,10 @@ Controller::~Controller()
 {
 }
 
-void Controller::compile(std::string_view asText)
+void Controller::compile()
 {
-    Lexer lcLexer;
-    lcLexer.tokenize(asText);
+    Lexer lcLexer { m_cContext };
+    lcLexer.tokenize();
 
     if (m_cContext.settings().StopAfterTokenizing)
     {

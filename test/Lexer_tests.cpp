@@ -2,46 +2,51 @@
 
 #include <fstream>
 #include <string>
+#include <vector>
 
+#include "Context.h"
 #include "Lexer.h"
 #include "Token.h"
 
 class LexerTest : public testing::Test
 {
 protected:
-    Lexer m_cLexer;
+    Lexer* m_pLexer = nullptr;
+
+    void TearDown() override
+    {
+        delete m_pLexer;
+        m_pLexer = nullptr;
+    }
 
     void tokenize_file(const std::string& asPath)
     {
-        std::string lsText;
-        std::ifstream lcIfStream(asPath);
-
-        char c;
-        while (lcIfStream.get(c))
-        {
-            lsText += c;
-        }
-
-        tokenize_str(lsText);
+        Context lcContext;
+        lcContext.add_path(asPath);
+        m_pLexer = new Lexer(lcContext);
+        m_pLexer->tokenize();
     }
 
     void tokenize_str(const std::string& asText)
     {
-        m_cLexer.tokenize(asText);
+        Context lcContext;
+        lcContext.add_text(asText);
+        m_pLexer = new Lexer(lcContext);
+        m_pLexer->tokenize();
     }
 
     void expect_tokens(size_t anCount)
     {
         const size_t expected = anCount;
-        const size_t actual = m_cLexer.tokens().size();
-        EXPECT_EQ(actual, expected) << "Text: " << m_cLexer.text();
+        const size_t actual = m_pLexer->tokens().size();
+        EXPECT_EQ(actual, expected) << "Text: " << m_pLexer->source().text();
     }
 
     void expect_token(size_t anIdx, const std::string& asTokenStr, const Token::Type& aeTokenType)
     {
         const Token expected(aeTokenType, asTokenStr);
-        const Token& actual = m_cLexer.token(anIdx);
-        EXPECT_EQ(actual, expected) << "At " << std::to_string(anIdx) << " from: " << m_cLexer.text();
+        const Token& actual = m_pLexer->token(anIdx);
+        EXPECT_EQ(actual, expected) << "Text: " << m_pLexer->source().text();
     }
 };
 
@@ -55,6 +60,8 @@ protected:
         expect_tokens(2);
         expect_token(0, asTokenStr, aeTokenType);
         expect_token(1, "EOF", Token::Type::END);
+
+        TearDown();
     }
 };
 
