@@ -45,5 +45,5 @@ void Controller::compile()
     //
 
     Analyzer lcAnalyzer(m_cContext);
-    lcAnalyzer.analyze(lcParser.root());
+    lcParser.root()->accept(lcAnalyzer);
 }

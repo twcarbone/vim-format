@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "NodeVisitor.h"
 #include "Token.h"
 
 //
@@ -25,6 +26,8 @@ public:
 
     friend bool operator==(const Node& lhs, const Node& rhs);
 
+    virtual void accept(NodeVisitor& visitor) = 0;
+
 protected:
     Node* m_pParent;
     std::vector<Node*> m_lChildren;
@@ -46,6 +49,8 @@ public:
 
     friend bool operator==(const RuleNode& lhs, const RuleNode& rhs);
 
+    virtual void accept(NodeVisitor& visitor) override;
+
 private:
     std::string m_sSymbol;
 };
@@ -65,6 +70,8 @@ public:
     virtual std::string toString() const override;
 
     friend bool operator==(const TokenNode& lhs, const TokenNode& rhs);
+
+    virtual void accept(NodeVisitor& visitor) override;
 
 private:
     Token* m_pToken;

@@ -11,8 +11,6 @@ public:
     Analyzer(const Context& context);
     ~Analyzer();
 
-    void analyze(const Node* root);
-
 private:
     const Context& m_cContext;
 };

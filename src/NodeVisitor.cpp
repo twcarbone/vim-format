@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include "Node.h"
@@ -24,4 +25,31 @@ std::vector<const Node*> NodeVisitor::accumulate(const Node* apNode, NodeVisitor
     }
 
     return llNodes;
+}
+
+void NodeVisitor::print(const Node* apNode)
+{
+    std::cout << std::string(2 * apNode->level(), ' ') << apNode->toString() << std::endl;
+}
+
+void NodeVisitor::visit(const RuleNode* apRuleNode)
+{
+    std::cout << "Rule  | ";
+    print(apRuleNode);
+
+    for (Node* pNode : apRuleNode->children())
+    {
+        pNode->accept(*this);
+    }
+}
+
+void NodeVisitor::visit(const TokenNode* apRuleNode)
+{
+    std::cout << "Token | ";
+    print(apRuleNode);
+
+    for (Node* pNode : apRuleNode->children())
+    {
+        pNode->accept(*this);
+    }
 }
