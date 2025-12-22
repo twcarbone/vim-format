@@ -67,11 +67,11 @@ Token* Lexer::do_next()
     if (m_cSource.eof())
     {
         // TODO (gh-6): throw exception if EOF has already been returned
-        pToken = new Token(Token::Type::END, "EOF");
+        pToken = new Token(Token::Type::END, "EOF", m_cSource.pos());
     }
     else
     {
-        pToken = m_pTokenSpec->match(m_cSource.remaining_text());
+        pToken = m_pTokenSpec->match(m_cSource);
 
         if (pToken == nullptr)
         {

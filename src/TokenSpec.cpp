@@ -158,43 +158,43 @@ TokenSpec::~TokenSpec()
 {
 }
 
-Token* TokenSpec::match(std::string_view asText)
+Token* TokenSpec::match(const Source& acSource)
 {
     std::string_view lsStr;
 
     // 1. Look for a fixed-width token
     for (const std::string& lsKey : m_lFixedWidthSpecKeys)
     {
-        if (startswith(asText, lsKey))
+        if (startswith(acSource.remaining_text(), lsKey))
         {
-            return new Token(m_mFixedWidthSpec.at(lsKey), lsKey);
+            return new Token(m_mFixedWidthSpec.at(lsKey), lsKey, acSource.pos());
         }
     }
 
     // 2. Look for a string
-    if (startswith_str(asText, lsStr))
+    if (startswith_str(acSource.remaining_text(), lsStr))
     {
-        return new Token(Token::Type::STRING, std::string { lsStr });
+        return new Token(Token::Type::STRING, std::string { lsStr }, acSource.pos());
     }
 
     // 3. Look for a float
-    if (startswith_float(asText, lsStr))
+    if (startswith_float(acSource.remaining_text(), lsStr))
     {
-        return new Token(Token::Type::FLOAT, std::string { lsStr });
+        return new Token(Token::Type::FLOAT, std::string { lsStr }, acSource.pos());
     }
 
     // 4. Look for an integer
-    if (startswith_int(asText, lsStr))
+    if (startswith_int(acSource.remaining_text(), lsStr))
     {
-        return new Token(Token::Type::INTEGER, std::string { lsStr });
+        return new Token(Token::Type::INTEGER, std::string { lsStr }, acSource.pos());
     }
 
     // 5. Look for a delimited token
     for (const std::string& lsKey : m_lDelimitedSpecKeys)
     {
-        if (startswith(asText, lsKey, "! \n"))
+        if (startswith(acSource.remaining_text(), lsKey, "! \n"))
         {
-            return new Token(m_mDelimitedSpec.at(lsKey), lsKey);
+            return new Token(m_mDelimitedSpec.at(lsKey), lsKey, acSource.pos());
         }
     }
 
@@ -205,10 +205,10 @@ Token* TokenSpec::match(std::string_view asText)
         const Token::Type& leTokenType = it->second;
 
         std::smatch lcMatch;
-        std::string lsText { asText };
+        std::string lsText { acSource.remaining_text() };
         if (std::regex_search(lsText, lcMatch, lcRe))
         {
-            return new Token(leTokenType, lcMatch.str());
+            return new Token(leTokenType, lcMatch.str(), acSource.pos());
         }
     }
 

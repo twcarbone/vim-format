@@ -487,7 +487,8 @@ void Parser::expr11(Node* apParent)
             list_expr(pRuleNode);
             break;
         default:
-            throw std::runtime_error("Invalid expression: " + m_pCurrToken->str());
+            m_cSource.seek(m_pCurrToken->source_pos());
+            throw std::runtime_error("Invalid expression.\n\n" + m_cSource.traceback());
     }
 }
 
@@ -500,8 +501,8 @@ void Parser::consume(Node* apParent, const Token::Type aeType)
 {
     if (m_pCurrToken->type() != aeType)
     {
-        throw std::runtime_error("Expected " + Token::TypeToStr(aeType) + ", got "
-                                 + Token::TypeToStr(m_pCurrToken->type()));
+        m_cSource.seek(m_pCurrToken->source_pos());
+        throw std::runtime_error("Expected " + Token::TypeToStr(aeType) + ".\n\n" + m_cSource.traceback());
     }
 
     Node* pTokenNode = new TokenNode(apParent, m_pCurrToken);
