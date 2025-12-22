@@ -11,6 +11,8 @@ TEST(SourceTest, text_test_01)
     Source lcSource;
     lcSource.read_text("The quick brown\nfox jumped over the\nlazy dog\n");
 
+    EXPECT_EQ(lcSource.path(), "stdin");
+
     lcSource.advance(7);
 
     EXPECT_EQ(lcSource.eof(), false);
@@ -30,6 +32,10 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.remaining_text(), "ox jumped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.line_text(), "fox jumped over the");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
+    EXPECT_EQ(lcSource.traceback(),
+              "stdin:2:1\n"
+              " 2 | fox jumped over the\n"
+              "   |  ^");
 
     lcSource.advance(19);
 
@@ -71,6 +77,8 @@ TEST(SourceTest, text_test_02)
     Source lcSource;
     lcSource.read_text("\n");
 
+    EXPECT_EQ(lcSource.path(), "stdin");
+
     EXPECT_EQ(lcSource.eof(), false);
     EXPECT_EQ(lcSource.pos(), 0);
     EXPECT_EQ(lcSource.line(), 0);
@@ -89,6 +97,8 @@ TEST(SourceTest, file_test_01)
     Source lcSource;
     lcSource.read_file("../../test/sample/05.vim");
 
+    EXPECT_EQ(lcSource.path(), "../../test/sample/05.vim");
+
     lcSource.advance(2);
 
     EXPECT_EQ(lcSource.eof(), false);
@@ -98,4 +108,9 @@ TEST(SourceTest, file_test_01)
     EXPECT_EQ(lcSource.remaining_text(), "ho 1\n");
     EXPECT_EQ(lcSource.line_text(), "echo 1");
     EXPECT_EQ(lcSource.text(), "echo 1\n");
+    EXPECT_EQ(lcSource.traceback(),
+              "../../test/sample/05.vim:1:2\n"
+              " 1 | echo 1\n"
+              "   |   ^");
+
 }

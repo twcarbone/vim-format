@@ -30,6 +30,30 @@ size_t Source::column() const
     return m_nColumn;
 }
 
+std::string Source::path() const
+{
+    if (m_cPath.empty())
+    {
+        return "stdin";
+    }
+
+    return m_cPath.string();
+}
+
+std::string Source::traceback() const
+{
+    std::string lsTraceback;
+
+    std::string lsLineNum = std::to_string(m_nLine + 1);
+    std::string lsColumnNum = std::to_string(m_nColumn);
+
+    lsTraceback += path() + ":" + lsLineNum + ":" + lsColumnNum;
+    lsTraceback += "\n " + lsLineNum + " | " + std::string(line_text());
+    lsTraceback += "\n " + std::string(lsLineNum.size(), ' ') + " | " + std::string(column(), ' ') + "^";
+
+    return lsTraceback;
+}
+
 std::string_view Source::text() const
 {
     return m_sText;

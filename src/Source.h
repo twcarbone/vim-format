@@ -17,6 +17,8 @@ public:
     size_t pos() const;
     size_t line() const;
     size_t column() const;
+    std::string path() const;
+    std::string traceback() const;
     std::string_view text() const;
     std::string_view line_text() const;
     std::string_view remaining_text() const;
