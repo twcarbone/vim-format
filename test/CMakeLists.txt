@@ -4,8 +4,9 @@ enable_testing()
 
 add_executable(
     unittests
-    Parser_tests.cpp
     Lexer_tests.cpp
+    Parser_tests.cpp
+    Source_tests.cpp
 )
 
 target_link_libraries(
