@@ -1,9 +1,8 @@
 #include <iostream>
 
+#include "Analyzer.h"
 #include "Controller.h"
 #include "Lexer.h"
-#include "Node.h"
-#include "NodeVisitor.h"
 #include "Parser.h"
 
 Controller::Controller(Context acContext) :
@@ -17,6 +16,10 @@ Controller::~Controller()
 
 void Controller::compile()
 {
+    //
+    // Tokenizing
+    //
+
     Lexer lcLexer(m_cContext);
     lcLexer.tokenize();
 
@@ -30,13 +33,17 @@ void Controller::compile()
         return;
     }
 
+    //
+    // Parsing
+    //
+
     Parser lcParser(m_cContext, lcLexer.tokens());
     lcParser.parse();
 
-    NodeVisitor lcNodeVisitor;
-    for (const Node* pNode : lcNodeVisitor.accumulate(lcParser.root(), NodeVisitor::Order::PRE))
-    {
-        std::cout << std::string(2 * pNode->level(), ' ');
-        std::cout << pNode->toString() << std::endl;
-    }
+    //
+    // Semantic analysis
+    //
+
+    Analyzer lcAnalyzer(m_cContext);
+    lcAnalyzer.analyze(lcParser.root());
 }
