@@ -237,13 +237,15 @@ void Parser::arg_list(Node* apParent)
                 }
                 else if (lbGotDefaultArg)
                 {
-                    throw VimError("E989");
+                    m_cSource.seek(m_pCurrToken->source_pos());
+                    throw VimError("E989", m_cSource.traceback());
                 }
 
                 consume_optional(pRuleNode, Token::Type::COMMA);
                 break;
             default:
-                throw VimError("E125");
+                m_cSource.seek(m_pCurrToken->source_pos());
+                throw VimError("E125", m_cSource.traceback());
         }
     }
 }
