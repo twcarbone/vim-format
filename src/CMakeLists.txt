@@ -11,6 +11,7 @@ add_library(
     Parser.cpp
     Settings.cpp
     Source.cpp
+    Symbol.cpp
     Token.cpp
     TokenSpec.cpp
 )
