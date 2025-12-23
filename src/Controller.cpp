@@ -40,6 +40,14 @@ void Controller::compile()
     Parser lcParser(m_cContext, lcLexer.tokens());
     lcParser.parse();
 
+    if (m_cContext.settings().StopAfterParsing)
+    {
+        NodeVisitor lcNodeVisitor;
+        lcParser.root()->accept(lcNodeVisitor);
+
+        return;
+    }
+
     //
     // Semantic analysis
     //

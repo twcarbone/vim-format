@@ -17,7 +17,8 @@ void usage()
               << "\n\nOPTIONS:\n\n"
 
               << "  -h, --help       Display this help.\n"
-              << "  -t               Stop after tokenizing." << std::endl;
+              << "  -t               Stop after tokenizing.\n"
+              << "  -p               Stop after parsing." << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -42,6 +43,10 @@ int main(int argc, char** argv)
         else if (lsArg == "-t")
         {
             lcContext.settings().StopAfterTokenizing = true;
+        }
+        else if (lsArg == "-p")
+        {
+            lcContext.settings().StopAfterParsing = true;
         }
         else if (i == argc - 1)
         {
