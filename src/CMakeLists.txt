@@ -10,6 +10,7 @@ add_library(
     NodeVisitor.cpp
     Parser.cpp
     Settings.cpp
+    Scope.cpp
     Source.cpp
     Symbol.cpp
     Token.cpp
