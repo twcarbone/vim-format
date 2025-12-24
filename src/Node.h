@@ -28,7 +28,7 @@ public:
 
     friend bool operator==(const Node& lhs, const Node& rhs);
 
-    virtual void accept(NodeVisitor& visitor) = 0;
+    virtual void accept(NodeVisitor& visitor) const = 0;
 
 protected:
     Node* m_pParent;
@@ -51,7 +51,7 @@ public:
 
     friend bool operator==(const RuleNode& lhs, const RuleNode& rhs);
 
-    virtual void accept(NodeVisitor& visitor) override;
+    virtual void accept(NodeVisitor& visitor) const override;
 
 private:
     std::string m_sSymbol;
@@ -73,7 +73,7 @@ public:
 
     friend bool operator==(const TokenNode& lhs, const TokenNode& rhs);
 
-    virtual void accept(NodeVisitor& visitor) override;
+    virtual void accept(NodeVisitor& visitor) const override;
 
 private:
     Token* m_pToken;

@@ -92,7 +92,7 @@ bool operator==(const RuleNode& lhs, const RuleNode& rhs)
     return dynamic_cast<const Node&>(lhs) == dynamic_cast<const Node&>(rhs);
 }
 
-void RuleNode::accept(NodeVisitor& acNodeVisitor)
+void RuleNode::accept(NodeVisitor& acNodeVisitor) const
 {
     acNodeVisitor.visit(this);
 }
@@ -131,7 +131,7 @@ bool operator==(const TokenNode& lhs, const TokenNode& rhs)
     return dynamic_cast<const Node&>(lhs) == dynamic_cast<const Node&>(rhs);
 }
 
-void TokenNode::accept(NodeVisitor& acNodeVisitor)
+void TokenNode::accept(NodeVisitor& acNodeVisitor) const
 {
     acNodeVisitor.visit(this);
 }
