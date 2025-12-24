@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 
+#include "AST.h"
 #include "Node.h"
 #include "NodeVisitor.h"
 
@@ -29,27 +30,57 @@ std::vector<const Node*> NodeVisitor::accumulate(const Node* apNode, NodeVisitor
 
 void NodeVisitor::print(const Node* apNode)
 {
-    std::cout << std::string(2 * apNode->level(), ' ') << apNode->toString() << std::endl;
+    for (size_t i = 0; i < apNode->level(); i++)
+    {
+        std::cout << "|  ";
+    }
+
+    std::cout << apNode->toString() << std::endl;
+}
+
+void NodeVisitor::handle_node(const Node* apNode)
+{
+    std::cout << "Node ";
+    print(apNode);
+
+    for (Node* pNode : apNode->children())
+    {
+        pNode->accept(*this);
+    }
 }
 
 void NodeVisitor::visit(const RuleNode* apRuleNode)
 {
-    std::cout << "Rule  | ";
-    print(apRuleNode);
+    handle_node(apRuleNode);
+}
 
-    for (Node* pNode : apRuleNode->children())
+void NodeVisitor::visit(const TokenNode* apRuleNode)
+{
+    handle_node(apRuleNode);
+}
+
+void NodeVisitor::handle_ast(const AST* apAST)
+{
+    std::cout << "AST ";
+    print(apAST);
+
+    for (Node* pNode : apAST->children())
     {
         pNode->accept(*this);
     }
 }
 
-void NodeVisitor::visit(const TokenNode* apRuleNode)
+void NodeVisitor::visit(const CmdExpr* apAST)
 {
-    std::cout << "Token | ";
-    print(apRuleNode);
+    handle_ast(apAST);
+}
 
-    for (Node* pNode : apRuleNode->children())
-    {
-        pNode->accept(*this);
-    }
+void NodeVisitor::visit(const Literal* apAST)
+{
+    handle_ast(apAST);
+}
+
+void NodeVisitor::visit(const BinOp* apAST)
+{
+    handle_ast(apAST);
 }
