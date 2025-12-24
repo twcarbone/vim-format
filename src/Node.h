@@ -16,11 +16,13 @@ public:
     Node(Node* parent);
     virtual ~Node();
 
-    void add(Node* node);
     int level() const;
 
     Node* parent() const;
+    void set_parent(Node* parent);
+
     std::vector<Node*> children() const;
+    void add(Node* node);
 
     virtual std::string toString() const = 0;
 

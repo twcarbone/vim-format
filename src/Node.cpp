@@ -48,6 +48,11 @@ Node* Node::parent() const
     return m_pParent;
 }
 
+void Node::set_parent(Node* apParent)
+{
+    m_pParent = apParent;
+}
+
 std::vector<Node*> Node::children() const
 {
     return m_lChildren;
