@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include "Lexer.h"
 #include "Parser.h"
+#include "Translator.h"
 
 Controller::Controller(Context acContext) :
     m_cContext(acContext)
@@ -49,9 +50,16 @@ void Controller::compile()
     }
 
     //
+    // Translating
+    //
+
+    Translator lcTranslator(m_cContext);
+    lcParser.root()->accept(lcTranslator);
+
+    //
     // Semantic analysis
     //
 
     Analyzer lcAnalyzer(m_cContext);
-    lcParser.root()->accept(lcAnalyzer);
+    lcTranslator.root()->accept(lcAnalyzer);
 }
