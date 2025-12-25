@@ -70,6 +70,16 @@ void NodeVisitor::handle_ast(const AST* apAST)
     }
 }
 
+void NodeVisitor::visit(const Program* apAST)
+{
+    handle_ast(apAST);
+}
+
+void NodeVisitor::visit(const StmtList* apAST)
+{
+    handle_ast(apAST);
+}
+
 void NodeVisitor::visit(const CmdExpr* apAST)
 {
     handle_ast(apAST);

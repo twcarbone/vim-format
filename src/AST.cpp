@@ -16,17 +16,40 @@ void AST::set_token(Token* apToken)
 }
 
 //
+// Program
+//
+
+std::string Program::toString() const
+{
+    return "Program(" + std::to_string(m_lChildren.size()) + ")";
+}
+
+void Program::accept(NodeVisitor& acNodeVisitor) const
+{
+    acNodeVisitor.visit(this);
+}
+
+//
+// StmtList
+//
+
+std::string StmtList::toString() const
+{
+    return "StmtList(" + std::to_string(m_lChildren.size()) + ")";
+}
+
+void StmtList::accept(NodeVisitor& acNodeVisitor) const
+{
+    acNodeVisitor.visit(this);
+}
+
+//
 // CmdExpr
 //
 
-CmdExpr::CmdExpr(AST* apParent) :
-    AST(apParent)
-{
-}
-
 std::string CmdExpr::toString() const
 {
-    return "CmdExp:" + m_pToken->str();
+    return "CmdExpr(" + std::to_string(m_lChildren.size()) + "):" + m_pToken->str();
 }
 
 void CmdExpr::accept(NodeVisitor& acNodeVisitor) const
@@ -38,14 +61,9 @@ void CmdExpr::accept(NodeVisitor& acNodeVisitor) const
 // BinOp
 //
 
-BinOp::BinOp(AST* apParent) :
-    AST(apParent)
-{
-}
-
 std::string BinOp::toString() const
 {
-    return "BinOp:" + m_pToken->str();
+    return "BinOp(" + std::to_string(m_lChildren.size()) + "):" + m_pToken->str();
 }
 
 void BinOp::accept(NodeVisitor& acNodeVisitor) const
@@ -57,14 +75,9 @@ void BinOp::accept(NodeVisitor& acNodeVisitor) const
 // Literal
 //
 
-Literal::Literal(AST* apParent) :
-    AST(apParent)
-{
-}
-
 std::string Literal::toString() const
 {
-    return "Literal:" + m_pToken->str();
+    return "Literal(" + std::to_string(m_lChildren.size()) + "):" + m_pToken->str();
 }
 
 void Literal::accept(NodeVisitor& acNodeVisitor) const

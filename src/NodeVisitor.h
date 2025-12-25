@@ -11,6 +11,8 @@ class AST;
 class BinOp;
 class CmdExpr;
 class Literal;
+class Program;
+class StmtList;
 
 class NodeVisitor
 {
@@ -32,6 +34,8 @@ public:
     virtual void visit(const TokenNode* node);
 
     void handle_ast(const AST* ast_node);
+    virtual void visit(const Program* ast_node);
+    virtual void visit(const StmtList* ast_node);
     virtual void visit(const CmdExpr* ast_node);
     virtual void visit(const Literal* ast_node);
     virtual void visit(const BinOp* ast_node);

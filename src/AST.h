@@ -14,12 +14,37 @@ class AST : public Node
 {
 public:
     AST(AST* parent);
-    virtual ~AST() = default;
 
     void set_token(Token* token);
 
 protected:
     Token* m_pToken;
+};
+
+//
+// Program
+//
+
+class Program : public AST
+{
+public:
+    using AST::AST;
+
+    virtual std::string toString() const override;
+    virtual void accept(NodeVisitor& visitor) const override;
+};
+
+//
+// StmtList
+//
+
+class StmtList : public AST
+{
+public:
+    using AST::AST;
+
+    virtual std::string toString() const override;
+    virtual void accept(NodeVisitor& visitor) const override;
 };
 
 //
@@ -29,8 +54,7 @@ protected:
 class CmdExpr : public AST
 {
 public:
-    CmdExpr(AST* parent);
-    virtual ~CmdExpr() = default;
+    using AST::AST;
 
     virtual std::string toString() const override;
     virtual void accept(NodeVisitor& visitor) const override;
@@ -43,8 +67,7 @@ public:
 class BinOp : public AST
 {
 public:
-    BinOp(AST* parent);
-    virtual ~BinOp() = default;
+    using AST::AST;
 
     virtual std::string toString() const override;
     virtual void accept(NodeVisitor& visitor) const override;
@@ -57,8 +80,7 @@ public:
 class Literal : public AST
 {
 public:
-    Literal(AST* parent);
-    virtual ~Literal() = default;
+    using AST::AST;
 
     virtual std::string toString() const override;
     virtual void accept(NodeVisitor& visitor) const override;
