@@ -79,7 +79,7 @@ std::string RuleNode::symbol() const
 
 std::string RuleNode::toString() const
 {
-    return "[RuleNode] " + m_sSymbol;
+    return m_sSymbol;
 }
 
 bool operator==(const RuleNode& lhs, const RuleNode& rhs)
@@ -118,7 +118,7 @@ TokenNode::~TokenNode()
 
 std::string TokenNode::toString() const
 {
-    return "[TokenNode] " + m_pToken->toString();
+    return m_pToken->toString();
 }
 
 bool operator==(const TokenNode& lhs, const TokenNode& rhs)
