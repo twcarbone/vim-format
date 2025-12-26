@@ -27,7 +27,7 @@ public:
      *  @brief
      *      Accumulate Nodes from a depth-first 'order' traversal.
      */
-    std::vector<const Node*> accumulate(const Node* node, Order order);
+    std::vector<const Node*> accumulate(const Node* node, Order order = Order::PRE);
 
     /**
      *  @brief
