@@ -9,6 +9,7 @@ class TokenNode;
 
 class AST;
 class BinOp;
+class UnaryOp;
 class CmdExpr;
 class Literal;
 class Program;
@@ -45,6 +46,7 @@ public:
     virtual void visit(const CmdExpr* ast_node);
     virtual void visit(const Literal* ast_node);
     virtual void visit(const BinOp* ast_node);
+    virtual void visit(const UnaryOp* ast_node);
 
 protected:
     virtual void print(const Node* node);

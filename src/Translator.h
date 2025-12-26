@@ -23,6 +23,9 @@ private:
     AST* m_pRoot;
     AST* m_pCurrAST;
     const Context& m_cContext;
+
+    void binop_left_fold(const RuleNode* rule_node);
+    void unary_left_fold(const RuleNode* rule_node);
 };
 
 #endif  // TRANSLATOR_H

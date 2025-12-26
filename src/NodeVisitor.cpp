@@ -106,3 +106,8 @@ void NodeVisitor::visit(const BinOp* apAST)
 {
     handle_ast(apAST);
 }
+
+void NodeVisitor::visit(const UnaryOp* apAST)
+{
+    handle_ast(apAST);
+}

@@ -72,6 +72,20 @@ void BinOp::accept(NodeVisitor& acNodeVisitor) const
 }
 
 //
+// UnaryOp
+//
+
+std::string UnaryOp::toString() const
+{
+    return "UnaryOp(" + std::to_string(m_lChildren.size()) + "):" + m_pToken->str();
+}
+
+void UnaryOp::accept(NodeVisitor& acNodeVisitor) const
+{
+    acNodeVisitor.visit(this);
+}
+
+//
 // Literal
 //
 
