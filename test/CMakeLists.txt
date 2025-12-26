@@ -7,6 +7,7 @@ add_executable(
     Lexer_tests.cpp
     Parser_tests.cpp
     Source_tests.cpp
+    Translator_test.cpp
 )
 
 target_link_libraries(
