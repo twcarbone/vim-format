@@ -29,6 +29,12 @@ public:
      */
     std::vector<const Node*> accumulate(const Node* node, Order order);
 
+    /**
+     *  @brief
+     *      Get the node at the given `path` index, starting from `root`.
+     */
+    const Node* get_node(const Node* root, const std::vector<int>& path);
+
     void handle_node(const Node* node);
     virtual void visit(const RuleNode* node);
     virtual void visit(const TokenNode* node);
