@@ -59,30 +59,30 @@ std::vector<Node*> Node::children() const
 }
 
 //
-// RuleNode
+// NonTerminal
 //
 
-RuleNode::RuleNode(Node* apParent, const std::string& asSymbol) :
+NonTerminal::NonTerminal(Node* apParent, const std::string& asSymbol) :
     Node(apParent),
     m_sSymbol { asSymbol }
 {
 }
 
-RuleNode::~RuleNode()
+NonTerminal::~NonTerminal()
 {
 }
 
-std::string RuleNode::symbol() const
-{
-    return m_sSymbol;
-}
-
-std::string RuleNode::toString() const
+std::string NonTerminal::symbol() const
 {
     return m_sSymbol;
 }
 
-bool operator==(const RuleNode& lhs, const RuleNode& rhs)
+std::string NonTerminal::toString() const
+{
+    return m_sSymbol;
+}
+
+bool operator==(const NonTerminal& lhs, const NonTerminal& rhs)
 {
     if (lhs.m_sSymbol != rhs.m_sSymbol)
     {
@@ -92,36 +92,36 @@ bool operator==(const RuleNode& lhs, const RuleNode& rhs)
     return dynamic_cast<const Node&>(lhs) == dynamic_cast<const Node&>(rhs);
 }
 
-void RuleNode::accept(NodeVisitor& acNodeVisitor) const
+void NonTerminal::accept(NodeVisitor& acNodeVisitor) const
 {
     acNodeVisitor.visit(this);
 }
 
 //
-// TokenNode
+// Terminal
 //
 
-TokenNode::TokenNode(Node* apParent, Token* apToken) :
+Terminal::Terminal(Node* apParent, Token* apToken) :
     Node(apParent),
     m_pToken { apToken }
 {
 }
 
-Token* TokenNode::token() const
+Token* Terminal::token() const
 {
     return m_pToken;
 }
 
-TokenNode::~TokenNode()
+Terminal::~Terminal()
 {
 }
 
-std::string TokenNode::toString() const
+std::string Terminal::toString() const
 {
     return m_pToken->toString();
 }
 
-bool operator==(const TokenNode& lhs, const TokenNode& rhs)
+bool operator==(const Terminal& lhs, const Terminal& rhs)
 {
     if (lhs.m_pToken != rhs.m_pToken)
     {
@@ -131,7 +131,7 @@ bool operator==(const TokenNode& lhs, const TokenNode& rhs)
     return dynamic_cast<const Node&>(lhs) == dynamic_cast<const Node&>(rhs);
 }
 
-void TokenNode::accept(NodeVisitor& acNodeVisitor) const
+void Terminal::accept(NodeVisitor& acNodeVisitor) const
 {
     acNodeVisitor.visit(this);
 }

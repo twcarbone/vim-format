@@ -3,9 +3,9 @@
 
 #include <string>
 
+#include "Context.h"
 #include "Node.h"
 #include "Token.h"
-#include "Context.h"
 
 class Lexer;
 

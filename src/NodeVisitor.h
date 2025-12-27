@@ -4,8 +4,8 @@
 #include <vector>
 
 class Node;
-class RuleNode;
-class TokenNode;
+class NonTerminal;
+class Terminal;
 
 class AST;
 class BinOp;
@@ -40,8 +40,8 @@ public:
     const Node* get_node(const Node* root, const std::vector<int>& path);
 
     void handle_node(const Node* node);
-    virtual void visit(const RuleNode* node);
-    virtual void visit(const TokenNode* node);
+    virtual void visit(const NonTerminal* node);
+    virtual void visit(const Terminal* node);
 
     void handle_ast(const AST* ast_node);
     virtual void visit(const Program* ast_node);

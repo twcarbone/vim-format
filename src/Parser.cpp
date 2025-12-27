@@ -34,29 +34,29 @@ Node* Parser::root() const
 
 void Parser::program()
 {
-    RuleNode* pRuleNode = new RuleNode(nullptr, __func__);
+    NonTerminal* pNonTerminal = new NonTerminal(nullptr, __func__);
 
-    m_pRoot = pRuleNode;
+    m_pRoot = pNonTerminal;
 
     if (m_pCurrToken->type() != Token::Type::END)
     {
-        stmt_list(pRuleNode);
+        stmt_list(pNonTerminal);
     }
 
-    consume(pRuleNode, Token::Type::END);
+    consume(pNonTerminal, Token::Type::END);
 }
 
 void Parser::stmt_list(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
     while (true)
     {
         switch (m_pCurrToken->type())
         {
             case Token::Type::NEWLINE:
-                consume(pRuleNode, Token::Type::NEWLINE);
+                consume(pNonTerminal, Token::Type::NEWLINE);
                 break;
             case Token::Type::ELSEIF:
             case Token::Type::ELSE:
@@ -67,41 +67,41 @@ void Parser::stmt_list(Node* apParent)
             case Token::Type::ENDFUNCTION:
                 return;
             default:
-                stmt(pRuleNode);
-                consume(pRuleNode, Token::Type::NEWLINE);
+                stmt(pNonTerminal);
+                consume(pNonTerminal, Token::Type::NEWLINE);
         }
     }
 }
 
 void Parser::stmt(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
     switch (m_pCurrToken->type())
     {
         case Token::Type::IF:
-            select_stmt(pRuleNode);
+            select_stmt(pNonTerminal);
             break;
         case Token::Type::FOR:
         case Token::Type::WHILE:
-            iteration_stmt(pRuleNode);
+            iteration_stmt(pNonTerminal);
             break;
         case Token::Type::FUNCTION:
-            function_stmt(pRuleNode);
+            function_stmt(pNonTerminal);
             break;
         case Token::Type::BREAK:
         case Token::Type::CONTINUE:
             // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
-            consume(pRuleNode, m_pCurrToken->type());
+            consume(pNonTerminal, m_pCurrToken->type());
             break;
         case Token::Type::CMD_ECHO:
-            consume(pRuleNode, Token::Type::CMD_ECHO);
-            expr1(pRuleNode);
+            consume(pNonTerminal, Token::Type::CMD_ECHO);
+            expr1(pNonTerminal);
             break;
         case Token::Type::CMD_LET:
-            consume(pRuleNode, Token::Type::CMD_LET);
-            consume(pRuleNode, Token::Type::IDENTIFIER);
+            consume(pNonTerminal, Token::Type::CMD_LET);
+            consume(pNonTerminal, Token::Type::IDENTIFIER);
             switch (m_pCurrToken->type())
             {
                 case Token::Type::ASSIGN_ADD:
@@ -112,8 +112,8 @@ void Parser::stmt(Node* apParent)
                 case Token::Type::ASSIGN_MODULO:
                 case Token::Type::ASSIGN_CAT_NEW:
                 case Token::Type::ASSIGN_CAT_OLD:
-                    consume(pRuleNode, m_pCurrToken->type());
-                    expr1(pRuleNode);
+                    consume(pNonTerminal, m_pCurrToken->type());
+                    expr1(pNonTerminal);
                 default:
                     break;
             }
@@ -124,77 +124,77 @@ void Parser::stmt(Node* apParent)
 
 void Parser::select_stmt(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    consume(pRuleNode, Token::Type::IF);
-    expr1(pRuleNode);
-    stmt_list(pRuleNode);
+    consume(pNonTerminal, Token::Type::IF);
+    expr1(pNonTerminal);
+    stmt_list(pNonTerminal);
 
     while (m_pCurrToken->type() == Token::Type::ELSEIF)
     {
-        consume(pRuleNode, Token::Type::ELSEIF);
-        expr1(pRuleNode);
-        stmt_list(pRuleNode);
+        consume(pNonTerminal, Token::Type::ELSEIF);
+        expr1(pNonTerminal);
+        stmt_list(pNonTerminal);
     }
 
-    if (consume_optional(pRuleNode, Token::Type::ELSE))
+    if (consume_optional(pNonTerminal, Token::Type::ELSE))
     {
-        stmt_list(pRuleNode);
+        stmt_list(pNonTerminal);
     }
 
-    consume(pRuleNode, Token::Type::ENDIF);
+    consume(pNonTerminal, Token::Type::ENDIF);
 }
 
 void Parser::iteration_stmt(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
     if (m_pCurrToken->type() == Token::Type::WHILE)
     {
-        consume(pRuleNode, Token::Type::WHILE);
-        expr1(pRuleNode);
-        stmt_list(pRuleNode);
-        consume(pRuleNode, Token::Type::ENDWHILE);
+        consume(pNonTerminal, Token::Type::WHILE);
+        expr1(pNonTerminal);
+        stmt_list(pNonTerminal);
+        consume(pNonTerminal, Token::Type::ENDWHILE);
     }
     else if (m_pCurrToken->type() == Token::Type::FOR)
     {
-        consume(pRuleNode, Token::Type::FOR);
-        consume(pRuleNode, Token::Type::IDENTIFIER);
-        consume(pRuleNode, Token::Type::IN);
+        consume(pNonTerminal, Token::Type::FOR);
+        consume(pNonTerminal, Token::Type::IDENTIFIER);
+        consume(pNonTerminal, Token::Type::IN);
 
         switch (m_pCurrToken->type())
         {
             case Token::Type::STRING:
             case Token::Type::IDENTIFIER:
-                consume(pRuleNode, m_pCurrToken->type());
+                consume(pNonTerminal, m_pCurrToken->type());
                 break;
             default:
-                list_expr(pRuleNode);
+                list_expr(pNonTerminal);
         }
 
-        stmt_list(pRuleNode);
-        consume(pRuleNode, Token::Type::ENDFOR);
+        stmt_list(pNonTerminal);
+        consume(pNonTerminal, Token::Type::ENDFOR);
     }
 }
 
 void Parser::function_stmt(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    consume(pRuleNode, Token::Type::FUNCTION);
-    consume_optional(pRuleNode, Token::Type::OP_BANG);
-    consume(pRuleNode, Token::Type::IDENTIFIER);
-    consume(pRuleNode, Token::Type::L_PAREN);
+    consume(pNonTerminal, Token::Type::FUNCTION);
+    consume_optional(pNonTerminal, Token::Type::OP_BANG);
+    consume(pNonTerminal, Token::Type::IDENTIFIER);
+    consume(pNonTerminal, Token::Type::L_PAREN);
 
     if (m_pCurrToken->type() != Token::Type::R_PAREN)
     {
-        arg_list(pRuleNode);
+        arg_list(pNonTerminal);
     }
 
-    consume(pRuleNode, Token::Type::R_PAREN);
+    consume(pNonTerminal, Token::Type::R_PAREN);
 
     bool lbLoop = true;
     while (lbLoop)
@@ -205,21 +205,21 @@ void Parser::function_stmt(Node* apParent)
             case Token::Type::FN_ABORT:
             case Token::Type::FN_DICT:
             case Token::Type::FN_CLOSURE:
-                consume(pRuleNode, m_pCurrToken->type());
+                consume(pNonTerminal, m_pCurrToken->type());
                 break;
             default:
                 lbLoop = false;
         }
     }
 
-    stmt_list(pRuleNode);
-    consume(pRuleNode, Token::Type::ENDFUNCTION);
+    stmt_list(pNonTerminal);
+    consume(pNonTerminal, Token::Type::ENDFUNCTION);
 }
 
 void Parser::arg_list(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
     bool lbGotDefaultArg = false;
     while (m_pCurrToken->type() != Token::Type::R_PAREN)
@@ -227,16 +227,16 @@ void Parser::arg_list(Node* apParent)
         switch (m_pCurrToken->type())
         {
             case Token::Type::FN_ELLIPSES:
-                consume(pRuleNode, Token::Type::FN_ELLIPSES);
-                consume_optional(pRuleNode, Token::Type::COMMA);
+                consume(pNonTerminal, Token::Type::FN_ELLIPSES);
+                consume_optional(pNonTerminal, Token::Type::COMMA);
                 return;
             case Token::Type::IDENTIFIER:
-                consume(pRuleNode, Token::Type::IDENTIFIER);
+                consume(pNonTerminal, Token::Type::IDENTIFIER);
 
-                if (consume_optional(pRuleNode, Token::Type::ASSIGN_EQ))
+                if (consume_optional(pNonTerminal, Token::Type::ASSIGN_EQ))
                 {
                     lbGotDefaultArg = true;
-                    expr1(pRuleNode);
+                    expr1(pNonTerminal);
                 }
                 else if (lbGotDefaultArg)
                 {
@@ -244,7 +244,7 @@ void Parser::arg_list(Node* apParent)
                     throw VimError("E989", m_cSource.traceback());
                 }
 
-                consume_optional(pRuleNode, Token::Type::COMMA);
+                consume_optional(pNonTerminal, Token::Type::COMMA);
                 break;
             default:
                 m_cSource.seek(m_pCurrToken->source_pos());
@@ -255,10 +255,10 @@ void Parser::arg_list(Node* apParent)
 
 void Parser::list_expr(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    consume(pRuleNode, Token::Type::L_BRACKET);
+    consume(pNonTerminal, Token::Type::L_BRACKET);
 
     while (true)
     {
@@ -267,35 +267,35 @@ void Parser::list_expr(Node* apParent)
             break;
         }
 
-        expr1(pRuleNode);
+        expr1(pNonTerminal);
 
         if (m_pCurrToken->type() != Token::Type::R_BRACKET)
         {
-            consume(pRuleNode, Token::Type::COMMA);
+            consume(pNonTerminal, Token::Type::COMMA);
         }
     }
 
-    consume(pRuleNode, Token::Type::R_BRACKET);
+    consume(pNonTerminal, Token::Type::R_BRACKET);
 }
 
 void Parser::expr1(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr2(pRuleNode);
+    expr2(pNonTerminal);
 
     switch (m_pCurrToken->type())
     {
         case Token::Type::OP_FALSEY:
-            consume(pRuleNode, Token::Type::OP_FALSEY);
-            expr1(pRuleNode);
+            consume(pNonTerminal, Token::Type::OP_FALSEY);
+            expr1(pNonTerminal);
             break;
         case Token::Type::OP_TERNARY_IF:
-            consume(pRuleNode, Token::Type::OP_TERNARY_IF);
-            expr1(pRuleNode);
-            consume(pRuleNode, Token::Type::OP_TERNARY_ELSE);
-            expr1(pRuleNode);
+            consume(pNonTerminal, Token::Type::OP_TERNARY_IF);
+            expr1(pNonTerminal);
+            consume(pNonTerminal, Token::Type::OP_TERNARY_ELSE);
+            expr1(pNonTerminal);
             break;
         default:
             break;
@@ -304,38 +304,38 @@ void Parser::expr1(Node* apParent)
 
 void Parser::expr2(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr3(pRuleNode);
+    expr3(pNonTerminal);
 
     while (m_pCurrToken->type() == Token::Type::OP_OR)
     {
-        consume(pRuleNode, Token::Type::OP_OR);
-        expr3(pRuleNode);
+        consume(pNonTerminal, Token::Type::OP_OR);
+        expr3(pNonTerminal);
     }
 }
 
 void Parser::expr3(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr4(pRuleNode);
+    expr4(pNonTerminal);
 
     while (m_pCurrToken->type() == Token::Type::OP_AND)
     {
-        consume(pRuleNode, Token::Type::OP_AND);
-        expr4(pRuleNode);
+        consume(pNonTerminal, Token::Type::OP_AND);
+        expr4(pNonTerminal);
     }
 }
 
 void Parser::expr4(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr5(pRuleNode);
+    expr5(pNonTerminal);
 
     switch (m_pCurrToken->type())
     {
@@ -349,18 +349,18 @@ void Parser::expr4(Node* apParent)
         case Token::Type::OP_NMATCH:
         case Token::Type::OP_IS:
         case Token::Type::OP_ISNOT:
-            consume(pRuleNode, m_pCurrToken->type());
+            consume(pNonTerminal, m_pCurrToken->type());
             switch (m_pCurrToken->type())
             {
                 case Token::Type::OP_MATCH_CASE:
                 case Token::Type::OP_IGNORE_CASE:
-                    consume(pRuleNode, m_pCurrToken->type());
+                    consume(pNonTerminal, m_pCurrToken->type());
                     break;
                 default:
                     break;
             }
 
-            expr5(pRuleNode);
+            expr5(pNonTerminal);
             break;
         default:
             break;
@@ -369,10 +369,10 @@ void Parser::expr4(Node* apParent)
 
 void Parser::expr5(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr6(pRuleNode);
+    expr6(pNonTerminal);
 
     while (true)
     {
@@ -380,8 +380,8 @@ void Parser::expr5(Node* apParent)
         {
             case Token::Type::OP_LSHIFT:
             case Token::Type::OP_RSHIFT:
-                consume(pRuleNode, m_pCurrToken->type());
-                expr6(pRuleNode);
+                consume(pNonTerminal, m_pCurrToken->type());
+                expr6(pNonTerminal);
                 break;
             default:
                 return;
@@ -391,10 +391,10 @@ void Parser::expr5(Node* apParent)
 
 void Parser::expr6(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr7(pRuleNode);
+    expr7(pNonTerminal);
 
     while (true)
     {
@@ -404,8 +404,8 @@ void Parser::expr6(Node* apParent)
             case Token::Type::OP_SUB:
             case Token::Type::OP_CAT_OLD:
             case Token::Type::OP_CAT_NEW:
-                consume(pRuleNode, m_pCurrToken->type());
-                expr7(pRuleNode);
+                consume(pNonTerminal, m_pCurrToken->type());
+                expr7(pNonTerminal);
                 break;
             default:
                 return;
@@ -415,10 +415,10 @@ void Parser::expr6(Node* apParent)
 
 void Parser::expr7(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr8(pRuleNode);
+    expr8(pNonTerminal);
 
     while (true)
     {
@@ -427,8 +427,8 @@ void Parser::expr7(Node* apParent)
             case Token::Type::OP_MUL:
             case Token::Type::OP_DIV:
             case Token::Type::OP_MODULO:
-                consume(pRuleNode, m_pCurrToken->type());
-                expr8(pRuleNode);
+                consume(pNonTerminal, m_pCurrToken->type());
+                expr8(pNonTerminal);
                 break;
             default:
                 return;
@@ -438,42 +438,42 @@ void Parser::expr7(Node* apParent)
 
 void Parser::expr8(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr9(pRuleNode);
+    expr9(pNonTerminal);
 }
 
 void Parser::expr9(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
     switch (m_pCurrToken->type())
     {
         case Token::Type::OP_LOGICAL_NOT:
         case Token::Type::OP_UNARY_MINUS:
         case Token::Type::OP_UNARY_PLUS:
-            consume(pRuleNode, m_pCurrToken->type());
-            expr9(pRuleNode);
+            consume(pNonTerminal, m_pCurrToken->type());
+            expr9(pNonTerminal);
             break;
         default:
-            expr10(pRuleNode);
+            expr10(pNonTerminal);
     }
 }
 
 void Parser::expr10(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
-    expr11(pRuleNode);
+    expr11(pNonTerminal);
 }
 
 void Parser::expr11(Node* apParent)
 {
-    RuleNode* pRuleNode = new RuleNode(apParent, __func__);
-    apParent->add(pRuleNode);
+    NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
+    apParent->add(pNonTerminal);
 
     switch (m_pCurrToken->type())
     {
@@ -481,15 +481,15 @@ void Parser::expr11(Node* apParent)
         case Token::Type::FLOAT:
         case Token::Type::STRING:
         case Token::Type::IDENTIFIER:
-            consume(pRuleNode, m_pCurrToken->type());
+            consume(pNonTerminal, m_pCurrToken->type());
             break;
         case Token::Type::L_PAREN:
-            consume(pRuleNode, Token::Type::L_PAREN);
-            expr1(pRuleNode);
-            consume(pRuleNode, Token::Type::R_PAREN);
+            consume(pNonTerminal, Token::Type::L_PAREN);
+            expr1(pNonTerminal);
+            consume(pNonTerminal, Token::Type::R_PAREN);
             break;
         case Token::Type::L_BRACKET:
-            list_expr(pRuleNode);
+            list_expr(pNonTerminal);
             break;
         default:
             m_cSource.seek(m_pCurrToken->source_pos());
@@ -510,8 +510,8 @@ void Parser::consume(Node* apParent, const Token::Type aeType)
         throw std::runtime_error("Expected " + Token::TypeToStr(aeType) + ".\n\n" + m_cSource.traceback());
     }
 
-    Node* pTokenNode = new TokenNode(apParent, m_pCurrToken);
-    apParent->add(pTokenNode);
+    Node* pTerminal = new Terminal(apParent, m_pCurrToken);
+    apParent->add(pTerminal);
 
     if (m_pCurrToken->type() == Token::Type::END)
     {

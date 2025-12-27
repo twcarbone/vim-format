@@ -36,20 +36,20 @@ protected:
 };
 
 //
-// RuleNode
+// NonTerminal
 //
 
-class RuleNode : public Node
+class NonTerminal : public Node
 {
 public:
-    RuleNode(Node* parent, const std::string& symbol);
-    virtual ~RuleNode();
+    NonTerminal(Node* parent, const std::string& symbol);
+    virtual ~NonTerminal();
 
     std::string symbol() const;
 
     virtual std::string toString() const override;
 
-    friend bool operator==(const RuleNode& lhs, const RuleNode& rhs);
+    friend bool operator==(const NonTerminal& lhs, const NonTerminal& rhs);
 
     virtual void accept(NodeVisitor& visitor) const override;
 
@@ -58,20 +58,20 @@ private:
 };
 
 //
-// TokenNode
+// Terminal
 //
 
-class TokenNode : public Node
+class Terminal : public Node
 {
 public:
-    TokenNode(Node* parent, Token* token);
-    virtual ~TokenNode();
+    Terminal(Node* parent, Token* token);
+    virtual ~Terminal();
 
     Token* token() const;
 
     virtual std::string toString() const override;
 
-    friend bool operator==(const TokenNode& lhs, const TokenNode& rhs);
+    friend bool operator==(const Terminal& lhs, const Terminal& rhs);
 
     virtual void accept(NodeVisitor& visitor) const override;
 

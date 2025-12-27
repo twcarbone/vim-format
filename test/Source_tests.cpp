@@ -122,5 +122,4 @@ TEST(SourceTest, file_test_01)
               "../../test/sample/05.vim:1:2\n"
               " 1 | echo 1\n"
               "   |   ^");
-
 }

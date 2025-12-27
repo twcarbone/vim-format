@@ -61,14 +61,14 @@ void NodeVisitor::handle_node(const Node* apNode)
     }
 }
 
-void NodeVisitor::visit(const RuleNode* apRuleNode)
+void NodeVisitor::visit(const NonTerminal* apNonTerminal)
 {
-    handle_node(apRuleNode);
+    handle_node(apNonTerminal);
 }
 
-void NodeVisitor::visit(const TokenNode* apRuleNode)
+void NodeVisitor::visit(const Terminal* apNonTerminal)
 {
-    handle_node(apRuleNode);
+    handle_node(apNonTerminal);
 }
 
 void NodeVisitor::handle_ast(const AST* apAST)

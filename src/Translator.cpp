@@ -12,9 +12,9 @@ Translator::~Translator()
     delete m_pRoot;
 }
 
-void Translator::translate(Node* apRuleNode)
+void Translator::translate(Node* apNonTerminal)
 {
-    apRuleNode->accept(*this);
+    apNonTerminal->accept(*this);
 }
 
 AST* Translator::root() const
@@ -22,16 +22,16 @@ AST* Translator::root() const
     return m_pRoot;
 }
 
-void Translator::visit(const RuleNode* apRuleNode)
+void Translator::visit(const NonTerminal* apNonTerminal)
 {
-    if (apRuleNode->symbol() == "program")
+    if (apNonTerminal->symbol() == "program")
     {
         AST* pAST = new Program(nullptr);
 
         m_pRoot = pAST;
         m_pCurrAST = pAST;
     }
-    else if (apRuleNode->symbol() == "stmt_list")
+    else if (apNonTerminal->symbol() == "stmt_list")
     {
         AST* pAST = new StmtList(m_pCurrAST);
         m_pCurrAST->add(pAST);
@@ -39,7 +39,7 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         AST* pParent = m_pCurrAST;
 
-        for (Node* pNode : apRuleNode->children())
+        for (Node* pNode : apNonTerminal->children())
         {
             pNode->accept(*this);
             m_pCurrAST = pParent;
@@ -47,11 +47,11 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         return;
     }
-    else if (apRuleNode->symbol() == "select_stmt" || apRuleNode->symbol() == "iteration_stmt")
+    else if (apNonTerminal->symbol() == "select_stmt" || apNonTerminal->symbol() == "iteration_stmt")
     {
         AST* pParent = m_pCurrAST;
 
-        for (Node* pNode : apRuleNode->children())
+        for (Node* pNode : apNonTerminal->children())
         {
             pNode->accept(*this);
             m_pCurrAST = pParent;
@@ -59,7 +59,7 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         return;
     }
-    else if (apRuleNode->symbol() == "list_expr")
+    else if (apNonTerminal->symbol() == "list_expr")
     {
         AST* pAST = new ListExpr(m_pCurrAST);
         m_pCurrAST->add(pAST);
@@ -67,7 +67,7 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         AST* pParent = m_pCurrAST;
 
-        for (Node* pNode : apRuleNode->children())
+        for (Node* pNode : apNonTerminal->children())
         {
             pNode->accept(*this);
             m_pCurrAST = pParent;
@@ -75,25 +75,25 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         return;
     }
-    else if (apRuleNode->symbol() == "stmt")
+    else if (apNonTerminal->symbol() == "stmt")
     {
         AST* pAST = new CmdExpr(m_pCurrAST);
         m_pCurrAST->add(pAST);
         m_pCurrAST = pAST;
     }
-    else if (apRuleNode->children().size() == 1)
+    else if (apNonTerminal->children().size() == 1)
     {
-        apRuleNode->children().at(0)->accept(*this);
+        apNonTerminal->children().at(0)->accept(*this);
 
         return;
     }
-    else if (apRuleNode->symbol() == "expr2" || apRuleNode->symbol() == "expr3"
-             || apRuleNode->symbol() == "expr5" || apRuleNode->symbol() == "expr6"
-             || apRuleNode->symbol() == "expr7")
+    else if (apNonTerminal->symbol() == "expr2" || apNonTerminal->symbol() == "expr3"
+             || apNonTerminal->symbol() == "expr5" || apNonTerminal->symbol() == "expr6"
+             || apNonTerminal->symbol() == "expr7")
     {
         AST* pParent = m_pCurrAST;
 
-        binop_left_fold(apRuleNode);
+        binop_left_fold(apNonTerminal);
 
         m_pCurrAST->set_parent(pParent);
         pParent->add(m_pCurrAST);
@@ -102,11 +102,11 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         return;
     }
-    else if (apRuleNode->symbol() == "expr9")
+    else if (apNonTerminal->symbol() == "expr9")
     {
         AST* pParent = m_pCurrAST;
 
-        unary_left_fold(apRuleNode);
+        unary_left_fold(apNonTerminal);
 
         m_pCurrAST->set_parent(pParent);
         pParent->add(m_pCurrAST);
@@ -116,17 +116,17 @@ void Translator::visit(const RuleNode* apRuleNode)
         return;
     }
 
-    for (Node* pNode : apRuleNode->children())
+    for (Node* pNode : apNonTerminal->children())
     {
         pNode->accept(*this);
     }
 }
 
-void Translator::visit(const TokenNode* apTokenNode)
+void Translator::visit(const Terminal* apTerminal)
 {
     AST* pAST = nullptr;
 
-    switch (apTokenNode->token()->type())
+    switch (apTerminal->token()->type())
     {
         // Literal
         case Token::Type::INTEGER:
@@ -168,7 +168,7 @@ void Translator::visit(const TokenNode* apTokenNode)
         case Token::Type::OP_LOGICAL_NOT:
         case Token::Type::OP_UNARY_MINUS:
         case Token::Type::OP_UNARY_PLUS:
-            m_pCurrAST->set_token(apTokenNode->token());
+            m_pCurrAST->set_token(apTerminal->token());
             break;
         default:
             break;
@@ -176,22 +176,22 @@ void Translator::visit(const TokenNode* apTokenNode)
 
     if (pAST != nullptr)
     {
-        pAST->set_token(apTokenNode->token());
+        pAST->set_token(apTerminal->token());
         m_pCurrAST->add(pAST);
     }
 }
 
-void Translator::binop_left_fold(const RuleNode* apRuleNode)
+void Translator::binop_left_fold(const NonTerminal* apNonTerminal)
 {
     m_pCurrAST = new BinOp(nullptr);
-    apRuleNode->children().at(0)->accept(*this);
+    apNonTerminal->children().at(0)->accept(*this);
 
-    for (size_t i = 1; i < apRuleNode->children().size() - 1; i += 2)
+    for (size_t i = 1; i < apNonTerminal->children().size() - 1; i += 2)
     {
-        apRuleNode->children().at(i)->accept(*this);
-        apRuleNode->children().at(i + 1)->accept(*this);
+        apNonTerminal->children().at(i)->accept(*this);
+        apNonTerminal->children().at(i + 1)->accept(*this);
 
-        if (i < apRuleNode->children().size() - 2)
+        if (i < apNonTerminal->children().size() - 2)
         {
             AST* pAST = new BinOp(nullptr);
             pAST->add(m_pCurrAST);
@@ -202,16 +202,16 @@ void Translator::binop_left_fold(const RuleNode* apRuleNode)
     }
 }
 
-void Translator::unary_left_fold(const RuleNode* apRuleNode)
+void Translator::unary_left_fold(const NonTerminal* apNonTerminal)
 {
     m_pCurrAST = new UnaryOp(nullptr);
-    apRuleNode->children().at(0)->accept(*this);
+    apNonTerminal->children().at(0)->accept(*this);
 
-    for (size_t i = 1; i < apRuleNode->children().size(); i++)
+    for (size_t i = 1; i < apNonTerminal->children().size(); i++)
     {
-        apRuleNode->children().at(i)->accept(*this);
+        apNonTerminal->children().at(i)->accept(*this);
 
-        if (i < apRuleNode->children().size() - 1)
+        if (i < apNonTerminal->children().size() - 1)
         {
             AST* pAST = new UnaryOp(nullptr);
             pAST->add(m_pCurrAST);

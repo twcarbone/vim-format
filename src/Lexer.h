@@ -7,8 +7,8 @@
 #include <utility>
 #include <vector>
 
-#include "Token.h"
 #include "Context.h"
+#include "Token.h"
 #include "TokenSpec.h"
 
 class Lexer
