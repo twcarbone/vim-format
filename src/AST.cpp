@@ -98,3 +98,31 @@ void Literal::accept(NodeVisitor& acNodeVisitor) const
 {
     acNodeVisitor.visit(this);
 }
+
+//
+// Var
+//
+
+std::string Var::toString() const
+{
+    return "Var(" + std::to_string(m_lChildren.size()) + "):" + m_pToken->str();
+}
+
+void Var::accept(NodeVisitor& acNodeVisitor) const
+{
+    acNodeVisitor.visit(this);
+}
+
+//
+// Assign
+//
+
+std::string Assign::toString() const
+{
+    return "Assign(" + std::to_string(m_lChildren.size()) + "):" + m_pToken->str();
+}
+
+void Assign::accept(NodeVisitor& acNodeVisitor) const
+{
+    acNodeVisitor.visit(this);
+}

@@ -14,6 +14,8 @@ class CmdExpr;
 class Literal;
 class Program;
 class StmtList;
+class Var;
+class Assign;
 
 class NodeVisitor
 {
@@ -47,6 +49,8 @@ public:
     virtual void visit(const Literal* ast_node);
     virtual void visit(const BinOp* ast_node);
     virtual void visit(const UnaryOp* ast_node);
+    virtual void visit(const Var* ast_node);
+    virtual void visit(const Assign* ast_node);
 
 protected:
     virtual void print(const Node* node);

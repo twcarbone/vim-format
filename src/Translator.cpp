@@ -124,6 +124,7 @@ void Translator::visit(const TokenNode* apTokenNode)
     switch (apTokenNode->token()->type())
     {
         case Token::Type::CMD_ECHO:
+        case Token::Type::CMD_LET:
             pAST = new CmdExpr(m_pCurrAST);
             m_pCurrAST->add(pAST);
             m_pCurrAST = pAST;
@@ -132,6 +133,10 @@ void Translator::visit(const TokenNode* apTokenNode)
         case Token::Type::FLOAT:
         case Token::Type::STRING:
             pAST = new Literal(m_pCurrAST);
+            m_pCurrAST->add(pAST);
+            break;
+        case Token::Type::IDENTIFIER:
+            pAST = new Var(m_pCurrAST);
             m_pCurrAST->add(pAST);
             break;
         case Token::Type::OP_OR:
@@ -148,8 +153,18 @@ void Translator::visit(const TokenNode* apTokenNode)
         case Token::Type::OP_LOGICAL_NOT:
         case Token::Type::OP_UNARY_MINUS:
         case Token::Type::OP_UNARY_PLUS:
+        case Token::Type::ASSIGN_ADD:
+        case Token::Type::ASSIGN_MINUS:
+        case Token::Type::ASSIGN_MUL:
+        case Token::Type::ASSIGN_DIV:
+        case Token::Type::ASSIGN_EQ:
+        case Token::Type::ASSIGN_MODULO:
+        case Token::Type::ASSIGN_CAT_NEW:
+        case Token::Type::ASSIGN_CAT_OLD:
             m_pCurrAST->set_token(apTokenNode->token());
             return;
+        case Token::Type::L_PAREN:
+        case Token::Type::R_PAREN:
         default:
             return;
     }

@@ -99,4 +99,30 @@ public:
     virtual void accept(NodeVisitor& visitor) const override;
 };
 
+//
+// Var
+//
+
+class Var : public AST
+{
+public:
+    using AST::AST;
+
+    virtual std::string toString() const override;
+    virtual void accept(NodeVisitor& visitor) const override;
+};
+
+//
+// Assign
+//
+
+class Assign : public AST
+{
+public:
+    using AST::AST;
+
+    virtual std::string toString() const override;
+    virtual void accept(NodeVisitor& visitor) const override;
+};
+
 #endif  // AST_H

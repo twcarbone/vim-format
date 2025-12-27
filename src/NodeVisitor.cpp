@@ -111,3 +111,13 @@ void NodeVisitor::visit(const UnaryOp* apAST)
 {
     handle_ast(apAST);
 }
+
+void NodeVisitor::visit(const Var* apAST)
+{
+    handle_ast(apAST);
+}
+
+void NodeVisitor::visit(const Assign* apAST)
+{
+    handle_ast(apAST);
+}
