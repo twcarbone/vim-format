@@ -78,3 +78,42 @@ TEST_F(TranslatorTest, test_01)
     expect_node({ 0, 0, 0, 1, 1 }, "Literal(0):3");
     expect_node({ 0, 0, 0, 1, 1 }, "Literal(0):3");
 }
+
+//
+// test_02
+//
+
+TEST_F(TranslatorTest, test_02)
+{
+    translate_str("echo 1\nlet i += 2\n");
+
+    expect_nodes(7);
+    expect_node({}, "Program(1)");
+    expect_node({ 0 }, "StmtList(2)");
+    expect_node({ 0, 0 }, "CmdExpr(1):echo");
+    expect_node({ 0, 0, 0 }, "Literal(0):1");
+    expect_node({ 0, 1 }, "CmdExpr(2):+=");
+    expect_node({ 0, 1, 0 }, "Var(0):i");
+    expect_node({ 0, 1, 1 }, "Literal(0):2");
+}
+
+//
+// test_03
+//
+
+TEST_F(TranslatorTest, test_03)
+{
+    translate_str("if 1\necho 2\nelse\necho 3\nendif\n");
+
+    expect_nodes(10);
+    expect_node({}, "Program(1)");
+    expect_node({ 0 }, "StmtList(1)");
+    expect_node({ 0, 0 }, "CmdExpr(3):if");
+    expect_node({ 0, 0, 0 }, "Literal(0):1");
+    expect_node({ 0, 0, 1 }, "StmtList(1)");
+    expect_node({ 0, 0, 1, 0 }, "CmdExpr(1):echo");
+    expect_node({ 0, 0, 1, 0, 0 }, "Literal(0):2");
+    expect_node({ 0, 0, 2 }, "StmtList(1)");
+    expect_node({ 0, 0, 2, 0 }, "CmdExpr(1):echo");
+    expect_node({ 0, 0, 2, 0, 0 }, "Literal(0):3");
+}

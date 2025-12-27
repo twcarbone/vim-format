@@ -23,6 +23,7 @@ protected:
     {
         Context lcContext;
         lcContext.add_path(asPath);
+
         m_pLexer = new Lexer(lcContext);
         m_pLexer->tokenize();
     }
@@ -31,6 +32,7 @@ protected:
     {
         Context lcContext;
         lcContext.add_text(asText);
+
         m_pLexer = new Lexer(lcContext);
         m_pLexer->tokenize();
     }

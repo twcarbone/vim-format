@@ -11,31 +11,39 @@
 class ParserTest : public testing::Test
 {
 protected:
-    std::string m_sText;
-    std::vector<const Node*> m_lNodes;
+    Lexer* m_pLexer = nullptr;
+    Parser* m_pParser = nullptr;
+    NodeVisitor* m_pVisitor = nullptr;
+
+    void TearDown() override
+    {
+        delete m_pLexer;
+        m_pLexer = nullptr;
+
+        delete m_pParser;
+        m_pParser = nullptr;
+
+        delete m_pVisitor;
+        m_pVisitor = nullptr;
+    }
 
     void parse_str(const std::string& asText)
     {
-        m_sText = asText;
-
         Context lcContext;
         lcContext.add_text(asText);
 
-        Lexer lcLexer(lcContext);
-        lcLexer.tokenize();
+        m_pLexer = new Lexer(lcContext);
+        m_pLexer->tokenize();
 
-        Parser lcParser(lcContext, lcLexer.tokens());
-        lcParser.parse();
-
-        NodeVisitor lcNodeVisitor;
-        m_lNodes = lcNodeVisitor.accumulate(lcParser.root(), NodeVisitor::Order::PRE);
+        m_pParser = new Parser(lcContext, m_pLexer->tokens());
+        m_pParser->parse();
     }
 
     void expect_nodes(size_t anCount)
     {
         const size_t expected = anCount;
-        const size_t actual = m_lNodes.size();
-        EXPECT_EQ(actual, expected) << "Text: " << m_sText;
+        const size_t actual = m_pVisitor->accumulate(m_pParser->root()).size();
+        EXPECT_EQ(actual, expected) << "Text: " << m_pLexer->source().text();
     }
 };
 
