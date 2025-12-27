@@ -36,6 +36,22 @@ void Translator::visit(const RuleNode* apRuleNode)
         AST* pAST = new StmtList(m_pCurrAST);
         m_pCurrAST->add(pAST);
         m_pCurrAST = pAST;
+
+        AST* pParent = m_pCurrAST;
+
+        for (Node* pNode : apRuleNode->children())
+        {
+            pNode->accept(*this);
+            m_pCurrAST = pParent;
+        }
+
+        return;
+    }
+    else if (apRuleNode->symbol() == "stmt")
+    {
+        AST* pAST = new CmdExpr(m_pCurrAST);
+        m_pCurrAST->add(pAST);
+        m_pCurrAST = pAST;
     }
     else if (apRuleNode->children().size() == 1)
     {
@@ -43,32 +59,6 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         return;
     }
-#if 0
-    else if (apRuleNode->symbol() == "stmt")
-    {
-    }
-    else if (apRuleNode->symbol() == "select_stmt")
-    {
-    }
-    else if (apRuleNode->symbol() == "iteration_stmt")
-    {
-    }
-    else if (apRuleNode->symbol() == "function_stmt")
-    {
-    }
-    else if (apRuleNode->symbol() == "arg_list")
-    {
-    }
-    else if (apRuleNode->symbol() == "list_expr")
-    {
-    }
-    else if (apRuleNode->symbol() == "expr1")
-    {
-    }
-    else if (apRuleNode->symbol() == "expr4")
-    {
-    }
-#endif
     else if (apRuleNode->symbol() == "expr2" || apRuleNode->symbol() == "expr3"
              || apRuleNode->symbol() == "expr5" || apRuleNode->symbol() == "expr6"
              || apRuleNode->symbol() == "expr7")
@@ -84,11 +74,6 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         return;
     }
-#if 0
-    else if (apRuleNode->symbol() == "expr8")
-    {
-    }
-#endif
     else if (apRuleNode->symbol() == "expr9")
     {
         AST* pParent = m_pCurrAST;
@@ -102,14 +87,6 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         return;
     }
-#if 0
-    else if (apRuleNode->symbol() == "expr10")
-    {
-    }
-    else if (apRuleNode->symbol() == "expr11")
-    {
-    }
-#endif
 
     for (Node* pNode : apRuleNode->children())
     {
@@ -123,22 +100,28 @@ void Translator::visit(const TokenNode* apTokenNode)
 
     switch (apTokenNode->token()->type())
     {
-        case Token::Type::CMD_ECHO:
-        case Token::Type::CMD_LET:
-            pAST = new CmdExpr(m_pCurrAST);
-            m_pCurrAST->add(pAST);
-            m_pCurrAST = pAST;
-            break;
+        // Literal
         case Token::Type::INTEGER:
         case Token::Type::FLOAT:
         case Token::Type::STRING:
             pAST = new Literal(m_pCurrAST);
-            m_pCurrAST->add(pAST);
             break;
+        // Var
         case Token::Type::IDENTIFIER:
             pAST = new Var(m_pCurrAST);
-            m_pCurrAST->add(pAST);
             break;
+        // CmdExpr
+        case Token::Type::CMD_ECHO:
+        case Token::Type::CMD_LET:
+        case Token::Type::ASSIGN_ADD:
+        case Token::Type::ASSIGN_MINUS:
+        case Token::Type::ASSIGN_MUL:
+        case Token::Type::ASSIGN_DIV:
+        case Token::Type::ASSIGN_EQ:
+        case Token::Type::ASSIGN_MODULO:
+        case Token::Type::ASSIGN_CAT_NEW:
+        case Token::Type::ASSIGN_CAT_OLD:
+        // BinOp
         case Token::Type::OP_OR:
         case Token::Type::OP_AND:
         case Token::Type::OP_LSHIFT:
@@ -150,26 +133,24 @@ void Translator::visit(const TokenNode* apTokenNode)
         case Token::Type::OP_MUL:
         case Token::Type::OP_DIV:
         case Token::Type::OP_MODULO:
+        // UnaryOp
         case Token::Type::OP_LOGICAL_NOT:
         case Token::Type::OP_UNARY_MINUS:
         case Token::Type::OP_UNARY_PLUS:
-        case Token::Type::ASSIGN_ADD:
-        case Token::Type::ASSIGN_MINUS:
-        case Token::Type::ASSIGN_MUL:
-        case Token::Type::ASSIGN_DIV:
-        case Token::Type::ASSIGN_EQ:
-        case Token::Type::ASSIGN_MODULO:
-        case Token::Type::ASSIGN_CAT_NEW:
-        case Token::Type::ASSIGN_CAT_OLD:
             m_pCurrAST->set_token(apTokenNode->token());
-            return;
+            break;
         case Token::Type::L_PAREN:
         case Token::Type::R_PAREN:
+        case Token::Type::NEWLINE:
         default:
-            return;
+            break;
     }
 
-    pAST->set_token(apTokenNode->token());
+    if (pAST != nullptr)
+    {
+        pAST->set_token(apTokenNode->token());
+        m_pCurrAST->add(pAST);
+    }
 }
 
 void Translator::binop_left_fold(const RuleNode* apRuleNode)
