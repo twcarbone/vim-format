@@ -52,41 +52,41 @@ TEST_F(ParserTest, Test01)
 TEST_F(ParserTest, function_stmt_01)
 {
     parse_str("function! foo() range abort dict closure\nendfunction\n");
-    expect_nodes(19);
+    expect_nodes(18);
 }
 
 TEST_F(ParserTest, function_stmt_02)
 {
     parse_str("function! foo(...)\nendfunction\n");
-    expect_nodes(17);
+    expect_nodes(16);
 }
 
 TEST_F(ParserTest, function_stmt_03)
 {
     parse_str("function! foo(...,)\nendfunction\n");
-    expect_nodes(18);
+    expect_nodes(17);
 }
 
 TEST_F(ParserTest, function_stmt_04)
 {
     parse_str("function! foo(a)\nendfunction\n");
-    expect_nodes(17);
+    expect_nodes(16);
 }
 
 TEST_F(ParserTest, function_stmt_05)
 {
     parse_str("function! foo(a,)\nendfunction\n");
-    expect_nodes(18);
+    expect_nodes(17);
 }
 
 TEST_F(ParserTest, function_stmt_06)
 {
     parse_str("function! foo(a, ...)\nendfunction\n");
-    expect_nodes(19);
+    expect_nodes(18);
 }
 
 TEST_F(ParserTest, function_stmt_07)
 {
     parse_str("function! foo(a, b = 1)\nendfunction\n");
-    expect_nodes(32);
+    expect_nodes(31);
 }

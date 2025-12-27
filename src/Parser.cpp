@@ -55,6 +55,9 @@ void Parser::stmt_list(Node* apParent)
     {
         switch (m_pCurrToken->type())
         {
+            case Token::Type::NEWLINE:
+                consume(pRuleNode, Token::Type::NEWLINE);
+                break;
             case Token::Type::ELSEIF:
             case Token::Type::ELSE:
             case Token::Type::ENDIF:
