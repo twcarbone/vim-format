@@ -89,6 +89,7 @@ STRING              "..." or '...'
 INTEGER             42, 0xff, 0b1101, etc.
 FLOAT               3.14, 6.022e+23, -1.4E-5, etc.
 
+
 ==============================================================================
 2. Grammar
 
@@ -186,3 +187,83 @@ expr11
 
 list_expr
         : L_BRACKET (expr1 (COMMA expr1)* COMMA?)? R_BRACKET
+
+
+==============================================================================
+3. Reference
+
+:h expression-commands (v9.1.0698)
+
+    :let {var-name} = {expr1}
+    :let {var-name}[{idx}] = {expr1}
+    :let {var-name}[{idx1}:{idx2}] = {expr1}
+    :let {var} += {expr1}
+    :let {var} -= {expr1}
+    :let {var} *= {expr1}
+    :let {var} /= {expr1}
+    :let {var} %= {expr1}
+    :let {var} .= {expr1}
+    :let {var} ..= {expr1}
+    :let ${env-name} = {expr1}
+    :let ${env-name} .= {expr1}
+    :let @{reg-name} = {expr1}
+    :let @{reg-name} .= {expr1}
+    :let &{option-name} = {expr1}
+    :let &{option-name} .= {expr1}
+    :let &{option-name} += {expr1}
+    :let &{option-name} -= {expr1}
+    :let &l:{option-name} = {expr1}
+    :let &l:{option-name} .= {expr1}
+    :let &l:{option-name} += {expr1}
+    :let &l:{option-name} -= {expr1}
+    :let &g:{option-name} = {expr1}
+    :let &g:{option-name} .= {expr1}
+    :let &g:{option-name} += {expr1}
+    :let &g:{option-name} -= {expr1}
+    :let [{name1}, {name2}, ...] = {expr1}
+    :let [{name1}, {name2}, ...] .= {expr1}
+    :let [{name1}, {name2}, ...] += {expr1}
+    :let [{name1}, {name2}, ...] -= {expr1}
+    :let [{name}, ..., ; {lastname}] = {expr1}
+    :let [{name}, ..., ; {lastname}] .= {expr1}
+    :let [{name}, ..., ; {lastname}] += {expr1}
+    :let [{name}, ..., ; {lastname}] -= {expr1}
+    :let {var-name} =<< [trim] [eval] {endmarker}
+    :let {var-name} ..
+    :let
+    :unl[et][!] {name} ...
+    :unl[et] ${env-name} ...
+    :cons[t] {var-name} = {expr1}
+    :cons[t] [{name1}, {name2}, ...] = {expr1}
+    :cons[t] [{name}, ..., ; {lastname}] = {expr1}
+    :cons[t] {var-name} =<< [trim] [eval] {marker}
+    :cons[t]
+    :cons[t] {var-name}
+    :lockv[ar][!] [depth] {name} ...
+    :unlo[ckvar][!] [depth] {name} ...
+    :if {expr1}
+    :en[dif]
+    :el[se]
+    :elsei[f] {expr1}
+    :wh[ile] {expr1}
+    :endw[hile]
+    :for {var} in {object}
+    :endfo[r]
+    :for [{var1}, {var2}, ...] in {listlist}
+    :endfo[r]
+    :con[tinue]
+    :brea[k]
+    :try
+    :endt[ry]
+    :cat[ch] /{pattern}/
+    :fina[lly]
+    :th[row] {expr1}
+    :ec[ho] {expr1} ..
+    :echon {expr1} ..
+    :echoh[l] {name}
+    :echom[sg] {expr1} ..
+    :[N]echow[indow] {expr1} ..
+    :echoe[rr] {expr1} ..
+    :echoc[onsole] {expr1} ..
+    :eval {expr}
+    :exe[cute] {expr1} ..
