@@ -21,7 +21,7 @@ public:
     };
 
     Symbol(Type type, const std::string& name);
-    ~Symbol();
+    ~Symbol() = default;
 
     std::string name() const;
 
