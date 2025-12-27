@@ -126,3 +126,17 @@ void Assign::accept(NodeVisitor& acNodeVisitor) const
 {
     acNodeVisitor.visit(this);
 }
+
+//
+// ListExpr
+//
+
+std::string ListExpr::toString() const
+{
+    return "ListExpr(" + std::to_string(m_lChildren.size()) + ")";
+}
+
+void ListExpr::accept(NodeVisitor& acNodeVisitor) const
+{
+    acNodeVisitor.visit(this);
+}

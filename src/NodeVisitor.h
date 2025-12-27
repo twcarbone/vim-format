@@ -16,6 +16,7 @@ class Program;
 class StmtList;
 class Var;
 class Assign;
+class ListExpr;
 
 class NodeVisitor
 {
@@ -51,6 +52,7 @@ public:
     virtual void visit(const UnaryOp* ast_node);
     virtual void visit(const Var* ast_node);
     virtual void visit(const Assign* ast_node);
+    virtual void visit(const ListExpr* ast_node);
 
 protected:
     virtual void print(const Node* node);

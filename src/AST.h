@@ -125,4 +125,17 @@ public:
     virtual void accept(NodeVisitor& visitor) const override;
 };
 
+//
+// ListExpr
+//
+
+class ListExpr : public AST
+{
+public:
+    using AST::AST;
+
+    virtual std::string toString() const override;
+    virtual void accept(NodeVisitor& visitor) const override;
+};
+
 #endif  // AST_H

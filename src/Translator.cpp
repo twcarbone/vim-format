@@ -47,6 +47,34 @@ void Translator::visit(const RuleNode* apRuleNode)
 
         return;
     }
+    else if (apRuleNode->symbol() == "select_stmt" || apRuleNode->symbol() == "iteration_stmt")
+    {
+        AST* pParent = m_pCurrAST;
+
+        for (Node* pNode : apRuleNode->children())
+        {
+            pNode->accept(*this);
+            m_pCurrAST = pParent;
+        }
+
+        return;
+    }
+    else if (apRuleNode->symbol() == "list_expr")
+    {
+        AST* pAST = new ListExpr(m_pCurrAST);
+        m_pCurrAST->add(pAST);
+        m_pCurrAST = pAST;
+
+        AST* pParent = m_pCurrAST;
+
+        for (Node* pNode : apRuleNode->children())
+        {
+            pNode->accept(*this);
+            m_pCurrAST = pParent;
+        }
+
+        return;
+    }
     else if (apRuleNode->symbol() == "stmt")
     {
         AST* pAST = new CmdExpr(m_pCurrAST);
@@ -121,6 +149,9 @@ void Translator::visit(const TokenNode* apTokenNode)
         case Token::Type::ASSIGN_MODULO:
         case Token::Type::ASSIGN_CAT_NEW:
         case Token::Type::ASSIGN_CAT_OLD:
+        case Token::Type::IF:
+        case Token::Type::FOR:
+        case Token::Type::WHILE:
         // BinOp
         case Token::Type::OP_OR:
         case Token::Type::OP_AND:
@@ -139,9 +170,6 @@ void Translator::visit(const TokenNode* apTokenNode)
         case Token::Type::OP_UNARY_PLUS:
             m_pCurrAST->set_token(apTokenNode->token());
             break;
-        case Token::Type::L_PAREN:
-        case Token::Type::R_PAREN:
-        case Token::Type::NEWLINE:
         default:
             break;
     }
