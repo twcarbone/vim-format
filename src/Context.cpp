@@ -1,7 +1,7 @@
 #include "Context.h"
 
 Context::Context() :
-    m_pScope { new Scope() }
+    m_pScope { nullptr }
 {
 }
 
@@ -46,7 +46,12 @@ void Context::push_scope()
 Scope* Context::pop_scope()
 {
     Scope* pOld = m_pScope;
-    pOld->set_parent(nullptr);
-    m_pScope = pOld->parent();
+
+    if (pOld != nullptr)
+    {
+        pOld->set_parent(nullptr);
+        m_pScope = pOld->parent();
+    }
+
     return pOld;
 }
