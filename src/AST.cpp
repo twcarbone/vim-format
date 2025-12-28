@@ -10,6 +10,11 @@ AST::AST(AST* apParent) :
 {
 }
 
+const Token* AST::token() const
+{
+    return m_pToken;
+}
+
 void AST::set_token(Token* apToken)
 {
     m_pToken = apToken;

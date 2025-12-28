@@ -15,6 +15,7 @@ class AST : public Node
 public:
     AST(AST* parent);
 
+    const Token* token() const;
     void set_token(Token* token);
 
 protected:
