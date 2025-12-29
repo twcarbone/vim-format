@@ -7,6 +7,7 @@ add_library(
     Context.cpp
     Controller.cpp
     Exceptions.cpp
+    ExprDisplayVisitor.cpp
     Lexer.cpp
     Node.cpp
     NodeVisitor.cpp
