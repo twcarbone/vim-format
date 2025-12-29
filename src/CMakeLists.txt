@@ -2,6 +2,7 @@ add_library(
     vimformat
     STATIC
     AST.cpp
+    ASTVisitor.cpp
     Analyzer.cpp
     Context.cpp
     Controller.cpp
@@ -17,6 +18,7 @@ add_library(
     Token.cpp
     TokenSpec.cpp
     Translator.cpp
+    ast.cpp
 )
 
 add_executable(
