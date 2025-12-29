@@ -27,7 +27,7 @@ void ExprDisplayVisitor::visit(const ast::Literal* apLiteral)
 void ExprDisplayVisitor::visit(const ast::UnaryOp* apUnaryOp)
 {
     m_sDisplay += " (" + apUnaryOp->op()->str();
-    apUnaryOp->accept(*this);
+    apUnaryOp->right()->accept(*this);
     m_sDisplay += ")";
 }
 
