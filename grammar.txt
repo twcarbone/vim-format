@@ -267,3 +267,42 @@ list_expr
     :echoc[onsole] {expr1} ..
     :eval {expr}
     :exe[cute] {expr1} ..
+
+C grammar (Credit: https://www.quut.com/c/ANSI-C-grammar-y.html)
+
+    stmt
+            : labeled_stmt
+            | compound_stmt
+            | expr_stmt
+            | selection_stmt
+            | iteration_stmt
+            | jump_stmt
+
+    expr_stmt
+            : SEMI
+            | expr SEMI
+
+    expr
+            : assignment_expr
+            | expr COMMA assignment_expr
+
+    assignment_expr
+            : conditional_expr
+            | unary_expr assignment_op assignment_expr
+
+    conditional_expr        (expr1)
+            : logical_or_expr
+            | ...
+
+    logical_or_expr         (expr2)
+            : logical_and_expr
+            | logical_or_expr OP_OR logical_and_expr
+
+    unary_expr
+            : TODO
+
+    assignment_op
+            : ASSIGN_EQ
+            | ASSIGN_MUL
+            | ASSIGN_DIV
+            | etc.
