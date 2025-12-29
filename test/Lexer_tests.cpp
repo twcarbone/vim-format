@@ -521,6 +521,22 @@ TEST_F(LexerTest, expr6_01)
     expect_token(8, "5", Token::Type::INTEGER, 17);
 }
 
+TEST_F(LexerTest, expr6_02)
+{
+    tokenize_str("a + b - c . d .. e");
+
+    expect_tokens(10);
+    expect_token(0, "a", Token::Type::IDENTIFIER, 0);
+    expect_token(1, "+", Token::Type::OP_ADD, 2);
+    expect_token(2, "b", Token::Type::IDENTIFIER, 4);
+    expect_token(3, "-", Token::Type::OP_SUB, 6);
+    expect_token(4, "c", Token::Type::IDENTIFIER, 8);
+    expect_token(5, ".", Token::Type::OP_CAT_OLD, 10);
+    expect_token(6, "d", Token::Type::IDENTIFIER, 12);
+    expect_token(7, "..", Token::Type::OP_CAT_NEW, 14);
+    expect_token(8, "e", Token::Type::IDENTIFIER, 17);
+}
+
 //
 // expr7
 //

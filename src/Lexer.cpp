@@ -123,11 +123,12 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
                 case Token::Type::STRING:
-                // See @note 1
                 case Token::Type::R_PAREN:
+                case Token::Type::IDENTIFIER:
                     apCurrentToken->setType(Token::Type::OP_SUB);
                     break;
                 default:
+                    // See @note 1
                     apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
             }
         }
@@ -150,11 +151,12 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 case Token::Type::FLOAT:
                 case Token::Type::INTEGER:
                 case Token::Type::STRING:
-                // See @note 1
                 case Token::Type::R_PAREN:
+                case Token::Type::IDENTIFIER:
                     apCurrentToken->setType(Token::Type::OP_ADD);
                     break;
                 default:
+                    // See @note 1
                     apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
             }
         }
