@@ -48,15 +48,29 @@ protected:
 };
 
 //
-// expr
+// expr_01
 //
 
-TEST_F(PrattParserTest, expr)
+TEST_F(PrattParserTest, expr_01)
 {
     parse_str("1", "1");
     parse_str("1 + 2", "(+ 1 2)");
     parse_str("1 + 2 - 3", "(- (+ 1 2) 3)");
+    parse_str("1 + 2 * 3", "(+ 1 (* 2 3))");
     parse_str("(1 + 2) * (a - b)", "(* (+ 1 2) (- a b))");
     parse_str("1 + 2 / (a - b)", "(+ 1 (/ 2 (- a b)))");
     parse_str("a + b / c - d", "(- (+ a (/ b c)) d)");
+}
+
+//
+// expr_02
+//
+
+TEST_F(PrattParserTest, expr_02)
+{
+    parse_str("-1", "(- 1)");
+    parse_str("--a", "(- (- a))");
+    parse_str("2 + -1", "(+ 2 (- 1))");
+    parse_str("-2 + 1", "(+ (- 2) 1)");
+    parse_str("-a / +-2 - 5", "(- (/ (- a) (+ (- 2))) 5)");
 }

@@ -108,6 +108,9 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
     ast::Node* pRhs;
     Token* pOp;
 
+    int lnLhsOpBindingPower;
+    int lnRhsOpBindingPower;
+
     // 1. Parse left-hand side
     switch (m_pCurrToken->type())
     {
@@ -124,6 +127,15 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
             consume(Token::Type::L_PAREN);
             pLhs = parse_expr(0);
             consume(Token::Type::R_PAREN);
+            break;
+        case Token::Type::OP_LOGICAL_NOT:
+        case Token::Type::OP_UNARY_MINUS:
+        case Token::Type::OP_UNARY_PLUS:
+            pOp = m_pCurrToken;
+            lnRhsOpBindingPower = m_mOpBindingPower.at(pOp->type()).second;
+            consume(m_pCurrToken->type());
+            pRhs = parse_expr(lnRhsOpBindingPower);
+            pLhs = new ast::UnaryOp(pOp, pRhs);
             break;
         default:
             throw_unexpected_token();
@@ -158,14 +170,16 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
         }
 
         // 3. Parse right-hand side
-        std::pair<int, int> lOpBindingPower = m_mOpBindingPower.at(pOp->type());
-        if (lOpBindingPower.first < anMinBindingPower)
+        lnLhsOpBindingPower = m_mOpBindingPower.at(pOp->type()).first;
+        lnRhsOpBindingPower = m_mOpBindingPower.at(pOp->type()).second;
+
+        if (lnLhsOpBindingPower < anMinBindingPower)
         {
             return pLhs;
         }
 
         consume(m_pCurrToken->type());
-        pRhs = parse_expr(lOpBindingPower.second);
+        pRhs = parse_expr(lnRhsOpBindingPower);
         pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
     }
 
