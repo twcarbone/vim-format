@@ -6,6 +6,7 @@ add_executable(
     unittests
     Lexer_tests.cpp
     Parser_tests.cpp
+    PrattParser_tests.cpp
     Source_tests.cpp
     Translator_tests.cpp
 )
