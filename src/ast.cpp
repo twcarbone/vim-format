@@ -92,6 +92,11 @@ const Token* UnaryOp::op() const
     return m_pOp;
 }
 
+const Node* UnaryOp::right() const
+{
+    return m_pRight;
+}
+
 UnaryOp::~UnaryOp()
 {
     delete m_pRight;
@@ -137,4 +142,3 @@ void Var::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
-

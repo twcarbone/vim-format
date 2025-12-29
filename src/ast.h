@@ -74,6 +74,7 @@ public:
     virtual ~UnaryOp();
 
     const Token* op() const;
+    const Node* right() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
