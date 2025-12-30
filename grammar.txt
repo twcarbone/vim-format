@@ -175,6 +175,7 @@ expr9
 
 expr10:
         : expr11
+        | expr10 L_BRACKET expr1 R_BRACKET
         | TODO (gh-9)
 
 expr11

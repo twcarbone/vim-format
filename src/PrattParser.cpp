@@ -37,6 +37,8 @@ PrattParser::PrattParser(const Context& acContext, std::vector<Token*> alTokens)
         { Token::Type::OP_LOGICAL_NOT, { 60, 61 } },
         { Token::Type::OP_UNARY_MINUS, { 60, 61 } },
         { Token::Type::OP_UNARY_PLUS, { 60, 61 } },
+        // 70
+        { Token::Type::L_BRACKET, { 70, 0 } },
     }
 {
 }
@@ -148,6 +150,7 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
         {
             case Token::Type::END:
             case Token::Type::R_PAREN:
+            case Token::Type::R_BRACKET:
                 return pLhs;
             case Token::Type::OP_OR:
             case Token::Type::OP_AND:
@@ -163,6 +166,7 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
             case Token::Type::OP_LOGICAL_NOT:
             case Token::Type::OP_UNARY_MINUS:
             case Token::Type::OP_UNARY_PLUS:
+            case Token::Type::L_BRACKET:
                 pOp = m_pCurrToken;
                 break;
             default:
@@ -179,7 +183,17 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
         }
 
         consume(m_pCurrToken->type());
-        pRhs = parse_expr(lnRhsOpBindingPower);
+
+        switch (pOp->type())
+        {
+            case Token::Type::L_BRACKET:
+                pRhs = parse_expr(0);
+                consume(Token::Type::R_BRACKET);
+                break;
+            default:
+                pRhs = parse_expr(lnRhsOpBindingPower);
+        }
+
         pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
     }
 

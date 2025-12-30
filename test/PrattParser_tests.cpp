@@ -74,3 +74,14 @@ TEST_F(PrattParserTest, expr_02)
     parse_str("-2 + 1", "(+ (- 2) 1)");
     parse_str("-a / +-2 - 5", "(- (/ (- a) (+ (- 2))) 5)");
 }
+
+//
+// expr_03
+//
+
+TEST_F(PrattParserTest, expr_03)
+{
+    parse_str("a[1]", "([ a 1)");
+    parse_str("a[2 + 3]", "([ a (+ 2 3))");
+    parse_str("a[b[1 << 2]]", "([ a ([ b (<< 1 2)))");
+}
