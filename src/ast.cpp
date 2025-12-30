@@ -78,6 +78,51 @@ void Literal::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// SliceExpr
+//
+
+SliceExpr::SliceExpr(Token* apOp, Node* apLeft, Node* apRight) :
+    m_pOp { apOp },
+    m_pLeft { apLeft },
+    m_pRight { apRight }
+{
+}
+
+SliceExpr::~SliceExpr()
+{
+    delete m_pLeft;
+    m_pLeft = nullptr;
+
+    delete m_pRight;
+    m_pRight = nullptr;
+}
+
+const Token* SliceExpr::op() const
+{
+    return m_pOp;
+}
+
+const Node* SliceExpr::left() const
+{
+    return m_pLeft;
+}
+
+const Node* SliceExpr::right() const
+{
+    return m_pRight;
+}
+
+std::string SliceExpr::toString() const
+{
+    return "SliceExpr:" + m_pOp->str();
+}
+
+void SliceExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // UnaryOp
 //
 

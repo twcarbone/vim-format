@@ -49,6 +49,7 @@ protected:
 
 //
 // expr_01
+//  - binary operator & parentheses
 //
 
 TEST_F(PrattParserTest, expr_01)
@@ -64,6 +65,7 @@ TEST_F(PrattParserTest, expr_01)
 
 //
 // expr_02
+//  - unary operator
 //
 
 TEST_F(PrattParserTest, expr_02)
@@ -77,6 +79,7 @@ TEST_F(PrattParserTest, expr_02)
 
 //
 // expr_03
+//  - index operator
 //
 
 TEST_F(PrattParserTest, expr_03)
@@ -84,4 +87,18 @@ TEST_F(PrattParserTest, expr_03)
     parse_str("a[1]", "([ a 1)");
     parse_str("a[2 + 3]", "([ a (+ 2 3))");
     parse_str("a[b[1 << 2]]", "([ a ([ b (<< 1 2)))");
+}
+
+//
+// expr_04
+//  - slice operator
+//
+
+TEST_F(PrattParserTest, expr_04)
+{
+    parse_str("a[2:4]", "([ a (: 2 4))");
+    parse_str("a[:4]", "([ a (: <begin> 4))");
+    parse_str("a[4:]", "([ a (: 4 <end>))");
+    parse_str("a[:]", "([ a (: <begin> <end>))");
+    parse_str("a[:b[1 + 2:c]]", "([ a (: <begin> ([ b (: (+ 1 2) c))))");
 }

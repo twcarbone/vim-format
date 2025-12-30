@@ -64,6 +64,29 @@ private:
 };
 
 //
+// SliceExpr
+//
+
+class SliceExpr : public Node
+{
+public:
+    SliceExpr(Token* op, Node* left, Node* right);
+    virtual ~SliceExpr();
+
+    const Token* op() const;
+    const Node* left() const;
+    const Node* right() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pOp;
+    Node* m_pLeft;
+    Node* m_pRight;
+};
+
+//
 // UnaryOp
 //
 

@@ -239,5 +239,28 @@ bool Lexer::disambiguate(Token* apCurrentToken)
             }
         }
     }
+
+    //
+    // GEN_COLON
+    //
+
+    else if (apCurrentToken->type() == Token::Type::GEN_COLON)
+    {
+        for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+        {
+            switch ((*rit)->type())
+            {
+                case Token::Type::L_BRACKET:
+                    apCurrentToken->setType(Token::Type::OP_SLICE);
+                    break;
+                case Token::Type::OP_TERNARY_IF:
+                    apCurrentToken->setType(Token::Type::OP_TERNARY_ELSE);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     return !apCurrentToken->ambiguous();
 }

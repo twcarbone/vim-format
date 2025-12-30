@@ -15,6 +15,7 @@
         X(GEN_QUESTION) \
         X(GEN_NAME) \
         X(GEN_EXCLAMATION) \
+        X(GEN_COLON) \
         X(OP_ADD) \
         X(OP_SUB) \
         X(OP_UNARY_PLUS) \
@@ -38,6 +39,7 @@
         X(OP_IGNORE_CASE) \
         X(OP_TERNARY_IF) \
         X(OP_TERNARY_ELSE) \
+        X(OP_SLICE) \
         X(OP_FALSEY) \
         X(OP_LSHIFT) \
         X(OP_RSHIFT) \

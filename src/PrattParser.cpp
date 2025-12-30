@@ -39,6 +39,7 @@ PrattParser::PrattParser(const Context& acContext, std::vector<Token*> alTokens)
         { Token::Type::OP_UNARY_PLUS, { 60, 61 } },
         // 70
         { Token::Type::L_BRACKET, { 70, 0 } },
+        { Token::Type::OP_SLICE, { 70, 71 } },
     }
 {
 }
@@ -106,9 +107,11 @@ void PrattParser::throw_unexpected_token()
 
 ast::Node* PrattParser::parse_expr(int anMinBindingPower)
 {
-    ast::Node* pLhs;
-    ast::Node* pRhs;
-    Token* pOp;
+    ast::Node* pLhs = nullptr;
+    ast::Node* pRhs = nullptr;
+    ast::Node* pStart = nullptr;
+    ast::Node* pStop = nullptr;
+    Token* pOp = nullptr;
 
     int lnLhsOpBindingPower;
     int lnRhsOpBindingPower;
@@ -151,6 +154,7 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
             case Token::Type::END:
             case Token::Type::R_PAREN:
             case Token::Type::R_BRACKET:
+            case Token::Type::OP_SLICE:
                 return pLhs;
             case Token::Type::OP_OR:
             case Token::Type::OP_AND:
@@ -182,20 +186,41 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
             return pLhs;
         }
 
-        consume(m_pCurrToken->type());
+        consume(pOp->type());
 
-        switch (pOp->type())
+        if (pOp->type() == Token::Type::L_BRACKET)
         {
-            case Token::Type::L_BRACKET:
-                pRhs = parse_expr(0);
+            if (m_pCurrToken->type() != Token::Type::OP_SLICE)
+            {
+                pStart = parse_expr(0);
+            }
+
+            if (m_pCurrToken->type() == Token::Type::OP_SLICE)
+            {
+                // Note: 'pOp' is declared again in this scope as a slice operator to not
+                // shadow the outer scope 'pOp' left-bracket operator.
+                Token* pOp = m_pCurrToken;
+                consume(Token::Type::OP_SLICE);
+
+                if (m_pCurrToken->type() != Token::Type::R_BRACKET)
+                {
+                    pStop = parse_expr(0);
+                }
+
                 consume(Token::Type::R_BRACKET);
-                break;
-            default:
-                pRhs = parse_expr(lnRhsOpBindingPower);
+                pRhs = new ast::SliceExpr(pOp, pStart, pStop);
+            }
+            else
+            {
+                consume(Token::Type::R_BRACKET);
+                pRhs = pStart;
+            }
+        }
+        else
+        {
+            pRhs = parse_expr(lnRhsOpBindingPower);
         }
 
         pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
     }
-
-    return pLhs;
 }
