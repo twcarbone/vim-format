@@ -20,17 +20,7 @@ Token::~Token()
 
 bool Token::ambiguous() const
 {
-    switch (m_eType)
-    {
-        case Type::GEN_NAME:
-        case Type::GEN_PLUS:
-        case Type::GEN_MINUS:
-        case Type::GEN_QUESTION:
-        case Type::GEN_EXCLAMATION:
-            return true;
-        default:
-            return false;
-    }
+    return TypeToStr(m_eType).substr(0, 4) == "GEN_";
 }
 
 bool Token::delimiting_wp() const
