@@ -39,7 +39,7 @@ OP_SLICE            :
 OP_FALSEY           ??
 OP_LSHIFT           <<
 OP_RSHIFT           >>
-OP_CAT_OLD          .
+OP_DOT              .
 OP_CAT_NEW          ..
 OP_LOGICAL_NOT      !
 OP_BANG             !
@@ -162,7 +162,7 @@ expr5
         : expr6 (OP_LSHIFT | OP_RSHIFT expr6)*
 
 expr6
-        : expr7 ((OP_ADD | OP_SUB | OP_CAT_OLD | OP_CAT_NEW) expr7)*
+        : expr7 ((OP_ADD | OP_SUB | OP_DOT | OP_CAT_NEW) expr7)*
 
 expr7
         : expr8 ((OP_MUL | OP_DIV | OP_MODULO) expr8)*

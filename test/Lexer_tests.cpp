@@ -134,25 +134,25 @@ TEST_F(LexerTest, bad_float)
     tokenize_str("2.2.2");
     expect_tokens(4);
     expect_token(0, "2", Token::Type::INTEGER, 0);
-    expect_token(1, ".", Token::Type::OP_CAT_OLD, 1);
+    expect_token(1, ".", Token::Type::OP_DOT, 1);
     expect_token(2, "2.2", Token::Type::FLOAT, 2);
 
     tokenize_str("3.3 . 3");
     expect_tokens(4);
     expect_token(0, "3.3", Token::Type::FLOAT, 0);
-    expect_token(1, ".", Token::Type::OP_CAT_OLD, 4);
+    expect_token(1, ".", Token::Type::OP_DOT, 4);
     expect_token(2, "3", Token::Type::INTEGER, 6);
 
     tokenize_str("4 . 4.4");
     expect_tokens(4);
     expect_token(0, "4", Token::Type::INTEGER, 0);
-    expect_token(1, ".", Token::Type::OP_CAT_OLD, 2);
+    expect_token(1, ".", Token::Type::OP_DOT, 2);
     expect_token(2, "4.4", Token::Type::FLOAT, 4);
 
     tokenize_str("5.5e");
     expect_tokens(5);
     expect_token(0, "5", Token::Type::INTEGER, 0);
-    expect_token(1, ".", Token::Type::OP_CAT_OLD, 1);
+    expect_token(1, ".", Token::Type::OP_DOT, 1);
     expect_token(2, "5", Token::Type::INTEGER, 2);
     expect_token(3, "e", Token::Type::IDENTIFIER, 3);
 
@@ -515,7 +515,7 @@ TEST_F(LexerTest, expr6_01)
     expect_token(2, "2", Token::Type::INTEGER, 4);
     expect_token(3, "-", Token::Type::OP_SUB, 6);
     expect_token(4, "3", Token::Type::INTEGER, 8);
-    expect_token(5, ".", Token::Type::OP_CAT_OLD, 10);
+    expect_token(5, ".", Token::Type::OP_DOT, 10);
     expect_token(6, "4", Token::Type::INTEGER, 12);
     expect_token(7, "..", Token::Type::OP_CAT_NEW, 14);
     expect_token(8, "5", Token::Type::INTEGER, 17);
@@ -531,7 +531,7 @@ TEST_F(LexerTest, expr6_02)
     expect_token(2, "b", Token::Type::IDENTIFIER, 4);
     expect_token(3, "-", Token::Type::OP_SUB, 6);
     expect_token(4, "c", Token::Type::IDENTIFIER, 8);
-    expect_token(5, ".", Token::Type::OP_CAT_OLD, 10);
+    expect_token(5, ".", Token::Type::OP_DOT, 10);
     expect_token(6, "d", Token::Type::IDENTIFIER, 12);
     expect_token(7, "..", Token::Type::OP_CAT_NEW, 14);
     expect_token(8, "e", Token::Type::IDENTIFIER, 17);

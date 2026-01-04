@@ -402,7 +402,7 @@ void Parser::expr6(Node* apParent)
         {
             case Token::Type::OP_ADD:
             case Token::Type::OP_SUB:
-            case Token::Type::OP_CAT_OLD:
+            case Token::Type::OP_DOT:
             case Token::Type::OP_CAT_NEW:
                 consume(pNonTerminal, m_pCurrToken->type());
                 expr7(pNonTerminal);

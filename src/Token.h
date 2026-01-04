@@ -43,7 +43,7 @@
         X(OP_FALSEY) \
         X(OP_LSHIFT) \
         X(OP_RSHIFT) \
-        X(OP_CAT_OLD) \
+        X(OP_DOT) \
         X(OP_CAT_NEW) \
         X(OP_LOGICAL_NOT) \
         X(OP_BANG) \

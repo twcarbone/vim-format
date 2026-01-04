@@ -27,7 +27,7 @@ PrattParser::PrattParser(const Context& acContext, std::vector<Token*> alTokens)
         // 40
         { Token::Type::OP_ADD, { 40, 41 } },
         { Token::Type::OP_SUB, { 40, 41 } },
-        { Token::Type::OP_CAT_OLD, { 40, 41 } },
+        { Token::Type::OP_DOT, { 40, 41 } },
         { Token::Type::OP_CAT_NEW, { 40, 41 } },
         // 50
         { Token::Type::OP_MUL, { 50, 51 } },
@@ -162,7 +162,7 @@ ast::Node* PrattParser::parse_expr(int anMinBindingPower)
             case Token::Type::OP_RSHIFT:
             case Token::Type::OP_ADD:
             case Token::Type::OP_SUB:
-            case Token::Type::OP_CAT_OLD:
+            case Token::Type::OP_DOT:
             case Token::Type::OP_CAT_NEW:
             case Token::Type::OP_MUL:
             case Token::Type::OP_DIV:

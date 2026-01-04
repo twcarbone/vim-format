@@ -124,7 +124,7 @@ TokenSpec::TokenSpec() :
         { "+=", Token::Type::ASSIGN_ADD },
         { "-", Token::Type::GEN_MINUS },
         { "-=", Token::Type::ASSIGN_MINUS },
-        { ".", Token::Type::OP_CAT_OLD },
+        { ".", Token::Type::OP_DOT },
         { "..", Token::Type::OP_CAT_NEW },
         { "..=", Token::Type::ASSIGN_CAT_NEW },
         { ".=", Token::Type::ASSIGN_CAT_OLD },
