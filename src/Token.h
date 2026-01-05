@@ -16,6 +16,7 @@
         X(GEN_NAME) \
         X(GEN_EXCLAMATION) \
         X(GEN_COLON) \
+        X(GEN_DOT) \
         X(OP_ADD) \
         X(OP_SUB) \
         X(OP_UNARY_PLUS) \
@@ -44,6 +45,7 @@
         X(OP_LSHIFT) \
         X(OP_RSHIFT) \
         X(OP_DOT) \
+        X(OP_CAT_OLD) \
         X(OP_CAT_NEW) \
         X(OP_LOGICAL_NOT) \
         X(OP_BANG) \
