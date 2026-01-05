@@ -102,3 +102,15 @@ TEST_F(PrattParserTest, expr_04)
     parse_str("a[:]", "([ a (: <begin> <end>))");
     parse_str("a[:b[1 + 2:c]]", "([ a (: <begin> ([ b (: (+ 1 2) c))))");
 }
+
+//
+// expr_05
+//  - dot and cat operator
+//
+
+TEST_F(PrattParserTest, expr_05)
+{
+    parse_str("dict.bar", "(. dict bar)");
+    parse_str("dict.2", "(. dict 2)");
+    parse_str("2 . 2", "(. 2 2)");
+}
