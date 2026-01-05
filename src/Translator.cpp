@@ -159,7 +159,7 @@ void Translator::visit(const Terminal* apTerminal)
         case Token::Type::OP_RSHIFT:
         case Token::Type::OP_ADD:
         case Token::Type::OP_SUB:
-        case Token::Type::OP_CAT_OLD:
+        case Token::Type::OP_DOT:
         case Token::Type::OP_CAT_NEW:
         case Token::Type::OP_MUL:
         case Token::Type::OP_DIV:

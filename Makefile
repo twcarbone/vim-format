@@ -17,3 +17,6 @@ test: build
 
 clean:
 	rm -rf build/
+
+format:
+	find src/ test/ -type f \( -name '*.h' -or -name '*.cpp' \) -exec clang-format -i {} +
