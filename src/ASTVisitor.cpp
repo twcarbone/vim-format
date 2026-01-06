@@ -5,6 +5,10 @@ void ASTVisitor::visit(const ast::BinaryOp* apBinaryOp)
 {
 }
 
+void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
+{
+}
+
 void ASTVisitor::visit(const ast::Literal* apLiteral)
 {
 }

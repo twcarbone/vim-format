@@ -79,6 +79,25 @@ private:
 };
 
 //
+// IfStmt
+//
+
+class IfStmt : public Stmt
+{
+public:
+    IfStmt(Expr* condition, StmtList* then_stmts, StmtList* else_smts);
+    virtual ~IfStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Expr* m_pCondition;
+    StmtList* m_pThenStmtList;
+    StmtList* m_pElseStmtList;
+};
+
+//
 // BinaryOp
 //
 

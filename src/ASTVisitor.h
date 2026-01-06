@@ -3,6 +3,7 @@
 namespace ast
 {
 class BinaryOp;
+class IfStmt;
 class Literal;
 class Program;
 class SliceExpr;
@@ -15,6 +16,7 @@ class ASTVisitor
 {
 public:
     virtual void visit(const ast::BinaryOp* ast);
+    virtual void visit(const ast::IfStmt* ast);
     virtual void visit(const ast::Literal* ast);
     virtual void visit(const ast::Program* ast);
     virtual void visit(const ast::SliceExpr* ast);

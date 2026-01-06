@@ -56,6 +56,39 @@ void Program::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// IfStmt
+//
+
+IfStmt::IfStmt(ast::Expr* apCondition, ast::StmtList* apThenStmtList, ast::StmtList* apElseStmtList) :
+    m_pCondition { apCondition },
+    m_pThenStmtList { apThenStmtList },
+    m_pElseStmtList { apElseStmtList }
+{
+}
+
+IfStmt::~IfStmt()
+{
+    delete m_pCondition;
+    m_pCondition = nullptr;
+
+    delete m_pThenStmtList;
+    m_pThenStmtList = nullptr;
+
+    delete m_pElseStmtList;
+    m_pElseStmtList = nullptr;
+}
+
+std::string IfStmt::toString() const
+{
+    return "IfStmt";
+}
+
+void IfStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // BinaryOp
 //
 
