@@ -9,6 +9,10 @@ void ASTVisitor::visit(const ast::Literal* apLiteral)
 {
 }
 
+void ASTVisitor::visit(const ast::Program* apProgram)
+{
+}
+
 void ASTVisitor::visit(const ast::StmtList* apStmtList)
 {
 }

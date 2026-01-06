@@ -32,6 +32,30 @@ void StmtList::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// Program
+//
+
+Program::Program(ast::StmtList* apStmtList) :
+    m_pStmtList { apStmtList }
+{
+}
+
+Program::~Program()
+{
+    delete m_pStmtList;
+}
+
+std::string Program::toString() const
+{
+    return "Program";
+}
+
+void Program::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // BinaryOp
 //
 

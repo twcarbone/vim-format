@@ -4,6 +4,7 @@ namespace ast
 {
 class BinaryOp;
 class Literal;
+class Program;
 class SliceExpr;
 class StmtList;
 class UnaryOp;
@@ -15,6 +16,7 @@ class ASTVisitor
 public:
     virtual void visit(const ast::BinaryOp* ast);
     virtual void visit(const ast::Literal* ast);
+    virtual void visit(const ast::Program* ast);
     virtual void visit(const ast::SliceExpr* ast);
     virtual void visit(const ast::StmtList* ast);
     virtual void visit(const ast::UnaryOp* ast);

@@ -62,6 +62,23 @@ private:
 };
 
 //
+// Program
+//
+
+class Program : public Node
+{
+public:
+    Program(ast::StmtList* stmts);
+    virtual ~Program();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    StmtList* m_pStmtList;
+};
+
+//
 // BinaryOp
 //
 
