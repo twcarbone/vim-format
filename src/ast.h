@@ -22,6 +22,16 @@ public:
 };
 
 //
+// Stmt
+//
+
+class Stmt : public Node
+{
+public:
+    virtual ~Stmt() = default;
+};
+
+//
 // Expr
 //
 
