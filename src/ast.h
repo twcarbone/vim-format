@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "ASTVisitor.h"
 #include "Token.h"
@@ -39,6 +40,25 @@ class Expr : public Node
 {
 public:
     virtual ~Expr() = default;
+};
+
+//
+// StmtList
+//
+
+class StmtList : public Node
+{
+public:
+    StmtList() = default;
+    virtual ~StmtList();
+
+    void push(Stmt* stmt);
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    std::vector<Stmt*> m_lStmnts;
 };
 
 //

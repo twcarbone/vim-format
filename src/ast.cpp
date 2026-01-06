@@ -3,6 +3,35 @@
 using namespace ast;
 
 //
+// StmtList
+//
+
+StmtList::~StmtList()
+{
+    for (Stmt* pStmt : m_lStmnts)
+    {
+        delete pStmt;
+    }
+
+    m_lStmnts.clear();
+}
+
+void StmtList::push(Stmt* apStmt)
+{
+    m_lStmnts.push_back(apStmt);
+}
+
+std::string StmtList::toString() const
+{
+    return "StmtList";
+}
+
+void StmtList::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // BinaryOp
 //
 
