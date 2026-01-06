@@ -6,7 +6,7 @@ using namespace ast;
 // BinaryOp
 //
 
-BinaryOp::BinaryOp(Token* apOp, Node* apLeft, Node* apRight) :
+BinaryOp::BinaryOp(Token* apOp, Expr* apLeft, Expr* apRight) :
     m_pOp { apOp },
     m_pLeft { apLeft },
     m_pRight { apRight }
@@ -27,12 +27,12 @@ const Token* BinaryOp::op() const
     return m_pOp;
 }
 
-const Node* BinaryOp::left() const
+const Expr* BinaryOp::left() const
 {
     return m_pLeft;
 }
 
-const Node* BinaryOp::right() const
+const Expr* BinaryOp::right() const
 {
     return m_pRight;
 }
@@ -81,7 +81,7 @@ void Literal::accept(ASTVisitor& acASTVisitor) const
 // SliceExpr
 //
 
-SliceExpr::SliceExpr(Token* apOp, Node* apLeft, Node* apRight) :
+SliceExpr::SliceExpr(Token* apOp, Expr* apLeft, Expr* apRight) :
     m_pOp { apOp },
     m_pLeft { apLeft },
     m_pRight { apRight }
@@ -102,12 +102,12 @@ const Token* SliceExpr::op() const
     return m_pOp;
 }
 
-const Node* SliceExpr::left() const
+const Expr* SliceExpr::left() const
 {
     return m_pLeft;
 }
 
-const Node* SliceExpr::right() const
+const Expr* SliceExpr::right() const
 {
     return m_pRight;
 }
@@ -126,7 +126,7 @@ void SliceExpr::accept(ASTVisitor& acASTVisitor) const
 // UnaryOp
 //
 
-UnaryOp::UnaryOp(Token* apOp, Node* apRight) :
+UnaryOp::UnaryOp(Token* apOp, Expr* apRight) :
     m_pOp { apOp },
     m_pRight { apRight }
 {
@@ -137,7 +137,7 @@ const Token* UnaryOp::op() const
     return m_pOp;
 }
 
-const Node* UnaryOp::right() const
+const Expr* UnaryOp::right() const
 {
     return m_pRight;
 }

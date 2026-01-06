@@ -22,33 +22,43 @@ public:
 };
 
 //
+// Expr
+//
+
+class Expr : public Node
+{
+public:
+    virtual ~Expr() = default;
+};
+
+//
 // BinaryOp
 //
 
-class BinaryOp : public Node
+class BinaryOp : public Expr
 {
 public:
-    BinaryOp(Token* op, Node* left, Node* right);
+    BinaryOp(Token* op, Expr* left, Expr* right);
     virtual ~BinaryOp();
 
     const Token* op() const;
-    const Node* left() const;
-    const Node* right() const;
+    const Expr* left() const;
+    const Expr* right() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     Token* m_pOp;
-    Node* m_pLeft;
-    Node* m_pRight;
+    Expr* m_pLeft;
+    Expr* m_pRight;
 };
 
 //
 // Literal
 //
 
-class Literal : public Node
+class Literal : public Expr
 {
 public:
     Literal(Token* token);
@@ -67,51 +77,51 @@ private:
 // SliceExpr
 //
 
-class SliceExpr : public Node
+class SliceExpr : public Expr
 {
 public:
-    SliceExpr(Token* op, Node* left, Node* right);
+    SliceExpr(Token* op, Expr* left, Expr* right);
     virtual ~SliceExpr();
 
     const Token* op() const;
-    const Node* left() const;
-    const Node* right() const;
+    const Expr* left() const;
+    const Expr* right() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     Token* m_pOp;
-    Node* m_pLeft;
-    Node* m_pRight;
+    Expr* m_pLeft;
+    Expr* m_pRight;
 };
 
 //
 // UnaryOp
 //
 
-class UnaryOp : public Node
+class UnaryOp : public Expr
 {
 public:
-    UnaryOp(Token* op, Node* right);
+    UnaryOp(Token* op, Expr* right);
     virtual ~UnaryOp();
 
     const Token* op() const;
-    const Node* right() const;
+    const Expr* right() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     Token* m_pOp;
-    Node* m_pRight;
+    Expr* m_pRight;
 };
 
 //
 // Var
 //
 
-class Var : public Node
+class Var : public Expr
 {
 public:
     Var(Token* token);

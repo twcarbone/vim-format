@@ -52,7 +52,7 @@ void PrattParser::parse()
     m_pRoot = parse_expr(0);
 }
 
-ast::Node* PrattParser::root() const
+ast::Expr* PrattParser::root() const
 {
     return m_pRoot;
 }
@@ -106,12 +106,12 @@ void PrattParser::throw_unexpected_token()
     throw std::runtime_error("Unexpected token.\n\n" + m_cSource.traceback());
 }
 
-ast::Node* PrattParser::parse_expr(int anMinBindingPower)
+ast::Expr* PrattParser::parse_expr(int anMinBindingPower)
 {
-    ast::Node* pLhs = nullptr;
-    ast::Node* pRhs = nullptr;
-    ast::Node* pStart = nullptr;
-    ast::Node* pStop = nullptr;
+    ast::Expr* pLhs = nullptr;
+    ast::Expr* pRhs = nullptr;
+    ast::Expr* pStart = nullptr;
+    ast::Expr* pStop = nullptr;
     Token* pOp = nullptr;
 
     int lnLhsOpBindingPower;

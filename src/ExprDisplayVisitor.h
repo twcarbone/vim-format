@@ -7,8 +7,8 @@
 namespace ast
 {
 class BinaryOp;
+class Expr;
 class Literal;
-class Node;
 class SliceExpr;
 class UnaryOp;
 class Var;
@@ -28,7 +28,7 @@ public:
      *      1 + 2 * 3               => (+ 1 (* 2 3))
      *      -1 + 2 * -3 / 4 - 5     => (- (+ (- 1) (/ (* 2 (- 3)) 4)) 5)
      */
-    std::string display(ast::Node* root);
+    std::string display(ast::Expr* expr);
 
     virtual void visit(const ast::BinaryOp* ast) override;
     virtual void visit(const ast::Literal* ast) override;

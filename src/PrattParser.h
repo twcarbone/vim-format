@@ -21,13 +21,13 @@ public:
      *      (Core Dumped) This Simple Algorithm Powers Real Interpreters: Pratt Parsing
      */
     void parse();
-    ast::Node* root() const;
+    ast::Expr* root() const;
 
     size_t pos() const;
     void seek(size_t pos);
 
 private:
-    ast::Node* m_pRoot;
+    ast::Expr* m_pRoot;
     Token* m_pCurrToken;
     Source m_cSource;
     size_t m_nPos;
@@ -37,7 +37,7 @@ private:
 
     void next();
     void consume(Token::Type type);
-    ast::Node* parse_expr(int min_binding_power);
+    ast::Expr* parse_expr(int min_binding_power);
 
     [[noreturn]] void throw_unexpected_token();
 };

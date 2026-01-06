@@ -1,11 +1,11 @@
 #include "ExprDisplayVisitor.h"
 #include "ast.h"
 
-std::string ExprDisplayVisitor::display(ast::Node* apRoot)
+std::string ExprDisplayVisitor::display(ast::Expr* apExpr)
 {
     m_sDisplay.clear();
 
-    apRoot->accept(*this);
+    apExpr->accept(*this);
 
     // Remove leading whitespace
     return m_sDisplay.substr(1);
