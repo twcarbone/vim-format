@@ -74,3 +74,16 @@ TEST_F(HybridParserTest, if_stmt_04)
               "  echo 3\n"
               "endif\n");
 }
+
+//
+// expr_cmd
+//
+
+TEST_F(HybridParserTest, expr_cmd_01)
+{
+    parse_str("echo foo ?? bar\n");
+    parse_str("echo 1 ?? 2\n");
+
+    parse_str("echo foo ? bar : baz\n");
+    parse_str("echo 1 ? 2 : 3\n");
+}

@@ -9,6 +9,7 @@ HybridParser::HybridParser(const Context& acContext, std::vector<Token*> alToken
     m_mOpBindingPower {
         // 10
         { Token::Type::OP_FALSEY, { 10, 11 } },
+        { Token::Type::OP_TERNARY_IF, { 10, 0 } },
         // 20
         { Token::Type::OP_OR, { 20, 21 } },
         // 30
@@ -159,8 +160,6 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
 {
     ast::Expr* pLhs = nullptr;
     ast::Expr* pRhs = nullptr;
-    ast::Expr* pStart = nullptr;
-    ast::Expr* pStop = nullptr;
     Token* pOp = nullptr;
 
     int lnLhsOpBindingPower;
@@ -205,8 +204,10 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
             case Token::Type::R_PAREN:
             case Token::Type::R_BRACKET:
             case Token::Type::OP_SLICE:
+            case Token::Type::OP_TERNARY_ELSE:
             case Token::Type::END:
                 return pLhs;
+            case Token::Type::OP_TERNARY_IF:
             case Token::Type::OP_FALSEY:
             case Token::Type::OP_OR:
             case Token::Type::OP_AND:
@@ -243,6 +244,9 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
 
         if (pOp->type() == Token::Type::L_BRACKET)
         {
+            ast::Expr* pStart = nullptr;
+            ast::Expr* pStop = nullptr;
+
             if (m_pCurrToken->type() != Token::Type::OP_SLICE)
             {
                 pStart = expr(0);
@@ -268,13 +272,23 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
                 consume(Token::Type::R_BRACKET);
                 pRhs = pStart;
             }
+
+            pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
+        }
+        else if (pOp->type() == Token::Type::OP_TERNARY_IF)
+        {
+            Token* pLeftOp = pOp;
+            ast::Expr* pMhs = expr(0);
+            Token* pRightOp = m_pCurrToken;
+            consume(Token::Type::OP_TERNARY_ELSE);
+            pRhs = expr(lnRhsOpBindingPower);
+            pLhs = new ast::TernaryOp(pLeftOp, pRightOp, pLhs, pMhs, pRhs);
         }
         else
         {
             pRhs = expr(lnRhsOpBindingPower);
+            pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
         }
-
-        pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
     }
 }
 
