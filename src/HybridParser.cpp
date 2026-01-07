@@ -7,40 +7,42 @@ HybridParser::HybridParser(const Context& acContext, std::vector<Token*> alToken
     m_nPos { 0 },
     m_lTokens { std::move(alTokens) },
     m_mOpBindingPower {
-        // 0
-        { Token::Type::OP_OR, { 0, 1 } },
         // 10
-        { Token::Type::OP_AND, { 10, 11 } },
+        { Token::Type::OP_FALSEY, { 10, 11 } },
         // 20
-        { Token::Type::OP_EQUAL, { 20, 21 } },
-        { Token::Type::OP_NEQUAL, { 20, 21 } },
-        { Token::Type::OP_GT, { 20, 21 } },
-        { Token::Type::OP_GTE, { 20, 21 } },
-        { Token::Type::OP_LT, { 20, 21 } },
-        { Token::Type::OP_LTE, { 20, 21 } },
-        { Token::Type::OP_MATCH, { 20, 21 } },
-        { Token::Type::OP_NMATCH, { 20, 21 } },
-        { Token::Type::OP_ISNOT, { 20, 21 } },
+        { Token::Type::OP_OR, { 20, 21 } },
         // 30
-        { Token::Type::OP_LSHIFT, { 30, 31 } },
-        { Token::Type::OP_RSHIFT, { 30, 31 } },
+        { Token::Type::OP_AND, { 30, 31 } },
         // 40
-        { Token::Type::OP_ADD, { 40, 41 } },
-        { Token::Type::OP_SUB, { 40, 41 } },
-        { Token::Type::OP_CAT_OLD, { 40, 41 } },
-        { Token::Type::OP_CAT_NEW, { 40, 41 } },
+        { Token::Type::OP_EQUAL, { 40, 41 } },
+        { Token::Type::OP_NEQUAL, { 40, 41 } },
+        { Token::Type::OP_GT, { 40, 41 } },
+        { Token::Type::OP_GTE, { 40, 41 } },
+        { Token::Type::OP_LT, { 40, 41 } },
+        { Token::Type::OP_LTE, { 40, 41 } },
+        { Token::Type::OP_MATCH, { 40, 41 } },
+        { Token::Type::OP_NMATCH, { 40, 41 } },
+        { Token::Type::OP_ISNOT, { 40, 41 } },
         // 50
-        { Token::Type::OP_MUL, { 50, 51 } },
-        { Token::Type::OP_DIV, { 50, 51 } },
-        { Token::Type::OP_MODULO, { 50, 51 } },
+        { Token::Type::OP_LSHIFT, { 50, 51 } },
+        { Token::Type::OP_RSHIFT, { 50, 51 } },
         // 60
-        { Token::Type::OP_LOGICAL_NOT, { 60, 61 } },
-        { Token::Type::OP_UNARY_MINUS, { 60, 61 } },
-        { Token::Type::OP_UNARY_PLUS, { 60, 61 } },
+        { Token::Type::OP_ADD, { 60, 61 } },
+        { Token::Type::OP_SUB, { 60, 61 } },
+        { Token::Type::OP_CAT_OLD, { 60, 61 } },
+        { Token::Type::OP_CAT_NEW, { 60, 61 } },
         // 70
-        { Token::Type::L_BRACKET, { 70, 0 } },
-        { Token::Type::OP_SLICE, { 70, 71 } },
-        { Token::Type::OP_DOT, { 70, 71 } },
+        { Token::Type::OP_MUL, { 70, 71 } },
+        { Token::Type::OP_DIV, { 70, 71 } },
+        { Token::Type::OP_MODULO, { 70, 71 } },
+        // 80
+        { Token::Type::OP_LOGICAL_NOT, { 80, 81 } },
+        { Token::Type::OP_UNARY_MINUS, { 80, 81 } },
+        { Token::Type::OP_UNARY_PLUS, { 80, 81 } },
+        // 90
+        { Token::Type::L_BRACKET, { 90, 0 } },
+        { Token::Type::OP_SLICE, { 90, 91 } },
+        { Token::Type::OP_DOT, { 90, 91 } },
     }
 {
 }
@@ -205,6 +207,7 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
             case Token::Type::OP_SLICE:
             case Token::Type::END:
                 return pLhs;
+            case Token::Type::OP_FALSEY:
             case Token::Type::OP_OR:
             case Token::Type::OP_AND:
             case Token::Type::OP_LSHIFT:
