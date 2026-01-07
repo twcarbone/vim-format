@@ -43,6 +43,24 @@ public:
 };
 
 //
+// ExprCmd
+//
+
+class ExprCmd : public Stmt
+{
+public:
+    ExprCmd(Token* cmd, Expr* expr);
+    virtual ~ExprCmd();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pCmd;
+    Expr* m_pExpr;
+};
+
+//
 // StmtList
 //
 

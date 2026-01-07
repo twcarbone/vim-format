@@ -32,6 +32,32 @@ void StmtList::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// ExprCmd
+//
+
+ExprCmd::ExprCmd(Token* apCmd, Expr* apExpr) :
+    m_pCmd { apCmd },
+    m_pExpr { apExpr }
+{
+}
+
+ExprCmd::~ExprCmd()
+{
+    delete m_pExpr;
+    m_pExpr = nullptr;
+}
+
+std::string ExprCmd::toString() const
+{
+    return "ExprCmd:" + m_pCmd->str();
+}
+
+void ExprCmd::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // Program
 //
 
