@@ -144,8 +144,6 @@ Literal::Literal(Token* apToken) :
 
 Literal::~Literal()
 {
-    delete m_pToken;
-    m_pToken = nullptr;
 }
 
 const Token* Literal::token() const
@@ -218,6 +216,12 @@ UnaryOp::UnaryOp(Token* apOp, Expr* apRight) :
 {
 }
 
+UnaryOp::~UnaryOp()
+{
+    delete m_pRight;
+    m_pRight = nullptr;
+}
+
 const Token* UnaryOp::op() const
 {
     return m_pOp;
@@ -226,12 +230,6 @@ const Token* UnaryOp::op() const
 const Expr* UnaryOp::right() const
 {
     return m_pRight;
-}
-
-UnaryOp::~UnaryOp()
-{
-    delete m_pRight;
-    m_pRight = nullptr;
 }
 
 std::string UnaryOp::toString() const
@@ -255,8 +253,6 @@ Var::Var(Token* apToken) :
 
 Var::~Var()
 {
-    delete m_pToken;
-    m_pToken = nullptr;
 }
 
 const Token* Var::token() const
