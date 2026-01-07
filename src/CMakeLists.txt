@@ -8,6 +8,7 @@ add_library(
     Controller.cpp
     Exceptions.cpp
     ExprDisplayVisitor.cpp
+    HybridParser.cpp
     Lexer.cpp
     Node.cpp
     NodeVisitor.cpp
