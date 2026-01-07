@@ -3,22 +3,35 @@
 using namespace ast;
 
 //
+// Node
+//
+
+Node::~Node()
+{
+    for (ast::Node* pNode : m_lChildren)
+    {
+        delete pNode;
+    }
+
+    m_lChildren.clear();
+}
+
+const std::vector<Node*>& Node::children() const
+{
+    return m_lChildren;
+}
+
+//
 // StmtList
 //
 
 StmtList::~StmtList()
 {
-    for (Stmt* pStmt : m_lStmnts)
-    {
-        delete pStmt;
-    }
-
-    m_lStmnts.clear();
 }
 
 void StmtList::push(Stmt* apStmt)
 {
-    m_lStmnts.push_back(apStmt);
+    m_lChildren.push_back(apStmt);
 }
 
 std::string StmtList::toString() const
@@ -36,15 +49,13 @@ void StmtList::accept(ASTVisitor& acASTVisitor) const
 //
 
 ExprCmd::ExprCmd(Token* apCmd, Expr* apExpr) :
-    m_pCmd { apCmd },
-    m_pExpr { apExpr }
+    m_pCmd { apCmd }
 {
+    m_lChildren.push_back(apExpr);
 }
 
 ExprCmd::~ExprCmd()
 {
-    delete m_pExpr;
-    m_pExpr = nullptr;
 }
 
 std::string ExprCmd::toString() const
@@ -61,14 +72,13 @@ void ExprCmd::accept(ASTVisitor& acASTVisitor) const
 // Program
 //
 
-Program::Program(ast::StmtList* apStmtList) :
-    m_pStmtList { apStmtList }
+Program::Program(ast::StmtList* apStmtList)
 {
+    m_lChildren.push_back(apStmtList);
 }
 
 Program::~Program()
 {
-    delete m_pStmtList;
 }
 
 std::string Program::toString() const
@@ -85,23 +95,15 @@ void Program::accept(ASTVisitor& acASTVisitor) const
 // IfStmt
 //
 
-IfStmt::IfStmt(ast::Expr* apCondition, ast::StmtList* apThenStmtList, ast::StmtList* apElseStmtList) :
-    m_pCondition { apCondition },
-    m_pThenStmtList { apThenStmtList },
-    m_pElseStmtList { apElseStmtList }
+IfStmt::IfStmt(ast::Expr* apCondition, ast::StmtList* apThenStmtList, ast::StmtList* apElseStmtList)
 {
+    m_lChildren.push_back(apCondition);
+    m_lChildren.push_back(apThenStmtList);
+    m_lChildren.push_back(apElseStmtList);
 }
 
 IfStmt::~IfStmt()
 {
-    delete m_pCondition;
-    m_pCondition = nullptr;
-
-    delete m_pThenStmtList;
-    m_pThenStmtList = nullptr;
-
-    delete m_pElseStmtList;
-    m_pElseStmtList = nullptr;
 }
 
 std::string IfStmt::toString() const
@@ -119,19 +121,14 @@ void IfStmt::accept(ASTVisitor& acASTVisitor) const
 //
 
 BinaryOp::BinaryOp(Token* apOp, Expr* apLeft, Expr* apRight) :
-    m_pOp { apOp },
-    m_pLeft { apLeft },
-    m_pRight { apRight }
+    m_pOp { apOp }
 {
+    m_lChildren.push_back(apLeft);
+    m_lChildren.push_back(apRight);
 }
 
 BinaryOp::~BinaryOp()
 {
-    delete m_pLeft;
-    m_pLeft = nullptr;
-
-    delete m_pRight;
-    m_pRight = nullptr;
 }
 
 const Token* BinaryOp::op() const
@@ -141,12 +138,12 @@ const Token* BinaryOp::op() const
 
 const Expr* BinaryOp::left() const
 {
-    return m_pLeft;
+    return static_cast<Expr*>(m_lChildren[0]);
 }
 
 const Expr* BinaryOp::right() const
 {
-    return m_pRight;
+    return static_cast<Expr*>(m_lChildren[1]);
 }
 
 std::string BinaryOp::toString() const
@@ -192,19 +189,14 @@ void Literal::accept(ASTVisitor& acASTVisitor) const
 //
 
 SliceExpr::SliceExpr(Token* apOp, Expr* apLeft, Expr* apRight) :
-    m_pOp { apOp },
-    m_pLeft { apLeft },
-    m_pRight { apRight }
+    m_pOp { apOp }
 {
+    m_lChildren.push_back(apLeft);
+    m_lChildren.push_back(apRight);
 }
 
 SliceExpr::~SliceExpr()
 {
-    delete m_pLeft;
-    m_pLeft = nullptr;
-
-    delete m_pRight;
-    m_pRight = nullptr;
 }
 
 const Token* SliceExpr::op() const
@@ -214,12 +206,12 @@ const Token* SliceExpr::op() const
 
 const Expr* SliceExpr::left() const
 {
-    return m_pLeft;
+    return static_cast<Expr*>(m_lChildren[0]);
 }
 
 const Expr* SliceExpr::right() const
 {
-    return m_pRight;
+    return static_cast<Expr*>(m_lChildren[1]);
 }
 
 std::string SliceExpr::toString() const
@@ -237,15 +229,13 @@ void SliceExpr::accept(ASTVisitor& acASTVisitor) const
 //
 
 UnaryOp::UnaryOp(Token* apOp, Expr* apRight) :
-    m_pOp { apOp },
-    m_pRight { apRight }
+    m_pOp { apOp }
 {
+    m_lChildren.push_back(apRight);
 }
 
 UnaryOp::~UnaryOp()
 {
-    delete m_pRight;
-    m_pRight = nullptr;
 }
 
 const Token* UnaryOp::op() const
@@ -255,7 +245,7 @@ const Token* UnaryOp::op() const
 
 const Expr* UnaryOp::right() const
 {
-    return m_pRight;
+    return static_cast<Expr*>(m_lChildren[0]);
 }
 
 std::string UnaryOp::toString() const

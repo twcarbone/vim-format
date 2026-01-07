@@ -16,10 +16,15 @@ namespace ast
 class Node
 {
 public:
-    virtual ~Node() = default;
+    virtual ~Node();
+
+    const std::vector<Node*>& children() const;
 
     virtual std::string toString() const = 0;
     virtual void accept(ASTVisitor& visitor) const = 0;
+
+protected:
+    std::vector<Node*> m_lChildren;
 };
 
 //
@@ -57,7 +62,6 @@ public:
 
 private:
     Token* m_pCmd;
-    Expr* m_pExpr;
 };
 
 //
@@ -74,9 +78,6 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-
-private:
-    std::vector<Stmt*> m_lStmnts;
 };
 
 //
@@ -91,9 +92,6 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-
-private:
-    StmtList* m_pStmtList;
 };
 
 //
@@ -108,11 +106,6 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-
-private:
-    Expr* m_pCondition;
-    StmtList* m_pThenStmtList;
-    StmtList* m_pElseStmtList;
 };
 
 //
@@ -134,8 +127,6 @@ public:
 
 private:
     Token* m_pOp;
-    Expr* m_pLeft;
-    Expr* m_pRight;
 };
 
 //
@@ -176,8 +167,6 @@ public:
 
 private:
     Token* m_pOp;
-    Expr* m_pLeft;
-    Expr* m_pRight;
 };
 
 //
@@ -198,7 +187,6 @@ public:
 
 private:
     Token* m_pOp;
-    Expr* m_pRight;
 };
 
 //
