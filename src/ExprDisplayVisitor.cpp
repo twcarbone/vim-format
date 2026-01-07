@@ -49,6 +49,15 @@ void ExprDisplayVisitor::visit(const ast::SliceExpr* apSliceExpr)
     m_sDisplay += ")";
 }
 
+void ExprDisplayVisitor::visit(const ast::TernaryOp* apTernaryOp)
+{
+    m_sDisplay += " (" + apTernaryOp->lop()->str() + apTernaryOp->rop()->str();
+    apTernaryOp->lexpr()->accept(*this);
+    apTernaryOp->mexpr()->accept(*this);
+    apTernaryOp->rexpr()->accept(*this);
+    m_sDisplay += ")";
+}
+
 void ExprDisplayVisitor::visit(const ast::UnaryOp* apUnaryOp)
 {
     m_sDisplay += " (" + apUnaryOp->op()->str();

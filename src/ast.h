@@ -170,6 +170,30 @@ private:
 };
 
 //
+// TernaryOp
+//
+
+class TernaryOp : public Expr
+{
+public:
+    TernaryOp(Token* left_op, Token* right_op, Expr* left, Expr* middle, Expr* right);
+    virtual ~TernaryOp();
+
+    const Token* lop() const;
+    const Token* rop() const;
+    const Expr* lexpr() const;
+    const Expr* mexpr() const;
+    const Expr* rexpr() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pLeftOp;
+    Token* m_pRightOp;
+};
+
+//
 // UnaryOp
 //
 

@@ -43,6 +43,11 @@ void ASTVisitor::visit(const ast::SliceExpr* apSliceExpr)
     print(apSliceExpr);
 }
 
+void ASTVisitor::visit(const ast::TernaryOp* apTernaryOp)
+{
+    print(apTernaryOp);
+}
+
 void ASTVisitor::visit(const ast::UnaryOp* apUnaryOp)
 {
     print(apUnaryOp);

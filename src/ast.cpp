@@ -60,7 +60,7 @@ ExprCmd::~ExprCmd()
 
 std::string ExprCmd::toString() const
 {
-    return "ExprCmd:" + m_pCmd->str();
+    return "ExprCmd " + m_pCmd->str();
 }
 
 void ExprCmd::accept(ASTVisitor& acASTVisitor) const
@@ -148,7 +148,7 @@ const Expr* BinaryOp::right() const
 
 std::string BinaryOp::toString() const
 {
-    return "BinaryOp:" + m_pOp->str();
+    return "BinaryOp " + m_pOp->str();
 }
 
 void BinaryOp::accept(ASTVisitor& acASTVisitor) const
@@ -176,7 +176,7 @@ const Token* Literal::token() const
 
 std::string Literal::toString() const
 {
-    return "Literal:" + m_pToken->str();
+    return "Literal " + m_pToken->str();
 }
 
 void Literal::accept(ASTVisitor& acASTVisitor) const
@@ -216,10 +216,66 @@ const Expr* SliceExpr::right() const
 
 std::string SliceExpr::toString() const
 {
-    return "SliceExpr:" + m_pOp->str();
+    return "SliceExpr " + m_pOp->str();
 }
 
 void SliceExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
+// TernaryOp
+//
+
+TernaryOp::TernaryOp(Token* apLeftOp,
+                     Token* apRightOp,
+                     Expr* apLeftExpr,
+                     Expr* apMiddleExpr,
+                     Expr* apRightExpr) :
+    m_pLeftOp { apLeftOp },
+    m_pRightOp { apRightOp }
+{
+    m_lChildren.push_back(apLeftExpr);
+    m_lChildren.push_back(apMiddleExpr);
+    m_lChildren.push_back(apRightExpr);
+}
+
+TernaryOp::~TernaryOp()
+{
+}
+
+const Token* TernaryOp::lop() const
+{
+    return m_pLeftOp;
+}
+
+const Token* TernaryOp::rop() const
+{
+    return m_pRightOp;
+}
+
+const Expr* TernaryOp::lexpr() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Expr* TernaryOp::mexpr() const
+{
+    return static_cast<Expr*>(m_lChildren[1]);
+}
+
+const Expr* TernaryOp::rexpr() const
+{
+    return static_cast<Expr*>(m_lChildren[2]);
+}
+
+std::string TernaryOp::toString() const
+{
+    return "TernaryOp " + m_pLeftOp->str() + " " + m_pRightOp->str();
+}
+
+void TernaryOp::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
@@ -250,7 +306,7 @@ const Expr* UnaryOp::right() const
 
 std::string UnaryOp::toString() const
 {
-    return "UnaryOp:" + m_pOp->str();
+    return "UnaryOp " + m_pOp->str();
 }
 
 void UnaryOp::accept(ASTVisitor& acASTVisitor) const
@@ -278,7 +334,7 @@ const Token* Var::token() const
 
 std::string Var::toString() const
 {
-    return "Var:" + m_pToken->str();
+    return "Var " + m_pToken->str();
 }
 
 void Var::accept(ASTVisitor& acASTVisitor) const

@@ -33,6 +33,7 @@ public:
     virtual void visit(const ast::BinaryOp* ast) override;
     virtual void visit(const ast::Literal* ast) override;
     virtual void visit(const ast::SliceExpr* ast) override;
+    virtual void visit(const ast::TernaryOp* ast) override;
     virtual void visit(const ast::UnaryOp* ast) override;
     virtual void visit(const ast::Var* ast) override;
 
