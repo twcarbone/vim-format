@@ -14,8 +14,8 @@ std::string ExprDisplayVisitor::display(ast::Expr* apExpr)
 void ExprDisplayVisitor::visit(const ast::BinaryOp* apBinaryOp)
 {
     m_sDisplay += " (" + apBinaryOp->op()->str();
-    apBinaryOp->left()->accept(*this);
-    apBinaryOp->right()->accept(*this);
+    apBinaryOp->lexpr()->accept(*this);
+    apBinaryOp->rexpr()->accept(*this);
     m_sDisplay += ")";
 }
 
@@ -28,22 +28,22 @@ void ExprDisplayVisitor::visit(const ast::SliceExpr* apSliceExpr)
 {
     m_sDisplay += " (" + apSliceExpr->op()->str();
 
-    if (apSliceExpr->left() == nullptr)
+    if (apSliceExpr->lexpr() == nullptr)
     {
         m_sDisplay += " <begin>";
     }
     else
     {
-        apSliceExpr->left()->accept(*this);
+        apSliceExpr->lexpr()->accept(*this);
     }
 
-    if (apSliceExpr->right() == nullptr)
+    if (apSliceExpr->rexpr() == nullptr)
     {
         m_sDisplay += " <end>";
     }
     else
     {
-        apSliceExpr->right()->accept(*this);
+        apSliceExpr->rexpr()->accept(*this);
     }
 
     m_sDisplay += ")";
@@ -61,7 +61,7 @@ void ExprDisplayVisitor::visit(const ast::TernaryOp* apTernaryOp)
 void ExprDisplayVisitor::visit(const ast::UnaryOp* apUnaryOp)
 {
     m_sDisplay += " (" + apUnaryOp->op()->str();
-    apUnaryOp->right()->accept(*this);
+    apUnaryOp->rexpr()->accept(*this);
     m_sDisplay += ")";
 }
 

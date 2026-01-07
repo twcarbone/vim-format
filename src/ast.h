@@ -119,8 +119,8 @@ public:
     virtual ~BinaryOp();
 
     const Token* op() const;
-    const Expr* left() const;
-    const Expr* right() const;
+    const Expr* lexpr() const;
+    const Expr* rexpr() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -159,8 +159,8 @@ public:
     virtual ~SliceExpr();
 
     const Token* op() const;
-    const Expr* left() const;
-    const Expr* right() const;
+    const Expr* lexpr() const;
+    const Expr* rexpr() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -204,7 +204,7 @@ public:
     virtual ~UnaryOp();
 
     const Token* op() const;
-    const Expr* right() const;
+    const Expr* rexpr() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;

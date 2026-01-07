@@ -136,12 +136,12 @@ const Token* BinaryOp::op() const
     return m_pOp;
 }
 
-const Expr* BinaryOp::left() const
+const Expr* BinaryOp::lexpr() const
 {
     return static_cast<Expr*>(m_lChildren[0]);
 }
 
-const Expr* BinaryOp::right() const
+const Expr* BinaryOp::rexpr() const
 {
     return static_cast<Expr*>(m_lChildren[1]);
 }
@@ -204,12 +204,12 @@ const Token* SliceExpr::op() const
     return m_pOp;
 }
 
-const Expr* SliceExpr::left() const
+const Expr* SliceExpr::lexpr() const
 {
     return static_cast<Expr*>(m_lChildren[0]);
 }
 
-const Expr* SliceExpr::right() const
+const Expr* SliceExpr::rexpr() const
 {
     return static_cast<Expr*>(m_lChildren[1]);
 }
@@ -299,7 +299,7 @@ const Token* UnaryOp::op() const
     return m_pOp;
 }
 
-const Expr* UnaryOp::right() const
+const Expr* UnaryOp::rexpr() const
 {
     return static_cast<Expr*>(m_lChildren[0]);
 }
