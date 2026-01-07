@@ -36,12 +36,41 @@ protected:
 };
 
 //
-// if_stmt_01
+// if_stmt
 //
 
 TEST_F(HybridParserTest, if_stmt_01)
 {
     parse_str("if 1\n"
               "  echo 1\n"
+              "endif\n");
+}
+
+TEST_F(HybridParserTest, if_stmt_02)
+{
+    parse_str("if 1\n"
+              "  echo 1\n"
+              "else\n"
+              "  echo 2\n"
+              "endif\n");
+}
+
+TEST_F(HybridParserTest, if_stmt_03)
+{
+    parse_str("if 1\n"
+              "  echo 1\n"
+              "elseif 1\n"
+              "  echo 2\n"
+              "endif\n");
+}
+
+TEST_F(HybridParserTest, if_stmt_04)
+{
+    parse_str("if 1\n"
+              "  echo 1\n"
+              "elseif 1\n"
+              "  echo 2\n"
+              "else\n"
+              "  echo 3\n"
               "endif\n");
 }

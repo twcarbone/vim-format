@@ -77,6 +77,7 @@ ast::StmtList* HybridParser::stmt_list()
         switch (m_pCurrToken->type())
         {
             case Token::Type::ELSE:
+            case Token::Type::ELSEIF:
             case Token::Type::END:
             case Token::Type::ENDIF:
                 return pStmtList;
@@ -111,23 +112,36 @@ ast::Stmt* HybridParser::stmt()
 
 ast::IfStmt* HybridParser::if_stmt()
 {
-    ast::Expr* pExpr = nullptr;
-    ast::StmtList* pThenStmts = nullptr;
-    ast::StmtList* pElseStmts = nullptr;
-
-    consume(Token::Type::IF);
-    pExpr = expr(0);
-
-    pThenStmts = stmt_list();
-
-    if (m_pCurrToken->type() == Token::Type::ELSE)
+    switch (m_pCurrToken->type())
     {
-        consume(Token::Type::ELSE);
+        case Token::Type::IF:
+        case Token::Type::ELSEIF:
+            consume(m_pCurrToken->type());
+            break;
+        default:
+            break;
     }
 
-    pElseStmts = stmt_list();
+    ast::Expr* pExpr = expr(0);
+    ast::StmtList* pThenStmts = stmt_list();
+    ast::StmtList* pElseStmts = nullptr;
 
-    consume(Token::Type::ENDIF);
+    switch (m_pCurrToken->type())
+    {
+        case Token::Type::ELSEIF:
+            pElseStmts = new ast::StmtList();
+            pElseStmts->push(if_stmt());
+            break;
+        case Token::Type::ELSE:
+            consume(Token::Type::ELSE);
+            pElseStmts = stmt_list();
+            consume(Token::Type::ENDIF);
+            break;
+        default:
+            pElseStmts = new ast::StmtList();
+            consume(Token::Type::ENDIF);
+    }
+
     return new ast::IfStmt(pExpr, pThenStmts, pElseStmts);
 }
 
