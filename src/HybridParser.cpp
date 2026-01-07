@@ -117,13 +117,15 @@ ast::IfStmt* HybridParser::if_stmt()
 
     consume(Token::Type::IF);
     pExpr = expr(0);
+
     pThenStmts = stmt_list();
 
     if (m_pCurrToken->type() == Token::Type::ELSE)
     {
         consume(Token::Type::ELSE);
-        pElseStmts = stmt_list();
     }
+
+    pElseStmts = stmt_list();
 
     consume(Token::Type::ENDIF);
     return new ast::IfStmt(pExpr, pThenStmts, pElseStmts);
