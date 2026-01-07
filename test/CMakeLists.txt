@@ -4,6 +4,7 @@ enable_testing()
 
 add_executable(
     unittests
+    HybridParser_tests.cpp
     Lexer_tests.cpp
     Parser_tests.cpp
     PrattParser_tests.cpp
