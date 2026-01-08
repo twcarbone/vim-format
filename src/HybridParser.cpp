@@ -194,6 +194,38 @@ ast::ListExpr* HybridParser::list_expr()
     return pListExpr;
 }
 
+ast::Expr* HybridParser::slice_expr()
+{
+    ast::Expr* pStart = nullptr;
+    ast::Expr* pStop = nullptr;
+    ast::Expr* pRhs = nullptr;
+
+    if (m_pCurrToken->type() != Token::Type::OP_SLICE)
+    {
+        pStart = expr(0);
+    }
+
+    if (m_pCurrToken->type() == Token::Type::OP_SLICE)
+    {
+        Token* pOp = m_pCurrToken;
+        consume(Token::Type::OP_SLICE);
+
+        if (m_pCurrToken->type() != Token::Type::R_BRACKET)
+        {
+            pStop = expr(0);
+        }
+
+        pRhs = new ast::SliceExpr(pOp, pStart, pStop);
+    }
+    else
+    {
+        pRhs = pStart;
+    }
+
+    consume(Token::Type::R_BRACKET);
+    return pRhs;
+}
+
 ast::Expr* HybridParser::expr(int anMinBindingPower)
 {
     ast::Expr* pLhs = nullptr;
@@ -286,35 +318,7 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
 
         if (pOp->type() == Token::Type::L_BRACKET)
         {
-            ast::Expr* pStart = nullptr;
-            ast::Expr* pStop = nullptr;
-
-            if (m_pCurrToken->type() != Token::Type::OP_SLICE)
-            {
-                pStart = expr(0);
-            }
-
-            if (m_pCurrToken->type() == Token::Type::OP_SLICE)
-            {
-                // Note: 'pOp' is declared again in this scope as a slice operator to not
-                // shadow the outer scope 'pOp' left-bracket operator.
-                Token* pOp = m_pCurrToken;
-                consume(Token::Type::OP_SLICE);
-
-                if (m_pCurrToken->type() != Token::Type::R_BRACKET)
-                {
-                    pStop = expr(0);
-                }
-
-                consume(Token::Type::R_BRACKET);
-                pRhs = new ast::SliceExpr(pOp, pStart, pStop);
-            }
-            else
-            {
-                consume(Token::Type::R_BRACKET);
-                pRhs = pStart;
-            }
-
+            pRhs = slice_expr();
             pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
         }
         else if (pOp->type() == Token::Type::OP_TERNARY_IF)

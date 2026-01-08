@@ -180,7 +180,7 @@ expr9
 expr10:
         : expr11
         | expr10 L_BRACKET expr1 R_BRACKET                                  *subscript*
-        | expr10 L_BRACKET expr1? OP_SLICE expr1? R_BRACKET                 *substring*
+        | expr10 L_BRACKET slice_expr R_BRACKET                             *substring*
         | expr10 OP_DOT IDENTIFIER                                          *expr-entry*
         | TODO (gh-9)
 
@@ -191,6 +191,9 @@ expr11
         | IDENTIFIER
         | L_PAREN expr1 R_PAREN
         | list_expr
+
+slice_expr
+        : expr1? OP_SLICE expr1?
 
 list_expr
         : L_BRACKET (expr1 (COMMA expr1)* COMMA?)? R_BRACKET
