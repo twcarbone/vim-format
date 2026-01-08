@@ -28,6 +28,7 @@ private:
     ast::StmtList* stmt_list();
     ast::Stmt* stmt();
     ast::IfStmt* if_stmt();
+    ast::WhileStmt* while_stmt();
     ast::ExprCmd* expr_cmd();
     ast::Expr* expr(int min_binding_power);
 

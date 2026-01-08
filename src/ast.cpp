@@ -117,6 +117,30 @@ void IfStmt::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// WhileStmt
+//
+
+WhileStmt::WhileStmt(ast::Expr* apCondition, ast::StmtList* apStmtList)
+{
+    m_lChildren.push_back(apCondition);
+    m_lChildren.push_back(apStmtList);
+}
+
+WhileStmt::~WhileStmt()
+{
+}
+
+std::string WhileStmt::toString() const
+{
+    return "WhileStmt";
+}
+
+void WhileStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // BinaryOp
 //
 

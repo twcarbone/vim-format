@@ -76,6 +76,17 @@ TEST_F(HybridParserTest, if_stmt_04)
 }
 
 //
+// while_stmt
+//
+
+TEST_F(HybridParserTest, while_stmt_01)
+{
+    parse_str("while 1\n"
+              "  echo 1\n"
+              "endwhile\n");
+}
+
+//
 // expr_cmd
 //
 

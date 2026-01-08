@@ -83,6 +83,7 @@ ast::StmtList* HybridParser::stmt_list()
             case Token::Type::ELSEIF:
             case Token::Type::END:
             case Token::Type::ENDIF:
+            case Token::Type::ENDWHILE:
                 return pStmtList;
             case Token::Type::NEWLINE:
                 consume(Token::Type::NEWLINE);
@@ -102,6 +103,9 @@ ast::Stmt* HybridParser::stmt()
     {
         case Token::Type::IF:
             pStmt = if_stmt();
+            break;
+        case Token::Type::WHILE:
+            pStmt = while_stmt();
             break;
         case Token::Type::CMD_ECHO:
             pStmt = expr_cmd();
@@ -146,6 +150,15 @@ ast::IfStmt* HybridParser::if_stmt()
     }
 
     return new ast::IfStmt(pExpr, pThenStmts, pElseStmts);
+}
+
+ast::WhileStmt* HybridParser::while_stmt()
+{
+    consume(Token::Type::WHILE);
+    ast::Expr* pExpr = expr(0);
+    ast::StmtList* pStmts = stmt_list();
+    consume(Token::Type::ENDWHILE);
+    return new ast::WhileStmt(pExpr, pStmts);
 }
 
 ast::ExprCmd* HybridParser::expr_cmd()

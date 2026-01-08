@@ -109,6 +109,20 @@ public:
 };
 
 //
+// WhileStmt
+//
+
+class WhileStmt : public Stmt
+{
+public:
+    WhileStmt(Expr* condition, StmtList* stmts);
+    virtual ~WhileStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // BinaryOp
 //
 

@@ -9,10 +9,11 @@ class Literal;
 class Node;
 class Program;
 class SliceExpr;
-class TernaryOp;
 class StmtList;
+class TernaryOp;
 class UnaryOp;
 class Var;
+class WhileStmt;
 };
 
 class ASTVisitor
@@ -31,6 +32,7 @@ public:
     virtual void visit(const ast::TernaryOp* ast);
     virtual void visit(const ast::UnaryOp* ast);
     virtual void visit(const ast::Var* ast);
+    virtual void visit(const ast::WhileStmt* ast);
 
 private:
     int m_nDepth;

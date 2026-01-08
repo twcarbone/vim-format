@@ -58,6 +58,11 @@ void ASTVisitor::visit(const ast::Var* apVar)
     print(apVar);
 }
 
+void ASTVisitor::visit(const ast::WhileStmt* apWhileStmt)
+{
+    print(apWhileStmt);
+}
+
 void ASTVisitor::print(const ast::Node* apNode)
 {
     for (size_t i = 0; i < m_nDepth; i++)
