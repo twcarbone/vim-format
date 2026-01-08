@@ -4,6 +4,7 @@
 
 namespace ast
 {
+class AssignStmt;
 class BinaryOp;
 class ExprCmd;
 class IfStmt;
@@ -25,6 +26,7 @@ public:
     ASTVisitor();
     ~ASTVisitor() = default;
 
+    virtual void visit(const ast::AssignStmt* ast);
     virtual void visit(const ast::BinaryOp* ast);
     virtual void visit(const ast::ExprCmd* ast);
     virtual void visit(const ast::IfStmt* ast);

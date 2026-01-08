@@ -388,3 +388,28 @@ void Var::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
+
+//
+// AssignStmt
+//
+
+AssignStmt::AssignStmt(Token* apOp, Var* apVar, Expr* apExpr) :
+    m_pOp { apOp }
+{
+    m_lChildren.push_back(apVar);
+    m_lChildren.push_back(apExpr);
+}
+
+AssignStmt::~AssignStmt()
+{
+}
+
+std::string AssignStmt::toString() const
+{
+    return "AssignStmt " + m_pOp->str();
+}
+
+void AssignStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}

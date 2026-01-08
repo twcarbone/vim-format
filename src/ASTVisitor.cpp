@@ -8,6 +8,11 @@ ASTVisitor::ASTVisitor() :
 {
 }
 
+void ASTVisitor::visit(const ast::AssignStmt* apAssignStmt)
+{
+    handle_node(apAssignStmt);
+}
+
 void ASTVisitor::visit(const ast::BinaryOp* apBinaryOp)
 {
     handle_node(apBinaryOp);

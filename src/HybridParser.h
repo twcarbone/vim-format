@@ -29,6 +29,7 @@ private:
     ast::Stmt* stmt();
     ast::IfStmt* if_stmt();
     ast::WhileStmt* while_stmt();
+    ast::AssignStmt* assign_stmt();
     ast::ExprCmd* expr_cmd();
     ast::ListExpr* list_expr();
     ast::Expr* slice_expr();

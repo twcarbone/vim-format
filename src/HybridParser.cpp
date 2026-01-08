@@ -111,6 +111,9 @@ ast::Stmt* HybridParser::stmt()
         case Token::Type::CMD_ECHO:
             pStmt = expr_cmd();
             break;
+        case Token::Type::CMD_LET:
+            pStmt = assign_stmt();
+            break;
         default:
             break;
     }
@@ -160,6 +163,38 @@ ast::WhileStmt* HybridParser::while_stmt()
     ast::StmtList* pStmts = stmt_list();
     consume(Token::Type::ENDWHILE);
     return new ast::WhileStmt(pExpr, pStmts);
+}
+
+ast::AssignStmt* HybridParser::assign_stmt()
+{
+    Token* pOp = nullptr;
+    ast::Var* pVar = nullptr;
+    ast::Expr* pExpr = nullptr;
+
+    consume(Token::Type::CMD_LET);
+
+    pVar = new ast::Var(m_pCurrToken);
+    consume(Token::Type::IDENTIFIER);
+
+    switch (m_pCurrToken->type())
+    {
+        case Token::Type::ASSIGN_ADD:
+        case Token::Type::ASSIGN_MINUS:
+        case Token::Type::ASSIGN_MUL:
+        case Token::Type::ASSIGN_DIV:
+        case Token::Type::ASSIGN_EQ:
+        case Token::Type::ASSIGN_MODULO:
+        case Token::Type::ASSIGN_CAT_NEW:
+        case Token::Type::ASSIGN_CAT_OLD:
+            pOp = m_pCurrToken;
+            consume(m_pCurrToken->type());
+            pExpr = expr(0);
+            break;
+        default:
+            throw_unexpected_token();
+    }
+
+    return new ast::AssignStmt(pOp, pVar, pExpr);
 }
 
 ast::ExprCmd* HybridParser::expr_cmd()

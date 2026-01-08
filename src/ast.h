@@ -262,4 +262,21 @@ private:
     Token* m_pToken;
 };
 
+//
+// AssignStmt
+//
+
+class AssignStmt : public Stmt
+{
+public:
+    AssignStmt(Token* op, Var* var, Expr* expr);
+    virtual ~AssignStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pOp;
+};
+
 };
