@@ -316,24 +316,26 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
 
         consume(pOp->type());
 
-        if (pOp->type() == Token::Type::L_BRACKET)
+        switch (pOp->type())
         {
-            pRhs = slice_expr();
-            pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
-        }
-        else if (pOp->type() == Token::Type::OP_TERNARY_IF)
-        {
-            Token* pLeftOp = pOp;
-            ast::Expr* pMhs = expr(0);
-            Token* pRightOp = m_pCurrToken;
-            consume(Token::Type::OP_TERNARY_ELSE);
-            pRhs = expr(lnRhsOpBindingPower);
-            pLhs = new ast::TernaryOp(pLeftOp, pRightOp, pLhs, pMhs, pRhs);
-        }
-        else
-        {
-            pRhs = expr(lnRhsOpBindingPower);
-            pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
+            case Token::Type::L_BRACKET:
+                pRhs = slice_expr();
+                pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
+                break;
+            case Token::Type::OP_TERNARY_IF:
+            {
+                Token* pLeftOp = pOp;
+                ast::Expr* pMhs = expr(0);
+                Token* pRightOp = m_pCurrToken;
+                consume(Token::Type::OP_TERNARY_ELSE);
+                pRhs = expr(lnRhsOpBindingPower);
+                pLhs = new ast::TernaryOp(pLeftOp, pRightOp, pLhs, pMhs, pRhs);
+
+                break;
+            }
+            default:
+                pRhs = expr(lnRhsOpBindingPower);
+                pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
         }
     }
 }
