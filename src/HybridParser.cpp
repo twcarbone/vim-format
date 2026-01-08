@@ -23,6 +23,7 @@ HybridParser::HybridParser(const Context& acContext, std::vector<Token*> alToken
         { Token::Type::OP_LTE, { 40, 41 } },
         { Token::Type::OP_MATCH, { 40, 41 } },
         { Token::Type::OP_NMATCH, { 40, 41 } },
+        { Token::Type::OP_IS, { 40, 41 } },
         { Token::Type::OP_ISNOT, { 40, 41 } },
         // 50
         { Token::Type::OP_LSHIFT, { 50, 51 } },
@@ -282,23 +283,43 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
             case Token::Type::OP_TERNARY_ELSE:
             case Token::Type::END:
                 return pLhs;
-            case Token::Type::OP_TERNARY_IF:
+            // expr1
             case Token::Type::OP_FALSEY:
+            case Token::Type::OP_TERNARY_IF:
+            // expr2
             case Token::Type::OP_OR:
+            // expr3
             case Token::Type::OP_AND:
+            // expr4
+            case Token::Type::OP_EQUAL:
+            case Token::Type::OP_NEQUAL:
+            case Token::Type::OP_GT:
+            case Token::Type::OP_GTE:
+            case Token::Type::OP_LT:
+            case Token::Type::OP_LTE:
+            case Token::Type::OP_MATCH:
+            case Token::Type::OP_NMATCH:
+            case Token::Type::OP_IS:
+            case Token::Type::OP_ISNOT:
+            // expr5
             case Token::Type::OP_LSHIFT:
             case Token::Type::OP_RSHIFT:
+            // expr6
             case Token::Type::OP_ADD:
             case Token::Type::OP_SUB:
             case Token::Type::OP_DOT:
             case Token::Type::OP_CAT_OLD:
             case Token::Type::OP_CAT_NEW:
+            // expr7
             case Token::Type::OP_MUL:
             case Token::Type::OP_DIV:
             case Token::Type::OP_MODULO:
+            // expr8
+            // expr9
             case Token::Type::OP_LOGICAL_NOT:
             case Token::Type::OP_UNARY_MINUS:
             case Token::Type::OP_UNARY_PLUS:
+            // expr10
             case Token::Type::L_BRACKET:
                 pOp = m_pCurrToken;
                 break;
