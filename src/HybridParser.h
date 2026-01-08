@@ -30,6 +30,8 @@ private:
     ast::IfStmt* if_stmt();
     ast::WhileStmt* while_stmt();
     ast::ExprCmd* expr_cmd();
+    ast::ListExpr* list_expr();
+
     ast::Expr* expr(int min_binding_power);
 
     void next();

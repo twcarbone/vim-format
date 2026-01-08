@@ -23,6 +23,11 @@ void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
     print(apIfStmt);
 }
 
+void ASTVisitor::visit(const ast::ListExpr* apListExpr)
+{
+    print(apListExpr);
+}
+
 void ASTVisitor::visit(const ast::Literal* apLiteral)
 {
     print(apLiteral);

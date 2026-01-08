@@ -181,6 +181,29 @@ void BinaryOp::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// ListExpr
+//
+
+ListExpr::~ListExpr()
+{
+}
+
+void ListExpr::push(Expr* apExpr)
+{
+    m_lChildren.push_back(apExpr);
+}
+
+std::string ListExpr::toString() const
+{
+    return "ListExpr";
+}
+
+void ListExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // Literal
 //
 

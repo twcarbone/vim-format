@@ -144,6 +144,22 @@ private:
 };
 
 //
+// ListExpr
+//
+
+class ListExpr : public Expr
+{
+public:
+    ListExpr() = default;
+    virtual ~ListExpr();
+
+    void push(Expr* expr);
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // Literal
 //
 

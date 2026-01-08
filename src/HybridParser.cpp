@@ -169,6 +169,31 @@ ast::ExprCmd* HybridParser::expr_cmd()
     return new ast::ExprCmd(pCmd, pExpr);
 }
 
+ast::ListExpr* HybridParser::list_expr()
+{
+    ast::ListExpr* pListExpr = new ast::ListExpr();
+
+    consume(Token::Type::L_BRACKET);
+
+    while (true)
+    {
+        if (m_pCurrToken->type() == Token::Type::R_BRACKET)
+        {
+            break;
+        }
+
+        pListExpr->push(expr(0));
+
+        if (m_pCurrToken->type() != Token::Type::R_BRACKET)
+        {
+            consume(Token::Type::COMMA);
+        }
+    }
+
+    consume(Token::Type::R_BRACKET);
+    return pListExpr;
+}
+
 ast::Expr* HybridParser::expr(int anMinBindingPower)
 {
     ast::Expr* pLhs = nullptr;
@@ -195,6 +220,9 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
             pLhs = expr(0);
             consume(Token::Type::R_PAREN);
             break;
+        case Token::Type::L_BRACKET:
+            pLhs = list_expr();
+            break;
         case Token::Type::OP_LOGICAL_NOT:
         case Token::Type::OP_UNARY_MINUS:
         case Token::Type::OP_UNARY_PLUS:
@@ -213,6 +241,7 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
         // 2. Parse operator
         switch (m_pCurrToken->type())
         {
+            case Token::Type::COMMA:
             case Token::Type::NEWLINE:
             case Token::Type::R_PAREN:
             case Token::Type::R_BRACKET:

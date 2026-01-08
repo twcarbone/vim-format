@@ -98,3 +98,10 @@ TEST_F(HybridParserTest, expr_cmd_01)
     parse_str("echo foo ? bar : baz\n");
     parse_str("echo 1 ? 2 : 3\n");
 }
+
+TEST_F(HybridParserTest, expr_cmd_11)
+{
+    parse_str("echo [1, 2]\n");
+    parse_str("echo [foo, bar,]\n");
+    parse_str("echo [1,2,3,4,5]\n");
+}
