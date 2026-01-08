@@ -240,6 +240,7 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
     {
         case Token::Type::INTEGER:
         case Token::Type::FLOAT:
+        case Token::Type::STRING:
             pLhs = new ast::Literal(m_pCurrToken);
             consume(m_pCurrToken->type());
             break;
