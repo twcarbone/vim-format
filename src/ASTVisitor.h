@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 namespace ast
 {
 class BinaryOp;
@@ -39,5 +41,6 @@ public:
 private:
     int m_nDepth;
 
-    void print(const ast::Node* ast);
+    void handle_node(const ast::Node* ast);
+    void print_line(std::string_view text);
 };

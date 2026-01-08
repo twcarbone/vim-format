@@ -10,79 +10,92 @@ ASTVisitor::ASTVisitor() :
 
 void ASTVisitor::visit(const ast::BinaryOp* apBinaryOp)
 {
-    print(apBinaryOp);
+    handle_node(apBinaryOp);
 }
 
 void ASTVisitor::visit(const ast::ExprCmd* apExprCmd)
 {
-    print(apExprCmd);
+    handle_node(apExprCmd);
 }
 
 void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
 {
-    print(apIfStmt);
+    handle_node(apIfStmt);
 }
 
 void ASTVisitor::visit(const ast::ListExpr* apListExpr)
 {
-    print(apListExpr);
+    handle_node(apListExpr);
 }
 
 void ASTVisitor::visit(const ast::Literal* apLiteral)
 {
-    print(apLiteral);
+    handle_node(apLiteral);
 }
 
 void ASTVisitor::visit(const ast::Program* apProgram)
 {
-    print(apProgram);
+    handle_node(apProgram);
 }
 
 void ASTVisitor::visit(const ast::StmtList* apStmtList)
 {
-    print(apStmtList);
+    handle_node(apStmtList);
 }
 
 void ASTVisitor::visit(const ast::SliceExpr* apSliceExpr)
 {
-    print(apSliceExpr);
+    handle_node(apSliceExpr);
 }
 
 void ASTVisitor::visit(const ast::TernaryOp* apTernaryOp)
 {
-    print(apTernaryOp);
+    handle_node(apTernaryOp);
 }
 
 void ASTVisitor::visit(const ast::UnaryOp* apUnaryOp)
 {
-    print(apUnaryOp);
+    handle_node(apUnaryOp);
 }
 
 void ASTVisitor::visit(const ast::Var* apVar)
 {
-    print(apVar);
+    handle_node(apVar);
 }
 
 void ASTVisitor::visit(const ast::WhileStmt* apWhileStmt)
 {
-    print(apWhileStmt);
+    handle_node(apWhileStmt);
 }
 
-void ASTVisitor::print(const ast::Node* apNode)
+void ASTVisitor::handle_node(const ast::Node* apNode)
+{
+    print_line(apNode->toString());
+
+    m_nDepth++;
+
+    for (ast::Node* pNode : apNode->children())
+    {
+        if (pNode == nullptr)
+        {
+            // Example: left side of SliceExpr '[:3]'
+            print_line("NULL");
+        }
+        else
+        {
+            pNode->accept(*this);
+        }
+    }
+
+    m_nDepth--;
+}
+
+void ASTVisitor::print_line(std::string_view asText)
 {
     for (size_t i = 0; i < m_nDepth; i++)
     {
         std::cout << "  ";
     }
 
-    std::cout << apNode->toString() << std::endl;
-
-    m_nDepth++;
-
-    for (ast::Node* pNode : apNode->children())
-    {
-        pNode->accept(*this);
-    }
-
-    m_nDepth--;
+    std::cout << asText << std::endl;
 }
