@@ -7,6 +7,7 @@ namespace ast
 class AssignStmt;
 class BinaryOp;
 class ExprCmd;
+class ForStmt;
 class IfStmt;
 class ListExpr;
 class Literal;
@@ -29,6 +30,7 @@ public:
     virtual void visit(const ast::AssignStmt* ast);
     virtual void visit(const ast::BinaryOp* ast);
     virtual void visit(const ast::ExprCmd* ast);
+    virtual void visit(const ast::ForStmt* ast);
     virtual void visit(const ast::IfStmt* ast);
     virtual void visit(const ast::ListExpr* ast);
     virtual void visit(const ast::Literal* ast);

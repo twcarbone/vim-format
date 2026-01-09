@@ -83,6 +83,7 @@ ast::StmtList* HybridParser::stmt_list()
             case Token::Type::ELSE:
             case Token::Type::ELSEIF:
             case Token::Type::END:
+            case Token::Type::ENDFOR:
             case Token::Type::ENDIF:
             case Token::Type::ENDWHILE:
                 return pStmtList;
@@ -107,6 +108,9 @@ ast::Stmt* HybridParser::stmt()
             break;
         case Token::Type::WHILE:
             pStmt = while_stmt();
+            break;
+        case Token::Type::FOR:
+            pStmt = for_stmt();
             break;
         case Token::Type::CMD_ECHO:
             pStmt = expr_cmd();
@@ -163,6 +167,17 @@ ast::WhileStmt* HybridParser::while_stmt()
     ast::StmtList* pStmts = stmt_list();
     consume(Token::Type::ENDWHILE);
     return new ast::WhileStmt(pExpr, pStmts);
+}
+
+ast::ForStmt* HybridParser::for_stmt()
+{
+    consume(Token::Type::FOR);
+    ast::Expr* pItem = expr(0);
+    consume(Token::Type::IN);
+    ast::Expr* pItems = expr(0);
+    ast::StmtList* pStmtList = stmt_list();
+    consume(Token::Type::ENDFOR);
+    return new ast::ForStmt(pItem, pItems, pStmtList);
 }
 
 ast::AssignStmt* HybridParser::assign_stmt()
@@ -311,12 +326,13 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
         switch (m_pCurrToken->type())
         {
             case Token::Type::COMMA:
+            case Token::Type::END:
+            case Token::Type::IN:
             case Token::Type::NEWLINE:
-            case Token::Type::R_PAREN:
-            case Token::Type::R_BRACKET:
             case Token::Type::OP_SLICE:
             case Token::Type::OP_TERNARY_ELSE:
-            case Token::Type::END:
+            case Token::Type::R_BRACKET:
+            case Token::Type::R_PAREN:
                 return pLhs;
             // expr1
             case Token::Type::OP_FALSEY:

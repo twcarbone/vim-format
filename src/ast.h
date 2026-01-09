@@ -123,6 +123,20 @@ public:
 };
 
 //
+// ForStmt
+//
+
+class ForStmt : public Stmt
+{
+public:
+    ForStmt(Expr* item, Expr* items, StmtList* stmts);
+    virtual ~ForStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // BinaryOp
 //
 

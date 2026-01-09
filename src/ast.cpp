@@ -141,6 +141,31 @@ void WhileStmt::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// ForStmt
+//
+
+ForStmt::ForStmt(ast::Expr* apItem, ast::Expr* apItems, ast::StmtList* apStmts)
+{
+    m_lChildren.push_back(apItem);
+    m_lChildren.push_back(apItems);
+    m_lChildren.push_back(apStmts);
+}
+
+ForStmt::~ForStmt()
+{
+}
+
+std::string ForStmt::toString() const
+{
+    return "ForStmt";
+}
+
+void ForStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // BinaryOp
 //
 
