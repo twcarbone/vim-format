@@ -166,6 +166,30 @@ void ForStmt::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// JumpStmt
+//
+
+JumpStmt::JumpStmt(Token* apToken, Expr* apExpr) :
+    m_pToken { apToken }
+{
+    m_lChildren.push_back(apExpr);
+}
+
+JumpStmt::~JumpStmt()
+{
+}
+
+std::string JumpStmt::toString() const
+{
+    return "JumpStmt " + m_pToken->str();
+}
+
+void JumpStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // BinaryOp
 //
 

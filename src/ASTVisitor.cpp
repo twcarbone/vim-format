@@ -33,6 +33,11 @@ void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
     handle_node(apIfStmt);
 }
 
+void ASTVisitor::visit(const ast::JumpStmt* apJumpStmt)
+{
+    handle_node(apJumpStmt);
+}
+
 void ASTVisitor::visit(const ast::ListExpr* apListExpr)
 {
     handle_node(apListExpr);

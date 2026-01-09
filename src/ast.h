@@ -137,6 +137,23 @@ public:
 };
 
 //
+// JumpStmt
+//
+
+class JumpStmt : public Stmt
+{
+public:
+    JumpStmt(Token* token, Expr* expr);
+    virtual ~JumpStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pToken;
+};
+
+//
 // BinaryOp
 //
 

@@ -109,6 +109,11 @@ ast::Stmt* HybridParser::stmt()
         case Token::Type::WHILE:
             pStmt = while_stmt();
             break;
+        case Token::Type::BREAK:
+        case Token::Type::CONTINUE:
+            // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
+            pStmt = jump_stmt();
+            break;
         case Token::Type::FOR:
             pStmt = for_stmt();
             break;
@@ -178,6 +183,15 @@ ast::ForStmt* HybridParser::for_stmt()
     ast::StmtList* pStmtList = stmt_list();
     consume(Token::Type::ENDFOR);
     return new ast::ForStmt(pItem, pItems, pStmtList);
+}
+
+ast::JumpStmt* HybridParser::jump_stmt()
+{
+    Token* pCmd = m_pCurrToken;
+    consume(m_pCurrToken->type());
+    // TODO (gh-28): Add support for 'return {expr}' parsing
+    ast::Expr* pExpr = nullptr;
+    return new ast::JumpStmt(pCmd, pExpr);
 }
 
 ast::AssignStmt* HybridParser::assign_stmt()

@@ -30,6 +30,7 @@ private:
     ast::IfStmt* if_stmt();
     ast::WhileStmt* while_stmt();
     ast::ForStmt* for_stmt();
+    ast::JumpStmt* jump_stmt();
     ast::AssignStmt* assign_stmt();
     ast::ExprCmd* expr_cmd();
     ast::ListExpr* list_expr();
