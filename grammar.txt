@@ -207,9 +207,201 @@ list_expr
 
 
 ==============================================================================
-4. Reference
+4. Vim Command Reference
 
-:h expression-commands (v9.1.0698)
+NOTE:   This list was created simply by grepping for '^:' in $VIMRUNTIME/doc.
+        Some may not actually be commands.
+
+autocmd.txt
+
+    :au[tocmd] [group] {event} {aupat} [++once] [++nested] {cmd}
+    :au[tocmd]! [group] {event} {aupat} [++once] [++nested] {cmd}
+    :au[tocmd]! [group] {event} {aupat}
+    :au[tocmd]! [group] * {aupat}
+    :au[tocmd]! [group] {event}
+    :au[tocmd]! [group]
+    :au[tocmd] [group] {event} {aupat}
+    :au[tocmd] [group] * {aupat}
+    :au[tocmd] [group] {event}
+    :au[tocmd] [group]
+    :aug[roup] {name}
+    :aug[roup]! {name}
+    :do[autocmd] [<nomodeline>] [group] {event} [fname]
+    :doautoa[ll] [<nomodeline>] [group] {event} [fname]
+
+change.txt
+
+    :[range]d[elete] [x]
+    :[range]d[elete] [x] {count}
+    :[range]j[oin][!] [flags]
+    :[range]j[oin][!] {count} [flags]
+    :{range}c[hange][!]
+    :[range]<
+    :[range]< {count}
+    :[range]le[ft] [indent]
+    :[range]> [flags]
+    :[range]> {count} [flags]
+    :{range}![!]{filter} [!][arg]
+    :[range]s[ubstitute]/{pattern}/{string}/[flags] [count]
+    :[range]s[ubstitute] [flags] [count]
+    :[range]&[&][flags] [count]
+    :[range]~[&][flags] [count]
+    :[range]sno[magic] ...
+    :[range]sm[agic] ...
+    :s/aa/a^Ma/
+    :s/aa/a\^Ma/
+    :s/aa/a\\^Ma/
+    :promptf[ind] [string]
+    :promptr[epl] [string]
+    :[range]ret[ab][!] [new_tabstop]
+    :reg[isters]
+    :reg[isters] {arg}
+    :di[splay] [arg]
+    :[range]y[ank] [x]
+    :[range]y[ank] [x] {count}
+    :[line]pu[t] [x]
+    :[line]pu[t]! [x]
+    :[range]co[py] {address}
+    :t
+    :[range]m[ove] {address}
+    :[range]ce[nter] [width]
+    :[range]ri[ght] [width]
+    :[range]le[ft] [indent]
+    :[range]sor[t][!] [b][f][i][l][n][o][r][u][x] [/{pattern}/]
+
+cmdline.txt
+
+    :his[tory]
+    :his[tory] [{name}] [{first}][, [{last}]]
+    :keepp[atterns] {command}
+    :*
+    :quit
+    :qall
+    :qall!
+
+diff.txt
+
+    :diffs[plit] {filename}
+    :difft[his]
+    :diffp[atch] {patchfile}
+    :diffo[ff]
+    :diffo[ff]!
+    :dif[fupdate][!]
+    :[range]diffg[et] [bufspec]
+    :[range]diffpu[t] [bufspec]
+
+digraph.txt
+
+    :dig[raphs][!]
+    :dig[raphs] {char1}{char2} {number} ...
+
+editing.txt
+
+    :keepalt {cmd}
+    :f[ile]
+    :f[ile]!
+    :f[ile][!] {name}
+    :0f[ile][!]
+    :buffers
+    :files
+    :ls
+    :e[dit] [++opt] [+cmd]
+    :e[dit]! [++opt] [+cmd]
+    :e[dit] [++opt] [+cmd] {file}
+    :e[dit]! [++opt] [+cmd] {file}
+    :e[dit] [++opt] [+cmd] #[count]
+    :ene[w]
+    :ene[w]!
+    :fin[d][!] [++opt] [+cmd] {file}
+    :{count}fin[d][!] [++opt] [+cmd] {file}
+    :ex [++opt] [+cmd] [file]
+    :vi[sual][!] [++opt] [+cmd] [file]
+    :vie[w][!] [++opt] [+cmd] file
+    :ar[gs]
+    :ar[gs] [++opt] [+cmd] {arglist}
+    :ar[gs]! [++opt] [+cmd] {arglist}
+    :[count]arge[dit][!] [++opt] [+cmd] {name} ..
+    :[count]arga[dd] {name} ..
+    :[count]arga[dd]
+    :argded[upe]
+    :argd[elete] {pattern} ..
+    :[range]argd[elete]
+    :[count]argu[ment] [count] [++opt] [+cmd]
+    :[count]argu[ment]! [count] [++opt] [+cmd]
+    :[count]n[ext] [++opt] [+cmd]
+    :[count]n[ext]! [++opt] [+cmd]
+    :n[ext] [++opt] [+cmd] {arglist}
+    :n[ext]! [++opt] [+cmd] {arglist}
+    :[count]N[ext] [count] [++opt] [+cmd]
+    :[count]N[ext]! [count] [++opt] [+cmd]
+    :[count]prev[ious] [count] [++opt] [+cmd]
+    :rew[ind] [++opt] [+cmd]
+    :rew[ind]! [++opt] [+cmd]
+    :fir[st][!] [++opt] [+cmd]
+    :la[st] [++opt] [+cmd]
+    :la[st]! [++opt] [+cmd]
+    :[count]wn[ext] [++opt]
+    :[count]wn[ext] [++opt] {file}
+    :[count]wn[ext]! [++opt] {file}
+    :[count]wN[ext][!] [++opt] [file]
+    :[count]wp[revious][!] [++opt] [file]
+    :argl[ocal]
+    :argl[ocal][!] [++opt] [+cmd] {arglist}
+    :argg[lobal]
+    :argg[lobal][!] [++opt] [+cmd] {arglist}
+    :[range]argdo[!] {cmd}
+    :w[rite] [++opt]
+    :w[rite]! [++opt]
+    :[range]w[rite][!] [++opt]
+    :[range]w[rite] [++opt]
+    :[range]w[rite]! [++opt] {file}
+    :[range]w[rite][!] [++opt] >>
+    :[range]w[rite][!] [++opt] >> {file}
+    :[range]w[rite] [++opt] !{cmd}
+    :sav[eas][!] [++opt] {file}
+    :[range]up[date][!] [++opt] [>>] [file]
+    :wa[ll]
+    :wa[ll]!
+    :q[uit]
+    :conf[irm] q[uit]
+    :q[uit]!
+    :cq[uit]
+    :wq [++opt]
+    :wq! [++opt]
+    :wq [++opt] {file}
+    :wq! [++opt] {file}
+    :[range]wq[!] [++opt] [file]
+    :[range]x[it][!] [++opt] [file]
+    :[range]exi[t][!] [++opt] [file]
+    :qa[ll]
+    :conf[irm] qa[ll]
+    :qa[ll]!
+    :quita[ll][!]
+    :wqa[ll] [++opt]
+    :xa[ll]
+    :conf[irm] wqa[ll] [++opt]
+    :conf[irm] xa[ll]
+    :wqa[ll]! [++opt]
+    :xa[ll]!
+    :conf[irm] {command}
+    :bro[wse] {command}
+    :cd[!]
+    :cd[!] {path}
+    :cd[!] -
+    :chd[ir][!] [path]
+    :tc[d][!] {path}
+    :tc[d][!] -
+    :tch[dir][!]
+    :lc[d][!] {path}
+    :lcd[!] -
+    :lch[dir][!]
+    :pw[d]
+    :X
+    :checkt[ime]
+    :[N]checkt[ime] {filename}
+    :[N]checkt[ime] [N]
+
+eval.txt
 
     :let {var-name} = {expr1}
     :let {var-name}[{idx}] = {expr1}
@@ -246,7 +438,7 @@ list_expr
     :let [{name}, ..., ; {lastname}] += {expr1}
     :let [{name}, ..., ; {lastname}] -= {expr1}
     :let {var-name} =<< [trim] [eval] {endmarker}
-    :let {var-name} ..
+    :let {var-name}
     :let
     :unl[et][!] {name} ...
     :unl[et] ${env-name} ...
@@ -284,6 +476,912 @@ list_expr
     :echoc[onsole] {expr1} ..
     :eval {expr}
     :exe[cute] {expr1} ..
+    :san[dbox] {cmd}
+
+filetype.txt
+
+    :filetype on
+    :filetype off
+    :filetype plugin on
+    :filetype plugin off
+    :filetype indent on
+    :filetype indent off
+    :filetype plugin indent on
+    :filetype plugin indent off
+
+fold.txt
+
+    :{range}fo[ld]
+    :{range}foldo[pen][!]
+    :{range}foldc[lose][!]
+    :[range]foldd[oopen] {cmd}
+    :[range]folddoc[losed] {cmd}
+
+ft_ada.txt
+
+    :AdaRainbow
+    :AdaLines
+    :AdaSpaces
+    :AdaTagDir
+    :AdaTagFile
+    :AdaTypes
+    :GnatFind
+    :GnatPretty
+    :GnatTags
+
+ft_rust.txt
+
+    :Cargo <args>
+    :Cbuild <args>
+    :Cclean <args>
+    :Cdoc <args>
+    :Cinit <args>
+    :Crun <args>
+    :Ctest <args>
+    :Cupdate <args>
+    :Cbench <args>
+    :Csearch <args>
+    :Cpublish <args>
+    :Cinstall <args>
+    :Cruntarget <args>
+    :RustFmt
+    :RustFmtRange
+    :RustPlay
+    :RustRun  [args]
+    :RustRun! [rustc-args] [--] [args]
+    :RustExpand  [args]
+    :RustExpand! [TYPE] [args]
+    :RustEmitIr [args]
+    :RustEmitAsm [args]
+    :[N]RustTest[!] [options]
+    :RustInfo
+    :RustInfoToClipboard
+    :RustInfoToFile [filename]
+
+gui.txt
+
+    :winp[os]
+    :winp[os] {X} {Y}
+    :win[size] {width} {height}
+    :be[have] {model}
+    :[range]em[enu] {menu}
+    :[range]em[enu] {mode} {menu}
+    :tm[enu] {menupath} {rhs}
+    :tm[enu] [menupath]
+    :tu[nmenu] {menupath}
+    :popu[p] {name}
+    :popu[p]! {name}
+
+gui_w32.txt
+
+    :te[aroff] {name}
+    :sim[alt] {key}
+
+helphelp.txt
+
+    :h[elp]
+    :h[elp] {subject}
+    :h[elp]! [subject]
+    :helpc[lose]
+    :helpg[rep] {pattern}[@xx]
+    :lh[elpgrep] {pattern}[@xx]
+    :exu[sage]
+    :viu[sage]
+    :helpf[ind]
+    :helpt[ags] [++t] {dir}
+
+if_lua.txt
+
+    :[range]lua {chunk}
+    :[range]lua << [trim] [{endmarker}]
+    :[range]luado {body}
+    :[range]luafile {file}
+
+if_mzsch.txt
+
+    :[range]mz[scheme] {stmt}
+    :[range]mz[scheme] << [trim] [{endmarker}]
+    :[range]mzf[ile] {file}
+
+if_perl.txt
+
+    :pe[rl] {cmd}
+    :pe[rl] << [trim] [{endmarker}]
+    :[range]perld[o] {cmd}
+
+if_pyth.txt
+
+    :[range]py[thon] {stmt}
+    :[range]py[thon] << [trim] [{endmarker}]
+    :[range]pydo {body}
+    :[range]pyf[ile] {file}
+    :[range]py3 {stmt}
+    :[range]py3 << [trim] [{endmarker}]
+    :[range]python3 {stmt}
+    :[range]python3 << [trim] [{endmarker}]
+    :[range]py3f[ile] {file}
+    :[range]py3do {body}
+
+if_ruby.txt
+
+    :rub[y] {cmd}
+    :rub[y] << [trim] [{endmarker}]
+    :[range]rubyd[o] {cmd}
+    :rubyf[ile] {file}
+
+if_tcl.txt
+
+    :tcl {cmd}
+    :[range]tcl << [trim] [{endmarker}]
+    :[range]tcld[o] {cmd}
+    :tclf[ile] {file}
+
+insert.txt
+
+    :XMLns {name} [{namespace}]
+    :XMLent {name}
+    :{range}a[ppend][!]
+    :{range}i[nsert][!]
+    :star[tinsert][!]
+    :stopi[nsert]
+    :startr[eplace][!]
+    :startg[replace][!]
+    :r[ead] [++opt] [name]
+    :{range}r[ead] [++opt] [name]
+    :[range]r[ead] [++opt] !{cmd}
+
+map.txt
+
+    :map
+    :nm[ap]
+    :vm[ap]
+    :xm[ap]
+    :smap
+    :om[ap]
+    :map!
+    :im[ap]
+    :lm[ap]
+    :cm[ap]
+    :tma[p]
+    :no[remap]  {lhs} {rhs}
+    :nn[oremap] {lhs} {rhs}
+    :vn[oremap] {lhs} {rhs}
+    :xn[oremap] {lhs} {rhs}
+    :snor[emap] {lhs} {rhs}
+    :ono[remap] {lhs} {rhs}
+    :no[remap]! {lhs} {rhs}
+    :ino[remap] {lhs} {rhs}
+    :ln[oremap] {lhs} {rhs}
+    :cno[remap] {lhs} {rhs}
+    :tno[remap] {lhs} {rhs}
+    :unm[ap]  {lhs}
+    :nun[map] {lhs}
+    :vu[nmap] {lhs}
+    :xu[nmap] {lhs}
+    :sunm[ap] {lhs}
+    :ou[nmap] {lhs}
+    :unm[ap]! {lhs}
+    :iu[nmap] {lhs}
+    :lu[nmap] {lhs}
+    :cu[nmap] {lhs}
+    :tunma[p] {lhs}
+    :mapc[lear]
+    :nmapc[lear]
+    :vmapc[lear]
+    :xmapc[lear]
+    :smapc[lear]
+    :omapc[lear]
+    :mapc[lear]!
+    :imapc[lear]
+    :lmapc[lear]
+    :cmapc[lear]
+    :tmapc[lear]
+    :map
+    :nm[ap]
+    :vm[ap]
+    :xm[ap]
+    :sm[ap]
+    :om[ap]
+    :map!
+    :im[ap]
+    :lm[ap]
+    :cm[ap]
+    :tma[p]
+    :map    {lhs}
+    :nm[ap] {lhs}
+    :vm[ap] {lhs}
+    :xm[ap] {lhs}
+    :sm[ap] {lhs}
+    :om[ap] {lhs}
+    :map!   {lhs}
+    :im[ap] {lhs}
+    :lm[ap] {lhs}
+    :cm[ap] {lhs}
+    :tma[p] {lhs}
+    :ab[breviate]
+    :ab[breviate] {lhs}
+    :ab[breviate] [<expr>] [<buffer>] {lhs} {rhs}
+    :una[bbreviate] [<buffer>] {lhs}
+    :norea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+    :ca[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+    :cuna[bbrev] [<buffer>] {lhs}
+    :cnorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+    :ia[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+    :iuna[bbrev] [<buffer>] {lhs}
+    :inorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+    :abc[lear] [<buffer>]
+    :iabc[lear] [<buffer>]
+    :cabc[lear] [<buffer>]
+    :com[mand]
+    :com[mand] {cmd}
+    :com[mand][!] [{attr}...] {cmd} {repl}
+    :delc[ommand] {cmd}
+    :delc[ommand] -buffer {cmd}
+    :comc[lear]
+
+mlang.txt
+
+    :lan[guage]
+    :lan[guage] mes[sages]
+    :lan[guage] cty[pe]
+    :lan[guage] tim[e]
+    :lan[guage] col[late]
+    :lan[guage] {name}
+    :lan[guage] mes[sages] {name}
+    :lan[guage] cty[pe] {name}
+    :lan[guage] tim[e] {name}
+    :lan[guage] col[late] {name}
+    :menut[ranslate] clear
+    :menut[ranslate] {english} {mylang}
+
+motion.txt
+
+    :[range]
+    :[range]go[to] [count]
+    :[range]ma[rk] {a-zA-Z'}
+    :[range]k{a-zA-Z'}
+    :marks
+    :marks {arg}
+    :delm[arks] {marks}
+    :delm[arks]!
+    :loc[kmarks] {command}
+    :kee[pmarks] {command}
+    :keepj[umps] {command}
+    :ju[mps]
+    :cle[arjumps]
+    :changes
+
+netbeans.txt
+
+    :nbs[tart] {connection}
+    :nbc[lose]
+    :nb[key] {key}
+
+options.txt
+
+    :se[t][!]
+    :se[t][!] all
+    :se[t] termcap
+    :se[t]! termcap
+    :se[t] {option}?
+    :se[t] {option}
+    :se[t] no{option}
+    :se[t] {option}!   or
+    :se[t] inv{option}
+    :se[t] {option}&
+    :se[t] {option}&vi
+    :se[t] {option}&vim
+    :se[t] all&
+    :se[t] {option}={value}
+    :se[t] {option}:{value}
+    :se[t] {option}+={value}
+    :se[t] {option}^={value}
+    :se[t] {option}-={value}
+    :setl[ocal][!] ...
+    :se[t] {option}<
+    :setl[ocal] {option}<
+    :setg[lobal][!] ...
+    :setglobal option=value
+    :setglobal option?
+    :setf[iletype] [FALLBACK] {filetype}
+    :bro[wse] se[t]
+    :opt[ions]
+    :fix[del]
+
+os_vms.txt
+
+    :fixdel doesn't do the trick, but the solution is (without "<" in 'cpo'): >
+
+os_win32.txt
+
+    :cd command
+
+pattern.txt
+
+    :noh[lsearch]
+    :mat[ch] {group} /{pattern}/
+    :mat[ch]
+    :mat[ch] none
+    :2mat[ch] {group} /{pattern}/
+    :2mat[ch]
+    :2mat[ch] none
+    :3mat[ch] {group} /{pattern}/
+    :3mat[ch]
+    :3mat[ch] none
+
+pi_netrw.txt
+
+    :[range]Nw[rite]
+    :[range]Nw[rite] {netfile} [{netfile}]...
+    :Nr[ead]
+    :Nr[ead] {netfile} {netfile}...
+    :Ns[ource] {netfile}
+    :call NetUserPass()
+    :call NetUserPass("userid")
+    :call NetUserPass("userid","passwd")
+    :NetrwSettings  This command is described in |netrw-settings| -- used to
+    :Explore  will open the local-directory browser on the current file's
+    :Explore! is like :Explore, but will use vertical splitting.
+    :Hexplore  [dir] does an :Explore with |:belowright| horizontal splitting.
+    :Hexplore! [dir] does an :Explore with |:aboveleft|  horizontal splitting.
+    :[N]Lexplore [dir] toggles a full height Explorer window on the left hand side
+    :[N]Lexplore! [dir] is similar to :Lexplore, except that the full-height
+    :[N]Sexplore will always split the window before invoking the local-directory
+    :[N]Sexplore! [dir] is like :Sexplore, but the splitting will be done vertically.
+    :Texplore  [dir] does a |:tabnew| before generating the browser window
+    :[N]Vexplore  [dir] does an :Explore with |:leftabove|  vertical splitting.
+    :[N]Vexplore! [dir] does an :Explore with |:rightbelow| vertical splitting.
+    :Rexplore  This command is a little different from the other Explore commands
+    :NetrwC [win#] command, or by setting |g:netrw_chgwin| to the selected window
+    :Tutor [tutorial]
+
+print.txt
+
+    :[range]ha[rdcopy][!] [arguments]
+    :[range]ha[rdcopy][!] >{filename}
+
+quickfix.txt
+
+    :cc[!] [nr]
+    :[nr]cc[!]
+    :ll[!] [nr]
+    :[nr]ll[!]
+    :[count]cn[ext][!]
+    :[count]lne[xt][!]
+    :[count]cN[ext][!]
+    :[count]cp[revious][!]
+    :[count]lN[ext][!]
+    :[count]lp[revious][!]
+    :[count]cabo[ve]
+    :[count]lab[ove]
+    :[count]cbel[ow]
+    :[count]lbel[ow]
+    :[count]cbe[fore]
+    :[count]lbe[fore]
+    :[count]caf[ter]
+    :[count]laf[ter]
+    :[count]cnf[ile][!]
+    :[count]lnf[ile][!]
+    :[count]cNf[ile][!]
+    :[count]cpf[ile][!]
+    :[count]lNf[ile][!]
+    :[count]lpf[ile][!]
+    :cr[ewind][!] [nr]
+    :lr[ewind][!] [nr]
+    :cfir[st][!] [nr]
+    :lfir[st][!] [nr]
+    :cla[st][!] [nr]
+    :lla[st][!] [nr]
+    :cq[uit][!]
+    :{N}cq[uit][!]
+    :cq[uit][!] {N}
+    :cf[ile][!] [errorfile]
+    :lf[ile][!] [errorfile]
+    :cg[etfile] [errorfile]
+    :lg[etfile] [errorfile]
+    :caddf[ile] [errorfile]
+    :laddf[ile] [errorfile]
+    :[range]cb[uffer][!] [bufnr]
+    :[range]lb[uffer][!] [bufnr]
+    :[range]cgetb[uffer] [bufnr]
+    :[range]lgetb[uffer] [bufnr]
+    :[range]cad[dbuffer] [bufnr]
+    :[range]laddb[uffer] [bufnr]
+    :cex[pr][!] {expr}
+    :lex[pr][!] {expr}
+    :cgete[xpr] {expr}
+    :lgete[xpr] {expr}
+    :cadde[xpr] {expr}
+    :lad[dexpr] {expr}
+    :cl[ist] [from] [, [to]]
+    :cl[ist] +{count}
+    :cl[ist]! [from] [, [to]]
+    :cl[ist]! +{count}
+    :lli[st] [from] [, [to]]
+    :lli[st]! [from] [, [to]]
+    :cdo[!] {cmd}
+    :cfdo[!] {cmd}
+    :ld[o][!] {cmd}
+    :lfdo[!] {cmd}
+    :cope[n] [height]
+    :lop[en] [height]
+    :ccl[ose]
+    :lcl[ose]
+    :cw[indow] [height]
+    :lw[indow] [height]
+    :cbo[ttom]
+    :lbo[ttom]
+    :col[der] [count]
+    :lol[der] [count]
+    :cnew[er] [count]
+    :lnew[er] [count]
+    :[count]chi[story]
+    :[count]lhi[story]
+    :mak[e][!] [arguments]
+    :lmak[e][!] [arguments]
+    :vim[grep][!] /{pattern}/[g][j][f] {file} ...
+    :{count}vim[grep] ...
+    :vim[grep][!] {pattern} {file} ...
+    :lv[imgrep][!] /{pattern}/[g][j][f] {file} ...
+    :lv[imgrep][!] {pattern} {file} ...
+    :vimgrepa[dd][!] /{pattern}/[g][j][f] {file} ...
+    :vimgrepa[dd][!] {pattern} {file} ...
+    :lvimgrepa[dd][!] /{pattern}/[g][j][f] {file} ...
+    :lvimgrepa[dd][!] {pattern} {file} ...
+    :gr[ep][!] [arguments]
+    :lgr[ep][!] [arguments]
+    :grepa[dd][!] [arguments]
+    :lgrepa[dd][!] [arguments]
+    :comp[iler][!] {name}
+
+recover.txt
+
+    :nos[wapfile]   {command}
+    :pre[serve]
+    :rec[over] [file]
+    :rec[over]! [file]
+
+repeat.txt
+
+    :[range]g[lobal]/{pattern}/[cmd]
+    :[range]g[lobal]!/{pattern}/[cmd]
+    :[range]v[global]/{pattern}/[cmd]
+    :[addr]@{0-9a-z".=*+}
+    :[addr]*{0-9a-z".=+}
+    :[addr]@:
+    :[addr]@
+    :[addr]@@
+    :so[urce] {file}
+    :[range]so[urce] [++clear]
+    :so[urce]! {file}
+    :ru[ntime][!] [where] {file} ..
+    :pa[ckadd][!] {name}
+    :packl[oadall][!]
+    :scripte[ncoding] [encoding]
+    :scriptv[ersion] {version}
+    :vim9s[cript] [noclear]
+    :scr[iptnames]
+    :scr[iptnames][!] {scriptId}
+    :fini[sh]
+    :breaka[dd] func [lnum] {name}
+    :breaka[dd] file [lnum] {name}
+    :breaka[dd] here
+    :breaka[dd] expr {expression}
+    :breakd[el] {nr}
+    :breakd[el] *
+    :breakd[el] func [lnum] {name}
+    :breakd[el] file [lnum] {name}
+    :breakd[el] here
+    :breakl[ist]
+    :debugg[reedy]
+    :0debugg[reedy]
+    :prof[ile] start {fname}
+    :prof[ile] stop
+    :prof[ile] pause
+    :prof[ile] continue
+    :prof[ile] func {pattern}
+    :prof[ile][!] file {pattern}
+    :prof[ile] dump
+    :profd[el] ...
+
+scroll.txt
+
+    :syncbind
+
+sign.txt
+
+    :sign define {name} {argument}...
+    :sign undefine {name}
+    :sign list
+    :sign list {name}
+    :sign place {id} line={lnum} name={name} file={fname}
+    :sign place {id} line={lnum} name={name} [buffer={nr}]
+    :sign place {id} name={name} file={fname}
+    :sign place {id} name={name} [buffer={nr}]
+    :sign unplace {id} file={fname}
+    :sign unplace {id} group={group} file={fname}
+    :sign unplace {id} group=* file={fname}
+    :sign unplace * file={fname}
+    :sign unplace * group={group} file={fname}
+    :sign unplace * group=* file={fname}
+    :sign unplace {id} buffer={nr}
+    :sign unplace {id} group={group} buffer={nr}
+    :sign unplace {id} group=* buffer={nr}
+    :sign unplace * buffer={nr}
+    :sign unplace * group={group} buffer={nr}
+    :sign unplace * group=* buffer={nr}
+    :sign unplace {id}
+    :sign unplace {id} group={group}
+    :sign unplace {id} group=*
+    :sign unplace *
+    :sign unplace * group={group}
+    :sign unplace * group=*
+    :sign unplace
+    :sign unplace group={group}
+    :sign unplace group=*
+    :sign place file={fname}
+    :sign place group={group} file={fname}
+    :sign place group=* file={fname}
+    :sign place buffer={nr}
+    :sign place group={group} buffer={nr}
+    :sign place group=* buffer={nr}
+    :sign place
+    :sign place group={group}
+    :sign place group=*
+    :sign jump {id} file={fname}
+    :sign jump {id} group={group} file={fname}
+    :sign jump {id} [buffer={nr}]
+    :sign jump {id} group={group} [buffer={nr}]
+
+spell.txt
+
+    :[count]spe[llgood] {word}
+    :spe[llgood]! {word}
+    :[count]spellw[rong] {word}
+    :spellw[rong]! {word}
+    :[count]spellra[re] {word}
+    :spellra[re]! {word}
+    :[count]spellu[ndo] {word}
+    :spellu[ndo]! {word}
+    :spellr[epall]
+    :mksp[ell][!] [-ascii] {outname} {inname} ...
+    :mksp[ell] [-ascii] {name}.{enc}.add
+    :mksp[ell] [-ascii] {name}
+    :spelld[ump]
+    :spelld[ump]!
+    :spelli[nfo]
+
+starting.txt
+
+    :sus[pend][!]
+    :st[op][!]
+    :mk[exrc] [file]
+    :mk[exrc]! [file]
+    :mkv[imrc][!] [file]
+    :mks[ession][!] [file]
+    :mkvie[w][!] [file]
+    :lo[adview] [nr]
+    :rv[iminfo][!] [file]
+    :wv[iminfo][!] [file]
+    :ol[dfiles]
+    :bro[wse] ol[dfiles][!]
+
+syntax.txt
+
+    :[range]TOhtml
+    :sy[ntax] case [match | ignore]
+    :sy[ntax] case
+    :sy[ntax] foldlevel start
+    :sy[ntax] foldlevel minimum
+    :sy[ntax] foldlevel
+    :sy[ntax] spell toplevel
+    :sy[ntax] spell notoplevel
+    :sy[ntax] spell default
+    :sy[ntax] spell
+    :sy[ntax] iskeyword [clear | {option}]
+    :sy[ntax] keyword {group-name} [{options}] {keyword} .. [{options}]
+    :sy[ntax] match {group-name} [{options}]
+    :sy[ntax] region {group-name} [{options}]
+    :syntax keyword
+    :syntax match
+    :syntax region
+    :sy[ntax] conceal [on|off]
+    :sy[ntax] conceal
+    :sy[ntax] cluster {cluster-name} [contains={group-name}..]
+    :sy[ntax] include [@{grouplist-name}] {file-name}
+    :sy[ntax] sync [ccomment [group-name] | minlines={N} | ...]
+    :colo[rscheme]
+    :colo[rscheme] {name}
+    :hi[ghlight]
+    :hi[ghlight] {group-name}
+    :hi[ghlight] clear
+    :hi[ghlight] clear {group-name}
+    :hi[ghlight] {group-name} NONE
+    :hi[ghlight] [default] {group-name} {key}={arg} ..
+    :syntime on
+    :syntime off
+    :syntime clear
+    :syntime report
+
+tabpage.txt
+
+    :[count]tabe[dit]
+    :[count]tabnew
+    :[count]tabe[dit] [++opt] [+cmd] {file}
+    :[count]tabnew [++opt] [+cmd] {file}
+    :[count]tabf[ind] [++opt] [+cmd] {file}
+    :[count]tab {cmd}
+    :tabc[lose][!]
+    :{count}tabc[lose][!]
+    :tabc[lose][!] {count}
+    :tabo[nly][!]
+    :{count}tabo[nly][!]
+    :tabo[nly][!] {count}
+    :tabn[ext]
+    :{count}tabn[ext]
+    :tabn[ext] {count}
+    :tabp[revious]
+    :tabN[ext]
+    :tabp[revious] {count}
+    :tabN[ext] {count}
+    :tabr[ewind]
+    :tabfir[st]
+    :tabl[ast]
+    :tabs
+    :tabm[ove] [N]
+    :[N]tabm[ove]
+    :tabm[ove] +[N]
+    :tabm[ove] -[N]
+    :[range]tabd[o] {cmd}
+
+tagsrch.txt
+
+    :[count]ta[g][!] {name}
+    :[count]po[p][!]
+    :[count]ta[g][!]
+    :tags
+    :ts[elect][!] [name]
+    :sts[elect][!] [name]
+    :tj[ump][!] [name]
+    :stj[ump][!] [name]
+    :[count]tn[ext][!]
+    :[count]tp[revious][!]
+    :[count]tN[ext][!]
+    :[count]tr[ewind][!]
+    :[count]tf[irst][!]
+    :tl[ast][!]
+    :lt[ag][!] [name]
+    :pts[elect][!] [name]
+    :ptj[ump][!] [name]
+    :[count]ptn[ext][!]
+    :[count]ptp[revious][!]
+    :[count]ptN[ext][!]
+    :[count]ptr[ewind][!]
+    :[count]ptf[irst][!]
+    :ptl[ast][!]
+    :[range]is[earch][!] [count] [/]pattern[/]
+    :[range]il[ist][!] [/]pattern[/]
+    :[range]ij[ump][!] [count] [/]pattern[/]
+    :[range]isp[lit][!] [count] [/]pattern[/]
+    :[range]ds[earch][!] [count] [/]string[/]
+    :[range]dli[st][!] [/]string[/]
+    :[range]dj[ump][!] [count] [/]string[/]
+    :[range]dsp[lit][!] [count] [/]string[/]
+    :che[ckpath]
+    :che[ckpath]!
+
+terminal.txt
+
+    :[range]ter[minal] [options] [command]
+
+term.txt
+
+    :mod[e] [mode]
+
+undo.txt
+
+    :u[ndo]
+    :u[ndo] {N}
+    :red[o]
+    :undoj[oin]
+    :undol[ist]
+    :earlier {count}
+    :earlier {N}s
+    :earlier {N}m
+    :earlier {N}h
+    :earlier {N}d
+    :earlier {N}f
+    :later {count}
+    :later {N}s
+    :later {N}m
+    :later {N}h
+    :later {N}d
+    :later {N}f
+    :wundo[!] {file}
+    :rundo {file}
+
+userfunc.txt
+
+    :fu[nction]
+    :fu[nction] {name}
+    :fu[nction] /{pattern}
+    :fu[nction][!] {name}([arguments]) [range] [abort] [dict] [closure]
+    :endf[unction] [argument]
+    :delf[unction][!] {name}
+    :retu[rn] [expr]
+    :[range]cal[l] {name}([arguments])
+    :defer {func}({args})
+
+various.txt
+
+    :redr[aw][!]
+    :redraws[tatus][!]
+    :redrawt[abline]
+    :as[cii]
+    :[range]p[rint] [flags]
+    :[range]p[rint] {count} [flags]
+    :[range]P[rint] [count] [flags]
+    :[range]l[ist] [count] [flags]
+    :[range]nu[mber] [count] [flags]
+    :[range]# [count] [flags]
+    :#!{anything}
+    :[range]z[+-^.=][count]
+    :[range]z![+-^.=][count]
+    :[range]z[!]#[+-^.=][count]
+    := [flags]
+    :{range}= [flags]
+    :norm[al][!] {commands}
+    :{range}norm[al][!] {commands}
+    :sh[ell]
+    :!{cmd}
+    :!!
+    :ve[rsion]
+    :ve[rsion] {nr}
+    :redi[r][!] > {file}
+    :redi[r] >> {file}
+    :redi[r] @{a-zA-Z}
+    :redi[r] @{a-zA-Z}>
+    :redi[r] @{a-z}>>
+    :redi[r] @*>
+    :redi[r] @+>
+    :redi[r] @*>>
+    :redi[r] @+>>
+    :redi[r] @">
+    :redi[r] @">>
+    :redi[r] => {var}
+    :redi[r] =>> {var}
+    :redi[r] END
+    :filt[er][!] {pattern} {command}
+    :filt[er][!] /{pattern}/ {command}
+    :sil[ent][!] {command}
+    :uns[ilent] {command}
+    :[count]verb[ose] {command}
+    :[N]sl[eep] [N][m]
+    :[N]sl[eep]! [N][m]
+    :xr[estore] [display]
+
+vi_diff.txt
+
+    :[range]o[pen]
+    :[range]o[pen] /pattern/
+
+vim9.txt
+
+    :vim9[cmd] {cmd}
+    :leg[acy] {cmd}
+    :def[!] {name}([arguments])[: {return-type}]
+    :enddef
+    :defc[ompile]
+    :defc[ompile] MyClass
+    :defc[ompile] {func}
+    :defc[ompile] debug {func}
+    :defc[ompile] profile {func}
+    :disa[ssemble] {func}
+    :disa[ssemble] profile {func}
+    :disa[ssemble] debug {func}
+
+wayland.txt
+
+    :wl[restore] [display]
+
+windows.txt
+
+    :[N]sp[lit] [++opt] [+cmd] [file]
+    :[N]vs[plit] [++opt] [+cmd] [file]
+    :[N]new [++opt] [+cmd]
+    :[N]new [++opt] [+cmd] {file}
+    :[N]sp[lit] [++opt] [+cmd] {file}
+    :[N]vne[w] [++opt] [+cmd] [file]
+    :[N]sv[iew] [++opt] [+cmd] [file]
+    :[N]sf[ind] [++opt] [+cmd] {file}
+    :vert[ical] {cmd}
+    :hor[izontal] {cmd}
+    :lefta[bove] {cmd}
+    :abo[veleft] {cmd}
+    :rightb[elow] {cmd}
+    :bel[owright] {cmd}
+    :to[pleft] {cmd}
+    :bo[tright] {cmd}
+    :q[uit]
+    :{count}q[uit]
+    :q[uit]!
+    :{count}q[uit]!
+    :clo[se][!]
+    :{count}clo[se][!]
+    :hid[e]
+    :{count}hid[e]
+    :hid[e] {cmd}
+    :on[ly][!]
+    :{count}on[ly][!]
+    :[count]winc[md] {arg}
+    :res[ize] -N
+    :res[ize] +N
+    :res[ize] [N]
+    :{winnr}res[ize] [+-]N
+    :vert[ical] res[ize] [N]
+    :[N]al[l][!] [N]
+    :[N]sal[l][!] [N]
+    :[N]sa[rgument][!] [++opt] [+cmd] [N]
+    :[N]sn[ext][!] [++opt] [+cmd] [file ..]
+    :[N]spr[evious][!] [++opt] [+cmd] [N]
+    :[N]sN[ext][!] [++opt] [+cmd] [N]
+    :sre[wind][!] [++opt] [+cmd]
+    :sfir[st] [++opt] [+cmd]
+    :sla[st][!] [++opt] [+cmd]
+    :dr[op] [++opt] [+cmd] {file} ..
+    :[range]windo {cmd}
+    :[range]bufdo[!] {cmd}
+    :sta[g][!] [tagname]
+    :pta[g][!] [tagname]
+    :pc[lose][!]
+    :[count]pp[op][!]
+    :ped[it][!] [++opt] [+cmd] {file}
+    :[range]ps[earch][!] [count] [/]pattern[/]
+    :files[!] [flags]
+    :buffers[!] [flags]
+    :ls[!] [flags]
+    :bad[d]
+    :balt [+lnum] {fname}
+    :[N]bd[elete][!]
+    :bd[elete][!] [N]
+    :bdelete[!] {bufname}
+    :bdelete[!] N1 N2 ...
+    :N,Mbdelete[!]
+    :[N]bw[ipeout][!]
+    :bw[ipeout][!] {bufname}
+    :N,Mbw[ipeout][!]
+    :bw[ipeout][!] N1 N2 ...
+    :[N]bun[load][!]
+    :bun[load][!] [N]
+    :bunload[!] {bufname}
+    :N,Mbunload[!]
+    :bunload[!] N1 N2 ...
+    :[N]b[uffer][!] [+cmd] [N]
+    :[N]b[uffer][!] [+cmd] {bufname}
+    :[N]sb[uffer] [+cmd] [N]
+    :[N]sb[uffer] [+cmd] {bufname}
+    :[N]bn[ext][!] [+cmd] [N]
+    :[N]sbn[ext] [+cmd] [N]
+    :[N]bN[ext][!] [+cmd] [N]
+    :[N]bp[revious][!] [+cmd] [N]
+    :[N]sbN[ext] [+cmd] [N]
+    :[N]sbp[revious] [+cmd] [N]
+    :br[ewind][!] [+cmd]
+    :bf[irst] [+cmd]
+    :sbr[ewind] [+cmd]
+    :sbf[irst] [+cmd]
+    :bl[ast][!] [+cmd]
+    :sbl[ast] [+cmd]
+    :[N]bm[odified][!] [+cmd] [N]
+    :[N]sbm[odified] [+cmd] [N]
+    :[N]unh[ide] [N]
+    :[N]sun[hide] [N]
+    :[N]ba[ll] [N]
+    :[N]sba[ll] [N]
+
+
+==============================================================================
+5. Misc Reference
 
 C grammar (Credit: https://www.quut.com/c/ANSI-C-grammar-y.html)
 
