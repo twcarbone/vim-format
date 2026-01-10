@@ -518,6 +518,33 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
 
                 break;
             }
+            case Token::Type::OP_EQUAL:
+            case Token::Type::OP_NEQUAL:
+            case Token::Type::OP_GT:
+            case Token::Type::OP_GTE:
+            case Token::Type::OP_LT:
+            case Token::Type::OP_LTE:
+            case Token::Type::OP_MATCH:
+            case Token::Type::OP_NMATCH:
+            case Token::Type::OP_IS:
+            case Token::Type::OP_ISNOT:
+            {
+                Token* pCaseSensitivity = nullptr;
+                switch (m_pCurrToken->type())
+                {
+                    case Token::Type::OP_MATCH_CASE:
+                    case Token::Type::OP_IGNORE_CASE:
+                        pCaseSensitivity = m_pCurrToken;
+                        consume(m_pCurrToken->type());
+                        break;
+                    default:
+                        break;
+                }
+
+                pRhs = expr(lnLhsOpBindingPower);
+                pLhs = new ast::CasedBinaryOp(pOp, pLhs, pRhs, pCaseSensitivity);
+                break;
+            }
             default:
                 pRhs = expr(lnRhsOpBindingPower);
                 pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);

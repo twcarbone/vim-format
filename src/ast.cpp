@@ -301,6 +301,37 @@ void BinaryOp::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// CasedBinaryOp
+//
+
+CasedBinaryOp::CasedBinaryOp(Token* apOp, Expr* apLeft, Expr* apRight, Token* apCaseSensitivity) :
+    BinaryOp(apOp, apLeft, apRight),
+    m_pCaseSensitivity { apCaseSensitivity }
+{
+}
+
+CasedBinaryOp::~CasedBinaryOp()
+{
+}
+
+std::string CasedBinaryOp::toString() const
+{
+    std::string lsStr = "CasedBinaryOp " + m_pOp->str();
+
+    if (m_pCaseSensitivity != nullptr)
+    {
+        lsStr += m_pCaseSensitivity->str();
+    }
+
+    return lsStr;
+}
+
+void CasedBinaryOp::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // ListExpr
 //
 

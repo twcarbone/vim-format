@@ -207,8 +207,25 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
-private:
+protected:
     Token* m_pOp;
+};
+
+//
+// CasedBinaryOp
+//
+
+class CasedBinaryOp : public BinaryOp
+{
+public:
+    CasedBinaryOp(Token* op, Expr* left, Expr* right, Token* case_sensitivity);
+    virtual ~CasedBinaryOp();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pCaseSensitivity;
 };
 
 //

@@ -4,6 +4,8 @@ echo 5 ?? 0
 echo 1 ? "this" : "that"
 
 echo 1 == 2
+echo 1 ==? 2
+echo 1 ==# 2
 echo 1 != 2
 echo 6 >  4
 echo 1 >= 5

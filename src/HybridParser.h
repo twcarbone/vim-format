@@ -24,18 +24,18 @@ private:
     const std::vector<Token*> m_lTokens;
     const std::unordered_map<Token::Type, std::pair<int, int> > m_mOpBindingPower;
 
-    ast::Program* program();
-    ast::StmtList* stmt_list();
     ast::Stmt* stmt();
-    ast::IfStmt* if_stmt();
-    ast::WhileStmt* while_stmt();
-    ast::FuncStmt* func_stmt();
-    ast::ForStmt* for_stmt();
-    ast::JumpStmt* jump_stmt();
-    ast::AssignStmt* assign_stmt();
-    ast::ExprCmd* expr_cmd();
-    ast::ListExpr* list_expr();
     ast::Expr* slice_expr();
+    ast::IfStmt* if_stmt();
+    ast::Program* program();
+    ast::ForStmt* for_stmt();
+    ast::ExprCmd* expr_cmd();
+    ast::StmtList* stmt_list();
+    ast::FuncStmt* func_stmt();
+    ast::JumpStmt* jump_stmt();
+    ast::ListExpr* list_expr();
+    ast::WhileStmt* while_stmt();
+    ast::AssignStmt* assign_stmt();
 
     ast::Expr* expr(int min_binding_power);
 
