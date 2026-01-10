@@ -8,6 +8,8 @@ class AssignStmt;
 class BinaryOp;
 class ExprCmd;
 class ForStmt;
+class FuncArg;
+class FuncStmt;
 class IfStmt;
 class JumpStmt;
 class ListExpr;
@@ -32,6 +34,8 @@ public:
     virtual void visit(const ast::BinaryOp* ast);
     virtual void visit(const ast::ExprCmd* ast);
     virtual void visit(const ast::ForStmt* ast);
+    virtual void visit(const ast::FuncArg* ast);
+    virtual void visit(const ast::FuncStmt* ast);
     virtual void visit(const ast::IfStmt* ast);
     virtual void visit(const ast::JumpStmt* ast);
     virtual void visit(const ast::ListExpr* ast);

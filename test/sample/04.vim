@@ -80,3 +80,27 @@ while 1
     let foo = 6
     break
 endwhile
+
+function! Foo() range abort dict closure
+    echo 1
+endfunction
+
+function! Foo(...)
+    echo 1
+endfunction
+
+function! Foo(a)
+    echo 1
+endfunction
+
+function! Foo(a,)
+    echo 1
+endfunction
+
+function! Foo(a, ...)
+    echo 1
+endfunction
+
+function! Foo(a, b = 1)
+    echo 1
+endfunction

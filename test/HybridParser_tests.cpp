@@ -87,6 +87,52 @@ TEST_F(HybridParserTest, while_stmt_01)
 }
 
 //
+// func_stmt
+//
+
+TEST_F(HybridParserTest, func_stmt_01)
+{
+    parse_str("function! Foo() range abort dict closure\n"
+              "    echo 1\n"
+              "endfunction\n");
+}
+
+TEST_F(HybridParserTest, func_stmt_02)
+{
+    parse_str("function! Foo(...)\n"
+              "    echo 1\n"
+              "endfunction\n");
+}
+
+TEST_F(HybridParserTest, func_stmt_03)
+{
+    parse_str("function! Foo(apple)\n"
+              "    echo 1\n"
+              "endfunction\n");
+}
+
+TEST_F(HybridParserTest, func_stmt_04)
+{
+    parse_str("function! Foo(apple,)\n"
+              "    echo 1\n"
+              "endfunction\n");
+}
+
+TEST_F(HybridParserTest, func_stmt_05)
+{
+    parse_str("function! Foo(apple, ...)\n"
+              "    echo 1\n"
+              "endfunction\n");
+}
+
+TEST_F(HybridParserTest, func_stmt_06)
+{
+    parse_str("function! Foo(apple, banana = 1)\n"
+              "    echo 1\n"
+              "endfunction\n");
+}
+
+//
 // expr_cmd
 //
 

@@ -29,6 +29,7 @@ private:
     ast::Stmt* stmt();
     ast::IfStmt* if_stmt();
     ast::WhileStmt* while_stmt();
+    ast::FuncStmt* func_stmt();
     ast::ForStmt* for_stmt();
     ast::JumpStmt* jump_stmt();
     ast::AssignStmt* assign_stmt();
@@ -40,6 +41,8 @@ private:
 
     void next();
     void consume(const Token::Type type);
+    bool consume_optional(const Token::Type type);
 
     [[noreturn]] void throw_unexpected_token();
+    [[noreturn]] void throw_vim_error(std::string code);
 };

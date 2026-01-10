@@ -1,3 +1,4 @@
+#include "Exceptions.h"
 #include "HybridParser.h"
 
 HybridParser::HybridParser(const Context& acContext, std::vector<Token*> alTokens) :
@@ -86,6 +87,7 @@ ast::StmtList* HybridParser::stmt_list()
             case Token::Type::ENDFOR:
             case Token::Type::ENDIF:
             case Token::Type::ENDWHILE:
+            case Token::Type::ENDFUNCTION:
                 return pStmtList;
             case Token::Type::NEWLINE:
                 consume(Token::Type::NEWLINE);
@@ -113,6 +115,9 @@ ast::Stmt* HybridParser::stmt()
         case Token::Type::CONTINUE:
             // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
             pStmt = jump_stmt();
+            break;
+        case Token::Type::FUNCTION:
+            pStmt = func_stmt();
             break;
         case Token::Type::FOR:
             pStmt = for_stmt();
@@ -172,6 +177,99 @@ ast::WhileStmt* HybridParser::while_stmt()
     ast::StmtList* pStmts = stmt_list();
     consume(Token::Type::ENDWHILE);
     return new ast::WhileStmt(pExpr, pStmts);
+}
+
+ast::FuncStmt* HybridParser::func_stmt()
+{
+    consume(Token::Type::FUNCTION);
+
+    // Bang (!)
+    Token* pBang = nullptr;
+    if (m_pCurrToken->type() == Token::Type::OP_BANG)
+    {
+        pBang = m_pCurrToken;
+        consume(Token::Type::OP_BANG);
+    }
+
+    // Identifier
+    Token* pName = m_pCurrToken;
+    consume(Token::Type::IDENTIFIER);
+
+    consume(Token::Type::L_PAREN);
+
+    // Arguments
+    std::vector<ast::FuncArg*> lArgs;
+    bool bGotDefaultArg = false;
+    while (m_pCurrToken->type() != Token::Type::R_PAREN)
+    {
+        ast::Var* pVar = nullptr;
+        ast::Expr* pDefaultExpr = nullptr;
+
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::FN_ELLIPSES:
+                pVar = new ast::Var(m_pCurrToken);
+                consume(Token::Type::FN_ELLIPSES);
+
+                if (m_pCurrToken->type() != Token::Type::R_PAREN)
+                {
+                    throw_vim_error("E475");
+                }
+
+                break;
+            case Token::Type::IDENTIFIER:
+                pVar = new ast::Var(m_pCurrToken);
+                consume(Token::Type::IDENTIFIER);
+
+                if (consume_optional(Token::Type::ASSIGN_EQ))
+                {
+                    bGotDefaultArg = true;
+                    pDefaultExpr = expr(0);
+                }
+                else if (bGotDefaultArg)
+                {
+                    throw_vim_error("E989");
+                }
+
+                consume_optional(Token::Type::COMMA);
+                break;
+            default:
+                throw_vim_error("E125");
+        }
+
+        ast::FuncArg* pFuncArg = new ast::FuncArg(pVar, pDefaultExpr);
+        lArgs.push_back(pFuncArg);
+    }
+
+    consume(Token::Type::R_PAREN);
+
+    // Modifiers (range, abort, etc.)
+    std::vector<Token*> lModifiers;
+    while (m_pCurrToken->type() != Token::Type::NEWLINE)
+    {
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::FN_RANGE:
+            case Token::Type::FN_ABORT:
+            case Token::Type::FN_DICT:
+            case Token::Type::FN_CLOSURE:
+                lModifiers.push_back(m_pCurrToken);
+                consume(m_pCurrToken->type());
+                break;
+            default:
+                throw_unexpected_token();
+        }
+    }
+
+    consume(Token::Type::NEWLINE);
+
+    // Body
+    ast::StmtList* pBody = stmt_list();
+
+    ast::FuncStmt* pFuncStmt = new ast::FuncStmt(pName, pBang, lArgs, lModifiers, pBody);
+
+    consume(Token::Type::ENDFUNCTION);
+    return pFuncStmt;
 }
 
 ast::ForStmt* HybridParser::for_stmt()
@@ -459,8 +557,25 @@ void HybridParser::consume(const Token::Type aeType)
     }
 }
 
+bool HybridParser::consume_optional(const Token::Type aeType)
+{
+    if (m_pCurrToken->type() == aeType)
+    {
+        consume(aeType);
+        return true;
+    }
+
+    return false;
+}
+
 void HybridParser::throw_unexpected_token()
 {
     m_cSource.seek(m_pCurrToken->source_pos());
     throw std::runtime_error("Unexpected token.\n\n" + m_cSource.traceback());
+}
+
+void HybridParser::throw_vim_error(std::string asCode)
+{
+    m_cSource.seek(m_pCurrToken->source_pos());
+    throw VimError(asCode, m_cSource.traceback());
 }

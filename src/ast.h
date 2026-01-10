@@ -154,6 +154,43 @@ private:
 };
 
 //
+// FuncArg
+//
+
+class FuncArg : public Expr
+{
+public:
+    FuncArg(Var* name, Expr* default_value);
+    virtual ~FuncArg();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// FuncStmt
+//
+
+class FuncStmt : public Stmt
+{
+public:
+    FuncStmt(Token* name,
+             Token* bang,
+             const std::vector<FuncArg*>& args,
+             const std::vector<Token*>& modifiers,
+             StmtList* body);
+    virtual ~FuncStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pName;
+    Token* m_pBang;
+    std::vector<Token*> m_lModifiers;
+};
+
+//
 // BinaryOp
 //
 

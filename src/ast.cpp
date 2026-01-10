@@ -190,6 +190,77 @@ void JumpStmt::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// FuncArg
+//
+
+FuncArg::FuncArg(Var* apName, Expr* apDefaultExpr)
+{
+    m_lChildren.push_back(apName);
+    m_lChildren.push_back(apDefaultExpr);
+}
+
+FuncArg::~FuncArg()
+{
+}
+
+std::string FuncArg::toString() const
+{
+    return "FuncArg";
+}
+
+void FuncArg::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
+// FuncStmt
+//
+
+FuncStmt::FuncStmt(Token* apName,
+                   Token* apBang,
+                   const std::vector<FuncArg*>& alArgs,
+                   const std::vector<Token*>& alModifiers,
+                   StmtList* apBody) :
+    m_pName { apName },
+    m_pBang { apBang },
+    m_lModifiers { alModifiers }
+{
+    for (ast::FuncArg* pFuncArg : alArgs)
+    {
+        m_lChildren.push_back(pFuncArg);
+    }
+
+    m_lChildren.push_back(apBody);
+}
+
+FuncStmt::~FuncStmt()
+{
+}
+
+std::string FuncStmt::toString() const
+{
+    std::string lsStr = "FuncStmt " + m_pName->str();
+
+    if (m_pBang != nullptr)
+    {
+        lsStr += m_pBang->str();
+    }
+
+    for (Token* pModifier : m_lModifiers)
+    {
+        lsStr += " " + pModifier->str();
+    }
+
+    return lsStr;
+}
+
+void FuncStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // BinaryOp
 //
 

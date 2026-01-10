@@ -28,6 +28,16 @@ void ASTVisitor::visit(const ast::ForStmt* apForStmt)
     handle_node(apForStmt);
 }
 
+void ASTVisitor::visit(const ast::FuncArg* apFuncArg)
+{
+    handle_node(apFuncArg);
+}
+
+void ASTVisitor::visit(const ast::FuncStmt* apFuncStmt)
+{
+    handle_node(apFuncStmt);
+}
+
 void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
 {
     handle_node(apIfStmt);
