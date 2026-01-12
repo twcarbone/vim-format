@@ -133,10 +133,10 @@ TEST_F(HybridParserTest, func_stmt_06)
 }
 
 //
-// expr_cmd
+// expr
 //
 
-TEST_F(HybridParserTest, expr_cmd_01)
+TEST_F(HybridParserTest, expr_01)
 {
     parse_str("echo foo ?? bar\n");
     parse_str("echo 1 ?? 2\n");
@@ -145,7 +145,76 @@ TEST_F(HybridParserTest, expr_cmd_01)
     parse_str("echo 1 ? 2 : 3\n");
 }
 
-TEST_F(HybridParserTest, expr_cmd_11)
+TEST_F(HybridParserTest, expr_02)
+{
+    parse_str("echo 1 || 2\n");
+    parse_str("echo foo || bar\n");
+}
+
+TEST_F(HybridParserTest, expr_03)
+{
+    parse_str("echo 1 && 2\n");
+    parse_str("echo foo && bar\n");
+}
+
+TEST_F(HybridParserTest, expr_04)
+{
+    parse_str("echo 1 == 2\n");
+    parse_str("echo 1 ==? 2\n");
+    parse_str("echo 1 ==# 2\n");
+    parse_str("echo 1 != 2\n");
+    parse_str("echo 6 >  4\n");
+    parse_str("echo 1 >= 5\n");
+    parse_str("echo 5 <  3\n");
+    parse_str("echo 3 <= 2\n");
+    parse_str("echo foo is bar\n");
+    parse_str("echo foo isnot bar\n");
+}
+
+TEST_F(HybridParserTest, expr_05)
+{
+    parse_str("echo 1 << 1\n");
+    parse_str("echo 2 >> 1\n");
+}
+
+TEST_F(HybridParserTest, expr_06)
+{
+    parse_str("echo 1 + 2\n");
+    parse_str("echo 2 - 1\n");
+    parse_str("echo sp .. am\n");
+    parse_str("echo sp . am\n");
+}
+
+TEST_F(HybridParserTest, expr_07)
+{
+    parse_str("echo 2 * 1\n");
+    parse_str("echo 6 / 2\n");
+    parse_str("echo 6 % 4\n");
+}
+
+TEST_F(HybridParserTest, expr_08)
+{
+    // TODO (gh-8)
+}
+
+TEST_F(HybridParserTest, expr_09)
+{
+    parse_str("echo !1\n");
+    parse_str("echo -1\n");
+    parse_str("echo +1\n");
+}
+
+TEST_F(HybridParserTest, expr_10)
+{
+    parse_str("echo foo[3]\n");
+    parse_str("echo foo[1:3]\n");
+    parse_str("echo foo[1:]\n");
+    parse_str("echo foo[:3]\n");
+    parse_str("echo foo[:]\n");
+    parse_str("echo foo.bar\n");
+}
+
+TEST_F(HybridParserTest, expr_11)
 {
     parse_str("echo [1, 2]\n");
     parse_str("echo [foo, bar,]\n");
