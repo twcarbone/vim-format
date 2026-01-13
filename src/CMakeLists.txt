@@ -20,7 +20,6 @@ add_library(
     Symbol.cpp
     Token.cpp
     TokenSpec.cpp
-    Translator.cpp
     ast.cpp
 )
 
