@@ -1,10 +1,8 @@
 #include <iostream>
 
-#include "Analyzer.h"
 #include "Controller.h"
+#include "HybridParser.h"
 #include "Lexer.h"
-#include "Parser.h"
-#include "Translator.h"
 
 Controller::Controller(Context acContext) :
     m_cContext(acContext)
@@ -38,28 +36,14 @@ void Controller::compile()
     // Parsing
     //
 
-    Parser lcParser(m_cContext, lcLexer.tokens());
+    HybridParser lcParser(m_cContext, lcLexer.tokens());
     lcParser.parse();
 
     if (m_cContext.settings().StopAfterParsing)
     {
-        NodeVisitor lcNodeVisitor;
-        lcParser.root()->accept(lcNodeVisitor);
+        ASTVisitor lcVisitor;
+        lcParser.root()->accept(lcVisitor);
 
         return;
     }
-
-    //
-    // Translating
-    //
-
-    Translator lcTranslator(m_cContext);
-    lcParser.root()->accept(lcTranslator);
-
-    //
-    // Semantic analysis
-    //
-
-    Analyzer lcAnalyzer(m_cContext);
-    lcTranslator.root()->accept(lcAnalyzer);
 }
