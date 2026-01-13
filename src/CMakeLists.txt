@@ -12,7 +12,6 @@ add_library(
     Node.cpp
     NodeVisitor.cpp
     Parser.cpp
-    PrattParser.cpp
     Scope.cpp
     Settings.cpp
     Source.cpp
