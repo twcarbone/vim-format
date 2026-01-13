@@ -4,11 +4,10 @@ enable_testing()
 
 add_executable(
     unittests
+    ASTParser_tests.cpp
     Lexer_tests.cpp
     Parser_tests.cpp
-    PrattParser_tests.cpp
     Source_tests.cpp
-    Translator_tests.cpp
 )
 
 target_link_libraries(

@@ -1,7 +1,7 @@
 add_library(
     vimformat
     STATIC
-    AST.cpp
+    ASTParser.cpp
     ASTVisitor.cpp
     Analyzer.cpp
     Context.cpp
@@ -12,14 +12,12 @@ add_library(
     Node.cpp
     NodeVisitor.cpp
     Parser.cpp
-    PrattParser.cpp
     Scope.cpp
     Settings.cpp
     Source.cpp
     Symbol.cpp
     Token.cpp
     TokenSpec.cpp
-    Translator.cpp
     ast.cpp
 )
 

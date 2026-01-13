@@ -4,6 +4,7 @@
 const std::unordered_map<std::string, std::string> VimError::s_mErrors {
     { "E121", "Undefined variable" },
     { "E125", "Illegal argument" },
+    { "E475", "Invalid argument" },
     { "E989", "Non-default argument follows default argument" },
 };
 
