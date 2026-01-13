@@ -1,7 +1,6 @@
 add_library(
     vimformat
     STATIC
-    AST.cpp
     ASTVisitor.cpp
     Analyzer.cpp
     Context.cpp
