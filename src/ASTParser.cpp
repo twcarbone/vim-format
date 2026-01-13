@@ -1,7 +1,7 @@
+#include "ASTParser.h"
 #include "Exceptions.h"
-#include "HybridParser.h"
 
-HybridParser::HybridParser(const Context& acContext, std::vector<Token*> alTokens) :
+ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
     m_pRoot { nullptr },
     m_pCurrToken { nullptr },
     m_cSource { acContext.source() },
@@ -50,30 +50,30 @@ HybridParser::HybridParser(const Context& acContext, std::vector<Token*> alToken
 {
 }
 
-HybridParser::~HybridParser()
+ASTParser::~ASTParser()
 {
     delete m_pRoot;
 }
 
-void HybridParser::parse()
+void ASTParser::parse()
 {
     next();
     m_pRoot = program();
 }
 
-ast::Program* HybridParser::root() const
+ast::Program* ASTParser::root() const
 {
     return m_pRoot;
 }
 
-ast::Program* HybridParser::program()
+ast::Program* ASTParser::program()
 {
     ast::Program* pProgram = new ast::Program(stmt_list());
     consume(Token::Type::END);
     return pProgram;
 }
 
-ast::StmtList* HybridParser::stmt_list()
+ast::StmtList* ASTParser::stmt_list()
 {
     ast::StmtList* pStmtList = new ast::StmtList();
 
@@ -99,7 +99,7 @@ ast::StmtList* HybridParser::stmt_list()
     }
 }
 
-ast::Stmt* HybridParser::stmt()
+ast::Stmt* ASTParser::stmt()
 {
     ast::Stmt* pStmt;
 
@@ -135,7 +135,7 @@ ast::Stmt* HybridParser::stmt()
     return pStmt;
 }
 
-ast::IfStmt* HybridParser::if_stmt()
+ast::IfStmt* ASTParser::if_stmt()
 {
     switch (m_pCurrToken->type())
     {
@@ -170,7 +170,7 @@ ast::IfStmt* HybridParser::if_stmt()
     return new ast::IfStmt(pExpr, pThenStmts, pElseStmts);
 }
 
-ast::WhileStmt* HybridParser::while_stmt()
+ast::WhileStmt* ASTParser::while_stmt()
 {
     consume(Token::Type::WHILE);
     ast::Expr* pExpr = expr(0);
@@ -179,7 +179,7 @@ ast::WhileStmt* HybridParser::while_stmt()
     return new ast::WhileStmt(pExpr, pStmts);
 }
 
-ast::FuncStmt* HybridParser::func_stmt()
+ast::FuncStmt* ASTParser::func_stmt()
 {
     consume(Token::Type::FUNCTION);
 
@@ -272,7 +272,7 @@ ast::FuncStmt* HybridParser::func_stmt()
     return pFuncStmt;
 }
 
-ast::ForStmt* HybridParser::for_stmt()
+ast::ForStmt* ASTParser::for_stmt()
 {
     consume(Token::Type::FOR);
     ast::Expr* pItem = expr(0);
@@ -283,7 +283,7 @@ ast::ForStmt* HybridParser::for_stmt()
     return new ast::ForStmt(pItem, pItems, pStmtList);
 }
 
-ast::JumpStmt* HybridParser::jump_stmt()
+ast::JumpStmt* ASTParser::jump_stmt()
 {
     Token* pCmd = m_pCurrToken;
     consume(m_pCurrToken->type());
@@ -292,7 +292,7 @@ ast::JumpStmt* HybridParser::jump_stmt()
     return new ast::JumpStmt(pCmd, pExpr);
 }
 
-ast::AssignStmt* HybridParser::assign_stmt()
+ast::AssignStmt* ASTParser::assign_stmt()
 {
     Token* pOp = nullptr;
     ast::Var* pVar = nullptr;
@@ -324,7 +324,7 @@ ast::AssignStmt* HybridParser::assign_stmt()
     return new ast::AssignStmt(pOp, pVar, pExpr);
 }
 
-ast::ExprCmd* HybridParser::expr_cmd()
+ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = m_pCurrToken;
     consume(m_pCurrToken->type());
@@ -332,7 +332,7 @@ ast::ExprCmd* HybridParser::expr_cmd()
     return new ast::ExprCmd(pCmd, pExpr);
 }
 
-ast::ListExpr* HybridParser::list_expr()
+ast::ListExpr* ASTParser::list_expr()
 {
     ast::ListExpr* pListExpr = new ast::ListExpr();
 
@@ -357,7 +357,7 @@ ast::ListExpr* HybridParser::list_expr()
     return pListExpr;
 }
 
-ast::Expr* HybridParser::slice_expr()
+ast::Expr* ASTParser::slice_expr()
 {
     ast::Expr* pStart = nullptr;
     ast::Expr* pStop = nullptr;
@@ -389,7 +389,7 @@ ast::Expr* HybridParser::slice_expr()
     return pRhs;
 }
 
-ast::Expr* HybridParser::expr(int anMinBindingPower)
+ast::Expr* ASTParser::expr(int anMinBindingPower)
 {
     ast::Expr* pLhs = nullptr;
     ast::Expr* pRhs = nullptr;
@@ -552,12 +552,12 @@ ast::Expr* HybridParser::expr(int anMinBindingPower)
     }
 }
 
-void HybridParser::next()
+void ASTParser::next()
 {
     m_pCurrToken = m_lTokens.at(m_nPos++);
 }
 
-void HybridParser::consume(const Token::Type aeType)
+void ASTParser::consume(const Token::Type aeType)
 {
     if (m_pCurrToken->type() != aeType)
     {
@@ -584,7 +584,7 @@ void HybridParser::consume(const Token::Type aeType)
     }
 }
 
-bool HybridParser::consume_optional(const Token::Type aeType)
+bool ASTParser::consume_optional(const Token::Type aeType)
 {
     if (m_pCurrToken->type() == aeType)
     {
@@ -595,13 +595,13 @@ bool HybridParser::consume_optional(const Token::Type aeType)
     return false;
 }
 
-void HybridParser::throw_unexpected_token()
+void ASTParser::throw_unexpected_token()
 {
     m_cSource.seek(m_pCurrToken->source_pos());
     throw std::runtime_error("Unexpected token.\n\n" + m_cSource.traceback());
 }
 
-void HybridParser::throw_vim_error(std::string asCode)
+void ASTParser::throw_vim_error(std::string asCode)
 {
     m_cSource.seek(m_pCurrToken->source_pos());
     throw VimError(asCode, m_cSource.traceback());

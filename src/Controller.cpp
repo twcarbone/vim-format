@@ -1,7 +1,7 @@
 #include <iostream>
 
+#include "ASTParser.h"
 #include "Controller.h"
-#include "HybridParser.h"
 #include "Lexer.h"
 
 Controller::Controller(Context acContext) :
@@ -36,7 +36,7 @@ void Controller::compile()
     // Parsing
     //
 
-    HybridParser lcParser(m_cContext, lcLexer.tokens());
+    ASTParser lcParser(m_cContext, lcLexer.tokens());
     lcParser.parse();
 
     if (m_cContext.settings().StopAfterParsing)

@@ -2,14 +2,14 @@
 
 #include <string>
 
-#include "HybridParser.h"
+#include "ASTParser.h"
 #include "Lexer.h"
 
-class HybridParserTest : public testing::Test
+class ASTParserTest : public testing::Test
 {
 protected:
     Lexer* m_pLexer = nullptr;
-    HybridParser* m_pParser = nullptr;
+    ASTParser* m_pParser = nullptr;
 
     void TearDown() override
     {
@@ -28,7 +28,7 @@ protected:
         m_pLexer = new Lexer(lcContext);
         m_pLexer->tokenize();
 
-        m_pParser = new HybridParser(lcContext, m_pLexer->tokens());
+        m_pParser = new ASTParser(lcContext, m_pLexer->tokens());
         m_pParser->parse();
 
         TearDown();
@@ -39,14 +39,14 @@ protected:
 // if_stmt
 //
 
-TEST_F(HybridParserTest, if_stmt_01)
+TEST_F(ASTParserTest, if_stmt_01)
 {
     parse_str("if 1\n"
               "  echo 1\n"
               "endif\n");
 }
 
-TEST_F(HybridParserTest, if_stmt_02)
+TEST_F(ASTParserTest, if_stmt_02)
 {
     parse_str("if 1\n"
               "  echo 1\n"
@@ -55,7 +55,7 @@ TEST_F(HybridParserTest, if_stmt_02)
               "endif\n");
 }
 
-TEST_F(HybridParserTest, if_stmt_03)
+TEST_F(ASTParserTest, if_stmt_03)
 {
     parse_str("if 1\n"
               "  echo 1\n"
@@ -64,7 +64,7 @@ TEST_F(HybridParserTest, if_stmt_03)
               "endif\n");
 }
 
-TEST_F(HybridParserTest, if_stmt_04)
+TEST_F(ASTParserTest, if_stmt_04)
 {
     parse_str("if 1\n"
               "  echo 1\n"
@@ -79,7 +79,7 @@ TEST_F(HybridParserTest, if_stmt_04)
 // while_stmt
 //
 
-TEST_F(HybridParserTest, while_stmt_01)
+TEST_F(ASTParserTest, while_stmt_01)
 {
     parse_str("while 1\n"
               "  echo 1\n"
@@ -90,42 +90,42 @@ TEST_F(HybridParserTest, while_stmt_01)
 // func_stmt
 //
 
-TEST_F(HybridParserTest, func_stmt_01)
+TEST_F(ASTParserTest, func_stmt_01)
 {
     parse_str("function! Foo() range abort dict closure\n"
               "    echo 1\n"
               "endfunction\n");
 }
 
-TEST_F(HybridParserTest, func_stmt_02)
+TEST_F(ASTParserTest, func_stmt_02)
 {
     parse_str("function! Foo(...)\n"
               "    echo 1\n"
               "endfunction\n");
 }
 
-TEST_F(HybridParserTest, func_stmt_03)
+TEST_F(ASTParserTest, func_stmt_03)
 {
     parse_str("function! Foo(apple)\n"
               "    echo 1\n"
               "endfunction\n");
 }
 
-TEST_F(HybridParserTest, func_stmt_04)
+TEST_F(ASTParserTest, func_stmt_04)
 {
     parse_str("function! Foo(apple,)\n"
               "    echo 1\n"
               "endfunction\n");
 }
 
-TEST_F(HybridParserTest, func_stmt_05)
+TEST_F(ASTParserTest, func_stmt_05)
 {
     parse_str("function! Foo(apple, ...)\n"
               "    echo 1\n"
               "endfunction\n");
 }
 
-TEST_F(HybridParserTest, func_stmt_06)
+TEST_F(ASTParserTest, func_stmt_06)
 {
     parse_str("function! Foo(apple, banana = 1)\n"
               "    echo 1\n"
@@ -136,7 +136,7 @@ TEST_F(HybridParserTest, func_stmt_06)
 // expr
 //
 
-TEST_F(HybridParserTest, expr_01)
+TEST_F(ASTParserTest, expr_01)
 {
     parse_str("echo foo ?? bar\n");
     parse_str("echo 1 ?? 2\n");
@@ -145,19 +145,19 @@ TEST_F(HybridParserTest, expr_01)
     parse_str("echo 1 ? 2 : 3\n");
 }
 
-TEST_F(HybridParserTest, expr_02)
+TEST_F(ASTParserTest, expr_02)
 {
     parse_str("echo 1 || 2\n");
     parse_str("echo foo || bar\n");
 }
 
-TEST_F(HybridParserTest, expr_03)
+TEST_F(ASTParserTest, expr_03)
 {
     parse_str("echo 1 && 2\n");
     parse_str("echo foo && bar\n");
 }
 
-TEST_F(HybridParserTest, expr_04)
+TEST_F(ASTParserTest, expr_04)
 {
     parse_str("echo 1 == 2\n");
     parse_str("echo 1 ==? 2\n");
@@ -171,13 +171,13 @@ TEST_F(HybridParserTest, expr_04)
     parse_str("echo foo isnot bar\n");
 }
 
-TEST_F(HybridParserTest, expr_05)
+TEST_F(ASTParserTest, expr_05)
 {
     parse_str("echo 1 << 1\n");
     parse_str("echo 2 >> 1\n");
 }
 
-TEST_F(HybridParserTest, expr_06)
+TEST_F(ASTParserTest, expr_06)
 {
     parse_str("echo 1 + 2\n");
     parse_str("echo 2 - 1\n");
@@ -185,26 +185,26 @@ TEST_F(HybridParserTest, expr_06)
     parse_str("echo sp . am\n");
 }
 
-TEST_F(HybridParserTest, expr_07)
+TEST_F(ASTParserTest, expr_07)
 {
     parse_str("echo 2 * 1\n");
     parse_str("echo 6 / 2\n");
     parse_str("echo 6 % 4\n");
 }
 
-TEST_F(HybridParserTest, expr_08)
+TEST_F(ASTParserTest, expr_08)
 {
     // TODO (gh-8)
 }
 
-TEST_F(HybridParserTest, expr_09)
+TEST_F(ASTParserTest, expr_09)
 {
     parse_str("echo !1\n");
     parse_str("echo -1\n");
     parse_str("echo +1\n");
 }
 
-TEST_F(HybridParserTest, expr_10)
+TEST_F(ASTParserTest, expr_10)
 {
     parse_str("echo foo[3]\n");
     parse_str("echo foo[1:3]\n");
@@ -214,7 +214,7 @@ TEST_F(HybridParserTest, expr_10)
     parse_str("echo foo.bar\n");
 }
 
-TEST_F(HybridParserTest, expr_11)
+TEST_F(ASTParserTest, expr_11)
 {
     parse_str("echo [1, 2]\n");
     parse_str("echo [foo, bar,]\n");

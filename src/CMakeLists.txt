@@ -1,13 +1,13 @@
 add_library(
     vimformat
     STATIC
+    ASTParser.cpp
     ASTVisitor.cpp
     Analyzer.cpp
     Context.cpp
     Controller.cpp
     Exceptions.cpp
     ExprDisplayVisitor.cpp
-    HybridParser.cpp
     Lexer.cpp
     Node.cpp
     NodeVisitor.cpp

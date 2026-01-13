@@ -4,7 +4,7 @@ enable_testing()
 
 add_executable(
     unittests
-    HybridParser_tests.cpp
+    ASTParser_tests.cpp
     Lexer_tests.cpp
     Parser_tests.cpp
     Source_tests.cpp

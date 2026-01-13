@@ -6,11 +6,11 @@
 #include "Token.h"
 #include "ast.h"
 
-class HybridParser
+class ASTParser
 {
 public:
-    HybridParser(const Context& context, std::vector<Token*> tokens);
-    ~HybridParser();
+    ASTParser(const Context& context, std::vector<Token*> tokens);
+    ~ASTParser();
 
     void parse();
     ast::Program* root() const;
