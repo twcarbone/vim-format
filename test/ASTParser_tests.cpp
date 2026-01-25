@@ -121,14 +121,14 @@ TEST_F(ASTParserTest, func_stmt_04)
 TEST_F(ASTParserTest, func_stmt_05)
 {
     parse_str("function! Foo(apple, ...)\n"
-              "    echo 1\n"
+              "    return 1\n"
               "endfunction\n");
 }
 
 TEST_F(ASTParserTest, func_stmt_06)
 {
     parse_str("function! Foo(apple, banana = 1)\n"
-              "    echo 1\n"
+              "    return\n"
               "endfunction\n");
 }
 

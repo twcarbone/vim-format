@@ -88,11 +88,11 @@ function! Foo() range abort dict closure
 endfunction
 
 function! Foo(...)
-    echo 1
+    return 1
 endfunction
 
 function! Foo(a)
-    echo 1
+    return
 endfunction
 
 function! Foo(a,)
