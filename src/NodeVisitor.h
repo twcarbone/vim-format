@@ -7,7 +7,6 @@ class Node;
 class NonTerminal;
 class Terminal;
 
-class AST;
 class BinOp;
 class UnaryOp;
 class CmdExpr;
@@ -42,17 +41,6 @@ public:
     void handle_node(const Node* node);
     virtual void visit(const NonTerminal* node);
     virtual void visit(const Terminal* node);
-
-    void handle_ast(const AST* ast_node);
-    virtual void visit(const Program* ast_node);
-    virtual void visit(const StmtList* ast_node);
-    virtual void visit(const CmdExpr* ast_node);
-    virtual void visit(const Literal* ast_node);
-    virtual void visit(const BinOp* ast_node);
-    virtual void visit(const UnaryOp* ast_node);
-    virtual void visit(const Var* ast_node);
-    virtual void visit(const Assign* ast_node);
-    virtual void visit(const ListExpr* ast_node);
 
 protected:
     virtual void print(const Node* node);

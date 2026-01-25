@@ -1,11 +1,11 @@
 #include "ExprDisplayVisitor.h"
 #include "ast.h"
 
-std::string ExprDisplayVisitor::display(ast::Node* apRoot)
+std::string ExprDisplayVisitor::display(ast::Expr* apExpr)
 {
     m_sDisplay.clear();
 
-    apRoot->accept(*this);
+    apExpr->accept(*this);
 
     // Remove leading whitespace
     return m_sDisplay.substr(1);
@@ -14,8 +14,8 @@ std::string ExprDisplayVisitor::display(ast::Node* apRoot)
 void ExprDisplayVisitor::visit(const ast::BinaryOp* apBinaryOp)
 {
     m_sDisplay += " (" + apBinaryOp->op()->str();
-    apBinaryOp->left()->accept(*this);
-    apBinaryOp->right()->accept(*this);
+    apBinaryOp->lexpr()->accept(*this);
+    apBinaryOp->rexpr()->accept(*this);
     m_sDisplay += ")";
 }
 
@@ -28,31 +28,40 @@ void ExprDisplayVisitor::visit(const ast::SliceExpr* apSliceExpr)
 {
     m_sDisplay += " (" + apSliceExpr->op()->str();
 
-    if (apSliceExpr->left() == nullptr)
+    if (apSliceExpr->lexpr() == nullptr)
     {
         m_sDisplay += " <begin>";
     }
     else
     {
-        apSliceExpr->left()->accept(*this);
+        apSliceExpr->lexpr()->accept(*this);
     }
 
-    if (apSliceExpr->right() == nullptr)
+    if (apSliceExpr->rexpr() == nullptr)
     {
         m_sDisplay += " <end>";
     }
     else
     {
-        apSliceExpr->right()->accept(*this);
+        apSliceExpr->rexpr()->accept(*this);
     }
 
+    m_sDisplay += ")";
+}
+
+void ExprDisplayVisitor::visit(const ast::TernaryOp* apTernaryOp)
+{
+    m_sDisplay += " (" + apTernaryOp->lop()->str() + apTernaryOp->rop()->str();
+    apTernaryOp->lexpr()->accept(*this);
+    apTernaryOp->mexpr()->accept(*this);
+    apTernaryOp->rexpr()->accept(*this);
     m_sDisplay += ")";
 }
 
 void ExprDisplayVisitor::visit(const ast::UnaryOp* apUnaryOp)
 {
     m_sDisplay += " (" + apUnaryOp->op()->str();
-    apUnaryOp->right()->accept(*this);
+    apUnaryOp->rexpr()->accept(*this);
     m_sDisplay += ")";
 }
 

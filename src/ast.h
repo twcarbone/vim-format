@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "ASTVisitor.h"
 #include "Token.h"
@@ -15,40 +16,239 @@ namespace ast
 class Node
 {
 public:
-    virtual ~Node() = default;
+    virtual ~Node();
+
+    const std::vector<Node*>& children() const;
 
     virtual std::string toString() const = 0;
     virtual void accept(ASTVisitor& visitor) const = 0;
+
+protected:
+    std::vector<Node*> m_lChildren;
+};
+
+//
+// Stmt
+//
+
+class Stmt : public Node
+{
+public:
+    virtual ~Stmt() = default;
+};
+
+//
+// Expr
+//
+
+class Expr : public Node
+{
+public:
+    virtual ~Expr() = default;
+};
+
+//
+// ExprCmd
+//
+
+class ExprCmd : public Stmt
+{
+public:
+    ExprCmd(Token* cmd, Expr* expr);
+    virtual ~ExprCmd();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pCmd;
+};
+
+//
+// StmtList
+//
+
+class StmtList : public Node
+{
+public:
+    StmtList() = default;
+    virtual ~StmtList();
+
+    void push(Stmt* stmt);
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// Program
+//
+
+class Program : public Node
+{
+public:
+    Program(ast::StmtList* stmts);
+    virtual ~Program();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// IfStmt
+//
+
+class IfStmt : public Stmt
+{
+public:
+    IfStmt(Expr* condition, StmtList* then_stmts, StmtList* else_smts);
+    virtual ~IfStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// WhileStmt
+//
+
+class WhileStmt : public Stmt
+{
+public:
+    WhileStmt(Expr* condition, StmtList* stmts);
+    virtual ~WhileStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// ForStmt
+//
+
+class ForStmt : public Stmt
+{
+public:
+    ForStmt(Expr* item, Expr* items, StmtList* stmts);
+    virtual ~ForStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// JumpStmt
+//
+
+class JumpStmt : public Stmt
+{
+public:
+    JumpStmt(Token* token, Expr* expr);
+    virtual ~JumpStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pToken;
+};
+
+//
+// FuncArg
+//
+
+class FuncArg : public Expr
+{
+public:
+    FuncArg(Var* name, Expr* default_value);
+    virtual ~FuncArg();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// FuncStmt
+//
+
+class FuncStmt : public Stmt
+{
+public:
+    FuncStmt(Token* name,
+             Token* bang,
+             const std::vector<FuncArg*>& args,
+             const std::vector<Token*>& modifiers,
+             StmtList* body);
+    virtual ~FuncStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pName;
+    Token* m_pBang;
+    std::vector<Token*> m_lModifiers;
 };
 
 //
 // BinaryOp
 //
 
-class BinaryOp : public Node
+class BinaryOp : public Expr
 {
 public:
-    BinaryOp(Token* op, Node* left, Node* right);
+    BinaryOp(Token* op, Expr* left, Expr* right);
     virtual ~BinaryOp();
 
     const Token* op() const;
-    const Node* left() const;
-    const Node* right() const;
+    const Expr* lexpr() const;
+    const Expr* rexpr() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+protected:
+    Token* m_pOp;
+};
+
+//
+// CasedBinaryOp
+//
+
+class CasedBinaryOp : public BinaryOp
+{
+public:
+    CasedBinaryOp(Token* op, Expr* left, Expr* right, Token* case_sensitivity);
+    virtual ~CasedBinaryOp();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
-    Token* m_pOp;
-    Node* m_pLeft;
-    Node* m_pRight;
+    Token* m_pCaseSensitivity;
+};
+
+//
+// ListExpr
+//
+
+class ListExpr : public Expr
+{
+public:
+    ListExpr() = default;
+    virtual ~ListExpr();
+
+    void push(Expr* expr);
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
 };
 
 //
 // Literal
 //
 
-class Literal : public Node
+class Literal : public Expr
 {
 public:
     Literal(Token* token);
@@ -67,51 +267,72 @@ private:
 // SliceExpr
 //
 
-class SliceExpr : public Node
+class SliceExpr : public Expr
 {
 public:
-    SliceExpr(Token* op, Node* left, Node* right);
+    SliceExpr(Token* op, Expr* left, Expr* right);
     virtual ~SliceExpr();
 
     const Token* op() const;
-    const Node* left() const;
-    const Node* right() const;
+    const Expr* lexpr() const;
+    const Expr* rexpr() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     Token* m_pOp;
-    Node* m_pLeft;
-    Node* m_pRight;
+};
+
+//
+// TernaryOp
+//
+
+class TernaryOp : public Expr
+{
+public:
+    TernaryOp(Token* left_op, Token* right_op, Expr* left, Expr* middle, Expr* right);
+    virtual ~TernaryOp();
+
+    const Token* lop() const;
+    const Token* rop() const;
+    const Expr* lexpr() const;
+    const Expr* mexpr() const;
+    const Expr* rexpr() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pLeftOp;
+    Token* m_pRightOp;
 };
 
 //
 // UnaryOp
 //
 
-class UnaryOp : public Node
+class UnaryOp : public Expr
 {
 public:
-    UnaryOp(Token* op, Node* right);
+    UnaryOp(Token* op, Expr* right);
     virtual ~UnaryOp();
 
     const Token* op() const;
-    const Node* right() const;
+    const Expr* rexpr() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     Token* m_pOp;
-    Node* m_pRight;
 };
 
 //
 // Var
 //
 
-class Var : public Node
+class Var : public Expr
 {
 public:
     Var(Token* token);
@@ -124,6 +345,23 @@ public:
 
 private:
     Token* m_pToken;
+};
+
+//
+// AssignStmt
+//
+
+class AssignStmt : public Stmt
+{
+public:
+    AssignStmt(Token* op, Var* var, Expr* expr);
+    virtual ~AssignStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pOp;
 };
 
 };
