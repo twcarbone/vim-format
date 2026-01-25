@@ -74,6 +74,7 @@
         X(ENDFOR) \
         X(BREAK) \
         X(CONTINUE) \
+        X(RETURN) \
         X(FUNCTION) \
         X(ENDFUNCTION) \
         X(FN_RANGE) \

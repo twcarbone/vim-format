@@ -113,6 +113,7 @@ ast::Stmt* ASTParser::stmt()
             break;
         case Token::Type::BREAK:
         case Token::Type::CONTINUE:
+        case Token::Type::RETURN:
             // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
             pStmt = jump_stmt();
             break;
@@ -287,8 +288,14 @@ ast::JumpStmt* ASTParser::jump_stmt()
 {
     Token* pCmd = m_pCurrToken;
     consume(m_pCurrToken->type());
-    // TODO (gh-28): Add support for 'return {expr}' parsing
+
     ast::Expr* pExpr = nullptr;
+
+    if (pCmd->type() == Token::Type::RETURN && m_pCurrToken->type() != Token::Type::NEWLINE)
+    {
+        pExpr = expr(0);
+    }
+
     return new ast::JumpStmt(pCmd, pExpr);
 }
 

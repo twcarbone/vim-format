@@ -73,6 +73,7 @@ IN                  in
 ENDFOR              endfor
 BREAK               break
 CONTINUE            continue
+RETURN              return
 FUNCTION            function                        (v9.1.0698) src/userfunc.c:4755
 ENDFUNCTION         endfunction                     ``
 
