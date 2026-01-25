@@ -101,6 +101,9 @@ ast::StmtList* ASTParser::stmt_list()
 
 ast::Stmt* ASTParser::stmt()
 {
+    // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
+    // TODO (gh-31): RETURN only allowed in function
+
     ast::Stmt* pStmt;
 
     switch (m_pCurrToken->type())
@@ -114,7 +117,6 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::BREAK:
         case Token::Type::CONTINUE:
         case Token::Type::RETURN:
-            // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
             pStmt = jump_stmt();
             break;
         case Token::Type::FUNCTION:
