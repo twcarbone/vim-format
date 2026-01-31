@@ -50,6 +50,7 @@
         X(OP_LOGICAL_NOT) \
         X(OP_BANG) \
         X(OP_OPTION) \
+        X(OP_METHOD) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \
         X(ASSIGN_MUL) \
@@ -62,6 +63,8 @@
         X(R_PAREN) \
         X(L_BRACKET) \
         X(R_BRACKET) \
+        X(L_BRACE) \
+        X(R_BRACE) \
         X(COMMA) \
         X(IF) \
         X(ELSEIF) \
