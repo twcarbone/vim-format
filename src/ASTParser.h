@@ -34,6 +34,7 @@ private:
     ast::FuncStmt* func_stmt();
     ast::JumpStmt* jump_stmt();
     ast::ListExpr* list_expr();
+    ast::FnArgList* fn_arg_list();
     ast::WhileStmt* while_stmt();
     ast::AssignStmt* assign_stmt();
 

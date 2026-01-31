@@ -28,6 +28,11 @@ void ASTVisitor::visit(const ast::ExprCmd* apExprCmd)
     handle_node(apExprCmd);
 }
 
+void ASTVisitor::visit(const ast::FnArgList* apFnArgList)
+{
+    handle_node(apFnArgList);
+}
+
 void ASTVisitor::visit(const ast::ForStmt* apForStmt)
 {
     handle_node(apForStmt);

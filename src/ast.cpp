@@ -22,6 +22,15 @@ const std::vector<Node*>& Node::children() const
 }
 
 //
+// ExprList
+//
+
+void ExprList::push(Expr* apExpr)
+{
+    m_lChildren.push_back(apExpr);
+}
+
+//
 // StmtList
 //
 
@@ -190,6 +199,24 @@ void JumpStmt::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// FnArgList
+//
+
+FnArgList::~FnArgList()
+{
+}
+
+std::string FnArgList::toString() const
+{
+    return "FnArgList";
+}
+
+void FnArgList::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // FuncArg
 //
 
@@ -219,18 +246,14 @@ void FuncArg::accept(ASTVisitor& acASTVisitor) const
 
 FuncStmt::FuncStmt(Token* apName,
                    Token* apBang,
-                   const std::vector<FuncArg*>& alArgs,
+                   FnArgList* apFnArgList,
                    const std::vector<Token*>& alModifiers,
                    StmtList* apBody) :
     m_pName { apName },
     m_pBang { apBang },
     m_lModifiers { alModifiers }
 {
-    for (ast::FuncArg* pFuncArg : alArgs)
-    {
-        m_lChildren.push_back(pFuncArg);
-    }
-
+    m_lChildren.push_back(apFnArgList);
     m_lChildren.push_back(apBody);
 }
 

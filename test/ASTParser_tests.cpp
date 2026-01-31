@@ -3,6 +3,7 @@
 #include <string>
 
 #include "ASTParser.h"
+#include "Exceptions.h"
 #include "Lexer.h"
 
 class ASTParserTest : public testing::Test
@@ -130,6 +131,22 @@ TEST_F(ASTParserTest, func_stmt_06)
     parse_str("function! Foo(apple, banana = 1)\n"
               "    return\n"
               "endfunction\n");
+}
+
+//
+// bad_func_stmt
+//
+
+TEST_F(ASTParserTest, bad_func_stmt_01)
+{
+    EXPECT_THROW(parse_str("function Bar(a,,)\nendfunction\n"), VimError);
+    EXPECT_THROW(parse_str("function Bar(,a)\nendfunction\n"), VimError);
+    EXPECT_THROW(parse_str("function Bar(,)\nendfunction\n"), VimError);
+    EXPECT_THROW(parse_str("function Bar(...,)\nendfunction\n"), VimError);
+    EXPECT_THROW(parse_str("function Bar(..., b)\nendfunction\n"), VimError);
+    EXPECT_THROW(parse_str("function Bar(a b)\nendfunction\n"), VimError);
+    EXPECT_THROW(parse_str("function Bar(a ...)\nendfunction\n"), VimError);
+    EXPECT_THROW(parse_str("function Bar(a = 1, b)\nendfunction\n"), VimError);
 }
 
 //

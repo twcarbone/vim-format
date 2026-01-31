@@ -182,6 +182,74 @@ ast::WhileStmt* ASTParser::while_stmt()
     return new ast::WhileStmt(pExpr, pStmts);
 }
 
+ast::FnArgList* ASTParser::fn_arg_list()
+{
+    ast::FnArgList* pFnArgList = new ast::FnArgList();
+
+    bool bGotDefaultParam = false;
+    bool bDoneParsing = false;
+
+    while (true)
+    {
+        ast::Var* pVar = nullptr;
+        ast::Expr* pDefaultExpr = nullptr;
+        ast::FuncArg* pFnArg = nullptr;
+
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::IDENTIFIER:
+                pVar = new ast::Var(m_pCurrToken);
+                consume(Token::Type::IDENTIFIER);
+
+                if (consume_optional(Token::Type::ASSIGN_EQ))
+                {
+                    bGotDefaultParam = true;
+                    pDefaultExpr = expr(0);
+                }
+                else if (bGotDefaultParam)
+                {
+                    // A non-default argument follows a default argument.
+                    throw_vim_error("E989");
+                }
+
+                if (!consume_optional(Token::Type::COMMA))
+                {
+                    bDoneParsing = true;
+                }
+
+                break;
+            case Token::Type::FN_ELLIPSES:
+                pVar = new ast::Var(m_pCurrToken);
+                consume(Token::Type::FN_ELLIPSES);
+                bDoneParsing = true;
+                break;
+            case Token::Type::COMMA:
+                // The first token is a comma, or we got two commas after a param.
+                throw_vim_error("E125");
+                break;
+            default:
+                bDoneParsing = true;
+        }
+
+        pFnArg = new ast::FuncArg(pVar, pDefaultExpr);
+        pFnArgList->push(pFnArg);
+
+        if (bDoneParsing)
+        {
+            switch (m_pCurrToken->type())
+            {
+                case Token::Type::R_PAREN:
+                case Token::Type::OP_METHOD:
+                    return pFnArgList;
+                    break;
+                default:
+                    // We should be at the end, but aren't.
+                    throw_vim_error("E475");
+            }
+        }
+    }
+}
+
 ast::FuncStmt* ASTParser::func_stmt()
 {
     consume(Token::Type::FUNCTION);
@@ -201,48 +269,7 @@ ast::FuncStmt* ASTParser::func_stmt()
     consume(Token::Type::L_PAREN);
 
     // Arguments
-    std::vector<ast::FuncArg*> lArgs;
-    bool bGotDefaultArg = false;
-    while (m_pCurrToken->type() != Token::Type::R_PAREN)
-    {
-        ast::Var* pVar = nullptr;
-        ast::Expr* pDefaultExpr = nullptr;
-
-        switch (m_pCurrToken->type())
-        {
-            case Token::Type::FN_ELLIPSES:
-                pVar = new ast::Var(m_pCurrToken);
-                consume(Token::Type::FN_ELLIPSES);
-
-                if (m_pCurrToken->type() != Token::Type::R_PAREN)
-                {
-                    throw_vim_error("E475");
-                }
-
-                break;
-            case Token::Type::IDENTIFIER:
-                pVar = new ast::Var(m_pCurrToken);
-                consume(Token::Type::IDENTIFIER);
-
-                if (consume_optional(Token::Type::ASSIGN_EQ))
-                {
-                    bGotDefaultArg = true;
-                    pDefaultExpr = expr(0);
-                }
-                else if (bGotDefaultArg)
-                {
-                    throw_vim_error("E989");
-                }
-
-                consume_optional(Token::Type::COMMA);
-                break;
-            default:
-                throw_vim_error("E125");
-        }
-
-        ast::FuncArg* pFuncArg = new ast::FuncArg(pVar, pDefaultExpr);
-        lArgs.push_back(pFuncArg);
-    }
+    ast::FnArgList* pFnArgList = fn_arg_list();
 
     consume(Token::Type::R_PAREN);
 
@@ -269,7 +296,7 @@ ast::FuncStmt* ASTParser::func_stmt()
     // Body
     ast::StmtList* pBody = stmt_list();
 
-    ast::FuncStmt* pFuncStmt = new ast::FuncStmt(pName, pBang, lArgs, lModifiers, pBody);
+    ast::FuncStmt* pFuncStmt = new ast::FuncStmt(pName, pBang, pFnArgList, lModifiers, pBody);
 
     consume(Token::Type::ENDFUNCTION);
     return pFuncStmt;

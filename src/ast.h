@@ -48,6 +48,18 @@ public:
 };
 
 //
+// ExprList
+//
+
+class ExprList : public Node
+{
+public:
+    virtual ~ExprList() = default;
+
+    void push(Expr* expr);
+};
+
+//
 // ExprCmd
 //
 
@@ -154,6 +166,20 @@ private:
 };
 
 //
+// FnArgList
+//
+
+class FnArgList : public ExprList
+{
+public:
+    FnArgList() = default;
+    virtual ~FnArgList();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // FuncArg
 //
 
@@ -175,11 +201,7 @@ public:
 class FuncStmt : public Stmt
 {
 public:
-    FuncStmt(Token* name,
-             Token* bang,
-             const std::vector<FuncArg*>& args,
-             const std::vector<Token*>& modifiers,
-             StmtList* body);
+    FuncStmt(Token* name, Token* bang, FnArgList* args, const std::vector<Token*>& modifiers, StmtList* body);
     virtual ~FuncStmt();
 
     virtual std::string toString() const;
