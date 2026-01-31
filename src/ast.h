@@ -166,43 +166,46 @@ private:
 };
 
 //
-// FnArgList
+// FnParamList
 //
 
-class FnArgList : public ExprList
+class FnParamList : public ExprList
 {
 public:
-    FnArgList() = default;
-    virtual ~FnArgList();
+    FnParamList() = default;
+    virtual ~FnParamList();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
 
 //
-// FuncArg
+// FnParam
 //
 
-// TODO (gh-34): Rename FuncArg to FuncParam
-class FuncArg : public Expr
+class FnParam : public Expr
 {
 public:
-    FuncArg(Var* name, Expr* default_value);
-    virtual ~FuncArg();
+    FnParam(Var* name, Expr* default_value);
+    virtual ~FnParam();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
 
 //
-// FuncStmt
+// FnStmt
 //
 
-class FuncStmt : public Stmt
+class FnStmt : public Stmt
 {
 public:
-    FuncStmt(Token* name, Token* bang, FnArgList* args, const std::vector<Token*>& modifiers, StmtList* body);
-    virtual ~FuncStmt();
+    FnStmt(Token* name,
+           Token* bang,
+           FnParamList* params,
+           const std::vector<Token*>& modifiers,
+           StmtList* body);
+    virtual ~FnStmt();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;

@@ -120,7 +120,7 @@ ast::Stmt* ASTParser::stmt()
             pStmt = jump_stmt();
             break;
         case Token::Type::FUNCTION:
-            pStmt = func_stmt();
+            pStmt = fn_stmt();
             break;
         case Token::Type::FOR:
             pStmt = for_stmt();
@@ -182,9 +182,9 @@ ast::WhileStmt* ASTParser::while_stmt()
     return new ast::WhileStmt(pExpr, pStmts);
 }
 
-ast::FnArgList* ASTParser::fn_arg_list()
+ast::FnParamList* ASTParser::fn_param_list()
 {
-    ast::FnArgList* pFnArgList = new ast::FnArgList();
+    ast::FnParamList* pFnParamList = new ast::FnParamList();
 
     bool bGotDefaultParam = false;
     bool bDoneParsing = false;
@@ -193,7 +193,7 @@ ast::FnArgList* ASTParser::fn_arg_list()
     {
         ast::Var* pVar = nullptr;
         ast::Expr* pDefaultExpr = nullptr;
-        ast::FuncArg* pFnArg = nullptr;
+        ast::FnParam* pFnParam = nullptr;
 
         switch (m_pCurrToken->type())
         {
@@ -208,7 +208,7 @@ ast::FnArgList* ASTParser::fn_arg_list()
                 }
                 else if (bGotDefaultParam)
                 {
-                    // A non-default argument follows a default argument.
+                    // A non-default param follows a default param.
                     throw_vim_error("E989");
                 }
 
@@ -231,8 +231,8 @@ ast::FnArgList* ASTParser::fn_arg_list()
                 bDoneParsing = true;
         }
 
-        pFnArg = new ast::FuncArg(pVar, pDefaultExpr);
-        pFnArgList->push(pFnArg);
+        pFnParam = new ast::FnParam(pVar, pDefaultExpr);
+        pFnParamList->push(pFnParam);
 
         if (bDoneParsing)
         {
@@ -240,7 +240,7 @@ ast::FnArgList* ASTParser::fn_arg_list()
             {
                 case Token::Type::R_PAREN:
                 case Token::Type::OP_METHOD:
-                    return pFnArgList;
+                    return pFnParamList;
                     break;
                 default:
                     // We should be at the end, but aren't.
@@ -250,7 +250,7 @@ ast::FnArgList* ASTParser::fn_arg_list()
     }
 }
 
-ast::FuncStmt* ASTParser::func_stmt()
+ast::FnStmt* ASTParser::fn_stmt()
 {
     consume(Token::Type::FUNCTION);
 
@@ -268,8 +268,8 @@ ast::FuncStmt* ASTParser::func_stmt()
 
     consume(Token::Type::L_PAREN);
 
-    // Arguments
-    ast::FnArgList* pFnArgList = fn_arg_list();
+    // Params
+    ast::FnParamList* pFnParamList = fn_param_list();
 
     consume(Token::Type::R_PAREN);
 
@@ -296,10 +296,10 @@ ast::FuncStmt* ASTParser::func_stmt()
     // Body
     ast::StmtList* pBody = stmt_list();
 
-    ast::FuncStmt* pFuncStmt = new ast::FuncStmt(pName, pBang, pFnArgList, lModifiers, pBody);
+    ast::FnStmt* pFnStmt = new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
 
     consume(Token::Type::ENDFUNCTION);
-    return pFuncStmt;
+    return pFnStmt;
 }
 
 ast::ForStmt* ASTParser::for_stmt()

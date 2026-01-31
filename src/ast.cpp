@@ -199,71 +199,71 @@ void JumpStmt::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
-// FnArgList
+// FnParamList
 //
 
-FnArgList::~FnArgList()
+FnParamList::~FnParamList()
 {
 }
 
-std::string FnArgList::toString() const
+std::string FnParamList::toString() const
 {
-    return "FnArgList";
+    return "FnParamList";
 }
 
-void FnArgList::accept(ASTVisitor& acASTVisitor) const
+void FnParamList::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
 
 //
-// FuncArg
+// FnParam
 //
 
-FuncArg::FuncArg(Var* apName, Expr* apDefaultExpr)
+FnParam::FnParam(Var* apName, Expr* apDefaultExpr)
 {
     m_lChildren.push_back(apName);
     m_lChildren.push_back(apDefaultExpr);
 }
 
-FuncArg::~FuncArg()
+FnParam::~FnParam()
 {
 }
 
-std::string FuncArg::toString() const
+std::string FnParam::toString() const
 {
-    return "FuncArg";
+    return "FnParam";
 }
 
-void FuncArg::accept(ASTVisitor& acASTVisitor) const
+void FnParam::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
 
 //
-// FuncStmt
+// FnStmt
 //
 
-FuncStmt::FuncStmt(Token* apName,
-                   Token* apBang,
-                   FnArgList* apFnArgList,
-                   const std::vector<Token*>& alModifiers,
-                   StmtList* apBody) :
+FnStmt::FnStmt(Token* apName,
+               Token* apBang,
+               FnParamList* apFnParamList,
+               const std::vector<Token*>& alModifiers,
+               StmtList* apBody) :
     m_pName { apName },
     m_pBang { apBang },
     m_lModifiers { alModifiers }
 {
-    m_lChildren.push_back(apFnArgList);
+    m_lChildren.push_back(apFnParamList);
     m_lChildren.push_back(apBody);
 }
 
-FuncStmt::~FuncStmt()
+FnStmt::~FnStmt()
 {
 }
 
-std::string FuncStmt::toString() const
+std::string FnStmt::toString() const
 {
-    std::string lsStr = "FuncStmt " + m_pName->str();
+    std::string lsStr = "FnStmt " + m_pName->str();
 
     if (m_pBang != nullptr)
     {
@@ -278,7 +278,7 @@ std::string FuncStmt::toString() const
     return lsStr;
 }
 
-void FuncStmt::accept(ASTVisitor& acASTVisitor) const
+void FnStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
