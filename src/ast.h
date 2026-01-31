@@ -157,6 +157,7 @@ private:
 // FuncArg
 //
 
+// TODO (gh-34): Rename FuncArg to FuncParam
 class FuncArg : public Expr
 {
 public:
