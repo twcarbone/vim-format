@@ -203,12 +203,30 @@ expr9
         : expr10
         | (OP_LOGICAL_NOT | OP_UNARY_MINUS | OP_UNARY_PLUS) expr9
 
-expr10:
+expr10
         : expr11
-        | expr10 L_BRACKET expr1 R_BRACKET                                  *subscript*
-        | expr10 L_BRACKET slice_expr R_BRACKET                             *substring*
-        | expr10 OP_DOT IDENTIFIER                                          *expr-entry*
-        | TODO (gh-9)
+        | slice_expr
+        | entry_expr
+
+slice_expr
+        : expr10 L_BRACKET expr1 R_BRACKET
+        | expr10 L_BRACKET expr1? OP_SLICE expr1? R_BRACKET
+
+            a[5]
+            a[:]
+            a[:3]
+            a[2:]
+            a[2:4]
+
+        See `subscript`, `substring`.
+
+entry_expr
+        : expr10 OP_DOT IDENTIFIER
+
+            dict.one
+            dict.2
+
+        See `expr-entry`
 
 expr11
         : INTEGER
