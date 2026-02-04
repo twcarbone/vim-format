@@ -18,6 +18,11 @@ void ASTVisitor::visit(const ast::BinaryOp* apBinaryOp)
     handle_node(apBinaryOp);
 }
 
+void ASTVisitor::visit(const ast::CallExpr* apCallExpr)
+{
+    handle_node(apCallExpr);
+}
+
 void ASTVisitor::visit(const ast::CasedBinaryOp* apCasedBinaryOp)
 {
     handle_node(apCasedBinaryOp);
@@ -26,6 +31,11 @@ void ASTVisitor::visit(const ast::CasedBinaryOp* apCasedBinaryOp)
 void ASTVisitor::visit(const ast::ExprCmd* apExprCmd)
 {
     handle_node(apExprCmd);
+}
+
+void ASTVisitor::visit(const ast::FnArgList* apFnArgList)
+{
+    handle_node(apFnArgList);
 }
 
 void ASTVisitor::visit(const ast::FnParamList* apFnParamList)

@@ -35,6 +35,7 @@ endfunction
 "   | lambda_expr ...
 
 " echo Add(1,2,,)          " E116: Invalid arguments for function Add(1, 2,,)
+" echo Add(1 2)            " E116: Invalid arguments for function Add(1 2)
 " echo Add(1,2,3)          " E118: Too many arguments for function: Add
 " echo Add(1)              " E119: Not enough arguments for function: Add
 echo Add(1,2)
@@ -49,8 +50,9 @@ echo FnPartial(1)
 let myDict = {'a': function("Add", [5, 6])}
 echo myDict.a()
 
-let myList = [function("Add", [7, 8])]
+let myList = [function("Add", [7, 8]), function("Add", [9, 10])]
 echo myList[0]()
+" echo myList[:]()
 
 echo Call(Fn)(11, 12)
 echo Call(Call(Fn))(13, 14)
@@ -79,4 +81,4 @@ echo 3.14->{x, -> 102}()
 echo 3.14->{x, ... -> 103}()
 echo 3.14->{... -> 104}()
 echo 3.14->{-> 105}()
-echo {-> 105}()
+echo {-> 106}()

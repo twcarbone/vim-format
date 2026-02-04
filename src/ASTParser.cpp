@@ -42,6 +42,8 @@ ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
         { Token::Type::OP_LOGICAL_NOT, { 80, 81 } },
         { Token::Type::OP_UNARY_MINUS, { 80, 81 } },
         { Token::Type::OP_UNARY_PLUS, { 80, 81 } },
+        // 85
+        { Token::Type::L_PAREN, { 85, 0 } },
         // 90
         { Token::Type::L_BRACKET, { 90, 0 } },
         { Token::Type::OP_SLICE, { 90, 91 } },
@@ -393,6 +395,40 @@ ast::ListExpr* ASTParser::list_expr()
     return pListExpr;
 }
 
+ast::FnArgList* ASTParser::fn_arg_list()
+{
+    ast::FnArgList* pFnArgList = new ast::FnArgList();
+
+    bool bLoop = true;
+
+    while (bLoop)
+    {
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::COMMA:
+                throw_vim_error("E116");
+                break;
+            case Token::Type::R_PAREN:
+                bLoop = false;
+                break;
+            default:
+                try
+                {
+                    pFnArgList->push(expr(0));
+                }
+                catch (const std::runtime_error& err)
+                {
+                    throw_vim_error("E116");
+                }
+
+                consume_optional(Token::Type::COMMA);
+        }
+    }
+
+    consume(Token::Type::R_PAREN);
+    return pFnArgList;
+}
+
 ast::Expr* ASTParser::slice_expr()
 {
     ast::Expr* pStart = nullptr;
@@ -520,6 +556,8 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::OP_UNARY_PLUS:
             // expr10
             case Token::Type::L_BRACKET:
+            // expr11
+            case Token::Type::L_PAREN:
                 pOp = m_pCurrToken;
                 break;
             default:
@@ -539,6 +577,9 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
 
         switch (pOp->type())
         {
+            case Token::Type::L_PAREN:
+                pLhs = new ast::CallExpr(pLhs, fn_arg_list());
+                break;
             case Token::Type::L_BRACKET:
                 pRhs = slice_expr();
                 pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);

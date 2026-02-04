@@ -106,3 +106,6 @@ endfunction
 function! Foo(a, b = 1)
     echo 1
 endfunction
+
+echo Foo(Bar() + 1, baz[4]) / 2
+echo fns[4]([2, 3])

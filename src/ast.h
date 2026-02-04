@@ -180,6 +180,20 @@ public:
 };
 
 //
+// FnArgList
+//
+
+class FnArgList : public ExprList
+{
+public:
+    FnArgList() = default;
+    virtual ~FnArgList();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // FnParam
 //
 
@@ -271,6 +285,20 @@ public:
 };
 
 //
+// CallExpr
+//
+
+class CallExpr : public Expr
+{
+public:
+    CallExpr(Expr* callable, FnArgList* args);
+    virtual ~CallExpr();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // Literal
 //
 
@@ -293,6 +321,14 @@ private:
 // SliceExpr
 //
 
+// WIP: SliceExpr requires some rethinking...
+//
+//      Fundamentally, this is not something that can be evaluated to produce a result.
+//      The expression '1:3' or ':-4' means nothing. In contrast to a BinaryOp that can,
+//      such as 'foo + 1'.
+//
+//      >> Create a new IndexExpr to handle both simple indexing and range indexing.
+//
 class SliceExpr : public Expr
 {
 public:

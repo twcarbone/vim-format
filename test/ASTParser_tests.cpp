@@ -150,6 +150,30 @@ TEST_F(ASTParserTest, bad_func_stmt_01)
 }
 
 //
+// call_expr
+//
+
+TEST_F(ASTParserTest, call_expr_01)
+{
+    parse_str("echo Add()\n");
+    parse_str("echo Add(1)\n");
+    parse_str("echo Add(1,)\n");
+    parse_str("echo Add(1, 2)\n");
+}
+
+//
+// bad_call_expr
+//
+
+TEST_F(ASTParserTest, bad_call_expr_01)
+{
+    EXPECT_THROW(parse_str("echo Add(1,,)"), VimError);
+    EXPECT_THROW(parse_str("echo Add(,1)"), VimError);
+    EXPECT_THROW(parse_str("echo Add(,)"), VimError);
+    EXPECT_THROW(parse_str("echo Add(1 2)"), VimError);
+}
+
+//
 // expr
 //
 

@@ -217,6 +217,24 @@ void FnParamList::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// FnArgList
+//
+
+FnArgList::~FnArgList()
+{
+}
+
+std::string FnArgList::toString() const
+{
+    return "FnArgList";
+}
+
+void FnArgList::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // FnParam
 //
 
@@ -373,6 +391,30 @@ std::string ListExpr::toString() const
 }
 
 void ListExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
+// CallExpr
+//
+
+CallExpr::CallExpr(ast::Expr* apCallable, FnArgList* apFnArgList)
+{
+    m_lChildren.push_back(apCallable);
+    m_lChildren.push_back(apFnArgList);
+}
+
+CallExpr::~CallExpr()
+{
+}
+
+std::string CallExpr::toString() const
+{
+    return "CallExpr";
+}
+
+void CallExpr::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
