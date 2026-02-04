@@ -38,24 +38,24 @@ void ASTVisitor::visit(const ast::FnArgList* apFnArgList)
     handle_node(apFnArgList);
 }
 
-void ASTVisitor::visit(const ast::FnParamList* apFnParamList)
-{
-    handle_node(apFnParamList);
-}
-
-void ASTVisitor::visit(const ast::ForStmt* apForStmt)
-{
-    handle_node(apForStmt);
-}
-
 void ASTVisitor::visit(const ast::FnParam* apFnParam)
 {
     handle_node(apFnParam);
 }
 
+void ASTVisitor::visit(const ast::FnParamList* apFnParamList)
+{
+    handle_node(apFnParamList);
+}
+
 void ASTVisitor::visit(const ast::FnStmt* apFnStmt)
 {
     handle_node(apFnStmt);
+}
+
+void ASTVisitor::visit(const ast::ForStmt* apForStmt)
+{
+    handle_node(apForStmt);
 }
 
 void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
@@ -83,14 +83,14 @@ void ASTVisitor::visit(const ast::Program* apProgram)
     handle_node(apProgram);
 }
 
-void ASTVisitor::visit(const ast::StmtList* apStmtList)
-{
-    handle_node(apStmtList);
-}
-
 void ASTVisitor::visit(const ast::SliceExpr* apSliceExpr)
 {
     handle_node(apSliceExpr);
+}
+
+void ASTVisitor::visit(const ast::StmtList* apStmtList)
+{
+    handle_node(apStmtList);
 }
 
 void ASTVisitor::visit(const ast::TernaryOp* apTernaryOp)
