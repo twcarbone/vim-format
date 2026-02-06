@@ -285,7 +285,7 @@ std::string FnStmt::toString() const
 
     if (m_pBang != nullptr)
     {
-        lsStr += m_pBang->str();
+        lsStr += " " + m_pBang->str();
     }
 
     for (Token* pModifier : m_lModifiers)
