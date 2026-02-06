@@ -233,8 +233,11 @@ ast::FnParamList* ASTParser::fn_param_list()
                 bDoneParsing = true;
         }
 
-        pFnParam = new ast::FnParam(pVar, pDefaultExpr);
-        pFnParamList->push(pFnParam);
+        if (pVar != nullptr)
+        {
+            pFnParam = new ast::FnParam(pVar, pDefaultExpr);
+            pFnParamList->push(pFnParam);
+        }
 
         if (bDoneParsing)
         {
