@@ -48,3 +48,8 @@ TEST_F(FunctionalTest, while_stmt_01)
 {
     test_file("../../test/res/while_stmt_01.vim");
 }
+
+TEST_F(FunctionalTest, expr)
+{
+    test_file("../../test/res/expr.vim");
+}
