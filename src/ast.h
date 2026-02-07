@@ -299,6 +299,23 @@ public:
 };
 
 //
+// MethodCallExpr
+//
+
+class MethodCallExpr : public Expr
+{
+public:
+    MethodCallExpr(Token* op, Expr* receiver, Expr* call);
+    virtual ~MethodCallExpr();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pOp;
+};
+
+//
 // Literal
 //
 

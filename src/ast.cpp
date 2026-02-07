@@ -420,6 +420,31 @@ void CallExpr::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// MethodCallExpr
+//
+
+MethodCallExpr::MethodCallExpr(Token* apOp, Expr* apReceiver, Expr* apCallExpr) :
+    m_pOp { apOp }
+{
+    m_lChildren.push_back(apReceiver);
+    m_lChildren.push_back(apCallExpr);
+}
+
+MethodCallExpr::~MethodCallExpr()
+{
+}
+
+std::string MethodCallExpr::toString() const
+{
+    return "MethodCallExpr " + m_pOp->str();
+}
+
+void MethodCallExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // Literal
 //
 

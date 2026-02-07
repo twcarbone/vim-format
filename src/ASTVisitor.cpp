@@ -79,6 +79,11 @@ void ASTVisitor::visit(const ast::Literal* apLiteral)
     handle_node(apLiteral);
 }
 
+void ASTVisitor::visit(const ast::MethodCallExpr* apMethodCallExpr)
+{
+    handle_node(apMethodCallExpr);
+}
+
 void ASTVisitor::visit(const ast::Program* apProgram)
 {
     handle_node(apProgram);

@@ -8,14 +8,14 @@ ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
     m_nPos { 0 },
     m_lTokens { std::move(alTokens) },
     m_mOpBindingPower {
-        // 10
+        // expr1
         { Token::Type::OP_FALSEY, { 10, 11 } },
         { Token::Type::OP_TERNARY_IF, { 10, 0 } },
-        // 20
+        // expr2
         { Token::Type::OP_OR, { 20, 21 } },
-        // 30
+        // expr3
         { Token::Type::OP_AND, { 30, 31 } },
-        // 40
+        // expr4
         { Token::Type::OP_EQUAL, { 40, 41 } },
         { Token::Type::OP_NEQUAL, { 40, 41 } },
         { Token::Type::OP_GT, { 40, 41 } },
@@ -26,25 +26,25 @@ ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
         { Token::Type::OP_NMATCH, { 40, 41 } },
         { Token::Type::OP_IS, { 40, 41 } },
         { Token::Type::OP_ISNOT, { 40, 41 } },
-        // 50
+        // expr5
         { Token::Type::OP_LSHIFT, { 50, 51 } },
         { Token::Type::OP_RSHIFT, { 50, 51 } },
-        // 60
+        // expr6
         { Token::Type::OP_ADD, { 60, 61 } },
         { Token::Type::OP_SUB, { 60, 61 } },
         { Token::Type::OP_CAT_OLD, { 60, 61 } },
         { Token::Type::OP_CAT_NEW, { 60, 61 } },
-        // 70
+        // expr7
         { Token::Type::OP_MUL, { 70, 71 } },
         { Token::Type::OP_DIV, { 70, 71 } },
         { Token::Type::OP_MODULO, { 70, 71 } },
-        // 80
+        // expr9
         { Token::Type::OP_LOGICAL_NOT, { 80, 81 } },
         { Token::Type::OP_UNARY_MINUS, { 80, 81 } },
         { Token::Type::OP_UNARY_PLUS, { 80, 81 } },
-        // 85
+        // expr10
+        { Token::Type::OP_METHOD, { 83, 84 } },
         { Token::Type::L_PAREN, { 85, 0 } },
-        // 90
         { Token::Type::L_BRACKET, { 90, 0 } },
         { Token::Type::OP_SLICE, { 90, 91 } },
         { Token::Type::OP_DOT, { 90, 91 } },
@@ -558,6 +558,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::OP_UNARY_MINUS:
             case Token::Type::OP_UNARY_PLUS:
             // expr10
+            case Token::Type::OP_METHOD:
             case Token::Type::L_BRACKET:
             // expr11
             case Token::Type::L_PAREN:
@@ -580,6 +581,10 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
 
         switch (pOp->type())
         {
+            case Token::Type::OP_METHOD:
+                pRhs = expr(lnRhsOpBindingPower);
+                pLhs = new ast::MethodCallExpr(pOp, pLhs, pRhs);
+                break;
             case Token::Type::L_PAREN:
                 pLhs = new ast::CallExpr(pLhs, fn_arg_list());
                 break;

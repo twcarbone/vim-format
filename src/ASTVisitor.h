@@ -19,6 +19,7 @@ class IfStmt;
 class JumpStmt;
 class ListExpr;
 class Literal;
+class MethodCallExpr;
 class Node;
 class Program;
 class SliceExpr;
@@ -49,6 +50,7 @@ public:
     virtual void visit(const ast::JumpStmt* ast);
     virtual void visit(const ast::ListExpr* ast);
     virtual void visit(const ast::Literal* ast);
+    virtual void visit(const ast::MethodCallExpr* ast);
     virtual void visit(const ast::Program* ast);
     virtual void visit(const ast::SliceExpr* ast);
     virtual void visit(const ast::StmtList* ast);
