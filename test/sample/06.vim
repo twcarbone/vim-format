@@ -48,6 +48,7 @@ let FnPartial = function("Add", [100])
 echo FnPartial(1)
 
 let myDict = {'a': function("Add", [5, 6])}
+let myDict = {'b': function("Add", [110])}
 echo myDict.a()
 
 let myList = [function("Add", [7, 8]), function("Add", [9, 10])]
@@ -82,3 +83,7 @@ echo 3.14->{x, ... -> 103}()
 echo 3.14->{... -> 104}()
 echo 3.14->{-> 105}()
 echo {-> 106}()
+echo ['quick', 'brown', 'fox'][1]->tr('own', 'ick')
+
+let l = [{x -> 1000 + x}]
+echo 500->l[0]()
