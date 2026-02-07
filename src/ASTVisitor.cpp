@@ -3,8 +3,9 @@
 #include "ASTVisitor.h"
 #include "ast.h"
 
-ASTVisitor::ASTVisitor() :
-    m_nDepth { 0 }
+ASTVisitor::ASTVisitor(std::ostream& acOutStream) :
+    m_nDepth { 0 },
+    m_cOutStream { acOutStream }
 {
 }
 
@@ -115,7 +116,7 @@ void ASTVisitor::visit(const ast::WhileStmt* apWhileStmt)
 
 void ASTVisitor::handle_node(const ast::Node* apNode)
 {
-    print_line(apNode->toString());
+    write_line(apNode->toString());
 
     m_nDepth++;
 
@@ -124,7 +125,7 @@ void ASTVisitor::handle_node(const ast::Node* apNode)
         if (pNode == nullptr)
         {
             // Example: left side of SliceExpr '[:3]'
-            print_line("NULL");
+            write_line("NULL");
         }
         else
         {
@@ -135,12 +136,12 @@ void ASTVisitor::handle_node(const ast::Node* apNode)
     m_nDepth--;
 }
 
-void ASTVisitor::print_line(std::string_view asText)
+void ASTVisitor::write_line(std::string_view asText)
 {
     for (size_t i = 0; i < m_nDepth; i++)
     {
-        std::cout << "  ";
+        m_cOutStream << "  ";
     }
 
-    std::cout << asText << std::endl;
+    m_cOutStream << asText << std::endl;
 }

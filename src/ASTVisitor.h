@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string_view>
 
 namespace ast
@@ -31,7 +32,7 @@ class WhileStmt;
 class ASTVisitor
 {
 public:
-    ASTVisitor();
+    ASTVisitor(std::ostream& os = std::cout);
     ~ASTVisitor() = default;
 
     virtual void visit(const ast::AssignStmt* ast);
@@ -58,7 +59,8 @@ public:
 
 private:
     int m_nDepth;
+    std::ostream& m_cOutStream;
 
     void handle_node(const ast::Node* ast);
-    void print_line(std::string_view text);
+    void write_line(std::string_view text);
 };
