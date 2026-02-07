@@ -19,6 +19,7 @@ add_library(
     Token.cpp
     TokenSpec.cpp
     ast.cpp
+    util.cpp
 )
 
 add_executable(
