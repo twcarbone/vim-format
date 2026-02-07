@@ -1,0 +1,37 @@
+Program
+  StmtList
+    ForStmt
+      Var item
+      ListExpr
+        Literal 1
+        Literal 2
+        Literal 3
+      StmtList
+        ExprCmd echo
+          Literal "for each item"
+        JumpStmt continue
+          NULL
+    AssignStmt =
+      Var i
+      Literal 1
+    AssignStmt =
+      Var items
+      ListExpr
+        Literal 4
+        Literal 5
+        Literal 6
+    ForStmt
+      Var item
+      Var items
+      StmtList
+        AssignStmt +=
+          Var i
+          Literal 1
+    WhileStmt
+      Literal 1
+      StmtList
+        AssignStmt =
+          Var foo
+          Literal 6
+        JumpStmt break
+          NULL
