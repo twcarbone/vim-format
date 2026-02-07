@@ -119,9 +119,21 @@ void ASTVisitor::visit(const ast::WhileStmt* apWhileStmt)
     handle_node(apWhileStmt);
 }
 
+const std::vector<VisitedNode>& ASTVisitor::nodes() const
+{
+    return m_lVisitedNodes;
+}
+
+const VisitedNode& ASTVisitor::node(size_t anIdx) const
+{
+    return m_lVisitedNodes.at(anIdx);
+}
+
 void ASTVisitor::handle_node(const ast::Node* apNode)
 {
     write_line(apNode->toString());
+
+    m_lVisitedNodes.push_back({ m_nDepth, apNode });
 
     m_nDepth++;
 

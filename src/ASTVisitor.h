@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string_view>
+#include <vector>
 
 namespace ast
 {
@@ -28,6 +29,12 @@ class TernaryOp;
 class UnaryOp;
 class Var;
 class WhileStmt;
+};
+
+struct VisitedNode
+{
+    int nLevel = -1;
+    const ast::Node* pNode = nullptr;
 };
 
 class ASTVisitor
@@ -59,9 +66,14 @@ public:
     virtual void visit(const ast::Var* ast);
     virtual void visit(const ast::WhileStmt* ast);
 
+    const std::vector<VisitedNode>& nodes() const;
+
+    const VisitedNode& node(size_t idx) const;
+
 private:
     int m_nDepth;
     std::ostream& m_cOutStream;
+    std::vector<VisitedNode> m_lVisitedNodes;
 
     void handle_node(const ast::Node* ast);
     void write_line(std::string_view text);
