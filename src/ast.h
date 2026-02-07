@@ -183,6 +183,7 @@ public:
 // FnArgList
 //
 
+// TODO (gh-37): Rename xxList to xxSeq to distinguish from a ListExpr
 class FnArgList : public ExprList
 {
 public:

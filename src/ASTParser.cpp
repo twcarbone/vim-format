@@ -626,6 +626,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                         break;
                 }
 
+                // TODO (gh-36): Verify CasedBinaryOp LHS vs. RHS binding power
                 pRhs = expr(lnLhsOpBindingPower);
                 pLhs = new ast::CasedBinaryOp(pOp, pLhs, pRhs, pCaseSensitivity);
                 break;
