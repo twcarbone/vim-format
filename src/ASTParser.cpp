@@ -46,7 +46,7 @@ ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
         { Token::Type::OP_METHOD, { 83, 84 } },
         { Token::Type::L_PAREN, { 85, 0 } },
         { Token::Type::L_BRACKET, { 90, 0 } },
-        { Token::Type::OP_SLICE, { 90, 91 } },
+        { Token::Type::COLON, { 90, 91 } },
         { Token::Type::OP_DOT, { 90, 91 } },
     }
 {
@@ -481,11 +481,10 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
         switch (m_pCurrToken->type())
         {
             case Token::Type::COMMA:
+            case Token::Type::COLON:
             case Token::Type::END:
             case Token::Type::IN:
             case Token::Type::NEWLINE:
-            case Token::Type::OP_SLICE:
-            case Token::Type::OP_TERNARY_ELSE:
             case Token::Type::R_BRACKET:
             case Token::Type::R_PAREN:
                 return pLhs;
@@ -561,12 +560,12 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 ast::Expr* pStart = nullptr;
                 ast::Expr* pStop = nullptr;
 
-                if (m_pCurrToken->type() != Token::Type::OP_SLICE)
+                if (m_pCurrToken->type() != Token::Type::COLON)
                 {
                     pStart = expr(0);
                 }
 
-                consume_optional(Token::Type::OP_SLICE);
+                consume_optional(Token::Type::COLON);
 
                 if (m_pCurrToken->type() != Token::Type::R_BRACKET)
                 {
@@ -583,7 +582,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 Token* pLeftOp = pOp;
                 ast::Expr* pMhs = expr(0);
                 Token* pRightOp = m_pCurrToken;
-                consume(Token::Type::OP_TERNARY_ELSE);
+                consume(Token::Type::COLON);
                 pRhs = expr(lnRhsOpBindingPower);
                 pLhs = new ast::TernaryOp(pLeftOp, pRightOp, pLhs, pMhs, pRhs);
 
