@@ -10,7 +10,6 @@ GEN_MINUS           -
 GEN_QUESTION        ?
 GEN_EXCLAMATION     !
 GEN_NAME            [a-zA-Z_][a-zA-Z0-9_]*
-GEN_COLON           :
 GEN_DOT             .
 
 OP_ADD              +
@@ -35,8 +34,6 @@ OP_AND              &&
 OP_MATCH_CASE       #
 OP_IGNORE_CASE      ?
 OP_TERNARY_IF       ?
-OP_TERNARY_ELSE     :
-OP_SLICE            :
 OP_FALSEY           ??
 OP_LSHIFT           <<
 OP_RSHIFT           >>
@@ -64,6 +61,7 @@ R_BRACKET           ]
 L_BRACE             {
 R_BRACE             }
 COMMA               ,
+COLON               :
 
 IF                  if
 ELSEIF              elseif
@@ -164,9 +162,18 @@ fn_opt_param_list
 
         See `optional-function-argument`.
 
+expr_list
+        : expr1 (COMMA expr1)* COMMA?
+
+        List of expressions with optional trailing comma.
+
+            42
+            42,
+            42, 20
+
 expr1
         : expr2 (OP_FALSEY expr1)?
-        | expr2 (OP_TERNARY_IF expr1 OP_TERNARY_ELSE expr1)?
+        | expr2 (OP_TERNARY_IF expr1 COLON expr1)?
 
 expr2
         : expr3 (OP_OR expr3)*
@@ -205,42 +212,58 @@ expr9
 
 expr10
         : expr11
-        | slice_expr
+        | subscript_expr
+        | substring_expr
         | entry_expr
+        | method_expr
 
-slice_expr
+subscript_expr
         : expr10 L_BRACKET expr1 R_BRACKET
-        | expr10 L_BRACKET expr1? OP_SLICE expr1? R_BRACKET
 
-            a[5]
-            a[:]
-            a[:3]
-            a[2:]
-            a[2:4]
+        See `subscript`.
 
-        See `subscript`, `substring`.
+substring_expr
+        : expr10 L_BRACKET expr1? COLON expr1? R_BRACKET
+
+        See `substring`.
 
 entry_expr
         : expr10 OP_DOT IDENTIFIER
 
-            dict.one
-            dict.2
-
         See `expr-entry`
+
+call_expr
+        : callable_expr L_PAREN expr_list? R_PAREN
+
+method_expr
+        : expr10 OP_METHOD (callable_expr | lambda_expr) L_PAREN expr_list? R_PAREN
+
+        See `method`.
+
+callable_expr
+        : IDENTIFIER
+        | entry_expr
+        | lambda_expr
+        | subscript_expr
+        | L_PAREN expr1 R_PAREN
+
+lambda_expr
+        : L_BRACE (fn_param_list COMMA?)? OP_METHOD expr1 R_BRACE
+
+        See `expr-lambda`.
 
 expr11
         : INTEGER
         | FLOAT
         | STRING
         | IDENTIFIER
-        | L_PAREN expr1 R_PAREN
+        | call_expr
+        | lambda_expr
         | list_expr
-
-slice_expr
-        : expr1? OP_SLICE expr1?
+        | L_PAREN expr1 R_PAREN
 
 list_expr
-        : L_BRACKET (expr1 (COMMA expr1)* COMMA?)? R_BRACKET
+        : L_BRACKET expr_list? R_BRACKET
 
 
 ==============================================================================

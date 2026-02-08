@@ -29,6 +29,16 @@ void ASTVisitor::visit(const ast::CasedBinaryOp* apCasedBinaryOp)
     handle_node(apCasedBinaryOp);
 }
 
+void ASTVisitor::visit(const ast::DictEntry* apDictEntry)
+{
+    handle_node(apDictEntry);
+}
+
+void ASTVisitor::visit(const ast::DictExpr* apDictExpr)
+{
+    handle_node(apDictExpr);
+}
+
 void ASTVisitor::visit(const ast::ExprCmd* apExprCmd)
 {
     handle_node(apExprCmd);

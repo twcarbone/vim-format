@@ -48,8 +48,10 @@ let FnPartial = function("Add", [100])
 echo FnPartial(1)
 
 let myDict = {'a': function("Add", [5, 6])}
-let myDict = {'b': function("Add", [110])}
 echo myDict.a()
+
+let dict_b = {{-> 'foo'}(): 'bar'}
+echo dict_b.foo
 
 let myList = [function("Add", [7, 8]), function("Add", [9, 10])]
 echo myList[0]()

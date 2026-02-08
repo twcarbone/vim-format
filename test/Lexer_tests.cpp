@@ -347,7 +347,7 @@ TEST_F(LexerTest, expr1_01)
     expect_token(2, "2", Token::Type::INTEGER, 5);
     expect_token(3, "?", Token::Type::OP_TERNARY_IF, 7);
     expect_token(4, "3", Token::Type::INTEGER, 9);
-    expect_token(5, ":", Token::Type::OP_TERNARY_ELSE, 11);
+    expect_token(5, ":", Token::Type::COLON, 11);
     expect_token(6, "4", Token::Type::INTEGER, 13);
 }
 

@@ -205,24 +205,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
             }
         }
 
-        else if (apCurrentToken->type() == Token::Type::GEN_COLON)
-        {
-            switch (pPrevToken->type())
-            {
-                case Token::Type::TAB:
-                case Token::Type::SPACE:
-                    continue;
-                case Token::Type::L_BRACKET:
-                    apCurrentToken->setType(Token::Type::OP_SLICE);
-                    break;
-                case Token::Type::OP_TERNARY_IF:
-                    apCurrentToken->setType(Token::Type::OP_TERNARY_ELSE);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         else if (apCurrentToken->type() == Token::Type::GEN_DOT)
         {
             switch (pPrevToken->type())

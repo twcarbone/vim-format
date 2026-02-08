@@ -294,7 +294,7 @@ void Parser::expr1(Node* apParent)
         case Token::Type::OP_TERNARY_IF:
             consume(pNonTerminal, Token::Type::OP_TERNARY_IF);
             expr1(pNonTerminal);
-            consume(pNonTerminal, Token::Type::OP_TERNARY_ELSE);
+            consume(pNonTerminal, Token::Type::COLON);
             expr1(pNonTerminal);
             break;
         default:

@@ -270,6 +270,36 @@ private:
 };
 
 //
+// DictEntry
+//
+
+class DictEntry : public Node
+{
+public:
+    DictEntry(Expr* key, Expr* value);
+    virtual ~DictEntry();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// DictExpr
+//
+
+class DictExpr : public Expr
+{
+public:
+    DictExpr() = default;
+    virtual ~DictExpr();
+
+    void push(DictEntry* entry);
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // ListExpr
 //
 

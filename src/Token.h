@@ -39,8 +39,6 @@
         X(OP_MATCH_CASE) \
         X(OP_IGNORE_CASE) \
         X(OP_TERNARY_IF) \
-        X(OP_TERNARY_ELSE) \
-        X(OP_SLICE) \
         X(OP_FALSEY) \
         X(OP_LSHIFT) \
         X(OP_RSHIFT) \
@@ -66,6 +64,7 @@
         X(L_BRACE) \
         X(R_BRACE) \
         X(COMMA) \
+        X(COLON) \
         X(IF) \
         X(ELSEIF) \
         X(ELSE) \
