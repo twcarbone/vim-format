@@ -1,6 +1,7 @@
 #include <fstream>
 
 #include "Source.h"
+#include "util.h"
 
 Source::Source()
 {
@@ -130,20 +131,6 @@ void Source::read_text(const std::string& asText)
 
 void Source::read_file(const fs::path& acPath)
 {
-    // TODO (gh-39): Use vf::read_file() to read files in Source
-
     m_cPath = acPath;
-
-    std::ifstream lcIfStream { m_cPath };
-
-    if (!lcIfStream.is_open())
-    {
-        throw std::runtime_error("Error: cannot open for reading: " + m_cPath.string());
-    }
-
-    char c;
-    while (lcIfStream.get(c))
-    {
-        m_sText += c;
-    }
+    m_sText = vf::read_file(acPath);
 }
