@@ -336,26 +336,17 @@ private:
 };
 
 //
-// SliceExpr
+// IndexExpr
 //
 
-// TODO (gh-35): Create a new IndexExpr to handle both simple indexing and range indexing
-
-class SliceExpr : public Expr
+class IndexExpr : public Expr
 {
 public:
-    SliceExpr(Token* op, Expr* left, Expr* right);
-    virtual ~SliceExpr();
-
-    const Token* op() const;
-    const Expr* lexpr() const;
-    const Expr* rexpr() const;
+    IndexExpr(Expr* indexable, Expr* start, Expr* stop);
+    virtual ~IndexExpr();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-
-private:
-    Token* m_pOp;
 };
 
 //

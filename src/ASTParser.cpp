@@ -432,38 +432,6 @@ ast::FnArgList* ASTParser::fn_arg_list()
     return pFnArgList;
 }
 
-ast::Expr* ASTParser::slice_expr()
-{
-    ast::Expr* pStart = nullptr;
-    ast::Expr* pStop = nullptr;
-    ast::Expr* pRhs = nullptr;
-
-    if (m_pCurrToken->type() != Token::Type::OP_SLICE)
-    {
-        pStart = expr(0);
-    }
-
-    if (m_pCurrToken->type() == Token::Type::OP_SLICE)
-    {
-        Token* pOp = m_pCurrToken;
-        consume(Token::Type::OP_SLICE);
-
-        if (m_pCurrToken->type() != Token::Type::R_BRACKET)
-        {
-            pStop = expr(0);
-        }
-
-        pRhs = new ast::SliceExpr(pOp, pStart, pStop);
-    }
-    else
-    {
-        pRhs = pStart;
-    }
-
-    consume(Token::Type::R_BRACKET);
-    return pRhs;
-}
-
 ast::Expr* ASTParser::expr(int anMinBindingPower)
 {
     ast::Expr* pLhs = nullptr;
@@ -589,9 +557,27 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 pLhs = new ast::CallExpr(pLhs, fn_arg_list());
                 break;
             case Token::Type::L_BRACKET:
-                pRhs = slice_expr();
-                pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
+            {
+                ast::Expr* pStart = nullptr;
+                ast::Expr* pStop = nullptr;
+
+                if (m_pCurrToken->type() != Token::Type::OP_SLICE)
+                {
+                    pStart = expr(0);
+                }
+
+                consume_optional(Token::Type::OP_SLICE);
+
+                if (m_pCurrToken->type() != Token::Type::R_BRACKET)
+                {
+                    pStop = expr(0);
+                }
+
+                pLhs = new ast::IndexExpr(pLhs, pStart, pStop);
+                consume(Token::Type::R_BRACKET);
+
                 break;
+            }
             case Token::Type::OP_TERNARY_IF:
             {
                 Token* pLeftOp = pOp;

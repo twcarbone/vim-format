@@ -110,45 +110,51 @@ Program
         Literal 2
         Literal 3
     ExprCmd echo
-      BinaryOp [
+      IndexExpr
         ListExpr
           Literal 0
           Literal 1
           Literal 2
           Literal 3
         Literal 0
+        NULL
     ExprCmd echo
-      BinaryOp [
+      IndexExpr
         ListExpr
           Literal 0
           Literal 1
           Literal 2
           Literal 3
-        SliceExpr :
-          NULL
-          NULL
+        NULL
+        NULL
     ExprCmd echo
-      BinaryOp [
+      IndexExpr
         ListExpr
           Literal 0
           Literal 1
           Literal 2
           Literal 3
-        SliceExpr :
-          NULL
-          Literal 2
+        NULL
+        Literal 2
     ExprCmd echo
-      BinaryOp [
+      IndexExpr
         Var items
-        SliceExpr :
-          Literal 2
-          NULL
+        Literal 2
+        NULL
     ExprCmd echo
-      BinaryOp [
+      IndexExpr
         Var items
-        SliceExpr :
+        Literal 1
+        Literal 3
+    ExprCmd echo
+      IndexExpr
+        Var items
+        BinaryOp +
           Literal 1
-          Literal 3
+          Literal 1
+        BinaryOp /
+          Literal 6
+          Literal 2
     FnStmt Add !
       FnParamList
         FnParam
@@ -167,9 +173,10 @@ Program
           Literal "passed to returned FuncRef"
     ExprCmd echo
       CallExpr
-        BinaryOp [
+        IndexExpr
           Var list_of_funcrefs
           Literal 4
+          NULL
         FnArgList
           Literal 5
     ExprCmd echo

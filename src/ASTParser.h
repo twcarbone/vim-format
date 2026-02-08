@@ -25,7 +25,6 @@ private:
     const std::unordered_map<Token::Type, std::pair<int, int> > m_mOpBindingPower;
 
     ast::Stmt* stmt();
-    ast::Expr* slice_expr();
     ast::IfStmt* if_stmt();
     ast::Program* program();
     ast::ForStmt* for_stmt();
