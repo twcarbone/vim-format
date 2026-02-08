@@ -64,6 +64,11 @@ void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
     handle_node(apIfStmt);
 }
 
+void ASTVisitor::visit(const ast::IndexExpr* apIndexExpr)
+{
+    handle_node(apIndexExpr);
+}
+
 void ASTVisitor::visit(const ast::JumpStmt* apJumpStmt)
 {
     handle_node(apJumpStmt);
@@ -87,11 +92,6 @@ void ASTVisitor::visit(const ast::MethodCallExpr* apMethodCallExpr)
 void ASTVisitor::visit(const ast::Program* apProgram)
 {
     handle_node(apProgram);
-}
-
-void ASTVisitor::visit(const ast::SliceExpr* apSliceExpr)
-{
-    handle_node(apSliceExpr);
 }
 
 void ASTVisitor::visit(const ast::StmtList* apStmtList)
@@ -141,7 +141,6 @@ void ASTVisitor::handle_node(const ast::Node* apNode)
     {
         if (pNode == nullptr)
         {
-            // Example: left side of SliceExpr '[:3]'
             write_line("NULL");
         }
         else
