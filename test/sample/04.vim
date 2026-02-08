@@ -4,6 +4,8 @@ echo 5 ?? 0
 echo 1 ? "this" : "that"
 
 echo 1 == 2
+echo 1 ==? 2
+echo 1 ==# 2
 echo 1 != 2
 echo 6 >  4
 echo 1 >= 5
@@ -80,3 +82,35 @@ while 1
     let foo = 6
     break
 endwhile
+
+function! One() range abort dict closure
+    echo 1
+endfunction
+
+function! Two(...)
+    return 1
+endfunction
+
+function! Three(a)
+    return
+endfunction
+
+function! Four(a,)
+    echo 1
+endfunction
+
+function! Five(a, ...)
+    echo 1
+endfunction
+
+function! Six(a, b = 1)
+    echo 1
+endfunction
+
+echo Foo(Bar() + 1, baz[4]) / 2
+echo fns[4]([2, 3])
+
+echo "hello"->toupper(1, 2)
+echo 500->l[0]()
+echo dict.a->list[5]("foo")
+echo "foo"->toupper()->tr("O", "a")

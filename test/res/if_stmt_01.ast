@@ -1,0 +1,42 @@
+Program
+  StmtList
+    IfStmt
+      Literal 1
+      StmtList
+        ExprCmd echo
+          Literal 1
+      StmtList
+    IfStmt
+      Literal 1
+      StmtList
+        ExprCmd echo
+          Literal 1
+      StmtList
+        ExprCmd echo
+          Literal 2
+    IfStmt
+      Literal 1
+      StmtList
+        ExprCmd echo
+          Literal 1
+      StmtList
+        IfStmt
+          Literal 2
+          StmtList
+            ExprCmd echo
+              Literal 2
+          StmtList
+    IfStmt
+      Literal 1
+      StmtList
+        ExprCmd echo
+          Literal 1
+      StmtList
+        IfStmt
+          Literal 2
+          StmtList
+            ExprCmd echo
+              Literal 2
+          StmtList
+            ExprCmd echo
+              Literal 3

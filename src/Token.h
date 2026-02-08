@@ -15,6 +15,8 @@
         X(GEN_QUESTION) \
         X(GEN_NAME) \
         X(GEN_EXCLAMATION) \
+        X(GEN_COLON) \
+        X(GEN_DOT) \
         X(OP_ADD) \
         X(OP_SUB) \
         X(OP_UNARY_PLUS) \
@@ -38,14 +40,17 @@
         X(OP_IGNORE_CASE) \
         X(OP_TERNARY_IF) \
         X(OP_TERNARY_ELSE) \
+        X(OP_SLICE) \
         X(OP_FALSEY) \
         X(OP_LSHIFT) \
         X(OP_RSHIFT) \
+        X(OP_DOT) \
         X(OP_CAT_OLD) \
         X(OP_CAT_NEW) \
         X(OP_LOGICAL_NOT) \
         X(OP_BANG) \
         X(OP_OPTION) \
+        X(OP_METHOD) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \
         X(ASSIGN_MUL) \
@@ -58,6 +63,8 @@
         X(R_PAREN) \
         X(L_BRACKET) \
         X(R_BRACKET) \
+        X(L_BRACE) \
+        X(R_BRACE) \
         X(COMMA) \
         X(IF) \
         X(ELSEIF) \
@@ -70,6 +77,7 @@
         X(ENDFOR) \
         X(BREAK) \
         X(CONTINUE) \
+        X(RETURN) \
         X(FUNCTION) \
         X(ENDFUNCTION) \
         X(FN_RANGE) \

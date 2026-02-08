@@ -33,7 +33,20 @@ void Lexer::tokenize()
 
 std::vector<Token*> Lexer::tokens() const
 {
-    return m_lTokens;
+    // Filter out delimiting whitespace tokens before returning.
+
+    std::vector<Token*> llTokens;
+    llTokens.reserve(m_lTokens.size());
+
+    for (Token* pToken : m_lTokens)
+    {
+        if (!pToken->delimiting_wp())
+        {
+            llTokens.push_back(pToken);
+        }
+    }
+
+    return llTokens;
 }
 
 const Source& Lexer::source() const
@@ -44,18 +57,12 @@ const Source& Lexer::source() const
 const Token& Lexer::token(size_t anIdx) const
 {
     // TODO (gh-7): throw IndexError
-    return *m_lTokens.at(anIdx);
+    return *tokens().at(anIdx);
 }
 
 Token* Lexer::next()
 {
     Token* pToken = do_next();
-
-    while (pToken->delimiting_wp())
-    {
-        pToken = do_next();
-    }
-
     m_lTokens.push_back(pToken);
     return pToken;
 }
@@ -99,81 +106,58 @@ void Lexer::freeTokens()
     m_lTokens.clear();
 }
 
-/**
- *  @notes
- *      1.  :h expr9 suggests unary operators apply to List, Dictionary. But we actually
- *          get E745, E728.
- */
 bool Lexer::disambiguate(Token* apCurrentToken)
 {
-    //
-    // GEN_MINUS
-    //
-
-    if (apCurrentToken->type() == Token::Type::GEN_MINUS)
+    // 1. Try disambiguating depending on preceding tokens.
+    for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
     {
-        if (m_lTokens.empty())
+        const Token* pPrevToken = *rit;
+
+        if (apCurrentToken->type() == Token::Type::GEN_MINUS)
         {
-            apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
-        }
-        else
-        {
-            switch (m_lTokens.back()->type())
+            switch (pPrevToken->type())
             {
+                case Token::Type::TAB:
+                case Token::Type::SPACE:
+                    continue;
                 case Token::Type::FLOAT:
-                case Token::Type::INTEGER:
                 case Token::Type::STRING:
-                // See @note 1
+                case Token::Type::INTEGER:
                 case Token::Type::R_PAREN:
+                case Token::Type::IDENTIFIER:
                     apCurrentToken->setType(Token::Type::OP_SUB);
                     break;
                 default:
                     apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
             }
         }
-    }
 
-    //
-    // GEN_PLUS
-    //
-
-    else if (apCurrentToken->type() == Token::Type::GEN_PLUS)
-    {
-        if (m_lTokens.empty())
+        else if (apCurrentToken->type() == Token::Type::GEN_PLUS)
         {
-            apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
-        }
-        else
-        {
-            switch (m_lTokens.back()->type())
+            switch (pPrevToken->type())
             {
+                case Token::Type::TAB:
+                case Token::Type::SPACE:
+                    continue;
                 case Token::Type::FLOAT:
-                case Token::Type::INTEGER:
                 case Token::Type::STRING:
-                // See @note 1
+                case Token::Type::INTEGER:
                 case Token::Type::R_PAREN:
+                case Token::Type::IDENTIFIER:
                     apCurrentToken->setType(Token::Type::OP_ADD);
                     break;
                 default:
                     apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
             }
         }
-    }
 
-    //
-    // GEN_QUESTION
-    //
-
-    else if (apCurrentToken->type() == Token::Type::GEN_QUESTION)
-    {
-        if (m_lTokens.empty())
+        else if (apCurrentToken->type() == Token::Type::GEN_QUESTION)
         {
-            // Nothing
-        }
-        else
-        {
-            switch (m_lTokens.back()->type())
+            switch (pPrevToken->type())
             {
+                case Token::Type::TAB:
+                case Token::Type::SPACE:
+                    continue;
                 case Token::Type::OP_EQUAL:
                 case Token::Type::OP_NEQUAL:
                 case Token::Type::OP_GT:
@@ -190,22 +174,14 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     apCurrentToken->setType(Token::Type::OP_TERNARY_IF);
             }
         }
-    }
 
-    //
-    // GEN_NAME
-    //
-
-    else if (apCurrentToken->type() == Token::Type::GEN_NAME)
-    {
-        if (m_lTokens.empty())
+        else if (apCurrentToken->type() == Token::Type::GEN_NAME)
         {
-            apCurrentToken->setType(Token::Type::IDENTIFIER);
-        }
-        else
-        {
-            switch (m_lTokens.back()->type())
+            switch (pPrevToken->type())
             {
+                case Token::Type::TAB:
+                case Token::Type::SPACE:
+                    continue;
                 case Token::Type::OP_OPTION:
                     apCurrentToken->setType(Token::Type::OPTION);
                     break;
@@ -213,22 +189,14 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     apCurrentToken->setType(Token::Type::IDENTIFIER);
             }
         }
-    }
 
-    //
-    // GEN_EXCLAMATION
-    //
-
-    else if (apCurrentToken->type() == Token::Type::GEN_EXCLAMATION)
-    {
-        if (m_lTokens.empty())
+        else if (apCurrentToken->type() == Token::Type::GEN_EXCLAMATION)
         {
-            apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
-        }
-        else
-        {
-            switch (m_lTokens.back()->type())
+            switch (pPrevToken->type())
             {
+                case Token::Type::TAB:
+                case Token::Type::SPACE:
+                    continue;
                 case Token::Type::FUNCTION:
                     apCurrentToken->setType(Token::Type::OP_BANG);
                     break;
@@ -236,6 +204,65 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
             }
         }
+
+        else if (apCurrentToken->type() == Token::Type::GEN_COLON)
+        {
+            switch (pPrevToken->type())
+            {
+                case Token::Type::TAB:
+                case Token::Type::SPACE:
+                    continue;
+                case Token::Type::L_BRACKET:
+                    apCurrentToken->setType(Token::Type::OP_SLICE);
+                    break;
+                case Token::Type::OP_TERNARY_IF:
+                    apCurrentToken->setType(Token::Type::OP_TERNARY_ELSE);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        else if (apCurrentToken->type() == Token::Type::GEN_DOT)
+        {
+            switch (pPrevToken->type())
+            {
+                case Token::Type::IDENTIFIER:
+                    apCurrentToken->setType(Token::Type::OP_DOT);
+                    break;
+                default:
+                    apCurrentToken->setType(Token::Type::OP_CAT_OLD);
+            }
+        }
+
+        // 2. Stop looking at preceding tokens if the current token was disambiguated.
+        if (!apCurrentToken->ambiguous())
+        {
+            break;
+        }
     }
+
+    // 3. If the token is still not disambiguated, it may because there were zero
+    //    preceding tokens, or all preceding tokens were whitespace. Some tokens can be
+    //    disambiguated in this case.
+    switch (apCurrentToken->type())
+    {
+        case Token::Type::GEN_MINUS:
+            apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
+            break;
+        case Token::Type::GEN_PLUS:
+            apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
+            break;
+        case Token::Type::GEN_NAME:
+            apCurrentToken->setType(Token::Type::IDENTIFIER);
+            break;
+        case Token::Type::GEN_EXCLAMATION:
+            apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
+            break;
+        default:
+            break;
+    }
+
+    // 4. Return true only if the current token was disambiguated.
     return !apCurrentToken->ambiguous();
 }

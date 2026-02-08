@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 
-#include "AST.h"
 #include "Node.h"
 #include "NodeVisitor.h"
 
@@ -69,60 +68,4 @@ void NodeVisitor::visit(const NonTerminal* apNonTerminal)
 void NodeVisitor::visit(const Terminal* apNonTerminal)
 {
     handle_node(apNonTerminal);
-}
-
-void NodeVisitor::handle_ast(const AST* apAST)
-{
-    std::cout << "AST ";
-    print(apAST);
-
-    for (Node* pNode : apAST->children())
-    {
-        pNode->accept(*this);
-    }
-}
-
-void NodeVisitor::visit(const Program* apAST)
-{
-    handle_ast(apAST);
-}
-
-void NodeVisitor::visit(const StmtList* apAST)
-{
-    handle_ast(apAST);
-}
-
-void NodeVisitor::visit(const CmdExpr* apAST)
-{
-    handle_ast(apAST);
-}
-
-void NodeVisitor::visit(const Literal* apAST)
-{
-    handle_ast(apAST);
-}
-
-void NodeVisitor::visit(const BinOp* apAST)
-{
-    handle_ast(apAST);
-}
-
-void NodeVisitor::visit(const UnaryOp* apAST)
-{
-    handle_ast(apAST);
-}
-
-void NodeVisitor::visit(const Var* apAST)
-{
-    handle_ast(apAST);
-}
-
-void NodeVisitor::visit(const Assign* apAST)
-{
-    handle_ast(apAST);
-}
-
-void NodeVisitor::visit(const ListExpr* apAST)
-{
-    handle_ast(apAST);
 }

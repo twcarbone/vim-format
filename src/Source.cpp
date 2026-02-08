@@ -130,6 +130,8 @@ void Source::read_text(const std::string& asText)
 
 void Source::read_file(const fs::path& acPath)
 {
+    // TODO (gh-39): Use vf::read_file() to read files in Source
+
     m_cPath = acPath;
 
     std::ifstream lcIfStream { m_cPath };

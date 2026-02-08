@@ -1,22 +1,25 @@
 add_library(
     vimformat
     STATIC
-    AST.cpp
+    ASTParser.cpp
+    ASTVisitor.cpp
     Analyzer.cpp
     Context.cpp
     Controller.cpp
     Exceptions.cpp
+    ExprDisplayVisitor.cpp
     Lexer.cpp
     Node.cpp
     NodeVisitor.cpp
     Parser.cpp
-    Settings.cpp
     Scope.cpp
+    Settings.cpp
     Source.cpp
     Symbol.cpp
     Token.cpp
     TokenSpec.cpp
-    Translator.cpp
+    ast.cpp
+    util.cpp
 )
 
 add_executable(

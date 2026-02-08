@@ -1,0 +1,199 @@
+Program
+  StmtList
+    ExprCmd echo
+      TernaryOp ? :
+        Literal 1
+        Literal "this"
+        Literal "that"
+    ExprCmd echo
+      BinaryOp ??
+        Literal "us"
+        Literal "them"
+    ExprCmd echo
+      BinaryOp ||
+        Literal 1
+        Literal 0
+    ExprCmd echo
+      BinaryOp &&
+        Literal 1
+        Literal 0
+    ExprCmd echo
+      CasedBinaryOp ==
+        Literal 1
+        Literal 2
+    ExprCmd echo
+      CasedBinaryOp ==?
+        Literal 1
+        Literal 2
+    ExprCmd echo
+      CasedBinaryOp ==#
+        Literal 1
+        Literal 2
+    ExprCmd echo
+      CasedBinaryOp !=
+        Literal 1
+        Literal 2
+    ExprCmd echo
+      CasedBinaryOp >
+        Literal 6
+        Literal 4
+    ExprCmd echo
+      CasedBinaryOp >=
+        Literal 1
+        Literal 5
+    ExprCmd echo
+      CasedBinaryOp <
+        Literal 5
+        Literal 3
+    ExprCmd echo
+      CasedBinaryOp <=
+        Literal 3
+        Literal 2
+    ExprCmd echo
+      CasedBinaryOp is
+        Literal "foo"
+        Literal "bar"
+    ExprCmd echo
+      CasedBinaryOp isnot
+        Literal "foo"
+        Literal "bar"
+    ExprCmd echo
+      BinaryOp <<
+        Literal 1
+        Literal 1
+    ExprCmd echo
+      BinaryOp >>
+        Literal 2
+        Literal 1
+    ExprCmd echo
+      BinaryOp +
+        Literal 1
+        Literal 2
+    ExprCmd echo
+      BinaryOp -
+        Literal 2
+        Literal 1
+    ExprCmd echo
+      BinaryOp ..
+        Literal "sp"
+        Literal "am"
+    ExprCmd echo
+      BinaryOp .
+        Literal "sp"
+        Literal "am"
+    ExprCmd echo
+      BinaryOp *
+        Literal 2
+        Literal 1
+    ExprCmd echo
+      BinaryOp /
+        Literal 6
+        Literal 2
+    ExprCmd echo
+      BinaryOp %
+        Literal 6
+        Literal 4
+    ExprCmd echo
+      UnaryOp !
+        Literal 1
+    ExprCmd echo
+      UnaryOp -
+        Literal 1
+    ExprCmd echo
+      UnaryOp +
+        Literal 1
+    AssignStmt =
+      Var items
+      ListExpr
+        Literal 0
+        Literal 1
+        Literal 2
+        Literal 3
+    ExprCmd echo
+      BinaryOp [
+        ListExpr
+          Literal 0
+          Literal 1
+          Literal 2
+          Literal 3
+        Literal 0
+    ExprCmd echo
+      BinaryOp [
+        ListExpr
+          Literal 0
+          Literal 1
+          Literal 2
+          Literal 3
+        SliceExpr :
+          NULL
+          NULL
+    ExprCmd echo
+      BinaryOp [
+        ListExpr
+          Literal 0
+          Literal 1
+          Literal 2
+          Literal 3
+        SliceExpr :
+          NULL
+          Literal 2
+    ExprCmd echo
+      BinaryOp [
+        Var items
+        SliceExpr :
+          Literal 2
+          NULL
+    ExprCmd echo
+      BinaryOp [
+        Var items
+        SliceExpr :
+          Literal 1
+          Literal 3
+    FnStmt Add !
+      FnParamList
+        FnParam
+          Var a
+          NULL
+        FnParam
+          Var b
+          NULL
+      StmtList
+    ExprCmd echo
+      CallExpr
+        CallExpr
+          Var ReturnsFuncRef
+          FnArgList
+        FnArgList
+          Literal "passed to returned FuncRef"
+    ExprCmd echo
+      CallExpr
+        BinaryOp [
+          Var list_of_funcrefs
+          Literal 4
+        FnArgList
+          Literal 5
+    ExprCmd echo
+      CallExpr
+        Var Add
+        FnArgList
+          Literal 1
+          Literal 2
+    ExprCmd echo
+      MethodCallExpr ->
+        Literal 2
+        CallExpr
+          Var Add
+          FnArgList
+            Literal 3
+    ExprCmd echo
+      MethodCallExpr ->
+        MethodCallExpr ->
+          Literal 3
+          CallExpr
+            Var Add
+            FnArgList
+              Literal 4
+        CallExpr
+          Var Add
+          FnArgList
+            Literal 5

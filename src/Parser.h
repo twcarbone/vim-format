@@ -34,8 +34,8 @@ private:
     void stmt(Node* parent);
     void select_stmt(Node* parent);
     void iteration_stmt(Node* parent);
-    void function_stmt(Node* parent);
-    void arg_list(Node* parent);
+    void fn_stmt(Node* parent);
+    void param_list(Node* parent);
     void list_expr(Node* parent);
     void expr1(Node* parent);
     void expr2(Node* parent);
