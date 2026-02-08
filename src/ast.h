@@ -48,6 +48,18 @@ public:
 };
 
 //
+// ExprList
+//
+
+class ExprList : public Node
+{
+public:
+    virtual ~ExprList() = default;
+
+    void push(Expr* expr);
+};
+
+//
 // ExprCmd
 //
 
@@ -154,32 +166,61 @@ private:
 };
 
 //
-// FuncArg
+// FnParamList
 //
 
-class FuncArg : public Expr
+class FnParamList : public ExprList
 {
 public:
-    FuncArg(Var* name, Expr* default_value);
-    virtual ~FuncArg();
+    FnParamList() = default;
+    virtual ~FnParamList();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
 
 //
-// FuncStmt
+// FnArgList
 //
 
-class FuncStmt : public Stmt
+// TODO (gh-37): Rename xxList to xxSeq to distinguish from a ListExpr
+class FnArgList : public ExprList
 {
 public:
-    FuncStmt(Token* name,
-             Token* bang,
-             const std::vector<FuncArg*>& args,
-             const std::vector<Token*>& modifiers,
-             StmtList* body);
-    virtual ~FuncStmt();
+    FnArgList() = default;
+    virtual ~FnArgList();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// FnParam
+//
+
+class FnParam : public Expr
+{
+public:
+    FnParam(Var* name, Expr* default_value);
+    virtual ~FnParam();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// FnStmt
+//
+
+class FnStmt : public Stmt
+{
+public:
+    FnStmt(Token* name,
+           Token* bang,
+           FnParamList* params,
+           const std::vector<Token*>& modifiers,
+           StmtList* body);
+    virtual ~FnStmt();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -245,6 +286,37 @@ public:
 };
 
 //
+// CallExpr
+//
+
+class CallExpr : public Expr
+{
+public:
+    CallExpr(Expr* callable, FnArgList* args);
+    virtual ~CallExpr();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// MethodCallExpr
+//
+
+class MethodCallExpr : public Expr
+{
+public:
+    MethodCallExpr(Token* op, Expr* receiver, Expr* call);
+    virtual ~MethodCallExpr();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pOp;
+};
+
+//
 // Literal
 //
 
@@ -266,6 +338,8 @@ private:
 //
 // SliceExpr
 //
+
+// TODO (gh-35): Create a new IndexExpr to handle both simple indexing and range indexing
 
 class SliceExpr : public Expr
 {

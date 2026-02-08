@@ -83,26 +83,34 @@ while 1
     break
 endwhile
 
-function! Foo() range abort dict closure
+function! One() range abort dict closure
     echo 1
 endfunction
 
-function! Foo(...)
+function! Two(...)
     return 1
 endfunction
 
-function! Foo(a)
+function! Three(a)
     return
 endfunction
 
-function! Foo(a,)
+function! Four(a,)
     echo 1
 endfunction
 
-function! Foo(a, ...)
+function! Five(a, ...)
     echo 1
 endfunction
 
-function! Foo(a, b = 1)
+function! Six(a, b = 1)
     echo 1
 endfunction
+
+echo Foo(Bar() + 1, baz[4]) / 2
+echo fns[4]([2, 3])
+
+echo "hello"->toupper(1, 2)
+echo 500->l[0]()
+echo dict.a->list[5]("foo")
+echo "foo"->toupper()->tr("O", "a")

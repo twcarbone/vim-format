@@ -1,0 +1,53 @@
+Program
+  StmtList
+    FnStmt One ! range abort dict closure
+      FnParamList
+      StmtList
+        ExprCmd echo
+          Literal 1
+    FnStmt Two !
+      FnParamList
+        FnParam
+          Var ...
+          NULL
+      StmtList
+        JumpStmt return
+          Literal 1
+    FnStmt Three !
+      FnParamList
+        FnParam
+          Var a
+          NULL
+      StmtList
+        JumpStmt return
+          NULL
+    FnStmt Four !
+      FnParamList
+        FnParam
+          Var a
+          NULL
+      StmtList
+        ExprCmd echo
+          Literal 1
+    FnStmt Five !
+      FnParamList
+        FnParam
+          Var a
+          NULL
+        FnParam
+          Var ...
+          NULL
+      StmtList
+        ExprCmd echo
+          Literal 1
+    FnStmt Six !
+      FnParamList
+        FnParam
+          Var a
+          NULL
+        FnParam
+          Var b
+          Literal 1
+      StmtList
+        ExprCmd echo
+          Literal 1

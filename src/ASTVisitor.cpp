@@ -3,8 +3,9 @@
 #include "ASTVisitor.h"
 #include "ast.h"
 
-ASTVisitor::ASTVisitor() :
-    m_nDepth { 0 }
+ASTVisitor::ASTVisitor(std::ostream& acOutStream) :
+    m_nDepth { 0 },
+    m_cOutStream { acOutStream }
 {
 }
 
@@ -18,6 +19,11 @@ void ASTVisitor::visit(const ast::BinaryOp* apBinaryOp)
     handle_node(apBinaryOp);
 }
 
+void ASTVisitor::visit(const ast::CallExpr* apCallExpr)
+{
+    handle_node(apCallExpr);
+}
+
 void ASTVisitor::visit(const ast::CasedBinaryOp* apCasedBinaryOp)
 {
     handle_node(apCasedBinaryOp);
@@ -28,19 +34,29 @@ void ASTVisitor::visit(const ast::ExprCmd* apExprCmd)
     handle_node(apExprCmd);
 }
 
+void ASTVisitor::visit(const ast::FnArgList* apFnArgList)
+{
+    handle_node(apFnArgList);
+}
+
+void ASTVisitor::visit(const ast::FnParam* apFnParam)
+{
+    handle_node(apFnParam);
+}
+
+void ASTVisitor::visit(const ast::FnParamList* apFnParamList)
+{
+    handle_node(apFnParamList);
+}
+
+void ASTVisitor::visit(const ast::FnStmt* apFnStmt)
+{
+    handle_node(apFnStmt);
+}
+
 void ASTVisitor::visit(const ast::ForStmt* apForStmt)
 {
     handle_node(apForStmt);
-}
-
-void ASTVisitor::visit(const ast::FuncArg* apFuncArg)
-{
-    handle_node(apFuncArg);
-}
-
-void ASTVisitor::visit(const ast::FuncStmt* apFuncStmt)
-{
-    handle_node(apFuncStmt);
 }
 
 void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
@@ -63,19 +79,24 @@ void ASTVisitor::visit(const ast::Literal* apLiteral)
     handle_node(apLiteral);
 }
 
+void ASTVisitor::visit(const ast::MethodCallExpr* apMethodCallExpr)
+{
+    handle_node(apMethodCallExpr);
+}
+
 void ASTVisitor::visit(const ast::Program* apProgram)
 {
     handle_node(apProgram);
 }
 
-void ASTVisitor::visit(const ast::StmtList* apStmtList)
-{
-    handle_node(apStmtList);
-}
-
 void ASTVisitor::visit(const ast::SliceExpr* apSliceExpr)
 {
     handle_node(apSliceExpr);
+}
+
+void ASTVisitor::visit(const ast::StmtList* apStmtList)
+{
+    handle_node(apStmtList);
 }
 
 void ASTVisitor::visit(const ast::TernaryOp* apTernaryOp)
@@ -98,9 +119,21 @@ void ASTVisitor::visit(const ast::WhileStmt* apWhileStmt)
     handle_node(apWhileStmt);
 }
 
+const std::vector<VisitedNode>& ASTVisitor::nodes() const
+{
+    return m_lVisitedNodes;
+}
+
+const VisitedNode& ASTVisitor::node(size_t anIdx) const
+{
+    return m_lVisitedNodes.at(anIdx);
+}
+
 void ASTVisitor::handle_node(const ast::Node* apNode)
 {
-    print_line(apNode->toString());
+    write_line(apNode->toString());
+
+    m_lVisitedNodes.push_back({ m_nDepth, apNode });
 
     m_nDepth++;
 
@@ -109,7 +142,7 @@ void ASTVisitor::handle_node(const ast::Node* apNode)
         if (pNode == nullptr)
         {
             // Example: left side of SliceExpr '[:3]'
-            print_line("NULL");
+            write_line("NULL");
         }
         else
         {
@@ -120,12 +153,12 @@ void ASTVisitor::handle_node(const ast::Node* apNode)
     m_nDepth--;
 }
 
-void ASTVisitor::print_line(std::string_view asText)
+void ASTVisitor::write_line(std::string_view asText)
 {
     for (size_t i = 0; i < m_nDepth; i++)
     {
-        std::cout << "  ";
+        m_cOutStream << "  ";
     }
 
-    std::cout << asText << std::endl;
+    m_cOutStream << asText << std::endl;
 }

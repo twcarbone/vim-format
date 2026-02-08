@@ -88,7 +88,7 @@ void Parser::stmt(Node* apParent)
             iteration_stmt(pNonTerminal);
             break;
         case Token::Type::FUNCTION:
-            function_stmt(pNonTerminal);
+            fn_stmt(pNonTerminal);
             break;
         case Token::Type::BREAK:
         case Token::Type::CONTINUE:
@@ -179,7 +179,7 @@ void Parser::iteration_stmt(Node* apParent)
     }
 }
 
-void Parser::function_stmt(Node* apParent)
+void Parser::fn_stmt(Node* apParent)
 {
     NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
     apParent->add(pNonTerminal);
@@ -191,7 +191,7 @@ void Parser::function_stmt(Node* apParent)
 
     if (m_pCurrToken->type() != Token::Type::R_PAREN)
     {
-        arg_list(pNonTerminal);
+        param_list(pNonTerminal);
     }
 
     consume(pNonTerminal, Token::Type::R_PAREN);
@@ -216,12 +216,12 @@ void Parser::function_stmt(Node* apParent)
     consume(pNonTerminal, Token::Type::ENDFUNCTION);
 }
 
-void Parser::arg_list(Node* apParent)
+void Parser::param_list(Node* apParent)
 {
     NonTerminal* pNonTerminal = new NonTerminal(apParent, __func__);
     apParent->add(pNonTerminal);
 
-    bool lbGotDefaultArg = false;
+    bool lbGotDefaultParam = false;
     while (m_pCurrToken->type() != Token::Type::R_PAREN)
     {
         switch (m_pCurrToken->type())
@@ -235,10 +235,10 @@ void Parser::arg_list(Node* apParent)
 
                 if (consume_optional(pNonTerminal, Token::Type::ASSIGN_EQ))
                 {
-                    lbGotDefaultArg = true;
+                    lbGotDefaultParam = true;
                     expr1(pNonTerminal);
                 }
-                else if (lbGotDefaultArg)
+                else if (lbGotDefaultParam)
                 {
                     m_cSource.seek(m_pCurrToken->source_pos());
                     throw VimError("E989", m_cSource.traceback());

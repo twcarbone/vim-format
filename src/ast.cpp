@@ -22,6 +22,15 @@ const std::vector<Node*>& Node::children() const
 }
 
 //
+// ExprList
+//
+
+void ExprList::push(Expr* apExpr)
+{
+    m_lChildren.push_back(apExpr);
+}
+
+//
 // StmtList
 //
 
@@ -190,61 +199,93 @@ void JumpStmt::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
-// FuncArg
+// FnParamList
 //
 
-FuncArg::FuncArg(Var* apName, Expr* apDefaultExpr)
-{
-    m_lChildren.push_back(apName);
-    m_lChildren.push_back(apDefaultExpr);
-}
-
-FuncArg::~FuncArg()
+FnParamList::~FnParamList()
 {
 }
 
-std::string FuncArg::toString() const
+std::string FnParamList::toString() const
 {
-    return "FuncArg";
+    return "FnParamList";
 }
 
-void FuncArg::accept(ASTVisitor& acASTVisitor) const
+void FnParamList::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
 
 //
-// FuncStmt
+// FnArgList
 //
 
-FuncStmt::FuncStmt(Token* apName,
-                   Token* apBang,
-                   const std::vector<FuncArg*>& alArgs,
-                   const std::vector<Token*>& alModifiers,
-                   StmtList* apBody) :
+FnArgList::~FnArgList()
+{
+}
+
+std::string FnArgList::toString() const
+{
+    return "FnArgList";
+}
+
+void FnArgList::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
+// FnParam
+//
+
+FnParam::FnParam(Var* apName, Expr* apDefaultExpr)
+{
+    m_lChildren.push_back(apName);
+    m_lChildren.push_back(apDefaultExpr);
+}
+
+FnParam::~FnParam()
+{
+}
+
+std::string FnParam::toString() const
+{
+    return "FnParam";
+}
+
+void FnParam::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
+// FnStmt
+//
+
+FnStmt::FnStmt(Token* apName,
+               Token* apBang,
+               FnParamList* apFnParamList,
+               const std::vector<Token*>& alModifiers,
+               StmtList* apBody) :
     m_pName { apName },
     m_pBang { apBang },
     m_lModifiers { alModifiers }
 {
-    for (ast::FuncArg* pFuncArg : alArgs)
-    {
-        m_lChildren.push_back(pFuncArg);
-    }
-
+    m_lChildren.push_back(apFnParamList);
     m_lChildren.push_back(apBody);
 }
 
-FuncStmt::~FuncStmt()
+FnStmt::~FnStmt()
 {
 }
 
-std::string FuncStmt::toString() const
+std::string FnStmt::toString() const
 {
-    std::string lsStr = "FuncStmt " + m_pName->str();
+    std::string lsStr = "FnStmt " + m_pName->str();
 
     if (m_pBang != nullptr)
     {
-        lsStr += m_pBang->str();
+        lsStr += " " + m_pBang->str();
     }
 
     for (Token* pModifier : m_lModifiers)
@@ -255,7 +296,7 @@ std::string FuncStmt::toString() const
     return lsStr;
 }
 
-void FuncStmt::accept(ASTVisitor& acASTVisitor) const
+void FnStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
@@ -350,6 +391,55 @@ std::string ListExpr::toString() const
 }
 
 void ListExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
+// CallExpr
+//
+
+CallExpr::CallExpr(ast::Expr* apCallable, FnArgList* apFnArgList)
+{
+    m_lChildren.push_back(apCallable);
+    m_lChildren.push_back(apFnArgList);
+}
+
+CallExpr::~CallExpr()
+{
+}
+
+std::string CallExpr::toString() const
+{
+    return "CallExpr";
+}
+
+void CallExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
+// MethodCallExpr
+//
+
+MethodCallExpr::MethodCallExpr(Token* apOp, Expr* apReceiver, Expr* apCallExpr) :
+    m_pOp { apOp }
+{
+    m_lChildren.push_back(apReceiver);
+    m_lChildren.push_back(apCallExpr);
+}
+
+MethodCallExpr::~MethodCallExpr()
+{
+}
+
+std::string MethodCallExpr::toString() const
+{
+    return "MethodCallExpr " + m_pOp->str();
+}
+
+void MethodCallExpr::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }

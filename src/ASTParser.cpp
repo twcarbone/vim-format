@@ -8,14 +8,14 @@ ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
     m_nPos { 0 },
     m_lTokens { std::move(alTokens) },
     m_mOpBindingPower {
-        // 10
+        // expr1
         { Token::Type::OP_FALSEY, { 10, 11 } },
         { Token::Type::OP_TERNARY_IF, { 10, 0 } },
-        // 20
+        // expr2
         { Token::Type::OP_OR, { 20, 21 } },
-        // 30
+        // expr3
         { Token::Type::OP_AND, { 30, 31 } },
-        // 40
+        // expr4
         { Token::Type::OP_EQUAL, { 40, 41 } },
         { Token::Type::OP_NEQUAL, { 40, 41 } },
         { Token::Type::OP_GT, { 40, 41 } },
@@ -26,23 +26,25 @@ ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
         { Token::Type::OP_NMATCH, { 40, 41 } },
         { Token::Type::OP_IS, { 40, 41 } },
         { Token::Type::OP_ISNOT, { 40, 41 } },
-        // 50
+        // expr5
         { Token::Type::OP_LSHIFT, { 50, 51 } },
         { Token::Type::OP_RSHIFT, { 50, 51 } },
-        // 60
+        // expr6
         { Token::Type::OP_ADD, { 60, 61 } },
         { Token::Type::OP_SUB, { 60, 61 } },
         { Token::Type::OP_CAT_OLD, { 60, 61 } },
         { Token::Type::OP_CAT_NEW, { 60, 61 } },
-        // 70
+        // expr7
         { Token::Type::OP_MUL, { 70, 71 } },
         { Token::Type::OP_DIV, { 70, 71 } },
         { Token::Type::OP_MODULO, { 70, 71 } },
-        // 80
+        // expr9
         { Token::Type::OP_LOGICAL_NOT, { 80, 81 } },
         { Token::Type::OP_UNARY_MINUS, { 80, 81 } },
         { Token::Type::OP_UNARY_PLUS, { 80, 81 } },
-        // 90
+        // expr10
+        { Token::Type::OP_METHOD, { 83, 84 } },
+        { Token::Type::L_PAREN, { 85, 0 } },
         { Token::Type::L_BRACKET, { 90, 0 } },
         { Token::Type::OP_SLICE, { 90, 91 } },
         { Token::Type::OP_DOT, { 90, 91 } },
@@ -120,7 +122,7 @@ ast::Stmt* ASTParser::stmt()
             pStmt = jump_stmt();
             break;
         case Token::Type::FUNCTION:
-            pStmt = func_stmt();
+            pStmt = fn_stmt();
             break;
         case Token::Type::FOR:
             pStmt = for_stmt();
@@ -182,7 +184,78 @@ ast::WhileStmt* ASTParser::while_stmt()
     return new ast::WhileStmt(pExpr, pStmts);
 }
 
-ast::FuncStmt* ASTParser::func_stmt()
+ast::FnParamList* ASTParser::fn_param_list()
+{
+    ast::FnParamList* pFnParamList = new ast::FnParamList();
+
+    bool bGotDefaultParam = false;
+    bool bDoneParsing = false;
+
+    while (true)
+    {
+        ast::Var* pVar = nullptr;
+        ast::Expr* pDefaultExpr = nullptr;
+        ast::FnParam* pFnParam = nullptr;
+
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::IDENTIFIER:
+                pVar = new ast::Var(m_pCurrToken);
+                consume(Token::Type::IDENTIFIER);
+
+                if (consume_optional(Token::Type::ASSIGN_EQ))
+                {
+                    bGotDefaultParam = true;
+                    pDefaultExpr = expr(0);
+                }
+                else if (bGotDefaultParam)
+                {
+                    // A non-default param follows a default param.
+                    throw_vim_error("E989");
+                }
+
+                if (!consume_optional(Token::Type::COMMA))
+                {
+                    bDoneParsing = true;
+                }
+
+                break;
+            case Token::Type::FN_ELLIPSES:
+                pVar = new ast::Var(m_pCurrToken);
+                consume(Token::Type::FN_ELLIPSES);
+                bDoneParsing = true;
+                break;
+            case Token::Type::COMMA:
+                // The first token is a comma, or we got two commas after a param.
+                throw_vim_error("E125");
+                break;
+            default:
+                bDoneParsing = true;
+        }
+
+        if (pVar != nullptr)
+        {
+            pFnParam = new ast::FnParam(pVar, pDefaultExpr);
+            pFnParamList->push(pFnParam);
+        }
+
+        if (bDoneParsing)
+        {
+            switch (m_pCurrToken->type())
+            {
+                case Token::Type::R_PAREN:
+                case Token::Type::OP_METHOD:
+                    return pFnParamList;
+                    break;
+                default:
+                    // We should be at the end, but aren't.
+                    throw_vim_error("E475");
+            }
+        }
+    }
+}
+
+ast::FnStmt* ASTParser::fn_stmt()
 {
     consume(Token::Type::FUNCTION);
 
@@ -200,49 +273,8 @@ ast::FuncStmt* ASTParser::func_stmt()
 
     consume(Token::Type::L_PAREN);
 
-    // Arguments
-    std::vector<ast::FuncArg*> lArgs;
-    bool bGotDefaultArg = false;
-    while (m_pCurrToken->type() != Token::Type::R_PAREN)
-    {
-        ast::Var* pVar = nullptr;
-        ast::Expr* pDefaultExpr = nullptr;
-
-        switch (m_pCurrToken->type())
-        {
-            case Token::Type::FN_ELLIPSES:
-                pVar = new ast::Var(m_pCurrToken);
-                consume(Token::Type::FN_ELLIPSES);
-
-                if (m_pCurrToken->type() != Token::Type::R_PAREN)
-                {
-                    throw_vim_error("E475");
-                }
-
-                break;
-            case Token::Type::IDENTIFIER:
-                pVar = new ast::Var(m_pCurrToken);
-                consume(Token::Type::IDENTIFIER);
-
-                if (consume_optional(Token::Type::ASSIGN_EQ))
-                {
-                    bGotDefaultArg = true;
-                    pDefaultExpr = expr(0);
-                }
-                else if (bGotDefaultArg)
-                {
-                    throw_vim_error("E989");
-                }
-
-                consume_optional(Token::Type::COMMA);
-                break;
-            default:
-                throw_vim_error("E125");
-        }
-
-        ast::FuncArg* pFuncArg = new ast::FuncArg(pVar, pDefaultExpr);
-        lArgs.push_back(pFuncArg);
-    }
+    // Params
+    ast::FnParamList* pFnParamList = fn_param_list();
 
     consume(Token::Type::R_PAREN);
 
@@ -269,10 +301,10 @@ ast::FuncStmt* ASTParser::func_stmt()
     // Body
     ast::StmtList* pBody = stmt_list();
 
-    ast::FuncStmt* pFuncStmt = new ast::FuncStmt(pName, pBang, lArgs, lModifiers, pBody);
+    ast::FnStmt* pFnStmt = new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
 
     consume(Token::Type::ENDFUNCTION);
-    return pFuncStmt;
+    return pFnStmt;
 }
 
 ast::ForStmt* ASTParser::for_stmt()
@@ -364,6 +396,40 @@ ast::ListExpr* ASTParser::list_expr()
 
     consume(Token::Type::R_BRACKET);
     return pListExpr;
+}
+
+ast::FnArgList* ASTParser::fn_arg_list()
+{
+    ast::FnArgList* pFnArgList = new ast::FnArgList();
+
+    bool bLoop = true;
+
+    while (bLoop)
+    {
+        switch (m_pCurrToken->type())
+        {
+            case Token::Type::COMMA:
+                throw_vim_error("E116");
+                break;
+            case Token::Type::R_PAREN:
+                bLoop = false;
+                break;
+            default:
+                try
+                {
+                    pFnArgList->push(expr(0));
+                }
+                catch (const std::runtime_error& err)
+                {
+                    throw_vim_error("E116");
+                }
+
+                consume_optional(Token::Type::COMMA);
+        }
+    }
+
+    consume(Token::Type::R_PAREN);
+    return pFnArgList;
 }
 
 ast::Expr* ASTParser::slice_expr()
@@ -492,7 +558,10 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::OP_UNARY_MINUS:
             case Token::Type::OP_UNARY_PLUS:
             // expr10
+            case Token::Type::OP_METHOD:
             case Token::Type::L_BRACKET:
+            // expr11
+            case Token::Type::L_PAREN:
                 pOp = m_pCurrToken;
                 break;
             default:
@@ -512,6 +581,13 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
 
         switch (pOp->type())
         {
+            case Token::Type::OP_METHOD:
+                pRhs = expr(lnRhsOpBindingPower);
+                pLhs = new ast::MethodCallExpr(pOp, pLhs, pRhs);
+                break;
+            case Token::Type::L_PAREN:
+                pLhs = new ast::CallExpr(pLhs, fn_arg_list());
+                break;
             case Token::Type::L_BRACKET:
                 pRhs = slice_expr();
                 pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
@@ -550,6 +626,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                         break;
                 }
 
+                // TODO (gh-36): Verify CasedBinaryOp LHS vs. RHS binding power
                 pRhs = expr(lnLhsOpBindingPower);
                 pLhs = new ast::CasedBinaryOp(pOp, pLhs, pRhs, pCaseSensitivity);
                 break;
