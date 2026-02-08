@@ -38,6 +38,7 @@ echo [0, 1, 2, 3][:]
 echo [0, 1, 2, 3][:2]
 echo items[2:]
 echo items[1:3]
+echo items[1 + 1:6 / 2]
 
 function! Add(a, b)
 endfunction
