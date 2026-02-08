@@ -42,6 +42,8 @@ echo items[1:3]
 function! Add(a, b)
 endfunction
 
+echo ReturnsFuncRef()("passed to returned FuncRef")
+echo list_of_funcrefs[4](5)
 echo Add(1, 2)
 echo 2->Add(3)
 echo 3->Add(4)->Add(5)

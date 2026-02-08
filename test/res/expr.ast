@@ -160,6 +160,20 @@ Program
       StmtList
     ExprCmd echo
       CallExpr
+        CallExpr
+          Var ReturnsFuncRef
+          FnArgList
+        FnArgList
+          Literal "passed to returned FuncRef"
+    ExprCmd echo
+      CallExpr
+        BinaryOp [
+          Var list_of_funcrefs
+          Literal 4
+        FnArgList
+          Literal 5
+    ExprCmd echo
+      CallExpr
         Var Add
         FnArgList
           Literal 1
