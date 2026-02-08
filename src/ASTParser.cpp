@@ -398,6 +398,36 @@ ast::ListExpr* ASTParser::list_expr()
     return pListExpr;
 }
 
+ast::DictExpr* ASTParser::dict_expr()
+{
+    ast::DictExpr* pDictExpr = new ast::DictExpr();
+
+    consume(Token::Type::L_BRACE);
+
+    while (true)
+    {
+        if (m_pCurrToken->type() == Token::Type::R_BRACE)
+        {
+            break;
+        }
+
+        ast::Expr* pKey = expr(0);
+        consume(Token::Type::COLON);
+        ast::Expr* pValue = expr(0);
+
+        ast::DictEntry* pDictEntry = new ast::DictEntry(pKey, pValue);
+        pDictExpr->push(pDictEntry);
+
+        if (m_pCurrToken->type() != Token::Type::R_BRACE)
+        {
+            consume(Token::Type::COMMA);
+        }
+    }
+
+    consume(Token::Type::R_BRACE);
+    return pDictExpr;
+}
+
 ast::FnArgList* ASTParser::fn_arg_list()
 {
     ast::FnArgList* pFnArgList = new ast::FnArgList();
@@ -462,6 +492,9 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
         case Token::Type::L_BRACKET:
             pLhs = list_expr();
             break;
+        case Token::Type::L_BRACE:
+            pLhs = dict_expr();
+            break;
         case Token::Type::OP_LOGICAL_NOT:
         case Token::Type::OP_UNARY_MINUS:
         case Token::Type::OP_UNARY_PLUS:
@@ -486,6 +519,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::IN:
             case Token::Type::NEWLINE:
             case Token::Type::R_BRACKET:
+            case Token::Type::R_BRACE:
             case Token::Type::R_PAREN:
                 return pLhs;
             // expr1

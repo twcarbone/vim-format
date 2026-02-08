@@ -155,6 +155,25 @@ Program
         BinaryOp /
           Literal 6
           Literal 2
+    AssignStmt =
+      Var dict_a
+      DictExpr
+        DictEntry
+          Literal "apple"
+          Literal 4
+        DictEntry
+          Literal "banana"
+          ListExpr
+            BinaryOp *
+              Literal 1
+              Literal 2
+            Literal 2
+        DictEntry
+          Literal "cherry"
+          Literal "pie"
+    AssignStmt =
+      Var dict_b
+      DictExpr
     FnStmt Add !
       FnParamList
         FnParam

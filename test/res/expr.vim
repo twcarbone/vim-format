@@ -40,6 +40,9 @@ echo items[2:]
 echo items[1:3]
 echo items[1 + 1:6 / 2]
 
+let dict_a = {"apple": 4, "banana": [1 * 2, 2], "cherry": "pie"}
+let dict_b = {}
+
 function! Add(a, b)
 endfunction
 
