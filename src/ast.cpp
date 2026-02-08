@@ -373,6 +373,53 @@ void CasedBinaryOp::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// DictEntry
+//
+
+DictEntry::DictEntry(Expr* apKey, Expr* apValue)
+{
+    m_lChildren.push_back(apKey);
+    m_lChildren.push_back(apValue);
+}
+
+DictEntry::~DictEntry()
+{
+}
+
+std::string DictEntry::toString() const
+{
+    return "DictEntry";
+}
+
+void DictEntry::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
+// DictExpr
+//
+
+DictExpr::~DictExpr()
+{
+}
+
+void DictExpr::push(DictEntry* apEntry)
+{
+    m_lChildren.push_back(apEntry);
+}
+
+std::string DictExpr::toString() const
+{
+    return "DictExpr";
+}
+
+void DictExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // ListExpr
 //
 

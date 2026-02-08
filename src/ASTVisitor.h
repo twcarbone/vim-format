@@ -10,6 +10,8 @@ class AssignStmt;
 class BinaryOp;
 class CallExpr;
 class CasedBinaryOp;
+class DictEntry;
+class DictExpr;
 class ExprCmd;
 class FnArgList;
 class FnParam;
@@ -47,6 +49,8 @@ public:
     virtual void visit(const ast::BinaryOp* ast);
     virtual void visit(const ast::CallExpr* ast);
     virtual void visit(const ast::CasedBinaryOp* ast);
+    virtual void visit(const ast::DictEntry* ast);
+    virtual void visit(const ast::DictExpr* ast);
     virtual void visit(const ast::ExprCmd* ast);
     virtual void visit(const ast::FnArgList* ast);
     virtual void visit(const ast::FnParam* ast);
