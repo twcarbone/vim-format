@@ -3,6 +3,7 @@
 
 #include "Lexer.h"
 #include "Token.h"
+#include "util.h"
 
 Lexer::Lexer(const Context& acContext) :
     m_cSource { acContext.source() }
@@ -214,6 +215,31 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     break;
                 default:
                     apCurrentToken->setType(Token::Type::OP_CAT_OLD);
+            }
+        }
+
+        else if (apCurrentToken->type() == Token::Type::GEN_COLON)
+        {
+            switch (pPrevToken->type())
+            {
+                case Token::Type::TAB:
+                case Token::Type::SPACE:
+                    continue;
+                case Token::Type::IDENTIFIER:
+                    if (rit == m_lTokens.crbegin() && vf::is_one_of(pPrevToken->str(), "bwtglsav"))
+                    {
+                        // Previous token must be non-whitespace, single-character, valid
+                        // identifier to make this colon a scope resolution operator
+                        apCurrentToken->setType(Token::Type::OP_SCOPE);
+                    }
+                    else
+                    {
+                        apCurrentToken->setType(Token::Type::COLON);
+                    }
+
+                    break;
+                default:
+                    apCurrentToken->setType(Token::Type::COLON);
             }
         }
 

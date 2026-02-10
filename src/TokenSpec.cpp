@@ -138,7 +138,7 @@ TokenSpec::TokenSpec() :
         { ".=", Token::Type::ASSIGN_CAT_OLD },
         { "/", Token::Type::OP_DIV },
         { "/=", Token::Type::ASSIGN_DIV },
-        { ":", Token::Type::COLON },
+        { ":", Token::Type::GEN_COLON },
         { "<", Token::Type::OP_LT },
         { "<<", Token::Type::OP_LSHIFT },
         { "<=", Token::Type::OP_LTE },

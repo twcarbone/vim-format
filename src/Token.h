@@ -49,6 +49,7 @@
         X(OP_BANG) \
         X(OP_OPTION) \
         X(OP_METHOD) \
+        X(OP_SCOPE) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \
         X(ASSIGN_MUL) \
