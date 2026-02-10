@@ -89,3 +89,18 @@ echo ['quick', 'brown', 'fox'][1]->tr('own', 'ick')
 
 let l = [{x -> 1000 + x}]
 echo 500->l[0]()
+
+let g = "one"
+let c = "two"
+" let dict_c = {g: 1}           " E720: Missing colon in Dictionary: 1}
+" let  dict_x = {c: 1}          " E121: Undefined variable: c
+let dict_c = {g : 1, c: 2}
+echo dict_c[g]
+echo dict_c[c]
+
+" echo b :foo                   " E121: Undefined variable: b
+" echo b: foo                   " E121: Undefined variable: foo
+" let m:spam = "eggs"           " E121: Undefined variable: m
+let b:foo = "bar"
+echo b:foo
+
