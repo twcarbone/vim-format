@@ -638,8 +638,9 @@ void UnaryOp::accept(ASTVisitor& acASTVisitor) const
 // Var
 //
 
-Var::Var(Token* apToken) :
-    m_pToken { apToken }
+Var::Var(Token* apScope, Token* apName) :
+    m_pScope { apScope },
+    m_pName { apName }
 {
 }
 
@@ -647,14 +648,26 @@ Var::~Var()
 {
 }
 
-const Token* Var::token() const
+const Token* Var::scope() const
 {
-    return m_pToken;
+    return m_pScope;
+}
+
+const Token* Var::name() const
+{
+    return m_pName;
 }
 
 std::string Var::toString() const
 {
-    return "Var " + m_pToken->str();
+    if (m_pScope != nullptr)
+    {
+        return "Var " + m_pScope->str() + ":" + m_pName->str();
+    }
+    else
+    {
+        return "Var " + m_pName->str();
+    }
 }
 
 void Var::accept(ASTVisitor& acASTVisitor) const

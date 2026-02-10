@@ -32,16 +32,19 @@ echo !1
 echo -1
 echo +1
 
-let items = [0, 1, 2, 3]
+let g:m_bar = 42
+
+let b:items = [0, 1, 2, 3]
 echo [0, 1, 2, 3][0]
 echo [0, 1, 2, 3][:]
 echo [0, 1, 2, 3][:2]
-echo items[2:]
-echo items[1:3]
-echo items[1 + 1:6 / 2]
+echo b:items[2:]
+echo b:items[1:3]
+echo b:items[1 + 1:6 / 2]
 
 let dict_a = {"apple": 4, "banana": [1 * 2, 2], "cherry": "pie"}
-let dict_b = {}
+let dict_b = {"test": g:m_bar}
+let dict_c = {g:m_bar: 43}
 
 function! Add(a, b)
 endfunction

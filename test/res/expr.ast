@@ -103,7 +103,10 @@ Program
       UnaryOp +
         Literal 1
     AssignStmt =
-      Var items
+      Var g:m_bar
+      Literal 42
+    AssignStmt =
+      Var b:items
       ListExpr
         Literal 0
         Literal 1
@@ -138,17 +141,17 @@ Program
         Literal 2
     ExprCmd echo
       IndexExpr
-        Var items
+        Var b:items
         Literal 2
         NULL
     ExprCmd echo
       IndexExpr
-        Var items
+        Var b:items
         Literal 1
         Literal 3
     ExprCmd echo
       IndexExpr
-        Var items
+        Var b:items
         BinaryOp +
           Literal 1
           Literal 1
@@ -174,6 +177,15 @@ Program
     AssignStmt =
       Var dict_b
       DictExpr
+        DictEntry
+          Literal "test"
+          Var g:m_bar
+    AssignStmt =
+      Var dict_c
+      DictExpr
+        DictEntry
+          Var g:m_bar
+          Literal 43
     FnStmt Add !
       FnParamList
         FnParam
