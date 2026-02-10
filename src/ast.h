@@ -430,16 +430,18 @@ private:
 class Var : public Expr
 {
 public:
-    Var(Token* token);
+    Var(Token* scope, Token* name);
     virtual ~Var();
 
-    const Token* token() const;
+    const Token* scope() const;
+    const Token* name() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
-    Token* m_pToken;
+    Token* m_pScope;
+    Token* m_pName;
 };
 
 //

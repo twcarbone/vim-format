@@ -75,6 +75,29 @@ ast::Program* ASTParser::program()
     return pProgram;
 }
 
+ast::Var* ASTParser::var()
+{
+    Token* pScope = m_pCurrToken;
+    Token* pName = nullptr;
+
+    consume(Token::Type::IDENTIFIER);
+
+    switch (m_pCurrToken->type())
+    {
+        case Token::Type::OP_SCOPE:
+            consume(Token::Type::OP_SCOPE);
+            pName = m_pCurrToken;
+            consume(Token::Type::IDENTIFIER);
+            break;
+        default:
+            pName = pScope;
+            pScope = nullptr;
+            break;
+    }
+
+    return new ast::Var(pScope, pName);
+}
+
 ast::StmtList* ASTParser::stmt_list()
 {
     ast::StmtList* pStmtList = new ast::StmtList();
@@ -200,8 +223,7 @@ ast::FnParamList* ASTParser::fn_param_list()
         switch (m_pCurrToken->type())
         {
             case Token::Type::IDENTIFIER:
-                pVar = new ast::Var(m_pCurrToken);
-                consume(Token::Type::IDENTIFIER);
+                pVar = var();
 
                 if (consume_optional(Token::Type::ASSIGN_EQ))
                 {
@@ -221,7 +243,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 
                 break;
             case Token::Type::FN_ELLIPSES:
-                pVar = new ast::Var(m_pCurrToken);
+                pVar = new ast::Var(nullptr, m_pCurrToken);
                 consume(Token::Type::FN_ELLIPSES);
                 bDoneParsing = true;
                 break;
@@ -341,8 +363,7 @@ ast::AssignStmt* ASTParser::assign_stmt()
 
     consume(Token::Type::CMD_LET);
 
-    pVar = new ast::Var(m_pCurrToken);
-    consume(Token::Type::IDENTIFIER);
+    pVar = var();
 
     switch (m_pCurrToken->type())
     {
@@ -481,8 +502,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             consume(m_pCurrToken->type());
             break;
         case Token::Type::IDENTIFIER:
-            pLhs = new ast::Var(m_pCurrToken);
-            consume(Token::Type::IDENTIFIER);
+            pLhs = var();
             break;
         case Token::Type::L_PAREN:
             consume(Token::Type::L_PAREN);

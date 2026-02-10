@@ -24,6 +24,7 @@ private:
     const std::vector<Token*> m_lTokens;
     const std::unordered_map<Token::Type, std::pair<int, int> > m_mOpBindingPower;
 
+    ast::Var* var();
     ast::Stmt* stmt();
     ast::IfStmt* if_stmt();
     ast::Program* program();
