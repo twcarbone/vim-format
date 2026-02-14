@@ -11,11 +11,6 @@ Source::~Source()
 {
 }
 
-int Source::pos() const
-{
-    return m_nPos;
-}
-
 int Source::line() const
 {
     int lnLine = 0;
@@ -71,12 +66,6 @@ int Source::indent() const
     size_t lnStartOfLine = lsView.rfind('\n', lnCurosrStart) + 1;
     size_t lnEndOfLine = lsView.find_first_not_of(" \t", lnStartOfLine);
     return lnEndOfLine - lnStartOfLine;
-}
-
-bool Source::eof() const
-{
-    // This does not check for '\0' on purpose! std::string can contain embedded '\0'.
-    return m_nPos == m_sText.size();
 }
 
 std::string Source::path() const

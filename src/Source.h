@@ -15,7 +15,7 @@ public:
 
     // 0-based index of cursor.
     // Can be equal to string size if at EOF.
-    int pos() const;
+    [[nodiscard]] int pos() const;
 
     // 0-based index of current line.
     int line() const;
@@ -28,7 +28,7 @@ public:
     int indent() const;
 
     // True if cursor is at EOF.
-    bool eof() const;
+    [[nodiscard]] bool eof() const;
 
     // Path to source file.
     std::string path() const;
@@ -60,5 +60,16 @@ private:
     fs::path m_cPath;
     std::string m_sText;
 };
+
+inline int Source::pos() const
+{
+    return m_nPos;
+}
+
+inline bool Source::eof() const
+{
+    // This does not check for '\0' on purpose! std::string can contain embedded '\0'.
+    return m_nPos == m_sText.size();
+}
 
 #endif  // SOURCE_H
