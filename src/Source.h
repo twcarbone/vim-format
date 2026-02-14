@@ -16,6 +16,7 @@ public:
     int pos() const;
     int line() const;
     int column() const;
+    int indent() const;
     bool eof() const;
     std::string path() const;
     std::string traceback() const;

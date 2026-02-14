@@ -22,6 +22,7 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.remaining_text(), "ck brown\nfox jumped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.line_text(), "The quick brown");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
+    EXPECT_EQ(lcSource.indent(), 0);
 
     lcSource.advance(10);
 
@@ -36,6 +37,7 @@ TEST(SourceTest, text_test_01)
               "stdin:2:1\n"
               " 2 | fox jumped over the\n"
               "   |  ^");
+    EXPECT_EQ(lcSource.indent(), 0);
 
     lcSource.advance(19);
 
@@ -46,6 +48,7 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.remaining_text(), "lazy dog\n");
     EXPECT_EQ(lcSource.line_text(), "lazy dog");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
+    EXPECT_EQ(lcSource.indent(), 0);
 
     lcSource.advance(8);
 
@@ -56,6 +59,7 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.remaining_text(), "\n");
     EXPECT_EQ(lcSource.line_text(), "lazy dog");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
+    EXPECT_EQ(lcSource.indent(), 0);
 
     lcSource.advance(1);
 
@@ -66,6 +70,7 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.remaining_text(), "");
     EXPECT_EQ(lcSource.line_text(), "");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
+    EXPECT_EQ(lcSource.indent(), 0);
 
     lcSource.seek(23);
 
@@ -76,6 +81,7 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.remaining_text(), "ped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.line_text(), "fox jumped over the");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
+    EXPECT_EQ(lcSource.indent(), 0);
 }
 
 //
@@ -96,6 +102,7 @@ TEST(SourceTest, text_test_02)
     EXPECT_EQ(lcSource.remaining_text(), "\n");
     EXPECT_EQ(lcSource.line_text(), "");
     EXPECT_EQ(lcSource.text(), "\n");
+    EXPECT_EQ(lcSource.indent(), 0);
 }
 
 //
@@ -122,4 +129,19 @@ TEST(SourceTest, file_test_01)
               "../../test/sample/05.vim:1:2\n"
               " 1 | echo 1\n"
               "   |   ^");
+    EXPECT_EQ(lcSource.indent(), 0);
+}
+
+//
+// file_test_02
+//
+
+TEST(SourceTest, file_test_02)
+{
+    Source lcSource;
+    lcSource.read_file("../../test/res/while_stmt_01.vim");
+
+    lcSource.advance(30);
+
+    EXPECT_EQ(lcSource.indent(), 4);
 }

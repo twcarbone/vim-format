@@ -50,6 +50,27 @@ int Source::column() const
     return lnColumn;
 }
 
+int Source::indent() const
+{
+    std::string_view lsView { m_sText };
+
+    if (line() == 0)
+    {
+        return lsView.find_first_not_of(" \t");
+    }
+
+    size_t lnCurosrStart = m_nPos - 1;
+
+    if (eof())
+    {
+        lnCurosrStart--;
+    }
+
+    size_t lnStartOfLine = lsView.rfind('\n', lnCurosrStart) + 1;
+    size_t lnEndOfLine = lsView.find_first_not_of(" \t", lnStartOfLine);
+    return lnEndOfLine - lnStartOfLine;
+}
+
 bool Source::eof() const
 {
     return m_nPos == m_sText.size();
