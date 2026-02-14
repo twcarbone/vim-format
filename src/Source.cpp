@@ -19,11 +19,13 @@ int Source::pos() const
 int Source::line() const
 {
     int lnLine = 0;
-    for (int i = 0; i <= m_nPos; i++)
+
+    // If we are at EOF, looking 1 behind will see the final newline of the file. So we
+    // need to start looking 2 behind.
+    for (int i = eof() ? m_nPos - 2 : m_nPos - 1; i >= 0; i--)
     {
-        if (m_sText[i] == '\n' && i < m_sText.size() - 1)
+        if (m_sText[i] == '\n')
         {
-            // Advance the line only after \n that is not the last character
             lnLine++;
         }
     }
