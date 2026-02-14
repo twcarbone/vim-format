@@ -34,7 +34,7 @@ public:
     std::string path() const;
 
     // Basic printout of current line context.
-    std::string traceback() const;
+    std::string context() const;
 
     // All text from 0 to EOF minus one.
     std::string_view text() const;

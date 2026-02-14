@@ -723,11 +723,11 @@ bool ASTParser::consume_optional(const Token::Type aeType)
 void ASTParser::throw_unexpected_token()
 {
     m_cSource.seek(m_pCurrToken->source_pos());
-    throw std::runtime_error("Unexpected token.\n\n" + m_cSource.traceback());
+    throw std::runtime_error("Unexpected token.\n\n" + m_cSource.context());
 }
 
 void ASTParser::throw_vim_error(std::string asCode)
 {
     m_cSource.seek(m_pCurrToken->source_pos());
-    throw VimError(asCode, m_cSource.traceback());
+    throw VimError(asCode, m_cSource.context());
 }

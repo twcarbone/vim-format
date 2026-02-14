@@ -83,12 +83,12 @@ Token* Lexer::do_next()
 
         if (pToken == nullptr)
         {
-            throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.traceback());
+            throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.context());
         }
 
         if (pToken->ambiguous() && !disambiguate(pToken))
         {
-            throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.traceback());
+            throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
         }
 
         m_cSource.advance(pToken->str().size());

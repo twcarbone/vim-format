@@ -89,7 +89,7 @@ std::string Source::path() const
     return m_cPath.string();
 }
 
-std::string Source::traceback() const
+std::string Source::context() const
 {
     std::string lsTraceback;
 

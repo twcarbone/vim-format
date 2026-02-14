@@ -241,14 +241,14 @@ void Parser::param_list(Node* apParent)
                 else if (lbGotDefaultParam)
                 {
                     m_cSource.seek(m_pCurrToken->source_pos());
-                    throw VimError("E989", m_cSource.traceback());
+                    throw VimError("E989", m_cSource.context());
                 }
 
                 consume_optional(pNonTerminal, Token::Type::COMMA);
                 break;
             default:
                 m_cSource.seek(m_pCurrToken->source_pos());
-                throw VimError("E125", m_cSource.traceback());
+                throw VimError("E125", m_cSource.context());
         }
     }
 }
@@ -493,7 +493,7 @@ void Parser::expr11(Node* apParent)
             break;
         default:
             m_cSource.seek(m_pCurrToken->source_pos());
-            throw std::runtime_error("Invalid expression.\n\n" + m_cSource.traceback());
+            throw std::runtime_error("Invalid expression.\n\n" + m_cSource.context());
     }
 }
 
@@ -507,7 +507,7 @@ void Parser::consume(Node* apParent, const Token::Type aeType)
     if (m_pCurrToken->type() != aeType)
     {
         m_cSource.seek(m_pCurrToken->source_pos());
-        throw std::runtime_error("Expected " + Token::TypeToStr(aeType) + ".\n\n" + m_cSource.traceback());
+        throw std::runtime_error("Expected " + Token::TypeToStr(aeType) + ".\n\n" + m_cSource.context());
     }
 
     Node* pTerminal = new Terminal(apParent, m_pCurrToken);
