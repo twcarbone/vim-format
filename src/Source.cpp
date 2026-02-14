@@ -75,6 +75,7 @@ int Source::indent() const
 
 bool Source::eof() const
 {
+    // This does not check for '\0' on purpose! std::string can contain embedded '\0'.
     return m_nPos == m_sText.size();
 }
 
