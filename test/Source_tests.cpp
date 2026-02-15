@@ -23,6 +23,8 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.line_text(), "The quick brown");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.indent(), 0);
+    EXPECT_EQ(lcSource.bol(), 0);
+    EXPECT_EQ(lcSource.eol(), 15);
 
     lcSource.advance(10);
 
@@ -38,6 +40,8 @@ TEST(SourceTest, text_test_01)
               " 2 | fox jumped over the\n"
               "   |  ^");
     EXPECT_EQ(lcSource.indent(), 0);
+    EXPECT_EQ(lcSource.bol(), 16);
+    EXPECT_EQ(lcSource.eol(), 35);
 
     lcSource.advance(19);
 
@@ -49,6 +53,8 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.line_text(), "lazy dog");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.indent(), 0);
+    EXPECT_EQ(lcSource.bol(), 36);
+    EXPECT_EQ(lcSource.eol(), 44);
 
     lcSource.advance(8);
 
@@ -60,6 +66,8 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.line_text(), "lazy dog");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.indent(), 0);
+    EXPECT_EQ(lcSource.bol(), 36);
+    EXPECT_EQ(lcSource.eol(), 44);
 
     lcSource.advance(1);
 
@@ -71,6 +79,8 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.line_text(), "");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.indent(), 0);
+    EXPECT_EQ(lcSource.bol(), 36);
+    EXPECT_EQ(lcSource.eol(), 44);
 
     lcSource.seek(23);
 
@@ -82,6 +92,8 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.line_text(), "fox jumped over the");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.indent(), 0);
+    EXPECT_EQ(lcSource.bol(), 16);
+    EXPECT_EQ(lcSource.eol(), 35);
 }
 
 //
@@ -130,6 +142,8 @@ TEST(SourceTest, file_test_01)
               " 1 | echo 1\n"
               "   |   ^");
     EXPECT_EQ(lcSource.indent(), 0);
+    EXPECT_EQ(lcSource.bol(), 0);
+    EXPECT_EQ(lcSource.eol(), 6);
 }
 
 //

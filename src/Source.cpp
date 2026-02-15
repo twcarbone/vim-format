@@ -68,6 +68,41 @@ int Source::indent() const
     return lnStartOfContent - lnStartOfLine;
 }
 
+int Source::bol() const
+{
+    std::string_view lsView { m_sText };
+
+    if (line() == 0)
+    {
+        return 0;
+    }
+    else if (eof())
+    {
+        return lsView.rfind('\n', m_nPos - 2) + 1;
+    }
+
+    return lsView.rfind('\n', m_nPos - 1) + 1;
+}
+
+int Source::eol() const
+{
+    std::string_view lsView { m_sText };
+
+    if (eof())
+    {
+        return m_nPos - 1;
+    }
+
+    size_t lnEOL = lsView.find('\n', m_nPos);
+
+    if (lnEOL == std::string_view::npos)
+    {
+        return lsView.size();
+    }
+
+    return lnEOL;
+}
+
 std::string Source::path() const
 {
     if (m_cPath.empty())

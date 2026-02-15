@@ -30,6 +30,13 @@ public:
     // True if cursor is at EOF.
     [[nodiscard]] bool eof() const;
 
+    // 0-based index of the first character of the current line.
+    [[nodiscard]] int bol() const;
+
+    // 0-based index of the next newline ahead of the cursor.
+    // If on EOF, index of preceding character.
+    [[nodiscard]] int eol() const;
+
     // Path to source file.
     std::string path() const;
 
