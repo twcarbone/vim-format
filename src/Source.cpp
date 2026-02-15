@@ -162,6 +162,11 @@ std::string_view Source::remaining_text() const
     return std::string_view(m_sText).substr(m_nPos);
 }
 
+std::string_view Source::remaining_line() const
+{
+    return std::string_view(m_sText).substr(m_nPos, eol() - m_nPos);
+}
+
 void Source::seek(int anPos)
 {
     m_nPos = anPos;

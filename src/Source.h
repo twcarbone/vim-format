@@ -53,6 +53,9 @@ public:
     // All text from cursor to EOF minus one.
     std::string_view remaining_text() const;
 
+    // All text from cursor to the next newline (exclusive).
+    std::string_view remaining_line() const;
+
     // Move cursor to 0-based `pos`.
     void seek(int pos);
 
