@@ -64,8 +64,8 @@ int Source::indent() const
     }
 
     size_t lnStartOfLine = lsView.rfind('\n', lnCurosrStart) + 1;
-    size_t lnEndOfLine = lsView.find_first_not_of(" \t", lnStartOfLine);
-    return lnEndOfLine - lnStartOfLine;
+    size_t lnStartOfContent = lsView.find_first_not_of(" \t", lnStartOfLine);
+    return lnStartOfContent - lnStartOfLine;
 }
 
 std::string Source::path() const
