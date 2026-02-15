@@ -69,6 +69,8 @@ private:
     int m_nPos = 0;
     fs::path m_cPath;
     std::string m_sText;
+
+    std::string_view view() const;
 };
 
 inline int Source::pos() const
@@ -81,5 +83,10 @@ inline bool Source::eof() const
     // This does not check for '\0' on purpose! std::string can contain embedded '\0'.
     return m_nPos == m_sText.size();
 }
+
+inline std::string_view Source::view() const
+{
+    return m_sText;
+};
 
 #endif  // SOURCE_H
