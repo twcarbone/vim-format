@@ -40,7 +40,7 @@ TEST(SourceTest, text_test_01)
     EXPECT_EQ(lcSource.line_text(), "fox jumped over the");
     EXPECT_EQ(lcSource.text(), "The quick brown\nfox jumped over the\nlazy dog\n");
     EXPECT_EQ(lcSource.context(),
-              "stdin:2:1\n"
+              "stdin:2:2\n"
               " 2 | fox jumped over the\n"
               "   |  ^");
     EXPECT_EQ(lcSource.indent(), 0);
@@ -150,7 +150,7 @@ TEST(SourceTest, file_test_01)
     EXPECT_EQ(lcSource.line_text(), "echo 1");
     EXPECT_EQ(lcSource.text(), "echo 1\n");
     EXPECT_EQ(lcSource.context(),
-              "../../test/sample/05.vim:1:2\n"
+              "../../test/sample/05.vim:1:3\n"
               " 1 | echo 1\n"
               "   |   ^");
     EXPECT_EQ(lcSource.indent(), 0);
