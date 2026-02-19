@@ -39,12 +39,15 @@ private:
     ast::FnParamList* fn_param_list();
     ast::WhileStmt* while_stmt();
     ast::AssignStmt* assign_stmt();
+    ast::CommentStmt* comment_stmt();
 
     ast::Expr* expr(int min_binding_power);
 
     void next();
     void consume(const Token::Type type);
     bool consume_optional(const Token::Type type);
+
+    Token* prev() const;
 
     [[noreturn]] void throw_unexpected_token();
     [[noreturn]] void throw_vim_error(std::string code);

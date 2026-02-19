@@ -119,6 +119,12 @@ ast::StmtList* ASTParser::stmt_list()
                 break;
             default:
                 pStmtList->push(stmt());
+
+                if (m_pCurrToken->type() == Token::Type::COMMENT)
+                {
+                    pStmtList->push(comment_stmt());
+                }
+
                 consume(Token::Type::NEWLINE);
         }
     }
@@ -133,6 +139,9 @@ ast::Stmt* ASTParser::stmt()
 
     switch (m_pCurrToken->type())
     {
+        case Token::Type::COMMENT:
+            pStmt = comment_stmt();
+            break;
         case Token::Type::IF:
             pStmt = if_stmt();
             break;
@@ -386,6 +395,32 @@ ast::AssignStmt* ASTParser::assign_stmt()
     return new ast::AssignStmt(pOp, pVar, pExpr);
 }
 
+ast::CommentStmt* ASTParser::comment_stmt()
+{
+    Token* pPrevToken = prev();
+    ast::CommentStmt* pCommentStmt = nullptr;
+
+    if (pPrevToken == nullptr)
+    {
+        pCommentStmt = new ast::CommentStmt(m_pCurrToken);
+    }
+    else
+    {
+        switch (pPrevToken->type())
+        {
+            case Token::Type::NEWLINE:
+                pCommentStmt = new ast::CommentStmt(m_pCurrToken);
+                break;
+            default:
+                pCommentStmt = new ast::CommentStmt(m_pCurrToken, true);
+        }
+    }
+
+    consume(Token::Type::COMMENT);
+
+    return pCommentStmt;
+}
+
 ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = m_pCurrToken;
@@ -533,6 +568,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
         // 2. Parse operator
         switch (m_pCurrToken->type())
         {
+            case Token::Type::COMMENT:
             case Token::Type::COMMA:
             case Token::Type::COLON:
             case Token::Type::END:
@@ -680,6 +716,16 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
 void ASTParser::next()
 {
     m_pCurrToken = m_lTokens.at(m_nPos++);
+}
+
+Token* ASTParser::prev() const
+{
+    if (m_nPos > 1)
+    {
+        return m_lTokens[m_nPos - 2];
+    }
+
+    return nullptr;
 }
 
 void ASTParser::consume(const Token::Type aeType)

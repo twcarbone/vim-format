@@ -53,3 +53,8 @@ TEST_F(FunctionalTest, expr)
 {
     test_file("../../test/res/expr.vim");
 }
+
+TEST_F(FunctionalTest, comment)
+{
+    test_file("../../test/res/comment.vim");
+}

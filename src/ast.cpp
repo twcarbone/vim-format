@@ -699,3 +699,32 @@ void AssignStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
+
+//
+// CommentStmt
+//
+
+CommentStmt::CommentStmt(Token* apComment, bool abTrailing) :
+    m_bTrailing { abTrailing },
+    m_pComment { apComment }
+{
+}
+
+CommentStmt::~CommentStmt()
+{
+}
+
+std::string CommentStmt::toString() const
+{
+    if (m_bTrailing)
+    {
+        return "CommentStmt (trailing) " + m_pComment->str();
+    }
+
+    return "CommentStmt " + m_pComment->str();
+}
+
+void CommentStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}

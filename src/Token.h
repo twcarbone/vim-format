@@ -93,7 +93,8 @@
         X(IDENTIFIER) \
         X(STRING) \
         X(INTEGER) \
-        X(FLOAT)
+        X(FLOAT) \
+        X(COMMENT)
 
 // clang-format on
 

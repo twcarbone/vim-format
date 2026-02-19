@@ -1,0 +1,19 @@
+Program
+  StmtList
+    CommentStmt " Comment
+    CommentStmt " Indented comment
+    CommentStmt " Comment with a "string" contained
+    CommentStmt "Comment that just looks like a string"
+    CommentStmt " Tab-indented comment with "string"
+    CommentStmt "" Comment, but with multiple (even) leaders
+    CommentStmt """ Comment, but with multiple (odd) leaders
+    AssignStmt =
+      Var a
+      ListExpr
+        Literal "a"
+        Literal "b"
+    CommentStmt (trailing) "inline comment
+    AssignStmt =
+      Var a
+      Literal 2
+    CommentStmt (trailing) "inline comment with no leading whitespace
