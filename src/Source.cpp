@@ -112,7 +112,7 @@ std::string Source::context() const
     std::string lsTraceback;
 
     std::string lsLineNum = std::to_string(line() + 1);
-    std::string lsColumnNum = std::to_string(column());
+    std::string lsColumnNum = std::to_string(column() + 1);
 
     lsTraceback += path() + ":" + lsLineNum + ":" + lsColumnNum;
     lsTraceback += "\n " + lsLineNum + " | " + std::string(line_text());
