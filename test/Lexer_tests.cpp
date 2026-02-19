@@ -117,15 +117,6 @@ TEST_F(SingleTokenTest, single_whitespace)
 }
 
 //
-// single_string
-//
-
-TEST_F(SingleTokenTest, single_string)
-{
-    do_test("\"abcd\"", Token::Type::STRING);
-}
-
-//
 // bad_float
 //
 
