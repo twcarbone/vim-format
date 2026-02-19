@@ -11,19 +11,16 @@ Source::~Source()
 {
 }
 
-int Source::pos() const
-{
-    return m_nPos;
-}
-
 int Source::line() const
 {
     int lnLine = 0;
-    for (int i = 0; i <= m_nPos; i++)
+
+    // If we are at EOF, looking 1 behind will see the final newline of the file. So we
+    // need to start looking 2 behind.
+    for (int i = eof() ? m_nPos - 2 : m_nPos - 1; i >= 0; i--)
     {
-        if (m_sText[i] == '\n' && i < m_sText.size() - 1)
+        if (view().at(i) == '\n')
         {
-            // Advance the line only after \n that is not the last character
             lnLine++;
         }
     }
@@ -36,12 +33,12 @@ int Source::column() const
     int lnColumn = 0;
     for (int i = 1; i <= m_nPos; i++)
     {
-        if (m_sText[i - 1] == '\n' && i < m_sText.size() - 1)
+        if (view().at(i - 1) == '\n' && i < view().size() - 1)
         {
             // Reset the column only after \n that is not the last character
             lnColumn = 0;
         }
-        else if (i != m_sText.size())
+        else if (i != view().size())
         {
             lnColumn++;
         }
@@ -50,9 +47,54 @@ int Source::column() const
     return lnColumn;
 }
 
-bool Source::eof() const
+int Source::indent() const
 {
-    return m_nPos == m_sText.size();
+    if (line() == 0)
+    {
+        return view().find_first_not_of(" \t");
+    }
+
+    size_t lnCurosrStart = m_nPos - 1;
+
+    if (eof())
+    {
+        lnCurosrStart--;
+    }
+
+    size_t lnStartOfLine = view().rfind('\n', lnCurosrStart) + 1;
+    size_t lnStartOfContent = view().find_first_not_of(" \t", lnStartOfLine);
+    return lnStartOfContent - lnStartOfLine;
+}
+
+int Source::bol() const
+{
+    if (line() == 0)
+    {
+        return 0;
+    }
+    else if (eof())
+    {
+        return view().rfind('\n', m_nPos - 2) + 1;
+    }
+
+    return view().rfind('\n', m_nPos - 1) + 1;
+}
+
+int Source::eol() const
+{
+    if (eof())
+    {
+        return m_nPos - 1;
+    }
+
+    size_t lnEOL = view().find('\n', m_nPos);
+
+    if (lnEOL == std::string_view::npos)
+    {
+        return view().size();
+    }
+
+    return lnEOL;
 }
 
 std::string Source::path() const
@@ -65,7 +107,7 @@ std::string Source::path() const
     return m_cPath.string();
 }
 
-std::string Source::traceback() const
+std::string Source::context() const
 {
     std::string lsTraceback;
 
@@ -86,11 +128,9 @@ std::string_view Source::text() const
 
 std::string_view Source::line_text() const
 {
-    std::string_view lsView { m_sText };
-
     // Start looking from one character behind in case we are on a newline
-    size_t lnStart = lsView.rfind('\n', m_nPos - 1);
-    size_t lnEnd = lsView.find('\n', m_nPos);
+    size_t lnStart = view().rfind('\n', m_nPos - 1);
+    size_t lnEnd = view().find('\n', m_nPos);
 
     if (lnStart == std::string_view::npos)
     {
@@ -103,15 +143,20 @@ std::string_view Source::line_text() const
 
     if (lnEnd == std::string_view::npos)
     {
-        lnEnd = m_sText.size();
+        lnEnd = view().size();
     }
 
-    return lsView.substr(lnStart, lnEnd - lnStart);
+    return view().substr(lnStart, lnEnd - lnStart);
 }
 
 std::string_view Source::remaining_text() const
 {
-    return std::string_view(m_sText).substr(m_nPos);
+    return view().substr(m_nPos);
+}
+
+std::string_view Source::remaining_line() const
+{
+    return view().substr(m_nPos, eol() - m_nPos);
 }
 
 void Source::seek(int anPos)

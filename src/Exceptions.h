@@ -8,7 +8,7 @@
 class VimError : public std::runtime_error
 {
 public:
-    explicit VimError(std::string code, std::string traceback);
+    explicit VimError(std::string code, std::string context);
 
     static const std::unordered_map<std::string, std::string> s_mErrors;
 };

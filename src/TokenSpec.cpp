@@ -179,10 +179,32 @@ Token* TokenSpec::match(const Source& acSource)
         }
     }
 
-    // 2. Look for a string
-    if (startswith_str(acSource.remaining_text(), lsStr))
+    // 2. Look for a string or comment
+    if (startswith(acSource.remaining_text(), "\""))
     {
-        return new Token(Token::Type::STRING, std::string { lsStr }, acSource.pos());
+        if (acSource.column() == acSource.indent())
+        {
+            lsStr = acSource.remaining_line();
+            return new Token(Token::Type::COMMENT, std::string { lsStr }, acSource.pos());
+        }
+
+        for (size_t i = 1; i < acSource.remaining_text().size(); i++)
+        {
+            switch (acSource.remaining_text().at(i))
+            {
+                case '"':
+                    // TODO (gh-3): Add support for single-quote string tokenizing
+                    // TODO (gh-4): Add support for escaped quotes within a string token
+                    lsStr = acSource.remaining_text().substr(0, i + 1);
+                    return new Token(Token::Type::STRING, std::string { lsStr }, acSource.pos());
+                case '\n':
+                    // TODO (gh-54): Trailing comments with more than one " are tokenized as strings
+                    lsStr = acSource.remaining_text().substr(0, i);
+                    return new Token(Token::Type::COMMENT, std::string { lsStr }, acSource.pos());
+                default:
+                    continue;
+            }
+        }
     }
 
     // 3. Look for a float
@@ -231,9 +253,6 @@ bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix, st
 
 bool TokenSpec::startswith_str(std::string_view asStr, std::string_view& asPrefix)
 {
-    // TODO (gh-3): Add support for single-quote string tokenizing
-    // TODO (gh-4): Add support for escaped quotes within a string token
-
     if (asStr.empty() || !startswith(asStr, "\""))
     {
         return false;

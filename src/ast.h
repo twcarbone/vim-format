@@ -461,4 +461,22 @@ private:
     Token* m_pOp;
 };
 
+//
+// CommentStmt
+//
+
+class CommentStmt : public Stmt
+{
+public:
+    CommentStmt(Token* comment, bool trailing = false);
+    virtual ~CommentStmt();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    bool m_bTrailing;
+    Token* m_pComment;
+};
+
 };
