@@ -36,25 +36,25 @@ protected:
 
 TEST_F(FunctionalTest, if_stmt_01)
 {
-    test_file("../../test/res/if_stmt_01.vim");
+    test_file("../../test/ast/if_stmt_01.vim");
 }
 
 TEST_F(FunctionalTest, func_stmt_01)
 {
-    test_file("../../test/res/func_stmt_01.vim");
+    test_file("../../test/ast/func_stmt_01.vim");
 }
 
 TEST_F(FunctionalTest, while_stmt_01)
 {
-    test_file("../../test/res/while_stmt_01.vim");
+    test_file("../../test/ast/while_stmt_01.vim");
 }
 
 TEST_F(FunctionalTest, expr)
 {
-    test_file("../../test/res/expr.vim");
+    test_file("../../test/ast/expr.vim");
 }
 
 TEST_F(FunctionalTest, comment)
 {
-    test_file("../../test/res/comment.vim");
+    test_file("../../test/ast/comment.vim");
 }
