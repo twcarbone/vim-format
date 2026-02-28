@@ -34,19 +34,19 @@ protected:
     }
 };
 
-TEST_F(FunctionalTest, if_stmt_01)
+TEST_F(FunctionalTest, if_stmt)
 {
-    test_file("../../test/ast/if_stmt_01.vim");
+    test_file("../../test/ast/if_stmt.vim");
 }
 
-TEST_F(FunctionalTest, func_stmt_01)
+TEST_F(FunctionalTest, func_stmt)
 {
-    test_file("../../test/ast/func_stmt_01.vim");
+    test_file("../../test/ast/func_stmt.vim");
 }
 
-TEST_F(FunctionalTest, while_stmt_01)
+TEST_F(FunctionalTest, while_stmt)
 {
-    test_file("../../test/ast/while_stmt_01.vim");
+    test_file("../../test/ast/while_stmt.vim");
 }
 
 TEST_F(FunctionalTest, expr)
