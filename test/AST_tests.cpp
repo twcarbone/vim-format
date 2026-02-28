@@ -8,7 +8,7 @@
 #include "Lexer.h"
 #include "util.h"
 
-class FunctionalTest : public testing::Test
+class ASTTest : public testing::Test
 {
 protected:
     void test_file(const std::string& asPath)
@@ -34,27 +34,27 @@ protected:
     }
 };
 
-TEST_F(FunctionalTest, if_stmt)
+TEST_F(ASTTest, if_stmt)
 {
     test_file("../../test/ast/if_stmt.vim");
 }
 
-TEST_F(FunctionalTest, func_stmt)
+TEST_F(ASTTest, func_stmt)
 {
     test_file("../../test/ast/func_stmt.vim");
 }
 
-TEST_F(FunctionalTest, while_stmt)
+TEST_F(ASTTest, while_stmt)
 {
     test_file("../../test/ast/while_stmt.vim");
 }
 
-TEST_F(FunctionalTest, expr)
+TEST_F(ASTTest, expr)
 {
     test_file("../../test/ast/expr.vim");
 }
 
-TEST_F(FunctionalTest, comment)
+TEST_F(ASTTest, comment)
 {
     test_file("../../test/ast/comment.vim");
 }
