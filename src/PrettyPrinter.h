@@ -55,7 +55,7 @@ private:
     void write_ln(const std::string& line);
     void write_bol();
     void write_eol();
-    void write_txt(const std::string& text);
+    void write(const std::string& text);
     void write(size_t count, char c);
 
     Indent m_cIndent;
