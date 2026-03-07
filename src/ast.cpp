@@ -67,6 +67,16 @@ ExprCmd::~ExprCmd()
 {
 }
 
+const Token* ExprCmd::cmd() const
+{
+    return m_pCmd;
+}
+
+const Expr* ExprCmd::expr() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
 std::string ExprCmd::toString() const
 {
     return "ExprCmd " + m_pCmd->str();
@@ -115,6 +125,21 @@ IfStmt::~IfStmt()
 {
 }
 
+const Expr* IfStmt::condition() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const StmtList* IfStmt::then_stmts() const
+{
+    return static_cast<StmtList*>(m_lChildren[1]);
+}
+
+const StmtList* IfStmt::else_stmts() const
+{
+    return static_cast<StmtList*>(m_lChildren[2]);
+}
+
 std::string IfStmt::toString() const
 {
     return "IfStmt";
@@ -137,6 +162,16 @@ WhileStmt::WhileStmt(ast::Expr* apCondition, ast::StmtList* apStmtList)
 
 WhileStmt::~WhileStmt()
 {
+}
+
+const Expr* WhileStmt::condition() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const StmtList* WhileStmt::stmts() const
+{
+    return static_cast<StmtList*>(m_lChildren[1]);
 }
 
 std::string WhileStmt::toString() const
@@ -164,6 +199,21 @@ ForStmt::~ForStmt()
 {
 }
 
+const Expr* ForStmt::item() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Expr* ForStmt::items() const
+{
+    return static_cast<Expr*>(m_lChildren[1]);
+}
+
+const StmtList* ForStmt::stmts() const
+{
+    return static_cast<StmtList*>(m_lChildren[2]);
+}
+
 std::string ForStmt::toString() const
 {
     return "ForStmt";
@@ -186,6 +236,16 @@ JumpStmt::JumpStmt(Token* apToken, Expr* apExpr) :
 
 JumpStmt::~JumpStmt()
 {
+}
+
+const Token* JumpStmt::token() const
+{
+    return m_pToken;
+}
+
+const Expr* JumpStmt::expr() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
 }
 
 std::string JumpStmt::toString() const
@@ -248,6 +308,16 @@ FnParam::~FnParam()
 {
 }
 
+const Var* FnParam::name() const
+{
+    return static_cast<Var*>(m_lChildren[0]);
+}
+
+const Expr* FnParam::default_value() const
+{
+    return static_cast<Expr*>(m_lChildren[1]);
+}
+
 std::string FnParam::toString() const
 {
     return "FnParam";
@@ -278,6 +348,31 @@ FnStmt::FnStmt(Token* apName,
 FnStmt::~FnStmt()
 {
 }
+
+const Token* FnStmt::name() const
+{
+    return m_pName;
+}
+
+const Token* FnStmt::bang() const
+{
+    return m_pBang;
+};
+
+const FnParamList* FnStmt::params() const
+{
+    return static_cast<FnParamList*>(m_lChildren[0]);
+};
+
+const std::vector<Token*>& FnStmt::modifiers() const
+{
+    return m_lModifiers;
+};
+
+const StmtList* FnStmt::body() const
+{
+    return static_cast<StmtList*>(m_lChildren[1]);
+};
 
 std::string FnStmt::toString() const
 {
@@ -355,6 +450,11 @@ CasedBinaryOp::~CasedBinaryOp()
 {
 }
 
+const Token* CasedBinaryOp::case_sensitivity() const
+{
+    return m_pCaseSensitivity;
+}
+
 std::string CasedBinaryOp::toString() const
 {
     std::string lsStr = "CasedBinaryOp " + m_pOp->str();
@@ -386,6 +486,16 @@ DictEntry::~DictEntry()
 {
 }
 
+const Expr* DictEntry::key() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Expr* DictEntry::value() const
+{
+    return static_cast<Expr*>(m_lChildren[1]);
+};
+
 std::string DictEntry::toString() const
 {
     return "DictEntry";
@@ -409,6 +519,18 @@ void DictExpr::push(DictEntry* apEntry)
     m_lChildren.push_back(apEntry);
 }
 
+std::vector<const DictEntry*> DictExpr::entries() const
+{
+    std::vector<const DictEntry*> lEntries;
+
+    for (Node* pNode : m_lChildren)
+    {
+        lEntries.push_back(static_cast<DictEntry*>(pNode));
+    }
+
+    return lEntries;
+}
+
 std::string DictExpr::toString() const
 {
     return "DictExpr";
@@ -430,6 +552,18 @@ ListExpr::~ListExpr()
 void ListExpr::push(Expr* apExpr)
 {
     m_lChildren.push_back(apExpr);
+}
+
+std::vector<const Expr*> ListExpr::exprs() const
+{
+    std::vector<const Expr*> lExprs;
+
+    for (Node* pNode : m_lChildren)
+    {
+        lExprs.push_back(static_cast<Expr*>(pNode));
+    }
+
+    return lExprs;
 }
 
 std::string ListExpr::toString() const
@@ -456,6 +590,16 @@ CallExpr::~CallExpr()
 {
 }
 
+const Expr* CallExpr::callable() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const FnArgList* CallExpr::args() const
+{
+    return static_cast<FnArgList*>(m_lChildren[1]);
+}
+
 std::string CallExpr::toString() const
 {
     return "CallExpr";
@@ -480,6 +624,21 @@ MethodCallExpr::MethodCallExpr(Token* apOp, Expr* apReceiver, Expr* apCallExpr) 
 MethodCallExpr::~MethodCallExpr()
 {
 }
+
+const Token* MethodCallExpr::op() const
+{
+    return m_pOp;
+}
+
+const Expr* MethodCallExpr::receiver() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+};
+
+const Expr* MethodCallExpr::call() const
+{
+    return static_cast<Expr*>(m_lChildren[1]);
+};
 
 std::string MethodCallExpr::toString() const
 {
@@ -538,6 +697,21 @@ std::string IndexExpr::toString() const
 {
     return "IndexExpr";
 }
+
+const Expr* IndexExpr::indexable() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Expr* IndexExpr::start() const
+{
+    return static_cast<Expr*>(m_lChildren[1]);
+};
+
+const Expr* IndexExpr::stop() const
+{
+    return static_cast<Expr*>(m_lChildren[2]);
+};
 
 void IndexExpr::accept(ASTVisitor& acASTVisitor) const
 {
@@ -695,6 +869,21 @@ std::string AssignStmt::toString() const
     return "AssignStmt " + m_pOp->str();
 }
 
+const Token* AssignStmt::op() const
+{
+    return m_pOp;
+}
+
+const Var* AssignStmt::var() const
+{
+    return static_cast<Var*>(m_lChildren[0]);
+}
+
+const Expr* AssignStmt::expr() const
+{
+    return static_cast<Expr*>(m_lChildren[1]);
+}
+
 void AssignStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
@@ -708,6 +897,16 @@ CommentStmt::CommentStmt(Token* apComment, bool abTrailing) :
     m_bTrailing { abTrailing },
     m_pComment { apComment }
 {
+}
+
+bool CommentStmt::trailing() const
+{
+    return m_bTrailing;
+}
+
+const Token* CommentStmt::comment() const
+{
+    return m_pComment;
 }
 
 CommentStmt::~CommentStmt()

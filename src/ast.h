@@ -69,6 +69,9 @@ public:
     ExprCmd(Token* cmd, Expr* expr);
     virtual ~ExprCmd();
 
+    const Token* cmd() const;
+    const Expr* expr() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
@@ -116,6 +119,10 @@ public:
     IfStmt(Expr* condition, StmtList* then_stmts, StmtList* else_smts);
     virtual ~IfStmt();
 
+    const Expr* condition() const;
+    const StmtList* then_stmts() const;
+    const StmtList* else_stmts() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
@@ -129,6 +136,9 @@ class WhileStmt : public Stmt
 public:
     WhileStmt(Expr* condition, StmtList* stmts);
     virtual ~WhileStmt();
+
+    const Expr* condition() const;
+    const StmtList* stmts() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -144,6 +154,10 @@ public:
     ForStmt(Expr* item, Expr* items, StmtList* stmts);
     virtual ~ForStmt();
 
+    const Expr* item() const;
+    const Expr* items() const;
+    const StmtList* stmts() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
@@ -157,6 +171,9 @@ class JumpStmt : public Stmt
 public:
     JumpStmt(Token* token, Expr* expr);
     virtual ~JumpStmt();
+
+    const Token* token() const;
+    const Expr* expr() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -204,6 +221,9 @@ public:
     FnParam(Var* name, Expr* default_value);
     virtual ~FnParam();
 
+    const Var* name() const;
+    const Expr* default_value() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
@@ -221,6 +241,12 @@ public:
            const std::vector<Token*>& modifiers,
            StmtList* body);
     virtual ~FnStmt();
+
+    const Token* name() const;
+    const Token* bang() const;
+    const FnParamList* params() const;
+    const std::vector<Token*>& modifiers() const;
+    const StmtList* body() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -262,6 +288,8 @@ public:
     CasedBinaryOp(Token* op, Expr* left, Expr* right, Token* case_sensitivity);
     virtual ~CasedBinaryOp();
 
+    const Token* case_sensitivity() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
@@ -279,6 +307,9 @@ public:
     DictEntry(Expr* key, Expr* value);
     virtual ~DictEntry();
 
+    const Expr* key() const;
+    const Expr* value() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
@@ -294,6 +325,8 @@ public:
     virtual ~DictExpr();
 
     void push(DictEntry* entry);
+
+    std::vector<const DictEntry*> entries() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -311,6 +344,8 @@ public:
 
     void push(Expr* expr);
 
+    std::vector<const Expr*> exprs() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
@@ -325,6 +360,9 @@ public:
     CallExpr(Expr* callable, FnArgList* args);
     virtual ~CallExpr();
 
+    const Expr* callable() const;
+    const FnArgList* args() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
@@ -338,6 +376,10 @@ class MethodCallExpr : public Expr
 public:
     MethodCallExpr(Token* op, Expr* receiver, Expr* call);
     virtual ~MethodCallExpr();
+
+    const Token* op() const;
+    const Expr* receiver() const;
+    const Expr* call() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -374,6 +416,10 @@ class IndexExpr : public Expr
 public:
     IndexExpr(Expr* indexable, Expr* start, Expr* stop);
     virtual ~IndexExpr();
+
+    const Expr* indexable() const;
+    const Expr* start() const;
+    const Expr* stop() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -454,6 +500,10 @@ public:
     AssignStmt(Token* op, Var* var, Expr* expr);
     virtual ~AssignStmt();
 
+    const Token* op() const;
+    const Var* var() const;
+    const Expr* expr() const;
+
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
@@ -470,6 +520,10 @@ class CommentStmt : public Stmt
 public:
     CommentStmt(Token* comment, bool trailing = false);
     virtual ~CommentStmt();
+
+    const Token* comment() const;
+
+    bool trailing() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
