@@ -112,9 +112,6 @@ ast::StmtList* ASTParser::stmt_list()
             case Token::Type::ENDWHILE:
             case Token::Type::ENDFUNCTION:
                 return pStmtList;
-            case Token::Type::NEWLINE:
-                consume(Token::Type::NEWLINE);
-                break;
             default:
                 pStmtList->push(stmt());
 
@@ -132,7 +129,13 @@ ast::Stmt* ASTParser::stmt()
 {
     // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
     // TODO (gh-31): RETURN only allowed in function
-    // TODO (gh-62): Leading newlines are not preserved before statements
+
+    size_t lnLeadingEmptyLines = 0;
+    while (curr()->type() == Token::Type::NEWLINE)
+    {
+        consume(Token::Type::NEWLINE);
+        lnLeadingEmptyLines++;
+    }
 
     ast::Stmt* pStmt;
 
@@ -168,6 +171,8 @@ ast::Stmt* ASTParser::stmt()
             break;
     }
 
+    pStmt->set_leading_empty_lines(lnLeadingEmptyLines);
+
     return pStmt;
 }
 
@@ -186,6 +191,7 @@ ast::IfStmt* ASTParser::if_stmt()
     }
 
     ast::Expr* pExpr = expr(0);
+    consume(Token::Type::NEWLINE);
     ast::StmtList* pThenStmts = stmt_list();
     ast::StmtList* pElseStmts = nullptr;
 
@@ -197,6 +203,7 @@ ast::IfStmt* ASTParser::if_stmt()
             break;
         case Token::Type::ELSE:
             consume(Token::Type::ELSE);
+            consume(Token::Type::NEWLINE);
             pElseStmts = stmt_list();
             consume(Token::Type::ENDIF);
             break;
@@ -211,6 +218,7 @@ ast::WhileStmt* ASTParser::while_stmt()
 {
     consume(Token::Type::WHILE);
     ast::Expr* pExpr = expr(0);
+    consume(Token::Type::NEWLINE);
     ast::StmtList* pStmts = stmt_list();
     consume(Token::Type::ENDWHILE);
     return new ast::WhileStmt(pExpr, pStmts);
@@ -344,6 +352,7 @@ ast::ForStmt* ASTParser::for_stmt()
     ast::Expr* pItem = expr(0);
     consume(Token::Type::IN);
     ast::Expr* pItems = expr(0);
+    consume(Token::Type::NEWLINE);
     ast::StmtList* pStmtList = stmt_list();
     consume(Token::Type::ENDFOR);
     return new ast::ForStmt(pItem, pItems, pStmtList);

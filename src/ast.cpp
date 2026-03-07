@@ -22,6 +22,20 @@ const std::vector<Node*>& Node::children() const
 }
 
 //
+// Stmt
+//
+
+void Stmt::set_leading_empty_lines(size_t anCount)
+{
+    m_nLeadingEmptyLines = anCount;
+}
+
+size_t Stmt::leading_empty_lines() const
+{
+    return m_nLeadingEmptyLines;
+}
+
+//
 // ExprList
 //
 

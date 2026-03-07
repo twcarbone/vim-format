@@ -35,6 +35,12 @@ class Stmt : public Node
 {
 public:
     virtual ~Stmt() = default;
+
+    void set_leading_empty_lines(size_t count);
+    size_t leading_empty_lines() const;
+
+protected:
+    size_t m_nLeadingEmptyLines = 0;
 };
 
 //
