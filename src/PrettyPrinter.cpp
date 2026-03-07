@@ -38,9 +38,12 @@ void PrettyPrinter::visit(const ast::AssignStmt* apAssignStmt)
 {
     write_bol();
 
-    write_txt("let ");
+    write_txt("let");
+    write(Settings::SpaceAfterExprCmd, ' ');
     apAssignStmt->var()->accept(*this);
-    write_txt(" " + apAssignStmt->op()->str() + " ");
+    write(Settings::OperatorPadding, ' ');
+    write_txt(apAssignStmt->op()->str());
+    write(Settings::OperatorPadding, ' ');
     apAssignStmt->expr()->accept(*this);
 
     write_eol();
@@ -63,7 +66,9 @@ void PrettyPrinter::visit(const ast::CommentStmt* apCommentStmt)
 void PrettyPrinter::visit(const ast::BinaryOp* apBinaryOp)
 {
     apBinaryOp->lexpr()->accept(*this);
-    write_txt(" " + apBinaryOp->op()->str() + " ");
+    write(Settings::OperatorPadding, ' ');
+    write_txt(apBinaryOp->op()->str());
+    write(Settings::OperatorPadding, ' ');
     apBinaryOp->rexpr()->accept(*this);
 }
 
@@ -79,14 +84,18 @@ void PrettyPrinter::visit(const ast::CallExpr* apCallExpr)
 void PrettyPrinter::visit(const ast::CasedBinaryOp* apCasedBinaryOp)
 {
     apCasedBinaryOp->lexpr()->accept(*this);
-    write_txt(" " + apCasedBinaryOp->op()->str() + apCasedBinaryOp->case_sensitivity()->str() + " ");
+    write(Settings::OperatorPadding, ' ');
+    write_txt(apCasedBinaryOp->op()->str() + apCasedBinaryOp->case_sensitivity()->str());
+    write(Settings::OperatorPadding, ' ');
     apCasedBinaryOp->rexpr()->accept(*this);
 }
 
 void PrettyPrinter::visit(const ast::DictEntry* apDictEntry)
 {
     apDictEntry->key()->accept(*this);
-    write_txt(": ");
+    write(Settings::SpaceAfterDictKey, ' ');
+    write_txt(":");
+    write(Settings::SpaceBeforeDictValue, ' ');
     apDictEntry->value()->accept(*this);
 }
 
@@ -102,7 +111,8 @@ void PrettyPrinter::visit(const ast::DictExpr* apDictExpr)
 
         if (i != lDictEntries.size() - 1)
         {
-            write_txt(", ");
+            write_txt(",");
+            write(Settings::SpaceAfterDictSeparator, ' ');
         }
     }
 
@@ -113,7 +123,8 @@ void PrettyPrinter::visit(const ast::ExprCmd* apExprCmd)
 {
     write_bol();
 
-    write_txt(apExprCmd->cmd()->str() + " ");
+    write_txt(apExprCmd->cmd()->str());
+    write(Settings::SpaceAfterExprCmd, ' ');
     apExprCmd->expr()->accept(*this);
 
     write_eol();
@@ -127,7 +138,8 @@ void PrettyPrinter::visit(const ast::FnArgList* apFnArgList)
 
         if (std::next(it) != apFnArgList->children().cend())
         {
-            write_txt(", ");
+            write_txt(",");
+            write(Settings::SpaceAfterFnArgSeparator, ' ');
         }
     }
 }
@@ -138,7 +150,9 @@ void PrettyPrinter::visit(const ast::FnParam* apFnParam)
 
     if (apFnParam->default_value() != nullptr)
     {
-        write_txt(" = ");
+        write(Settings::DefaultFnParamPadding, ' ');
+        write_txt("=");
+        write(Settings::DefaultFnParamPadding, ' ');
         apFnParam->default_value()->accept(*this);
     }
 }
@@ -151,7 +165,8 @@ void PrettyPrinter::visit(const ast::FnParamList* apFnParamList)
 
         if (std::next(it) != apFnParamList->children().cend())
         {
-            write_txt(", ");
+            write_txt(",");
+            write(Settings::SpaceAfterFnParamSeparator, ' ');
         }
     }
 }
@@ -167,7 +182,8 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
         write_txt(apFnStmt->bang()->str());
     }
 
-    write_txt(" " + apFnStmt->name()->str());
+    write(Settings::SpaceBeforeFunctionName, ' ');
+    write_txt(apFnStmt->name()->str());
 
     write_txt("(");
     apFnStmt->params()->accept(*this);
@@ -177,7 +193,8 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
     {
         if (pModifier != nullptr)
         {
-            write_txt(" " + pModifier->str());
+            write(Settings::FnModifierPadding, ' ');
+            write_txt(pModifier->str());
         }
     }
 
@@ -196,10 +213,13 @@ void PrettyPrinter::visit(const ast::ForStmt* apForStmt)
 {
     write_bol();
 
-    write_txt("for ");
+    write_txt("for");
+    write(Settings::ControlStmtPadding, ' ');
     apForStmt->item()->accept(*this);
 
-    write_txt(" in ");
+    write(Settings::ControlStmtPadding, ' ');
+    write_txt("in");
+    write(Settings::ControlStmtPadding, ' ');
     apForStmt->items()->accept(*this);
     write_eol();
 
@@ -218,7 +238,8 @@ void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
 
     write_bol();
 
-    write_txt("if ");
+    write_txt("if");
+    write(Settings::ControlStmtPadding, ' ');
     apIfStmt->condition()->accept(*this);
     write_eol();
 
@@ -267,7 +288,7 @@ void PrettyPrinter::visit(const ast::JumpStmt* apJumpStmt)
 
     if (apJumpStmt->expr() != nullptr)
     {
-        write_txt(" ");
+        write(Settings::ReturnStmtPadding, ' ');
         apJumpStmt->expr()->accept(*this);
     }
 
@@ -286,7 +307,8 @@ void PrettyPrinter::visit(const ast::ListExpr* apListExpr)
 
         if (i != lExpr.size() - 1)
         {
-            write_txt(", ");
+            write_txt(",");
+            write(Settings::SpaceAfterListSeparator, ' ');
         }
     }
 
@@ -324,9 +346,13 @@ void PrettyPrinter::visit(const ast::StmtList* apStmtList)
 void PrettyPrinter::visit(const ast::TernaryOp* apTernaryOp)
 {
     apTernaryOp->lexpr()->accept(*this);
-    write_txt(" " + apTernaryOp->lop()->str() + " ");
+    write(Settings::OperatorPadding, ' ');
+    write_txt(apTernaryOp->lop()->str());
+    write(Settings::OperatorPadding, ' ');
     apTernaryOp->mexpr()->accept(*this);
-    write_txt(" " + apTernaryOp->rop()->str() + " ");
+    write(Settings::OperatorPadding, ' ');
+    write_txt(apTernaryOp->rop()->str());
+    write(Settings::OperatorPadding, ' ');
     apTernaryOp->rexpr()->accept(*this);
 }
 
@@ -352,7 +378,8 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
 {
     write_bol();
 
-    write_txt("while ");
+    write_txt("while");
+    write(Settings::ControlStmtPadding, ' ');
     apWhileStmt->condition()->accept(*this);
     write_eol();
 
@@ -383,4 +410,14 @@ void PrettyPrinter::write_eol()
 void PrettyPrinter::write_ln(const std::string& asLine)
 {
     m_cOutStream << m_cIndent << asLine << std::endl;
+}
+
+void PrettyPrinter::write(size_t anCount, char anChar)
+{
+    if (anCount < 1)
+    {
+        return;
+    }
+
+    m_cOutStream << std::string(anCount, anChar);
 }
