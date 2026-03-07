@@ -87,7 +87,8 @@ void PrettyPrinter::visit(const ast::CasedBinaryOp* apCasedBinaryOp)
 {
     apCasedBinaryOp->lexpr()->accept(*this);
     write(' ', Settings::OperatorPadding);
-    write(apCasedBinaryOp->op()->str() + apCasedBinaryOp->case_sensitivity()->str());
+    write(apCasedBinaryOp->op()->str());
+    write(apCasedBinaryOp->case_sensitivity()->str());
     write(' ', Settings::OperatorPadding);
     apCasedBinaryOp->rexpr()->accept(*this);
 }
@@ -378,7 +379,9 @@ void PrettyPrinter::visit(const ast::Var* apVar)
 {
     if (apVar->scope() != nullptr)
     {
-        write(apVar->scope()->str() + ":" + apVar->name()->str());
+        write(apVar->scope()->str());
+        write(':');
+        write(apVar->name()->str());
     }
     else
     {
