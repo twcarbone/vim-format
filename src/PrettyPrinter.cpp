@@ -1,7 +1,13 @@
 #include <iostream>
 
 #include "PrettyPrinter.h"
+#include "Settings.h"
 #include "ast.h"
+
+Indent::Indent(size_t anTabStop) :
+    m_nTabStop { anTabStop }
+{
+}
 
 Indent Indent::operator++(int)
 {
@@ -23,7 +29,8 @@ std::ostream& operator<<(std::ostream& os, const Indent& acIndent)
 }
 
 PrettyPrinter::PrettyPrinter(std::ostream& acOutStream) :
-    ASTVisitor(acOutStream)
+    ASTVisitor(acOutStream),
+    m_cIndent { Settings::IndentWidth }
 {
 }
 

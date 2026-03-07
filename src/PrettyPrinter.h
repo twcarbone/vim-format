@@ -7,6 +7,8 @@
 class Indent
 {
 public:
+    Indent(size_t tabstop);
+
     Indent operator++(int);
     Indent operator--(int);
     friend std::ostream& operator<<(std::ostream& os, const Indent& indent);
