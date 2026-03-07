@@ -5,7 +5,7 @@ Program
       StmtList
         ExprCmd echo
           Literal 1
-      StmtList
+      NULL
     IfStmt
       Literal 1
       StmtList
@@ -25,7 +25,7 @@ Program
           StmtList
             ExprCmd echo
               Literal 2
-          StmtList
+          NULL
     IfStmt
       Literal 1
       StmtList

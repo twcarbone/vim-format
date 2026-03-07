@@ -198,7 +198,6 @@ ast::IfStmt* ASTParser::if_stmt()
             consume(Token::Type::ENDIF);
             break;
         default:
-            pElseStmts = new ast::StmtList();
             consume(Token::Type::ENDIF);
     }
 
