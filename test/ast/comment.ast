@@ -1,19 +1,19 @@
 Program
   StmtList
-    CommentStmt " Comment
-    CommentStmt " Indented comment
-    CommentStmt " Comment with a "string" contained
-    CommentStmt "Comment that just looks like a string"
-    CommentStmt " Tab-indented comment with "string"
-    CommentStmt "" Comment, but with multiple (even) leaders
-    CommentStmt """ Comment, but with multiple (odd) leaders
-    AssignStmt =
+    CommentStmt " Comment <lvwp = 0; trailing = no>
+    CommentStmt " Indented comment <lvwp = 0; trailing = no>
+    CommentStmt " Comment with a "string" contained <lvwp = 0; trailing = no>
+    CommentStmt "Comment that just looks like a string" <lvwp = 0; trailing = no>
+    CommentStmt " Tab-indented comment with "string" <lvwp = 0; trailing = no>
+    CommentStmt "" Comment, but with multiple (even) leaders <lvwp = 0; trailing = no>
+    CommentStmt """ Comment, but with multiple (odd) leaders <lvwp = 0; trailing = no>
+    AssignStmt = <lvwp = 1>
       Var a
       ListExpr
         Literal "a"
         Literal "b"
-    CommentStmt (trailing) "inline comment
-    AssignStmt =
+    CommentStmt "inline comment <lvwp = 0; trailing = yes>
+    AssignStmt = <lvwp = 0>
       Var a
       Literal 2
-    CommentStmt (trailing) "inline comment with no leading whitespace
+    CommentStmt "inline comment with no leading whitespace <lvwp = 0; trailing = yes>

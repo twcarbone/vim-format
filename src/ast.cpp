@@ -35,6 +35,16 @@ size_t Stmt::leading_empty_lines() const
     return m_nLeadingEmptyLines;
 }
 
+std::string Stmt::toString() const
+{
+    return str_a() + " <" + str_b() + ">";
+}
+
+std::string Stmt::str_b() const
+{
+    return "lvwp = " + std::to_string(m_nLeadingEmptyLines);
+}
+
 //
 // ExprList
 //
@@ -91,14 +101,14 @@ const Expr* ExprCmd::expr() const
     return static_cast<Expr*>(m_lChildren[0]);
 }
 
-std::string ExprCmd::toString() const
-{
-    return "ExprCmd " + m_pCmd->str();
-}
-
 void ExprCmd::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+std::string ExprCmd::str_a() const
+{
+    return "ExprCmd " + m_pCmd->str();
 }
 
 //
@@ -154,14 +164,14 @@ const StmtList* IfStmt::else_stmts() const
     return static_cast<StmtList*>(m_lChildren[2]);
 }
 
-std::string IfStmt::toString() const
-{
-    return "IfStmt";
-}
-
 void IfStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+std::string IfStmt::str_a() const
+{
+    return "IfStmt";
 }
 
 //
@@ -188,14 +198,14 @@ const StmtList* WhileStmt::stmts() const
     return static_cast<StmtList*>(m_lChildren[1]);
 }
 
-std::string WhileStmt::toString() const
-{
-    return "WhileStmt";
-}
-
 void WhileStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+std::string WhileStmt::str_a() const
+{
+    return "WhileStmt";
 }
 
 //
@@ -228,14 +238,14 @@ const StmtList* ForStmt::stmts() const
     return static_cast<StmtList*>(m_lChildren[2]);
 }
 
-std::string ForStmt::toString() const
-{
-    return "ForStmt";
-}
-
 void ForStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+std::string ForStmt::str_a() const
+{
+    return "ForStmt";
 }
 
 //
@@ -262,14 +272,14 @@ const Expr* JumpStmt::expr() const
     return static_cast<Expr*>(m_lChildren[0]);
 }
 
-std::string JumpStmt::toString() const
-{
-    return "JumpStmt " + m_pToken->str();
-}
-
 void JumpStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+std::string JumpStmt::str_a() const
+{
+    return "JumpStmt " + m_pToken->str();
 }
 
 //
@@ -388,7 +398,7 @@ const StmtList* FnStmt::body() const
     return static_cast<StmtList*>(m_lChildren[1]);
 };
 
-std::string FnStmt::toString() const
+std::string FnStmt::str_a() const
 {
     std::string lsStr = "FnStmt " + m_pName->str();
 
@@ -878,11 +888,6 @@ AssignStmt::~AssignStmt()
 {
 }
 
-std::string AssignStmt::toString() const
-{
-    return "AssignStmt " + m_pOp->str();
-}
-
 const Token* AssignStmt::op() const
 {
     return m_pOp;
@@ -901,6 +906,11 @@ const Expr* AssignStmt::expr() const
 void AssignStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+std::string AssignStmt::str_a() const
+{
+    return "AssignStmt " + m_pOp->str();
 }
 
 //
@@ -927,14 +937,19 @@ CommentStmt::~CommentStmt()
 {
 }
 
-std::string CommentStmt::toString() const
+std::string CommentStmt::str_a() const
 {
-    if (m_bTrailing)
-    {
-        return "CommentStmt (trailing) " + m_pComment->str();
-    }
-
     return "CommentStmt " + m_pComment->str();
+}
+
+std::string CommentStmt::str_b() const
+{
+    std::string lsStr = Stmt::str_b();
+
+    lsStr += "; trailing = ";
+    lsStr += m_bTrailing ? "yes" : "no";
+
+    return lsStr;
 }
 
 void CommentStmt::accept(ASTVisitor& acASTVisitor) const

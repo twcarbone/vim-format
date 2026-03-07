@@ -1,118 +1,118 @@
 Program
   StmtList
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       TernaryOp ? :
         Literal 1
         Literal "this"
         Literal "that"
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       BinaryOp ??
         Literal "us"
         Literal "them"
-    ExprCmd echo
+    ExprCmd echo <lvwp = 1>
       BinaryOp ||
         Literal 1
         Literal 0
-    ExprCmd echo
+    ExprCmd echo <lvwp = 1>
       BinaryOp &&
         Literal 1
         Literal 0
-    ExprCmd echo
+    ExprCmd echo <lvwp = 1>
       CasedBinaryOp ==
         Literal 1
         Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp ==?
         Literal 1
         Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp ==#
         Literal 1
         Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp !=
         Literal 1
         Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp >
         Literal 6
         Literal 4
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp >=
         Literal 1
         Literal 5
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp <
         Literal 5
         Literal 3
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp <=
         Literal 3
         Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp is
         Literal "foo"
         Literal "bar"
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CasedBinaryOp isnot
         Literal "foo"
         Literal "bar"
-    ExprCmd echo
+    ExprCmd echo <lvwp = 1>
       BinaryOp <<
         Literal 1
         Literal 1
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       BinaryOp >>
         Literal 2
         Literal 1
-    ExprCmd echo
+    ExprCmd echo <lvwp = 1>
       BinaryOp +
         Literal 1
         Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       BinaryOp -
         Literal 2
         Literal 1
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       BinaryOp ..
         Literal "sp"
         Literal "am"
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       BinaryOp .
         Literal "sp"
         Literal "am"
-    ExprCmd echo
+    ExprCmd echo <lvwp = 1>
       BinaryOp *
         Literal 2
         Literal 1
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       BinaryOp /
         Literal 6
         Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       BinaryOp %
         Literal 6
         Literal 4
-    ExprCmd echo
+    ExprCmd echo <lvwp = 1>
       UnaryOp !
         Literal 1
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       UnaryOp -
         Literal 1
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       UnaryOp +
         Literal 1
-    AssignStmt =
+    AssignStmt = <lvwp = 1>
       Var g:m_bar
       Literal 42
-    AssignStmt =
+    AssignStmt = <lvwp = 1>
       Var b:items
       ListExpr
         Literal 0
         Literal 1
         Literal 2
         Literal 3
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       IndexExpr
         ListExpr
           Literal 0
@@ -121,7 +121,7 @@ Program
           Literal 3
         Literal 0
         NULL
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       IndexExpr
         ListExpr
           Literal 0
@@ -130,7 +130,7 @@ Program
           Literal 3
         NULL
         NULL
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       IndexExpr
         ListExpr
           Literal 0
@@ -139,17 +139,17 @@ Program
           Literal 3
         NULL
         Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       IndexExpr
         Var b:items
         Literal 2
         NULL
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       IndexExpr
         Var b:items
         Literal 1
         Literal 3
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       IndexExpr
         Var b:items
         BinaryOp +
@@ -158,7 +158,7 @@ Program
         BinaryOp /
           Literal 6
           Literal 2
-    AssignStmt =
+    AssignStmt = <lvwp = 1>
       Var dict_a
       DictExpr
         DictEntry
@@ -174,19 +174,19 @@ Program
         DictEntry
           Literal "cherry"
           Literal "pie"
-    AssignStmt =
+    AssignStmt = <lvwp = 0>
       Var dict_b
       DictExpr
         DictEntry
           Literal "test"
           Var g:m_bar
-    AssignStmt =
+    AssignStmt = <lvwp = 0>
       Var dict_c
       DictExpr
         DictEntry
           Var g:m_bar
           Literal 43
-    FnStmt Add !
+    FnStmt Add ! <lvwp = 1>
       FnParamList
         FnParam
           Var a
@@ -195,14 +195,14 @@ Program
           Var b
           NULL
       StmtList
-    ExprCmd echo
+    ExprCmd echo <lvwp = 1>
       CallExpr
         CallExpr
           Var ReturnsFuncRef
           FnArgList
         FnArgList
           Literal "passed to returned FuncRef"
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CallExpr
         IndexExpr
           Var list_of_funcrefs
@@ -210,20 +210,20 @@ Program
           NULL
         FnArgList
           Literal 5
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       CallExpr
         Var Add
         FnArgList
           Literal 1
           Literal 2
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       MethodCallExpr ->
         Literal 2
         CallExpr
           Var Add
           FnArgList
             Literal 3
-    ExprCmd echo
+    ExprCmd echo <lvwp = 0>
       MethodCallExpr ->
         MethodCallExpr ->
           Literal 3

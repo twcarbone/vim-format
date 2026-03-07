@@ -1,42 +1,42 @@
 Program
   StmtList
-    IfStmt
+    IfStmt <lvwp = 0>
       Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <lvwp = 0>
           Literal 1
       NULL
-    IfStmt
+    IfStmt <lvwp = 1>
       Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <lvwp = 0>
           Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <lvwp = 0>
           Literal 2
-    IfStmt
+    IfStmt <lvwp = 1>
       Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <lvwp = 0>
           Literal 1
       StmtList
-        IfStmt
+        IfStmt <lvwp = 0>
           Literal 2
           StmtList
-            ExprCmd echo
+            ExprCmd echo <lvwp = 0>
               Literal 2
           NULL
-    IfStmt
+    IfStmt <lvwp = 1>
       Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <lvwp = 0>
           Literal 1
       StmtList
-        IfStmt
+        IfStmt <lvwp = 0>
           Literal 2
           StmtList
-            ExprCmd echo
+            ExprCmd echo <lvwp = 0>
               Literal 2
           StmtList
-            ExprCmd echo
+            ExprCmd echo <lvwp = 0>
               Literal 3

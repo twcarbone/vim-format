@@ -39,7 +39,14 @@ public:
     void set_leading_empty_lines(size_t count);
     size_t leading_empty_lines() const;
 
+    virtual std::string toString() const;
+
 protected:
+    virtual std::string str_b() const;
+
+private:
+    virtual std::string str_a() const = 0;
+
     size_t m_nLeadingEmptyLines = 0;
 };
 
@@ -78,10 +85,11 @@ public:
     const Token* cmd() const;
     const Expr* expr() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
+    virtual std::string str_a() const;
+
     Token* m_pCmd;
 };
 
@@ -129,8 +137,10 @@ public:
     const StmtList* then_stmts() const;
     const StmtList* else_stmts() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
 };
 
 //
@@ -146,8 +156,10 @@ public:
     const Expr* condition() const;
     const StmtList* stmts() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
 };
 
 //
@@ -164,8 +176,10 @@ public:
     const Expr* items() const;
     const StmtList* stmts() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
 };
 
 //
@@ -181,10 +195,11 @@ public:
     const Token* token() const;
     const Expr* expr() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
+    virtual std::string str_a() const;
+
     Token* m_pToken;
 };
 
@@ -254,10 +269,11 @@ public:
     const std::vector<Token*>& modifiers() const;
     const StmtList* body() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
+    virtual std::string str_a() const;
+
     Token* m_pName;
     Token* m_pBang;
     std::vector<Token*> m_lModifiers;
@@ -510,10 +526,11 @@ public:
     const Var* var() const;
     const Expr* expr() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
+    virtual std::string str_a() const;
+
     Token* m_pOp;
 };
 
@@ -531,10 +548,12 @@ public:
 
     bool trailing() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
+    virtual std::string str_a() const;
+    virtual std::string str_b() const;
+
     bool m_bTrailing;
     Token* m_pComment;
 };
