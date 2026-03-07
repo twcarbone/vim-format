@@ -412,14 +412,14 @@ void PrettyPrinter::write_bol()
     m_cOutStream << m_cIndent;
 }
 
-void PrettyPrinter::write(const std::string& asText)
-{
-    m_cOutStream << asText;
-}
-
 void PrettyPrinter::write_eol()
 {
     m_cOutStream << std::endl;
+}
+
+void PrettyPrinter::write(const std::string& asText)
+{
+    m_cOutStream << asText;
 }
 
 void PrettyPrinter::write(char anChar, size_t anCount)
