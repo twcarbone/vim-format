@@ -7,6 +7,8 @@
 class Indent
 {
 public:
+    Indent(size_t tabstop);
+
     Indent operator++(int);
     Indent operator--(int);
     friend std::ostream& operator<<(std::ostream& os, const Indent& indent);
@@ -50,10 +52,10 @@ public:
     virtual void visit(const ast::WhileStmt* ast);
 
 private:
-    void write_ln(const std::string& line);
     void write_bol();
     void write_eol();
-    void write_txt(const std::string& text);
+    void write(const std::string& text);
+    void write(char c, size_t count = 1);
 
     Indent m_cIndent;
 };
