@@ -132,6 +132,7 @@ ast::Stmt* ASTParser::stmt()
 {
     // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
     // TODO (gh-31): RETURN only allowed in function
+    // TODO (gh-62): Leading newlines are not preserved before statements
 
     ast::Stmt* pStmt;
 
@@ -169,6 +170,8 @@ ast::Stmt* ASTParser::stmt()
 
     return pStmt;
 }
+
+// TODO (gh-64): Investigate leading whitespace in statements
 
 ast::IfStmt* ASTParser::if_stmt()
 {
@@ -651,6 +654,8 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 {
                     pStart = expr(0);
                 }
+
+                // TODO (gh-61): ast::IndexExpr does not account for open-ended slice
 
                 consume_optional(Token::Type::COLON);
 
