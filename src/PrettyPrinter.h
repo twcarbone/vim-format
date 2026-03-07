@@ -52,7 +52,6 @@ public:
     virtual void visit(const ast::WhileStmt* ast);
 
 private:
-    void write_ln(const std::string& line);
     void write_bol();
     void write_eol();
     void write(const std::string& text);

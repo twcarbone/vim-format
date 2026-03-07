@@ -249,7 +249,9 @@ void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
 
     if (apIfStmt->else_stmts() != nullptr)
     {
-        write_ln("else");
+        write_bol();
+        write("else");
+        write_eol();
         m_cIndent++;
         apIfStmt->else_stmts()->accept(*this);
         m_cIndent--;
@@ -405,11 +407,6 @@ void PrettyPrinter::write(const std::string& asText)
 void PrettyPrinter::write_eol()
 {
     m_cOutStream << std::endl;
-}
-
-void PrettyPrinter::write_ln(const std::string& asLine)
-{
-    m_cOutStream << m_cIndent << asLine << std::endl;
 }
 
 void PrettyPrinter::write(size_t anCount, char anChar)
