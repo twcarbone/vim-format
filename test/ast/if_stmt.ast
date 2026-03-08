@@ -1,10 +1,13 @@
 Program
   StmtList
+    EmptyStmt <>
     IfStmt <>
       Literal 1
       StmtList
         ExprCmd echo <>
           Literal 1
+        EmptyStmt <>
+        EmptyStmt <>
       NULL
     EmptyStmt <>
     IfStmt <>
@@ -12,7 +15,9 @@ Program
       StmtList
         ExprCmd echo <>
           Literal 1
+        EmptyStmt <>
       StmtList
+        EmptyStmt <>
         ExprCmd echo <>
           Literal 2
     EmptyStmt <>
@@ -29,6 +34,8 @@ Program
               Literal 2
           NULL
     EmptyStmt <>
+    EmptyStmt <>
+    EmptyStmt <>
     IfStmt <>
       Literal 1
       StmtList
@@ -43,3 +50,6 @@ Program
           StmtList
             ExprCmd echo <>
               Literal 3
+    EmptyStmt <>
+    EmptyStmt <>
+    EmptyStmt <>
