@@ -13,6 +13,7 @@ class CasedBinaryOp;
 class CommentStmt;
 class DictEntry;
 class DictExpr;
+class EmptyStmt;
 class ExprCmd;
 class FnArgList;
 class FnParam;
@@ -53,6 +54,7 @@ public:
     virtual void visit(const ast::CommentStmt* ast);
     virtual void visit(const ast::DictEntry* ast);
     virtual void visit(const ast::DictExpr* ast);
+    virtual void visit(const ast::EmptyStmt* ast);
     virtual void visit(const ast::ExprCmd* ast);
     virtual void visit(const ast::FnArgList* ast);
     virtual void visit(const ast::FnParam* ast);

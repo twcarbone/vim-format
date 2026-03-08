@@ -1,37 +1,40 @@
 Program
   StmtList
-    ForStmt
+    ForStmt <>
       Var item
       ListExpr
         Literal 1
         Literal 2
         Literal 3
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal "for each item"
-        JumpStmt continue
+        JumpStmt continue <>
           NULL
-    AssignStmt =
+    EmptyStmt <>
+    AssignStmt = <>
       Var i
       Literal 1
-    AssignStmt =
+    AssignStmt = <>
       Var items
       ListExpr
         Literal 4
         Literal 5
         Literal 6
-    ForStmt
+    EmptyStmt <>
+    ForStmt <>
       Var item
       Var items
       StmtList
-        AssignStmt +=
+        AssignStmt += <>
           Var i
           Literal 1
-    WhileStmt
+    EmptyStmt <>
+    WhileStmt <>
       Literal 1
       StmtList
-        AssignStmt =
+        AssignStmt = <>
           Var foo
           Literal 6
-        JumpStmt break
+        JumpStmt break <>
           NULL

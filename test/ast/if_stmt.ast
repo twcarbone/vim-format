@@ -1,42 +1,55 @@
 Program
   StmtList
-    IfStmt
+    EmptyStmt <>
+    IfStmt <>
       Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal 1
+        EmptyStmt <>
+        EmptyStmt <>
       NULL
-    IfStmt
+    EmptyStmt <>
+    IfStmt <>
       Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal 1
+        EmptyStmt <>
       StmtList
-        ExprCmd echo
+        EmptyStmt <>
+        ExprCmd echo <>
           Literal 2
-    IfStmt
+    EmptyStmt <>
+    IfStmt <>
       Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal 1
       StmtList
-        IfStmt
+        IfStmt <>
           Literal 2
           StmtList
-            ExprCmd echo
+            ExprCmd echo <>
               Literal 2
           NULL
-    IfStmt
+    EmptyStmt <>
+    EmptyStmt <>
+    EmptyStmt <>
+    IfStmt <>
       Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal 1
       StmtList
-        IfStmt
+        IfStmt <>
           Literal 2
           StmtList
-            ExprCmd echo
+            ExprCmd echo <>
               Literal 2
           StmtList
-            ExprCmd echo
+            ExprCmd echo <>
               Literal 3
+    EmptyStmt <>
+    EmptyStmt <>
+    EmptyStmt <>

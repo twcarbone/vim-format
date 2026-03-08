@@ -124,6 +124,11 @@ void PrettyPrinter::visit(const ast::DictExpr* apDictExpr)
     write('}');
 }
 
+void PrettyPrinter::visit(const ast::EmptyStmt* apEmptyStmt)
+{
+    write('\n');
+}
+
 void PrettyPrinter::visit(const ast::ExprCmd* apExprCmd)
 {
     write_bol();

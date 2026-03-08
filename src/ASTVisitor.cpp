@@ -44,6 +44,11 @@ void ASTVisitor::visit(const ast::DictExpr* apDictExpr)
     handle_node(apDictExpr);
 }
 
+void ASTVisitor::visit(const ast::EmptyStmt* apEmptyStmt)
+{
+    handle_node(apEmptyStmt);
+}
+
 void ASTVisitor::visit(const ast::ExprCmd* apExprCmd)
 {
     handle_node(apExprCmd);
