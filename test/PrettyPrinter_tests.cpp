@@ -28,7 +28,7 @@ protected:
         PrettyPrinter lcPrettyPrinter(lcPrettyStrStream);
         lcParser.root()->accept(lcPrettyPrinter);
 
-        std::string lsPrettyStr = vf::read_file(lcSrcPath.replace_extension("pretty"));
+        std::string lsPrettyStr = vf::read_file(lcSrcPath.replace_extension("pretty.vim"));
 
         EXPECT_EQ(lcPrettyStrStream.str(), lsPrettyStr);
     }
