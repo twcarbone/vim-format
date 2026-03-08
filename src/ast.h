@@ -36,9 +36,6 @@ class Stmt : public Node
 public:
     virtual ~Stmt() = default;
 
-    void set_leading_empty_lines(size_t count);
-    size_t leading_empty_lines() const;
-
     virtual std::string toString() const;
 
 protected:
@@ -46,8 +43,20 @@ protected:
 
 private:
     virtual std::string str_a() const = 0;
+};
 
-    size_t m_nLeadingEmptyLines = 0;
+//
+// EmptyStmt
+//
+
+class EmptyStmt : public Stmt
+{
+    virtual ~EmptyStmt();
+
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
 };
 
 //

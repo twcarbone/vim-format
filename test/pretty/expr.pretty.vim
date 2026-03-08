@@ -12,7 +12,9 @@ let list = [1, 2, 3]
 echo [1, 2, 3]
 
 if 1
+
     echo "if"
+
 endif
 
 if 2
@@ -21,8 +23,10 @@ else
     echo "else"
 endif
 
+
 while 0
     echo "while"
+
 endwhile
 
 for item in ["a", "b", "c"]
@@ -46,7 +50,10 @@ function! Six(a, b = 1)
 " trailing comment
 endfunction
 
+
+
 echo "foo" ==# "Foo"
 echo "foo" ==? "Foo"
 
 echo "hello"->toupper()
+

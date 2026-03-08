@@ -130,13 +130,6 @@ ast::Stmt* ASTParser::stmt()
     // TODO (gh-5): BREAK and CONTINUE are only allowed during an iteration
     // TODO (gh-31): RETURN only allowed in function
 
-    size_t lnLeadingEmptyLines = 0;
-    while (curr()->type() == Token::Type::NEWLINE)
-    {
-        consume(Token::Type::NEWLINE);
-        lnLeadingEmptyLines++;
-    }
-
     ast::Stmt* pStmt;
 
     switch (curr()->type())
@@ -167,11 +160,11 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::CMD_LET:
             pStmt = assign_stmt();
             break;
+        case Token::Type::NEWLINE:
+            pStmt = new ast::EmptyStmt();
         default:
             break;
     }
-
-    pStmt->set_leading_empty_lines(lnLeadingEmptyLines);
 
     return pStmt;
 }

@@ -25,16 +25,6 @@ const std::vector<Node*>& Node::children() const
 // Stmt
 //
 
-void Stmt::set_leading_empty_lines(size_t anCount)
-{
-    m_nLeadingEmptyLines = anCount;
-}
-
-size_t Stmt::leading_empty_lines() const
-{
-    return m_nLeadingEmptyLines;
-}
-
 std::string Stmt::toString() const
 {
     return str_a() + " <" + str_b() + ">";
@@ -42,7 +32,25 @@ std::string Stmt::toString() const
 
 std::string Stmt::str_b() const
 {
-    return "lvwp = " + std::to_string(m_nLeadingEmptyLines);
+    return "";
+}
+
+//
+// EmptyStmt
+//
+
+EmptyStmt::~EmptyStmt()
+{
+}
+
+void EmptyStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string EmptyStmt::str_a() const
+{
+    return "EmptyStmt";
 }
 
 //
@@ -946,7 +954,12 @@ std::string CommentStmt::str_b() const
 {
     std::string lsStr = Stmt::str_b();
 
-    lsStr += "; trailing = ";
+    if (!lsStr.empty())
+    {
+        lsStr += "; ";
+    }
+
+    lsStr += "trailing = ";
     lsStr += m_bTrailing ? "yes" : "no";
 
     return lsStr;

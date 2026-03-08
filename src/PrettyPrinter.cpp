@@ -36,7 +36,6 @@ PrettyPrinter::PrettyPrinter(std::ostream& acOutStream) :
 
 void PrettyPrinter::visit(const ast::AssignStmt* apAssignStmt)
 {
-    write('\n', apAssignStmt->leading_empty_lines());
     write_bol();
 
     write("let");
@@ -56,7 +55,6 @@ void PrettyPrinter::visit(const ast::CommentStmt* apCommentStmt)
 
     if (!apCommentStmt->trailing())
     {
-        write('\n', apCommentStmt->leading_empty_lines());
         write_bol();
     }
 
@@ -126,9 +124,13 @@ void PrettyPrinter::visit(const ast::DictExpr* apDictExpr)
     write('}');
 }
 
+void PrettyPrinter::visit(const ast::EmptyStmt* apEmptyStmt)
+{
+    write('\n');
+}
+
 void PrettyPrinter::visit(const ast::ExprCmd* apExprCmd)
 {
-    write('\n', apExprCmd->leading_empty_lines());
     write_bol();
 
     write(apExprCmd->cmd()->str());
@@ -181,7 +183,6 @@ void PrettyPrinter::visit(const ast::FnParamList* apFnParamList)
 
 void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
 {
-    write('\n', apFnStmt->leading_empty_lines());
     write_bol();
 
     write("function");
@@ -222,7 +223,6 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
 
 void PrettyPrinter::visit(const ast::ForStmt* apForStmt)
 {
-    write('\n', apForStmt->leading_empty_lines());
     write_bol();
 
     write("for");
@@ -248,7 +248,6 @@ void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
 {
     // TODO (gh-60): Handle elseif in PrettyPrinter
 
-    write('\n', apIfStmt->leading_empty_lines());
     write_bol();
 
     write("if");
@@ -299,7 +298,6 @@ void PrettyPrinter::visit(const ast::IndexExpr* apIndexExpr)
 
 void PrettyPrinter::visit(const ast::JumpStmt* apJumpStmt)
 {
-    write('\n', apJumpStmt->leading_empty_lines());
     write_bol();
 
     write(apJumpStmt->token()->str());
@@ -398,7 +396,6 @@ void PrettyPrinter::visit(const ast::Var* apVar)
 
 void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
 {
-    write('\n', apWhileStmt->leading_empty_lines());
     write_bol();
 
     write("while");
