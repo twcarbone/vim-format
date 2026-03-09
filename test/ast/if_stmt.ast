@@ -2,54 +2,58 @@ Program
   StmtList
     EmptyStmt <>
     IfStmt <>
-      Literal 1
-      StmtList
-        ExprCmd echo <>
-          Literal 1
-        EmptyStmt <>
-        EmptyStmt <>
-      NULL
+      IfBranch
+        Literal 1
+        StmtList
+          ExprCmd echo <>
+            Literal 1
+          EmptyStmt <>
+          EmptyStmt <>
     EmptyStmt <>
     IfStmt <>
-      Literal 1
-      StmtList
-        ExprCmd echo <>
-          Literal 1
-        EmptyStmt <>
-      StmtList
-        EmptyStmt <>
-        ExprCmd echo <>
-          Literal 2
+      IfBranch
+        Literal 1
+        StmtList
+          ExprCmd echo <>
+            Literal 1
+          EmptyStmt <>
+      IfBranch
+        NULL
+        StmtList
+          EmptyStmt <>
+          ExprCmd echo <>
+            Literal 2
     EmptyStmt <>
     IfStmt <>
-      Literal 1
-      StmtList
-        ExprCmd echo <>
-          Literal 1
-      StmtList
-        IfStmt <>
-          Literal 2
-          StmtList
-            ExprCmd echo <>
-              Literal 2
-          NULL
+      IfBranch
+        Literal 1
+        StmtList
+          ExprCmd echo <>
+            Literal 1
+      IfBranch
+        Literal 2
+        StmtList
+          ExprCmd echo <>
+            Literal 2
     EmptyStmt <>
     EmptyStmt <>
     EmptyStmt <>
     IfStmt <>
-      Literal 1
-      StmtList
-        ExprCmd echo <>
-          Literal 1
-      StmtList
-        IfStmt <>
-          Literal 2
-          StmtList
-            ExprCmd echo <>
-              Literal 2
-          StmtList
-            ExprCmd echo <>
-              Literal 3
+      IfBranch
+        Literal 1
+        StmtList
+          ExprCmd echo <>
+            Literal 1
+      IfBranch
+        Literal 2
+        StmtList
+          ExprCmd echo <>
+            Literal 2
+      IfBranch
+        NULL
+        StmtList
+          ExprCmd echo <>
+            Literal 3
     EmptyStmt <>
     EmptyStmt <>
     EmptyStmt <>
