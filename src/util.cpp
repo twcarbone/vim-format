@@ -23,3 +23,10 @@ std::string vf::read_file(const std::filesystem::path& acPath)
 
     return lsBuffer;
 }
+
+std::string vf::base_name(const std::filesystem::path& acPath)
+{
+    const std::string lsFilename = acPath.filename().string();
+    const size_t lnPos = lsFilename.find('.');
+    return lsFilename.substr(0, lnPos);
+}
