@@ -79,6 +79,11 @@ void ASTVisitor::visit(const ast::ForStmt* apForStmt)
     handle_node(apForStmt);
 }
 
+void ASTVisitor::visit(const ast::IfBranch* apIfBranch)
+{
+    handle_node(apIfBranch);
+}
+
 void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
 {
     handle_node(apIfStmt);

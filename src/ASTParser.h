@@ -25,22 +25,22 @@ private:
 
     ast::Var* var();
     ast::Stmt* stmt();
+    ast::Expr* expr(int min_binding_power);
     ast::IfStmt* if_stmt();
+    ast::FnStmt* fn_stmt();
     ast::Program* program();
     ast::ForStmt* for_stmt();
     ast::ExprCmd* expr_cmd();
     ast::StmtList* stmt_list();
-    ast::FnStmt* fn_stmt();
     ast::JumpStmt* jump_stmt();
     ast::ListExpr* list_expr();
     ast::DictExpr* dict_expr();
+    ast::IfBranch* if_branch(Token::Type type);
     ast::FnArgList* fn_arg_list();
-    ast::FnParamList* fn_param_list();
     ast::WhileStmt* while_stmt();
     ast::AssignStmt* assign_stmt();
+    ast::FnParamList* fn_param_list();
     ast::CommentStmt* comment_stmt();
-
-    ast::Expr* expr(int min_binding_power);
 
     void consume(const Token::Type type);
     bool consume_optional(const Token::Type type);

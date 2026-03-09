@@ -169,42 +169,60 @@ ast::Stmt* ASTParser::stmt()
     return pStmt;
 }
 
+ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
+{
+    Token* pToken = nullptr;
+    ast::Expr* pCondition = nullptr;
+    ast::StmtList* pBody = nullptr;
+
+    pToken = curr();
+    consume(aeType);
+
+    switch (aeType)
+    {
+        case Token::Type::IF:
+        case Token::Type::ELSEIF:
+            pCondition = expr(0);
+        case Token::Type::ELSE:
+        default:
+            break;
+    }
+
+    consume(Token::Type::NEWLINE);
+
+    pBody = stmt_list();
+
+    return new ast::IfBranch(pToken, pCondition, pBody);
+}
+
 // TODO (gh-64): Investigate leading whitespace in statements
 
 ast::IfStmt* ASTParser::if_stmt()
 {
-    switch (curr()->type())
+    ast::IfStmt* pIfStmt = new ast::IfStmt();
+    ast::IfBranch* pIfBranch = nullptr;
+
+    pIfBranch = if_branch(Token::Type::IF);
+    pIfStmt->push(pIfBranch);
+
+    bool bLoop = true;
+    while (bLoop)
     {
-        case Token::Type::IF:
-        case Token::Type::ELSEIF:
-            consume(curr()->type());
-            break;
-        default:
-            break;
+        switch (curr()->type())
+        {
+            case Token::Type::ELSEIF:
+            case Token::Type::ELSE:
+                pIfBranch = if_branch(curr()->type());
+                pIfStmt->push(pIfBranch);
+                break;
+            case Token::Type::ENDIF:
+                consume(Token::Type::ENDIF);
+            default:
+                bLoop = false;
+        }
     }
 
-    ast::Expr* pExpr = expr(0);
-    consume(Token::Type::NEWLINE);
-    ast::StmtList* pThenStmts = stmt_list();
-    ast::StmtList* pElseStmts = nullptr;
-
-    switch (curr()->type())
-    {
-        case Token::Type::ELSEIF:
-            pElseStmts = new ast::StmtList();
-            pElseStmts->push(if_stmt());
-            break;
-        case Token::Type::ELSE:
-            consume(Token::Type::ELSE);
-            consume(Token::Type::NEWLINE);
-            pElseStmts = stmt_list();
-            consume(Token::Type::ENDIF);
-            break;
-        default:
-            consume(Token::Type::ENDIF);
-    }
-
-    return new ast::IfStmt(pExpr, pThenStmts, pElseStmts);
+    return pIfStmt;
 }
 
 ast::WhileStmt* ASTParser::while_stmt()

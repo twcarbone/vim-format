@@ -244,29 +244,30 @@ void PrettyPrinter::visit(const ast::ForStmt* apForStmt)
     write_eol();
 }
 
-void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
+void PrettyPrinter::visit(const ast::IfBranch* apIfBranch)
 {
-    // TODO (gh-60): Handle elseif in PrettyPrinter
-
     write_bol();
 
-    write("if");
-    write(' ', Settings::ControlStmtPadding);
-    apIfStmt->condition()->accept(*this);
+    write(apIfBranch->token()->str());
+
+    if (apIfBranch->condition() != nullptr)
+    {
+        write(' ', Settings::ControlStmtPadding);
+        apIfBranch->condition()->accept(*this);
+    }
+
     write_eol();
 
     m_cIndent++;
-    apIfStmt->then_stmts()->accept(*this);
+    apIfBranch->body()->accept(*this);
     m_cIndent--;
+}
 
-    if (apIfStmt->else_stmts() != nullptr)
+void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
+{
+    for (const ast::IfBranch* pIfBranch : apIfStmt->branches())
     {
-        write_bol();
-        write("else");
-        write_eol();
-        m_cIndent++;
-        apIfStmt->else_stmts()->accept(*this);
-        m_cIndent--;
+        pIfBranch->accept(*this);
     }
 
     write("endif");
