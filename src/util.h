@@ -27,4 +27,10 @@ inline bool is_one_of(std::string_view str, std::string_view any)
  */
 std::string base_name(const std::filesystem::path& path);
 
+/**
+ *  @brief
+ *      Everything right of the non-first dot in the filename.
+ */
+std::string tail(const std::filesystem::path& path);
+
 };

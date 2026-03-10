@@ -30,3 +30,21 @@ std::string vf::base_name(const std::filesystem::path& acPath)
     const size_t lnPos = lsFilename.find('.');
     return lsFilename.substr(0, lnPos);
 }
+
+std::string vf::tail(const std::filesystem::path& acPath)
+{
+    std::string lsFilename = acPath.filename().string();
+    size_t lnPos = lsFilename.find('.');
+
+    if (lnPos == 0)
+    {
+        lnPos = lsFilename.find('.', 1);
+    }
+
+    if (lnPos == std::string::npos)
+    {
+        return "";
+    }
+
+    return lsFilename.substr(lnPos + 1);
+}
