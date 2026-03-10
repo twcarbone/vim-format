@@ -24,14 +24,28 @@ TEST(UtilTest, test_is_one_of)
     EXPECT_FALSE(vf::is_one_of("ab", "a"));
 }
 
-TEST(UtilTest, test_base_name)
+TEST_F(FilesystemTest, test_name)
 {
-    EXPECT_EQ(vf::base_name("bar"), "bar");
-    EXPECT_EQ(vf::base_name("bar.txt"), "bar");
-    EXPECT_EQ(vf::base_name("bar.tar.gz"), "bar");
-    EXPECT_EQ(vf::base_name("/bar"), "bar");
-    EXPECT_EQ(vf::base_name("/foo/bar.txt"), "bar");
-    EXPECT_EQ(vf::base_name("/foo/bar.tar.gz"), "bar");
+    EXPECT_EQ(vf::name(m_s1), "pkg.tar.gz");
+    EXPECT_EQ(vf::name(m_s2), "user");
+    EXPECT_EQ(vf::name(m_s3), "user");
+    EXPECT_EQ(vf::name(m_s4), "known_hosts");
+    EXPECT_EQ(vf::name(m_s5), ".tmux.conf");
+    EXPECT_EQ(vf::name(m_s6), ".vimrc");
+    EXPECT_EQ(vf::name(m_s7), "epel.repo");
+    EXPECT_EQ(vf::name(m_s8), "");
+}
+
+TEST_F(FilesystemTest, test_stem)
+{
+    EXPECT_EQ(vf::stem(m_s1), "pkg");
+    EXPECT_EQ(vf::stem(m_s2), "user");
+    EXPECT_EQ(vf::stem(m_s3), "user");
+    EXPECT_EQ(vf::stem(m_s4), "known_hosts");
+    EXPECT_EQ(vf::stem(m_s5), ".tmux");
+    EXPECT_EQ(vf::stem(m_s6), ".vimrc");
+    EXPECT_EQ(vf::stem(m_s7), "epel");
+    EXPECT_EQ(vf::stem(m_s8), "");
 }
 
 TEST_F(FilesystemTest, test_tail)
