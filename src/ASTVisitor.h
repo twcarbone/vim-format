@@ -20,6 +20,7 @@ class FnParam;
 class FnParamList;
 class FnStmt;
 class ForStmt;
+class IfBranch;
 class IfStmt;
 class IndexExpr;
 class JumpStmt;
@@ -61,6 +62,7 @@ public:
     virtual void visit(const ast::FnParamList* ast);
     virtual void visit(const ast::FnStmt* ast);
     virtual void visit(const ast::ForStmt* ast);
+    virtual void visit(const ast::IfBranch* ast);
     virtual void visit(const ast::IfStmt* ast);
     virtual void visit(const ast::IndexExpr* ast);
     virtual void visit(const ast::JumpStmt* ast);

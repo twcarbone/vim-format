@@ -143,33 +143,72 @@ void Program::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// IfBranch
+//
+
+IfBranch::IfBranch(Token* apToken, ast::Expr* apCondition, ast::StmtList* apBody) :
+    m_pToken { apToken }
+{
+    m_lChildren.push_back(apCondition);
+    m_lChildren.push_back(apBody);
+}
+
+IfBranch::~IfBranch()
+{
+}
+
+const Token* IfBranch::token() const
+{
+    return m_pToken;
+}
+
+const Expr* IfBranch::condition() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const StmtList* IfBranch::body() const
+{
+    return static_cast<StmtList*>(m_lChildren[1]);
+}
+
+std::string IfBranch::toString() const
+{
+    return "IfBranch";
+}
+
+void IfBranch::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // IfStmt
 //
 
-IfStmt::IfStmt(ast::Expr* apCondition, ast::StmtList* apThenStmtList, ast::StmtList* apElseStmtList)
+IfStmt::IfStmt()
 {
-    m_lChildren.push_back(apCondition);
-    m_lChildren.push_back(apThenStmtList);
-    m_lChildren.push_back(apElseStmtList);
 }
 
 IfStmt::~IfStmt()
 {
 }
 
-const Expr* IfStmt::condition() const
+void IfStmt::push(ast::IfBranch* apIfBranch)
 {
-    return static_cast<Expr*>(m_lChildren[0]);
+    m_lChildren.push_back(apIfBranch);
 }
 
-const StmtList* IfStmt::then_stmts() const
+std::vector<const IfBranch*> IfStmt::branches() const
 {
-    return static_cast<StmtList*>(m_lChildren[1]);
-}
+    std::vector<const IfBranch*> lBranches;
 
-const StmtList* IfStmt::else_stmts() const
-{
-    return static_cast<StmtList*>(m_lChildren[2]);
+    for (Node* pNode : m_lChildren)
+    {
+        lBranches.push_back(static_cast<IfBranch*>(pNode));
+    }
+
+    return lBranches;
 }
 
 void IfStmt::accept(ASTVisitor& acASTVisitor) const

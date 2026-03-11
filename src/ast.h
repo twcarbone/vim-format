@@ -51,6 +51,7 @@ private:
 
 class EmptyStmt : public Stmt
 {
+public:
     virtual ~EmptyStmt();
 
     virtual void accept(ASTVisitor& visitor) const;
@@ -133,18 +134,39 @@ public:
 };
 
 //
+// IfBranch
+//
+
+class IfBranch : public Node
+{
+public:
+    IfBranch(Token* token, Expr* expr, StmtList* body);
+    virtual ~IfBranch();
+
+    const Token* token() const;
+    const Expr* condition() const;
+    const StmtList* body() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pToken;
+};
+
+//
 // IfStmt
 //
 
 class IfStmt : public Stmt
 {
 public:
-    IfStmt(Expr* condition, StmtList* then_stmts, StmtList* else_smts);
+    IfStmt();
     virtual ~IfStmt();
 
-    const Expr* condition() const;
-    const StmtList* then_stmts() const;
-    const StmtList* else_stmts() const;
+    void push(IfBranch* if_branch);
+
+    std::vector<const IfBranch*> branches() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
