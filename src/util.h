@@ -32,4 +32,6 @@ std::string stem(const std::filesystem::path& path);
  */
 std::string tail(const std::filesystem::path& path);
 
+std::filesystem::path with_tail(const std::filesystem::path& path, const std::string& tail);
+
 };

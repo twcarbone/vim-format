@@ -59,3 +59,16 @@ TEST_F(FilesystemTest, test_tail)
     EXPECT_EQ(vf::tail(m_s7), "repo");
     EXPECT_EQ(vf::tail(m_s8), "");
 }
+
+TEST_F(FilesystemTest, test_with_stem)
+{
+    EXPECT_EQ(vf::with_tail(m_s1, "cpp").string(), "/home/user/pkg.cpp");
+    EXPECT_EQ(vf::with_tail(m_s2, "d").string(), "/home/user.d");
+    EXPECT_EQ(vf::with_tail(m_s3, "d").string(), "/home/user.d");
+    EXPECT_EQ(vf::with_tail(m_s4, "").string(), "/home/user/.ssh/known_hosts");
+    EXPECT_EQ(vf::with_tail(m_s5, "conf.bak").string(), "/home/user/.config/.tmux.conf.bak");
+    EXPECT_EQ(vf::with_tail(m_s6, "2").string(), "/home/user/.vimrc.2");
+    EXPECT_EQ(vf::with_tail(m_s7, "tar.gz").string(), "/etc/yum.repos.d/epel.tar.gz");
+
+    EXPECT_THROW(vf::with_tail(m_s8, "cpp"), std::runtime_error);
+}
