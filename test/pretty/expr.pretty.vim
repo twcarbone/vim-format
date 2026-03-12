@@ -46,8 +46,7 @@ echo add([1, 2, 3], --4 + 5)
 function! Six(a, b = 1)
     " non-trailing comment
     let i = 1
-    return 1 << 2
-" trailing comment
+    return 1 << 2  " trailing comment
 endfunction
 
 

@@ -59,5 +59,6 @@ private:
     void write(const std::string& text);
     void write(char c, size_t count = 1);
 
+    bool m_bNewlinePending;
     Indent m_cIndent;
 };
