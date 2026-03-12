@@ -219,7 +219,8 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
     apFnStmt->body()->accept(*this);
     m_cIndent--;
 
-    write("\nendfunction");
+    write_bol();
+    write("endfunction");
 
     write_eol();
 }
@@ -242,7 +243,8 @@ void PrettyPrinter::visit(const ast::ForStmt* apForStmt)
     apForStmt->stmts()->accept(*this);
     m_cIndent--;
 
-    write("\nendfor");
+    write_bol();
+    write("endfor");
 
     write_eol();
 }
@@ -273,7 +275,8 @@ void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
         pIfBranch->accept(*this);
     }
 
-    write("\nendif");
+    write_bol();
+    write("endif");
 
     write_eol();
 }
@@ -413,7 +416,8 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
     apWhileStmt->stmts()->accept(*this);
     m_cIndent--;
 
-    write("\nendwhile");
+    write_bol();
+    write("endwhile");
 
     write_eol();
 }
