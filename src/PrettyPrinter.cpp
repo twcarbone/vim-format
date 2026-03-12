@@ -30,6 +30,7 @@ std::ostream& operator<<(std::ostream& os, const Indent& acIndent)
 
 PrettyPrinter::PrettyPrinter(std::ostream& acOutStream) :
     ASTVisitor(acOutStream),
+    m_bNewlinePending { false },
     m_cIndent { Settings::IndentWidth }
 {
 }
@@ -51,11 +52,13 @@ void PrettyPrinter::visit(const ast::AssignStmt* apAssignStmt)
 
 void PrettyPrinter::visit(const ast::CommentStmt* apCommentStmt)
 {
-    // TODO (gh-59): PrettyPrinting trailing statement comments
-
     if (!apCommentStmt->trailing())
     {
         write_bol();
+    }
+    else
+    {
+        write(' ', Settings::SpaceBeforeTrailingComment);
     }
 
     write(apCommentStmt->comment()->str());
@@ -216,6 +219,7 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
     apFnStmt->body()->accept(*this);
     m_cIndent--;
 
+    write_bol();
     write("endfunction");
 
     write_eol();
@@ -239,6 +243,7 @@ void PrettyPrinter::visit(const ast::ForStmt* apForStmt)
     apForStmt->stmts()->accept(*this);
     m_cIndent--;
 
+    write_bol();
     write("endfor");
 
     write_eol();
@@ -270,6 +275,7 @@ void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
         pIfBranch->accept(*this);
     }
 
+    write_bol();
     write("endif");
 
     write_eol();
@@ -352,6 +358,8 @@ void PrettyPrinter::visit(const ast::Program* apProgram)
     {
         pNode->accept(*this);
     }
+
+    write_bol();
 }
 
 void PrettyPrinter::visit(const ast::StmtList* apStmtList)
@@ -408,6 +416,7 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
     apWhileStmt->stmts()->accept(*this);
     m_cIndent--;
 
+    write_bol();
     write("endwhile");
 
     write_eol();
@@ -415,12 +424,17 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
 
 void PrettyPrinter::write_bol()
 {
-    m_cOutStream << m_cIndent;
+    if (m_bNewlinePending)
+    {
+        m_bNewlinePending = false;
+        m_cOutStream << std::endl;
+        m_cOutStream << m_cIndent;
+    }
 }
 
 void PrettyPrinter::write_eol()
 {
-    m_cOutStream << std::endl;
+    m_bNewlinePending = true;
 }
 
 void PrettyPrinter::write(const std::string& asText)
