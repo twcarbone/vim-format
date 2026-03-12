@@ -58,7 +58,7 @@ void PrettyPrinter::visit(const ast::CommentStmt* apCommentStmt)
     }
     else
     {
-        write("  ");
+        write(' ', Settings::SpaceBeforeTrailingComment);
     }
 
     write(apCommentStmt->comment()->str());

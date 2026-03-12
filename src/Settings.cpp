@@ -19,4 +19,5 @@ size_t Settings::SpaceAfterFnParamSeparator = 1;
 size_t Settings::SpaceAfterListSeparator = 1;
 size_t Settings::SpaceBeforeDictValue = 1;
 size_t Settings::SpaceBeforeFunctionName = 1;
+size_t Settings::SpaceBeforeTrailingComment = 2;
 size_t Settings::SquareBracketPadding = 0;

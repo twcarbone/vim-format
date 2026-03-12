@@ -25,6 +25,7 @@ public:
     static size_t SpaceAfterListSeparator;
     static size_t SpaceBeforeDictValue;
     static size_t SpaceBeforeFunctionName;
+    static size_t SpaceBeforeTrailingComment;
     static size_t SquareBracketPadding;
 };
 
