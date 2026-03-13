@@ -806,6 +806,40 @@ void SliceExpr::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// IndexExpr
+//
+
+IndexExpr::IndexExpr(Expr* apIndexable, Expr* apIndex)
+{
+    m_lChildren.push_back(apIndexable);
+    m_lChildren.push_back(apIndex);
+}
+
+IndexExpr::~IndexExpr()
+{
+}
+
+const Expr* IndexExpr::indexable() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Expr* IndexExpr::index() const
+{
+    return static_cast<Expr*>(m_lChildren[1]);
+}
+
+std::string IndexExpr::toString() const
+{
+    return "IndexExpr";
+}
+
+void IndexExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // TernaryOp
 //
 

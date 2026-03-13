@@ -482,6 +482,23 @@ public:
 };
 
 //
+// IndexExpr
+//
+
+class IndexExpr : public Expr
+{
+public:
+    IndexExpr(Expr* indexable, Expr* index);
+    virtual ~IndexExpr();
+
+    const Expr* indexable() const;
+    const Expr* index() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // TernaryOp
 //
 

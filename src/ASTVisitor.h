@@ -22,6 +22,7 @@ class FnStmt;
 class ForStmt;
 class IfBranch;
 class IfStmt;
+class IndexExpr;
 class JumpStmt;
 class ListExpr;
 class Literal;
@@ -64,6 +65,7 @@ public:
     virtual void visit(const ast::ForStmt* ast);
     virtual void visit(const ast::IfBranch* ast);
     virtual void visit(const ast::IfStmt* ast);
+    virtual void visit(const ast::IndexExpr* ast);
     virtual void visit(const ast::SliceExpr* ast);
     virtual void visit(const ast::JumpStmt* ast);
     virtual void visit(const ast::ListExpr* ast);
