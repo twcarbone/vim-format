@@ -766,41 +766,41 @@ void Literal::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
-// IndexExpr
+// SliceExpr
 //
 
-IndexExpr::IndexExpr(Expr* apIndexable, Expr* apStart, Expr* apStop)
+SliceExpr::SliceExpr(Expr* apSliceable, Expr* apStart, Expr* apStop)
 {
-    m_lChildren.push_back(apIndexable);
+    m_lChildren.push_back(apSliceable);
     m_lChildren.push_back(apStart);
     m_lChildren.push_back(apStop);
 }
 
-IndexExpr::~IndexExpr()
+SliceExpr::~SliceExpr()
 {
 }
 
-std::string IndexExpr::toString() const
+std::string SliceExpr::toString() const
 {
-    return "IndexExpr";
+    return "SliceExpr";
 }
 
-const Expr* IndexExpr::indexable() const
+const Expr* SliceExpr::sliceable() const
 {
     return static_cast<Expr*>(m_lChildren[0]);
 }
 
-const Expr* IndexExpr::start() const
+const Expr* SliceExpr::start() const
 {
     return static_cast<Expr*>(m_lChildren[1]);
 };
 
-const Expr* IndexExpr::stop() const
+const Expr* SliceExpr::stop() const
 {
     return static_cast<Expr*>(m_lChildren[2]);
 };
 
-void IndexExpr::accept(ASTVisitor& acASTVisitor) const
+void SliceExpr::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }

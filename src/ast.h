@@ -464,16 +464,16 @@ private:
 };
 
 //
-// IndexExpr
+// SliceExpr
 //
 
-class IndexExpr : public Expr
+class SliceExpr : public Expr
 {
 public:
-    IndexExpr(Expr* indexable, Expr* start, Expr* stop);
-    virtual ~IndexExpr();
+    SliceExpr(Expr* sliceable, Expr* start, Expr* stop);
+    virtual ~SliceExpr();
 
-    const Expr* indexable() const;
+    const Expr* sliceable() const;
     const Expr* start() const;
     const Expr* stop() const;
 
