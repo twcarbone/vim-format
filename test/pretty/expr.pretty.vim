@@ -15,7 +15,7 @@ if 1  " trailing comment
 
     echo "if"
 
-endif
+endif  " endif
 
 if 2
     echo "if"
@@ -49,7 +49,9 @@ function! Six(a, b = 1)  " trailing comment
     return 1 << 2  " trailing comment
 endfunction
 
-
+" multiline
+" line
+" comment
 
 echo "foo" ==# "Foo"
 echo "foo" ==? "Foo"
