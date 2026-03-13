@@ -173,7 +173,7 @@ ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
 {
     Token* pToken = nullptr;
     ast::Expr* pCondition = nullptr;
-    ast::StmtList* pBody = nullptr;
+    ast::StmtList* pBody = new ast::StmtList();
 
     pToken = curr();
     consume(aeType);
@@ -188,9 +188,16 @@ ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
             break;
     }
 
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
+    }
+
     consume(Token::Type::NEWLINE);
 
-    pBody = stmt_list();
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
 
     return new ast::IfBranch(pToken, pCondition, pBody);
 }
@@ -227,12 +234,26 @@ ast::IfStmt* ASTParser::if_stmt()
 
 ast::WhileStmt* ASTParser::while_stmt()
 {
+    ast::Expr* pExpr = nullptr;
+    ast::StmtList* pBody = new ast::StmtList();
+
     consume(Token::Type::WHILE);
-    ast::Expr* pExpr = expr(0);
+    pExpr = expr(0);
+
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
+    }
+
     consume(Token::Type::NEWLINE);
-    ast::StmtList* pStmts = stmt_list();
+
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
+
     consume(Token::Type::ENDWHILE);
-    return new ast::WhileStmt(pExpr, pStmts);
+
+    return new ast::WhileStmt(pExpr, pBody);
 }
 
 ast::FnParamList* ASTParser::fn_param_list()
@@ -330,7 +351,8 @@ ast::FnStmt* ASTParser::fn_stmt()
 
     // Modifiers (range, abort, etc.)
     std::vector<Token*> lModifiers;
-    while (curr()->type() != Token::Type::NEWLINE)
+    bool bLoop = true;
+    while (bLoop)
     {
         switch (curr()->type())
         {
@@ -342,31 +364,55 @@ ast::FnStmt* ASTParser::fn_stmt()
                 consume(curr()->type());
                 break;
             default:
-                throw_unexpected_token();
+                bLoop = false;
         }
+    }
+
+    ast::StmtList* pBody = new ast::StmtList();
+
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
     }
 
     consume(Token::Type::NEWLINE);
 
     // Body
-    ast::StmtList* pBody = stmt_list();
-
-    ast::FnStmt* pFnStmt = new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
 
     consume(Token::Type::ENDFUNCTION);
-    return pFnStmt;
+
+    return new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
 }
 
 ast::ForStmt* ASTParser::for_stmt()
 {
+    ast::Expr* pItem = nullptr;
+    ast::Expr* pItems = nullptr;
+    ast::StmtList* pBody = new ast::StmtList();
+
     consume(Token::Type::FOR);
-    ast::Expr* pItem = expr(0);
+    pItem = expr(0);
+
     consume(Token::Type::IN);
-    ast::Expr* pItems = expr(0);
+    pItems = expr(0);
+
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
+    }
+
     consume(Token::Type::NEWLINE);
-    ast::StmtList* pStmtList = stmt_list();
+
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
+
     consume(Token::Type::ENDFOR);
-    return new ast::ForStmt(pItem, pItems, pStmtList);
+
+    return new ast::ForStmt(pItem, pItems, pBody);
 }
 
 ast::JumpStmt* ASTParser::jump_stmt()
