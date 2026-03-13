@@ -11,7 +11,7 @@ echo 3 + 3
 let list = [1, 2, 3]
 echo [1, 2, 3]
 
-if 1
+if 1  " trailing comment
 
     echo "if"
 
@@ -24,12 +24,12 @@ else
 endif
 
 
-while 0
+while 0  " trailing comment
     echo "while"
 
 endwhile
 
-for item in ["a", "b", "c"]
+for item in ["a", "b", "c"]  " trailing comment
     echo item
 endfor
 
@@ -43,7 +43,7 @@ echo 1 ? "true" : "false"
 
 echo add([1, 2, 3], --4 + 5)
 
-function! Six(a, b = 1)
+function! Six(a, b = 1)  " trailing comment
     " non-trailing comment
     let i = 1
     return 1 << 2  " trailing comment
