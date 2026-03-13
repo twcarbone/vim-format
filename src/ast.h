@@ -114,6 +114,9 @@ public:
     virtual ~StmtList();
 
     void push(Stmt* stmt);
+    void take(StmtList* stmts);
+    void insert(size_t pos, Stmt* stmt);
+    void extend(const StmtList* stmts);
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;

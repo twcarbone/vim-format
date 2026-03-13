@@ -60,7 +60,7 @@ TEST_F(FilesystemTest, test_tail)
     EXPECT_EQ(vf::tail(m_s8), "");
 }
 
-TEST_F(FilesystemTest, test_with_stem)
+TEST_F(FilesystemTest, test_with_tail)
 {
     EXPECT_EQ(vf::with_tail(m_s1, "cpp").string(), "/home/user/pkg.cpp");
     EXPECT_EQ(vf::with_tail(m_s2, "d").string(), "/home/user.d");
