@@ -75,6 +75,22 @@ void StmtList::push(Stmt* apStmt)
     m_lChildren.push_back(apStmt);
 }
 
+void StmtList::take(StmtList* apStmtList)
+{
+    extend(apStmtList);
+    apStmtList->m_lChildren.clear();
+}
+
+void StmtList::insert(size_t anPos, Stmt* apStmt)
+{
+    m_lChildren.insert(m_lChildren.begin() + anPos, apStmt);
+}
+
+void StmtList::extend(const StmtList* apStmtList)
+{
+    m_lChildren.insert(m_lChildren.end(), apStmtList->m_lChildren.begin(), apStmtList->m_lChildren.end());
+}
+
 std::string StmtList::toString() const
 {
     return "StmtList";
