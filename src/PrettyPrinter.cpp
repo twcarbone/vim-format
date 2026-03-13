@@ -281,6 +281,19 @@ void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
     write_eol();
 }
 
+void PrettyPrinter::visit(const ast::IndexExpr* apIndexExpr)
+{
+    apIndexExpr->indexable()->accept(*this);
+
+    write('[');
+    write(' ', Settings::SquareBracketPadding);
+
+    apIndexExpr->index()->accept(*this);
+
+    write(' ', Settings::SquareBracketPadding);
+    write(']');
+}
+
 void PrettyPrinter::visit(const ast::SliceExpr* apSliceExpr)
 {
     apSliceExpr->sliceable()->accept(*this);
@@ -293,9 +306,10 @@ void PrettyPrinter::visit(const ast::SliceExpr* apSliceExpr)
         apSliceExpr->start()->accept(*this);
     }
 
+    write(':');
+
     if (apSliceExpr->stop() != nullptr)
     {
-        write(':');
         apSliceExpr->stop()->accept(*this);
     }
 

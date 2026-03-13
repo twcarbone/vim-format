@@ -34,7 +34,7 @@ for item in ["a", "b", "c"]  " trailing comment
 endfor
 
 echo list[0]
-echo list[1]
+echo list[1:]
 echo list[:1]
 
 echo -1 + 2

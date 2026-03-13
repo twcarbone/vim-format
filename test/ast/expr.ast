@@ -122,14 +122,13 @@ Program
         Literal 2
         Literal 3
     ExprCmd echo <>
-      SliceExpr
+      IndexExpr
         ListExpr
           Literal 0
           Literal 1
           Literal 2
           Literal 3
         Literal 0
-        NULL
     ExprCmd echo <>
       SliceExpr
         ListExpr
@@ -216,10 +215,9 @@ Program
           Literal "passed to returned FuncRef"
     ExprCmd echo <>
       CallExpr
-        SliceExpr
+        IndexExpr
           Var list_of_funcrefs
           Literal 4
-          NULL
         FnArgList
           Literal 5
     ExprCmd echo <>

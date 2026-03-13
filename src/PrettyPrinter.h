@@ -41,6 +41,7 @@ public:
     virtual void visit(const ast::ForStmt* ast);
     virtual void visit(const ast::IfBranch* ast);
     virtual void visit(const ast::IfStmt* ast);
+    virtual void visit(const ast::IndexExpr* ast);
     virtual void visit(const ast::JumpStmt* ast);
     virtual void visit(const ast::ListExpr* ast);
     virtual void visit(const ast::Literal* ast);
