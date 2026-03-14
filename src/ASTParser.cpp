@@ -202,8 +202,6 @@ ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
     return new ast::IfBranch(pToken, pCondition, pBody);
 }
 
-// TODO (gh-64): Investigate leading whitespace in statements
-
 ast::IfStmt* ASTParser::if_stmt()
 {
     ast::IfStmt* pIfStmt = new ast::IfStmt();

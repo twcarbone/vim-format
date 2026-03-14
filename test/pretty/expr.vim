@@ -12,7 +12,7 @@ echo ((	2  +2)-   1) / (3)
 let list = [1,2,3]
 echo [ 1 ,  2,3   ]
 
-if   1 " trailing comment
+	if   1 " trailing comment
 
 echo "if"
 
@@ -25,7 +25,7 @@ if		2
     endif
 
 
-while  0    " trailing comment
+  while  0    " trailing comment
 echo "while"
 
   endwhile    
@@ -36,9 +36,9 @@ for  item	in  ["a","b"  ,  'c']	" trailing comment
 
 echo list[ 0 ]
 echo list[1:]
-echo list[:1]
+    echo list[:1]
 echo list[	1   :2			]
-echo list[:   ]
+ 	 	echo list[:   ]
 
 echo - 1+ 2
 
@@ -46,7 +46,7 @@ echo  1 ? "true": 	"false"
 
 echo add ([1,2  ,3],--4+  5)
 
-function!    Six (		a, b=1  ) " trailing comment
+      function!    Six (		a, b=1  ) " trailing comment
 " non-trailing comment
     let i = 1
 return 1<<2  	" trailing comment
