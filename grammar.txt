@@ -136,6 +136,8 @@ fn_stmt
         : FUNCTION OP_BANG? IDENTIFIER L_PAREN param_list? R_PAREN
             FN_RANGE? FN_ABORT? FN_DICT? FN_CLOSURE? stmt_list ENDFUNCTION
 
+            -   Whitespace is not allowed between FUNCTION and OP_BANG
+
 param_list
         : FN_ELLIPSES
         | (fn_param_list | fn_opt_param_list) (COMMA? | COMMA FN_ELLIPSES)
@@ -147,6 +149,8 @@ param_list
             foo = 1, bar = 2
             foo, bar, ...
             foo, bar, baz = 42, ...
+
+            -   Whitespace is not allowed before COMMA (E1068)
 
 fn_param_list
         : IDENTIFIER (COMMA IDENTIFIER)*
@@ -242,6 +246,9 @@ method_expr
         : expr10 OP_METHOD (callable_expr | lambda_expr) L_PAREN expr_list? R_PAREN
 
         See `method`.
+
+        -   Whitespace is not allowed before L_PAREN (E274)
+        -   Whitespace is not allowed after OP_METHOD (E274)
 
 callable_expr
         : IDENTIFIER
