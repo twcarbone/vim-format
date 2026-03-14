@@ -18,10 +18,10 @@ echo "if"
 
   endif  " endif
 
-if 2
+if		2
  echo "if"
              else
-  echo "else"
+  echo	 	 	"else"
     endif
 
 
