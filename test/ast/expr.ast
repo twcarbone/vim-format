@@ -123,6 +123,8 @@ Program
           Literal 2
         GroupExpr
           Literal 10
+    ExprCmd echo <>
+      Literal 'string with "embedded" double quote'
     EmptyStmt <>
     AssignStmt = <>
       Var g:m_bar
