@@ -249,6 +249,15 @@ void PrettyPrinter::visit(const ast::ForStmt* apForStmt)
     write_eol();
 }
 
+void PrettyPrinter::visit(const ast::GroupExpr* apGroupExpr)
+{
+    write('(');
+    write(' ', Settings::ParenPadding);
+    apGroupExpr->expr()->accept(*this);
+    write(' ', Settings::ParenPadding);
+    write(')');
+}
+
 void PrettyPrinter::visit(const ast::IfBranch* apIfBranch)
 {
     write_bol();

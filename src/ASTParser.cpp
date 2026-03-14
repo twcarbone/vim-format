@@ -607,7 +607,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             break;
         case Token::Type::L_PAREN:
             consume(Token::Type::L_PAREN);
-            pLhs = expr(0);
+            pLhs = new ast::GroupExpr(expr(0));
             consume(Token::Type::R_PAREN);
             break;
         case Token::Type::L_BRACKET:

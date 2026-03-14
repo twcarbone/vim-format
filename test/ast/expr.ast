@@ -110,6 +110,20 @@ Program
       UnaryOp +
         Literal 1
     EmptyStmt <>
+    ExprCmd echo <>
+      BinaryOp -
+        BinaryOp *
+          GroupExpr
+            BinaryOp +
+              Literal 1
+              GroupExpr
+                BinaryOp +
+                  Literal 3
+                  Literal 4
+          Literal 2
+        GroupExpr
+          Literal 10
+    EmptyStmt <>
     AssignStmt = <>
       Var g:m_bar
       Literal 42

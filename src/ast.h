@@ -71,6 +71,22 @@ public:
 };
 
 //
+// GroupExpr
+//
+
+class GroupExpr : public Expr
+{
+public:
+    GroupExpr(Expr* expr);
+    virtual ~GroupExpr();
+
+    const Expr* expr() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // ExprList
 //
 
