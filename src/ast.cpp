@@ -54,6 +54,34 @@ std::string EmptyStmt::str_a() const
 }
 
 //
+// GroupExpr
+//
+
+GroupExpr::GroupExpr(Expr* apExpr)
+{
+    m_lChildren.push_back(apExpr);
+}
+
+GroupExpr::~GroupExpr()
+{
+}
+
+const Expr* GroupExpr::expr() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+std::string GroupExpr::toString() const
+{
+    return "GroupExpr";
+}
+
+void GroupExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // ExprList
 //
 
