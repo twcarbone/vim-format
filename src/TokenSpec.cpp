@@ -179,7 +179,7 @@ Token* TokenSpec::match(const Source& acSource)
         }
     }
 
-    // Look for single-quote delimited string
+    // Look for single-quote string
     if (acSource.remaining_text().at(0) == '\'')
     {
         size_t lnEnd = acSource.remaining_text().find('\'', 1);
@@ -187,7 +187,7 @@ Token* TokenSpec::match(const Source& acSource)
         return new Token(Token::Type::STRING, std::string { lsStr }, acSource.pos());
     }
 
-    // Look for a string or comment
+    // Look for double-quote string or comment
     if (acSource.remaining_text().at(0) == '"')
     {
         if (acSource.column() == acSource.indent())
