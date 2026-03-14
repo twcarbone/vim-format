@@ -5,7 +5,7 @@ let i = 42
 
 let g:foo = "baz"
 
-echo "hello"
+echo 'hello'
 echo 3 + 3
 echo ((2 + 2) - 1) / (3)
 
@@ -30,7 +30,7 @@ while 0  " trailing comment
 
 endwhile
 
-for item in ["a", "b", "c"]  " trailing comment
+for item in ["a", "b", 'c']  " trailing comment
     echo item
 endfor
 

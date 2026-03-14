@@ -180,7 +180,7 @@ Token* TokenSpec::match(const Source& acSource)
     }
 
     // 2. Look for a string or comment
-    if (startswith(acSource.remaining_text(), "\""))
+    if (startswith(acSource.remaining_text(), "\"") || startswith(acSource.remaining_text(), "'"))
     {
         if (acSource.column() == acSource.indent())
         {
@@ -193,7 +193,7 @@ Token* TokenSpec::match(const Source& acSource)
             switch (acSource.remaining_text().at(i))
             {
                 case '"':
-                    // TODO (gh-3): Add support for single-quote string tokenizing
+                case '\'':
                     // TODO (gh-4): Add support for escaped quotes within a string token
                     lsStr = acSource.remaining_text().substr(0, i + 1);
                     return new Token(Token::Type::STRING, std::string { lsStr }, acSource.pos());
