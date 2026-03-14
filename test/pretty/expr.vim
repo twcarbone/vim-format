@@ -36,6 +36,8 @@ for  item	in  ["a","b"  ,  "c"]	" trailing comment
 echo list[ 0 ]
 echo list[1:]
 echo list[:1]
+echo list[	1   :2			]
+echo list[:   ]
 
 echo - 1+ 2
 

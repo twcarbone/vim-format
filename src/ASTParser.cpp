@@ -719,9 +719,13 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 if (curr()->type() != Token::Type::COLON)
                 {
                     pStart = expr(0);
-                }
 
-                // TODO (gh-61): ast::IndexExpr does not account for open-ended slice
+                    if (consume_optional(Token::Type::R_BRACKET))
+                    {
+                        pLhs = new ast::IndexExpr(pLhs, pStart);
+                        break;
+                    }
+                }
 
                 consume_optional(Token::Type::COLON);
 
@@ -730,7 +734,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                     pStop = expr(0);
                 }
 
-                pLhs = new ast::IndexExpr(pLhs, pStart, pStop);
+                pLhs = new ast::SliceExpr(pLhs, pStart, pStop);
                 consume(Token::Type::R_BRACKET);
 
                 break;

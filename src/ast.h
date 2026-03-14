@@ -464,18 +464,35 @@ private:
 };
 
 //
+// SliceExpr
+//
+
+class SliceExpr : public Expr
+{
+public:
+    SliceExpr(Expr* sliceable, Expr* start, Expr* stop);
+    virtual ~SliceExpr();
+
+    const Expr* sliceable() const;
+    const Expr* start() const;
+    const Expr* stop() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // IndexExpr
 //
 
 class IndexExpr : public Expr
 {
 public:
-    IndexExpr(Expr* indexable, Expr* start, Expr* stop);
+    IndexExpr(Expr* indexable, Expr* index);
     virtual ~IndexExpr();
 
     const Expr* indexable() const;
-    const Expr* start() const;
-    const Expr* stop() const;
+    const Expr* index() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;

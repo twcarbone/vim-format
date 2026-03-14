@@ -129,9 +129,8 @@ Program
           Literal 2
           Literal 3
         Literal 0
-        NULL
     ExprCmd echo <>
-      IndexExpr
+      SliceExpr
         ListExpr
           Literal 0
           Literal 1
@@ -140,7 +139,7 @@ Program
         NULL
         NULL
     ExprCmd echo <>
-      IndexExpr
+      SliceExpr
         ListExpr
           Literal 0
           Literal 1
@@ -149,17 +148,17 @@ Program
         NULL
         Literal 2
     ExprCmd echo <>
-      IndexExpr
+      SliceExpr
         Var b:items
         Literal 2
         NULL
     ExprCmd echo <>
-      IndexExpr
+      SliceExpr
         Var b:items
         Literal 1
         Literal 3
     ExprCmd echo <>
-      IndexExpr
+      SliceExpr
         Var b:items
         BinaryOp +
           Literal 1
@@ -219,7 +218,6 @@ Program
         IndexExpr
           Var list_of_funcrefs
           Literal 4
-          NULL
         FnArgList
           Literal 5
     ExprCmd echo <>

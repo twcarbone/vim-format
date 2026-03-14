@@ -94,6 +94,11 @@ void ASTVisitor::visit(const ast::IndexExpr* apIndexExpr)
     handle_node(apIndexExpr);
 }
 
+void ASTVisitor::visit(const ast::SliceExpr* apSliceExpr)
+{
+    handle_node(apSliceExpr);
+}
+
 void ASTVisitor::visit(const ast::JumpStmt* apJumpStmt)
 {
     handle_node(apJumpStmt);

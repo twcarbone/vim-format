@@ -29,6 +29,7 @@ class Literal;
 class MethodCallExpr;
 class Node;
 class Program;
+class SliceExpr;
 class StmtList;
 class TernaryOp;
 class UnaryOp;
@@ -65,6 +66,7 @@ public:
     virtual void visit(const ast::IfBranch* ast);
     virtual void visit(const ast::IfStmt* ast);
     virtual void visit(const ast::IndexExpr* ast);
+    virtual void visit(const ast::SliceExpr* ast);
     virtual void visit(const ast::JumpStmt* ast);
     virtual void visit(const ast::ListExpr* ast);
     virtual void visit(const ast::Literal* ast);

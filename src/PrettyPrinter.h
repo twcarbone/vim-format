@@ -47,6 +47,7 @@ public:
     virtual void visit(const ast::Literal* ast);
     virtual void visit(const ast::MethodCallExpr* ast);
     virtual void visit(const ast::Program* ast);
+    virtual void visit(const ast::SliceExpr* ast);
     virtual void visit(const ast::StmtList* ast);
     virtual void visit(const ast::TernaryOp* ast);
     virtual void visit(const ast::UnaryOp* ast);
