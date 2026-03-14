@@ -170,7 +170,7 @@ Token* TokenSpec::match(const Source& acSource)
 {
     std::string_view lsStr;
 
-    // 1. Look for a fixed-width token
+    // Look for a fixed-width token
     for (const std::string& lsKey : m_lFixedWidthSpecKeys)
     {
         if (startswith(acSource.remaining_text(), lsKey))
@@ -179,8 +179,16 @@ Token* TokenSpec::match(const Source& acSource)
         }
     }
 
-    // 2. Look for a string or comment
-    if (startswith(acSource.remaining_text(), "\""))
+    // Look for single-quote string
+    if (acSource.remaining_text().at(0) == '\'')
+    {
+        size_t lnEnd = acSource.remaining_text().find('\'', 1);
+        lsStr = acSource.remaining_text().substr(0, lnEnd + 1);
+        return new Token(Token::Type::STRING, std::string { lsStr }, acSource.pos());
+    }
+
+    // Look for double-quote string or comment
+    if (acSource.remaining_text().at(0) == '"')
     {
         if (acSource.column() == acSource.indent())
         {
@@ -193,7 +201,6 @@ Token* TokenSpec::match(const Source& acSource)
             switch (acSource.remaining_text().at(i))
             {
                 case '"':
-                    // TODO (gh-3): Add support for single-quote string tokenizing
                     // TODO (gh-4): Add support for escaped quotes within a string token
                     lsStr = acSource.remaining_text().substr(0, i + 1);
                     return new Token(Token::Type::STRING, std::string { lsStr }, acSource.pos());
@@ -207,19 +214,19 @@ Token* TokenSpec::match(const Source& acSource)
         }
     }
 
-    // 3. Look for a float
+    // Look for a float
     if (startswith_float(acSource.remaining_text(), lsStr))
     {
         return new Token(Token::Type::FLOAT, std::string { lsStr }, acSource.pos());
     }
 
-    // 4. Look for an integer
+    // Look for an integer
     if (startswith_int(acSource.remaining_text(), lsStr))
     {
         return new Token(Token::Type::INTEGER, std::string { lsStr }, acSource.pos());
     }
 
-    // 5. Look for a delimited token
+    // Look for a delimited token
     for (const std::string& lsKey : m_lDelimitedSpecKeys)
     {
         if (startswith(acSource.remaining_text(), lsKey, "! \n\t"))
@@ -228,7 +235,7 @@ Token* TokenSpec::match(const Source& acSource)
         }
     }
 
-    // 6. Match on a regular expression (slow - last resort)
+    // Match on a regular expression (slow - last resort)
     for (auto it = m_lReSpec.cbegin(); it != m_lReSpec.cend(); ++it)
     {
         const std::regex& lcRe = it->first;

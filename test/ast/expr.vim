@@ -33,6 +33,7 @@ echo -1
 echo +1
 
 echo (1 + (3 + 4)) * 2 - (10)
+echo 'string with "embedded" double quote'
 
 let g:m_bar = 42
 
