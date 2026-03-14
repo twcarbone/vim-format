@@ -7,6 +7,7 @@ let g:foo = "baz"
 
 echo    "hello"
 echo   3+   3
+echo ((	2  +2)-   1) / (3)
 
 let list = [1,2,3]
 echo [ 1 ,  2,3   ]

@@ -32,6 +32,8 @@ echo !1
 echo -1
 echo +1
 
+echo (1 + (3 + 4)) * 2 - (10)
+
 let g:m_bar = 42
 
 let b:items = [0, 1, 2, 3]
