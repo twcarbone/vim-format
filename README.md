@@ -5,6 +5,8 @@
 A code formatter for legacy vimscript.
 
 ![CI](https://github.com/twcarbone/vim-format/actions/workflows/ci.yml/badge.svg?branch=master)
+![License](https://img.shields.io/github/license/twcarbone/vim-format)
+![Last Commit](https://img.shields.io/github/last-commit/twcarbone/vim-format)
 
 ### Input
 ```vimscript
