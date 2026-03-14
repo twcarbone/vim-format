@@ -112,9 +112,6 @@ ast::StmtList* ASTParser::stmt_list()
             case Token::Type::ENDWHILE:
             case Token::Type::ENDFUNCTION:
                 return pStmtList;
-            case Token::Type::NEWLINE:
-                consume(Token::Type::NEWLINE);
-                break;
             default:
                 pStmtList->push(stmt());
 
@@ -163,6 +160,8 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::CMD_LET:
             pStmt = assign_stmt();
             break;
+        case Token::Type::NEWLINE:
+            pStmt = new ast::EmptyStmt();
         default:
             break;
     }
@@ -170,48 +169,91 @@ ast::Stmt* ASTParser::stmt()
     return pStmt;
 }
 
-ast::IfStmt* ASTParser::if_stmt()
+ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
 {
-    switch (curr()->type())
+    Token* pToken = nullptr;
+    ast::Expr* pCondition = nullptr;
+    ast::StmtList* pBody = new ast::StmtList();
+
+    pToken = curr();
+    consume(aeType);
+
+    switch (aeType)
     {
         case Token::Type::IF:
         case Token::Type::ELSEIF:
-            consume(curr()->type());
-            break;
-        default:
-            break;
-    }
-
-    ast::Expr* pExpr = expr(0);
-    ast::StmtList* pThenStmts = stmt_list();
-    ast::StmtList* pElseStmts = nullptr;
-
-    switch (curr()->type())
-    {
-        case Token::Type::ELSEIF:
-            pElseStmts = new ast::StmtList();
-            pElseStmts->push(if_stmt());
-            break;
+            pCondition = expr(0);
         case Token::Type::ELSE:
-            consume(Token::Type::ELSE);
-            pElseStmts = stmt_list();
-            consume(Token::Type::ENDIF);
-            break;
         default:
-            pElseStmts = new ast::StmtList();
-            consume(Token::Type::ENDIF);
+            break;
     }
 
-    return new ast::IfStmt(pExpr, pThenStmts, pElseStmts);
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
+    }
+
+    consume(Token::Type::NEWLINE);
+
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
+
+    return new ast::IfBranch(pToken, pCondition, pBody);
+}
+
+// TODO (gh-64): Investigate leading whitespace in statements
+
+ast::IfStmt* ASTParser::if_stmt()
+{
+    ast::IfStmt* pIfStmt = new ast::IfStmt();
+    ast::IfBranch* pIfBranch = nullptr;
+
+    pIfBranch = if_branch(Token::Type::IF);
+    pIfStmt->push(pIfBranch);
+
+    bool bLoop = true;
+    while (bLoop)
+    {
+        switch (curr()->type())
+        {
+            case Token::Type::ELSEIF:
+            case Token::Type::ELSE:
+                pIfBranch = if_branch(curr()->type());
+                pIfStmt->push(pIfBranch);
+                break;
+            case Token::Type::ENDIF:
+                consume(Token::Type::ENDIF);
+            default:
+                bLoop = false;
+        }
+    }
+
+    return pIfStmt;
 }
 
 ast::WhileStmt* ASTParser::while_stmt()
 {
+    ast::Expr* pExpr = nullptr;
+    ast::StmtList* pBody = new ast::StmtList();
+
     consume(Token::Type::WHILE);
-    ast::Expr* pExpr = expr(0);
-    ast::StmtList* pStmts = stmt_list();
+    pExpr = expr(0);
+
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
+    }
+
+    consume(Token::Type::NEWLINE);
+
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
+
     consume(Token::Type::ENDWHILE);
-    return new ast::WhileStmt(pExpr, pStmts);
+
+    return new ast::WhileStmt(pExpr, pBody);
 }
 
 ast::FnParamList* ASTParser::fn_param_list()
@@ -309,7 +351,8 @@ ast::FnStmt* ASTParser::fn_stmt()
 
     // Modifiers (range, abort, etc.)
     std::vector<Token*> lModifiers;
-    while (curr()->type() != Token::Type::NEWLINE)
+    bool bLoop = true;
+    while (bLoop)
     {
         switch (curr()->type())
         {
@@ -321,30 +364,55 @@ ast::FnStmt* ASTParser::fn_stmt()
                 consume(curr()->type());
                 break;
             default:
-                throw_unexpected_token();
+                bLoop = false;
         }
+    }
+
+    ast::StmtList* pBody = new ast::StmtList();
+
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
     }
 
     consume(Token::Type::NEWLINE);
 
     // Body
-    ast::StmtList* pBody = stmt_list();
-
-    ast::FnStmt* pFnStmt = new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
 
     consume(Token::Type::ENDFUNCTION);
-    return pFnStmt;
+
+    return new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
 }
 
 ast::ForStmt* ASTParser::for_stmt()
 {
+    ast::Expr* pItem = nullptr;
+    ast::Expr* pItems = nullptr;
+    ast::StmtList* pBody = new ast::StmtList();
+
     consume(Token::Type::FOR);
-    ast::Expr* pItem = expr(0);
+    pItem = expr(0);
+
     consume(Token::Type::IN);
-    ast::Expr* pItems = expr(0);
-    ast::StmtList* pStmtList = stmt_list();
+    pItems = expr(0);
+
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
+    }
+
+    consume(Token::Type::NEWLINE);
+
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
+
     consume(Token::Type::ENDFOR);
-    return new ast::ForStmt(pItem, pItems, pStmtList);
+
+    return new ast::ForStmt(pItem, pItems, pBody);
 }
 
 ast::JumpStmt* ASTParser::jump_stmt()
@@ -539,7 +607,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             break;
         case Token::Type::L_PAREN:
             consume(Token::Type::L_PAREN);
-            pLhs = expr(0);
+            pLhs = new ast::GroupExpr(expr(0));
             consume(Token::Type::R_PAREN);
             break;
         case Token::Type::L_BRACKET:
@@ -651,6 +719,12 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 if (curr()->type() != Token::Type::COLON)
                 {
                     pStart = expr(0);
+
+                    if (consume_optional(Token::Type::R_BRACKET))
+                    {
+                        pLhs = new ast::IndexExpr(pLhs, pStart);
+                        break;
+                    }
                 }
 
                 consume_optional(Token::Type::COLON);
@@ -660,7 +734,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                     pStop = expr(0);
                 }
 
-                pLhs = new ast::IndexExpr(pLhs, pStart, pStop);
+                pLhs = new ast::SliceExpr(pLhs, pStart, pStop);
                 consume(Token::Type::R_BRACKET);
 
                 break;

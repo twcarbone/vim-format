@@ -4,10 +4,10 @@ enable_testing()
 
 add_executable(
     unittests
-    ASTParser_tests.cpp
-    Functional_tests.cpp
+    AST_tests.cpp
     Lexer_tests.cpp
     Parser_tests.cpp
+    PrettyPrinter_tests.cpp
     Source_tests.cpp
     Unit_tests.cpp
 )

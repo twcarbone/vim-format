@@ -1,35 +1,39 @@
 Program
   StmtList
-    FnStmt One ! range abort dict closure
+    FnStmt One ! range abort dict closure <>
       FnParamList
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal 1
-    FnStmt Two !
+    EmptyStmt <>
+    FnStmt Two ! <>
       FnParamList
         FnParam
           Var ...
           NULL
       StmtList
-        JumpStmt return
+        JumpStmt return <>
           Literal 1
-    FnStmt Three !
+    EmptyStmt <>
+    FnStmt Three ! <>
       FnParamList
         FnParam
           Var a
           NULL
       StmtList
-        JumpStmt return
+        JumpStmt return <>
           NULL
-    FnStmt Four !
+    EmptyStmt <>
+    FnStmt Four ! <>
       FnParamList
         FnParam
           Var a
           NULL
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal 1
-    FnStmt Five !
+    EmptyStmt <>
+    FnStmt Five ! <>
       FnParamList
         FnParam
           Var a
@@ -38,9 +42,10 @@ Program
           Var ...
           NULL
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal 1
-    FnStmt Six !
+    EmptyStmt <>
+    FnStmt Six ! <>
       FnParamList
         FnParam
           Var a
@@ -49,5 +54,5 @@ Program
           Var b
           Literal 1
       StmtList
-        ExprCmd echo
+        ExprCmd echo <>
           Literal 1

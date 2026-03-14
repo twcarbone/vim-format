@@ -44,6 +44,11 @@ void ASTVisitor::visit(const ast::DictExpr* apDictExpr)
     handle_node(apDictExpr);
 }
 
+void ASTVisitor::visit(const ast::EmptyStmt* apEmptyStmt)
+{
+    handle_node(apEmptyStmt);
+}
+
 void ASTVisitor::visit(const ast::ExprCmd* apExprCmd)
 {
     handle_node(apExprCmd);
@@ -74,6 +79,16 @@ void ASTVisitor::visit(const ast::ForStmt* apForStmt)
     handle_node(apForStmt);
 }
 
+void ASTVisitor::visit(const ast::GroupExpr* apGroupExpr)
+{
+    handle_node(apGroupExpr);
+}
+
+void ASTVisitor::visit(const ast::IfBranch* apIfBranch)
+{
+    handle_node(apIfBranch);
+}
+
 void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
 {
     handle_node(apIfStmt);
@@ -82,6 +97,11 @@ void ASTVisitor::visit(const ast::IfStmt* apIfStmt)
 void ASTVisitor::visit(const ast::IndexExpr* apIndexExpr)
 {
     handle_node(apIndexExpr);
+}
+
+void ASTVisitor::visit(const ast::SliceExpr* apSliceExpr)
+{
+    handle_node(apSliceExpr);
 }
 
 void ASTVisitor::visit(const ast::JumpStmt* apJumpStmt)

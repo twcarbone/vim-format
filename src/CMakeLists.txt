@@ -11,6 +11,7 @@ add_library(
     Node.cpp
     NodeVisitor.cpp
     Parser.cpp
+    PrettyPrinter.cpp
     Scope.cpp
     Settings.cpp
     Source.cpp

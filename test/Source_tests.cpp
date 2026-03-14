@@ -166,7 +166,7 @@ TEST(SourceTest, file_test_01)
 TEST(SourceTest, file_test_02)
 {
     Source lcSource;
-    lcSource.read_file("../../test/res/while_stmt_01.vim");
+    lcSource.read_file("../../test/ast/while_stmt.vim");
 
     lcSource.advance(30);
 

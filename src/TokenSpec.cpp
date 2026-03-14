@@ -222,6 +222,7 @@ Token* TokenSpec::match(const Source& acSource)
     // 5. Look for a delimited token
     for (const std::string& lsKey : m_lDelimitedSpecKeys)
     {
+        // TODO (gh-63): Delimited tokens can be delimited by tabs
         if (startswith(acSource.remaining_text(), lsKey, "! \n"))
         {
             return new Token(m_mDelimitedSpec.at(lsKey), lsKey, acSource.pos());

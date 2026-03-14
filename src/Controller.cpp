@@ -1,8 +1,10 @@
 #include <iostream>
 
 #include "ASTParser.h"
+#include "ASTVisitor.h"
 #include "Controller.h"
 #include "Lexer.h"
+#include "PrettyPrinter.h"
 
 Controller::Controller(Context acContext) :
     m_cContext(acContext)
@@ -46,4 +48,11 @@ void Controller::compile()
 
         return;
     }
+
+    //
+    // Pretty-printing
+    //
+
+    PrettyPrinter lcPrettyPrinter;
+    lcParser.root()->accept(lcPrettyPrinter);
 }
