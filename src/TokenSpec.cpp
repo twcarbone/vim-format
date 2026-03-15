@@ -4,6 +4,7 @@
 #include <string_view>
 
 #include "TokenSpec.h"
+#include "util.h"
 
 TokenSpec::TokenSpec() :
     // clang-format off
@@ -100,7 +101,7 @@ Token* TokenSpec::match(const Source& acSource)
     // Look for a symbol
     for (const Symbol& lcSymbol : m_lSymbols)
     {
-        if (startswith(acSource.remaining_text(), lcSymbol.sLexeme))
+        if (vf::startswith(acSource.remaining_text(), lcSymbol.sLexeme))
         {
             return new Token(lcSymbol.eTokenType, lcSymbol.sLexeme, acSource.pos());
         }
@@ -142,13 +143,13 @@ Token* TokenSpec::match(const Source& acSource)
     }
 
     // Look for a float
-    if (startswith_float(acSource.remaining_text(), lsStr))
+    if (vf::startswith_float(acSource.remaining_text(), lsStr))
     {
         return new Token(Token::Type::FLOAT, std::string { lsStr }, acSource.pos());
     }
 
     // Look for an integer
-    if (startswith_int(acSource.remaining_text(), lsStr))
+    if (vf::startswith_int(acSource.remaining_text(), lsStr))
     {
         return new Token(Token::Type::INTEGER, std::string { lsStr }, acSource.pos());
     }
@@ -156,7 +157,7 @@ Token* TokenSpec::match(const Source& acSource)
     // Look for a keyword
     for (const Keyword& lcKeyword : m_lKeywords)
     {
-        if (startswith(acSource.remaining_text(), lcKeyword.sFull, "! \n\t"))
+        if (vf::startswith(acSource.remaining_text(), lcKeyword.sFull, "! \n\t"))
         {
             return new Token(lcKeyword.eTokenType, lcKeyword.sFull, acSource.pos());
         }
@@ -177,103 +178,4 @@ Token* TokenSpec::match(const Source& acSource)
     }
 
     return nullptr;
-}
-
-bool TokenSpec::startswith(std::string_view asStr, std::string_view asPrefix, std::string_view asDelim)
-{
-    size_t lnEnd = asDelim.empty() ? asPrefix.size() : asStr.find_first_of(asDelim);
-    return asStr.substr(0, lnEnd) == asPrefix;
-}
-
-bool TokenSpec::startswith_str(std::string_view asStr, std::string_view& asPrefix)
-{
-    if (asStr.empty() || !startswith(asStr, "\""))
-    {
-        return false;
-    }
-
-    const size_t lnBegin = 0;
-    const size_t lnEnd = asStr.find('"', 1);
-
-    asPrefix = asStr.substr(0, lnEnd - lnBegin + 1);
-
-    return true;
-}
-
-bool TokenSpec::startswith_int(std::string_view asStr, std::string_view& asOut)
-{
-    // 1. Start by finding the end any leading digits. Save it for back-tracking.
-    const size_t lnDigitsEnd = asStr.find_first_not_of("0123456789");
-    asOut = asStr.substr(0, lnDigitsEnd);
-
-    // 2. Zero digits means this is not an integer. More than one digit means this is a
-    //    base-10 integer. We can return immediately in either case.
-    if (lnDigitsEnd != 1)
-    {
-        return lnDigitsEnd > 0;
-    }
-
-    // 3. Compute the base from the "base character". Return the leading digits if it's
-    //    not a valid base character.
-    int lnBase;
-    switch (asStr[1])
-    {
-        case 'X':
-        case 'x':
-            lnBase = 16;
-            break;
-        case 'O':
-        case 'o':
-            lnBase = 8;
-            break;
-        case 'B':
-        case 'b':
-            lnBase = 2;
-            break;
-        default:
-            return true;
-    }
-
-    // 4. Convert the "value" portion (example: 1234 from 0x1234).
-    const size_t lnCandidateEnd = asStr.find_first_not_of("0123456789abcdefABCDEF", 2);
-    const std::string_view lsValue = asStr.substr(2, lnCandidateEnd - 2);
-    const char* pStart = lsValue.data();
-    char* pEnd = nullptr;
-    long l = std::strtol(pStart, &pEnd, lnBase);
-
-    // 5. Zero valid characters, or one invalid character, followed the "base character".
-    //    Return the leading digits.
-    if (pEnd == pStart || pEnd != lsValue.end())
-    {
-        return true;
-    }
-
-    asOut = asStr.substr(0, lnCandidateEnd);
-    return true;
-}
-
-bool TokenSpec::startswith_float(std::string_view asStr, std::string_view& asOut)
-{
-    // 1. The candidate string is everything until the first non-float character
-    const size_t lnCandidateEnd = asStr.find_first_not_of("0123456789eE+-.");
-    asOut = asStr.substr(0, lnCandidateEnd);
-
-    // 2. Do the conversion
-    const char* pStart = asOut.data();
-    char* pEnd = nullptr;
-    float f = std::strtof(pStart, &pEnd);
-
-    // 3. The entire candidate needs to be parsed to make a valid float
-    if (pEnd == pStart || pEnd != asOut.end())
-    {
-        return false;
-    }
-
-    // 4. It might've been an integer that was parsed
-    if (asOut.find('.') == std::string_view::npos)
-    {
-        return false;
-    }
-
-    return true;
 }

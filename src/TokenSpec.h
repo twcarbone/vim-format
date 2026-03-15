@@ -37,31 +37,6 @@ private:
     const std::vector<Keyword> m_lKeywords;
     const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
-
-    /**
-     *  @brief
-     *      Return true if `str` begins with `prefix`, delimited by one of `delim`.
-     *
-     *  @example
-     *      startswith("integer", "int")            => true
-     *      startswith("integer", "int", " ")       => false
-     *      startswith("int i", "int", " ")         => true
-     */
-    static bool startswith(std::string_view str, std::string_view prefix, std::string_view delim = "");
-
-    /**
-     *  @brief
-     *      Return true if `str` starts with a valid int and set `out` to the int.
-     */
-    static bool startswith_str(std::string_view str, std::string_view& substr);
-
-    static bool startswith_int(std::string_view str, std::string_view& out);
-
-    /**
-     *  @brief
-     *      Return true if `str` starts with a valid float and set `out` to the float.
-     */
-    static bool startswith_float(std::string_view str, std::string_view& out);
 };
 
 #endif  // TOKENSPEC_H
