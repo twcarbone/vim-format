@@ -161,6 +161,14 @@ Token* TokenSpec::match(const Source& acSource)
         {
             return new Token(lcKeyword.eTokenType, lcKeyword.sFull, acSource.pos());
         }
+        else if (lcKeyword.sAbrv.empty())
+        {
+            continue;
+        }
+        else if (vf::startswith(acSource.remaining_text(), lcKeyword.sAbrv, "! \n\t"))
+        {
+            return new Token(lcKeyword.eTokenType, lcKeyword.sAbrv, acSource.pos());
+        }
     }
 
     // Match on a regular expression (slow - last resort)
