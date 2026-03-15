@@ -34,8 +34,6 @@ private:
     const std::vector<std::string> m_lFixedWidthSpecKeys;
     const std::map<std::string, Token::Type> m_mFixedWidthSpec;
 
-    static constexpr std::string_view s_lDigits = "0123456789";
-
     /**
      *  @brief
      *      Return true if `str` begins with `prefix`, delimited by one of `delim`.
