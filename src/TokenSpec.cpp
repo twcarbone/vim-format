@@ -6,6 +6,8 @@
 #include "TokenSpec.h"
 #include "util.h"
 
+const std::string g_sKeyWordDelimiters = "! \n\t";
+
 TokenSpec::TokenSpec() :
     // clang-format off
     m_lKeywords {
@@ -157,7 +159,7 @@ Token* TokenSpec::match(const Source& acSource)
     // Look for a keyword
     for (const Keyword& lcKeyword : m_lKeywords)
     {
-        if (vf::startswith(acSource.remaining_text(), lcKeyword.sFull, "! \n\t"))
+        if (vf::startswith(acSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
         {
             return new Token(lcKeyword.eTokenType, lcKeyword.sFull, acSource.pos());
         }
@@ -165,7 +167,7 @@ Token* TokenSpec::match(const Source& acSource)
         {
             continue;
         }
-        else if (vf::startswith(acSource.remaining_text(), lcKeyword.sAbrv, "! \n\t"))
+        else if (vf::startswith(acSource.remaining_text(), lcKeyword.sAbrv, g_sKeyWordDelimiters))
         {
             return new Token(lcKeyword.eTokenType, lcKeyword.sAbrv, acSource.pos());
         }
