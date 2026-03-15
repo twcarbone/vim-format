@@ -20,10 +20,16 @@ public:
     Token* match(const Source& source);
 
 private:
-    const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
+    struct Keyword
+    {
+        std::string sFull = "";
+        std::string sAbrv = "";
+        Token::Type eTokenType = Token::Type::NONE;
+    };
 
-    const std::vector<std::string> m_lDelimitedSpecKeys;
-    const std::map<std::string, Token::Type> m_mDelimitedSpec;
+    const std::vector<Keyword> m_lKeywords;
+
+    const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
 
     const std::vector<std::string> m_lFixedWidthSpecKeys;
     const std::map<std::string, Token::Type> m_mFixedWidthSpec;

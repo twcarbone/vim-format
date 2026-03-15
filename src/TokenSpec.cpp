@@ -6,60 +6,34 @@
 #include "TokenSpec.h"
 
 TokenSpec::TokenSpec() :
+    // clang-format off
+    m_lKeywords {
+        { "break", "brea", Token::Type::BREAK },
+        { "continue", "con", Token::Type::CONTINUE },
+        { "echo", "ec", Token::Type::CMD_ECHO },
+        { "else", "el", Token::Type::ELSE },
+        { "elseif", "elsei", Token::Type::ELSEIF },
+        { "endfor", "endfo", Token::Type::ENDFOR },
+        { "endfunction", "endf", Token::Type::ENDFUNCTION },
+        { "endif", "en", Token::Type::ENDIF },
+        { "endwhile", "endwh", Token::Type::ENDWHILE },
+        { "function", "fu", Token::Type::FUNCTION },
+        { "return", "retu", Token::Type::RETURN },
+        { "set", "se", Token::Type::CMD_SET },
+        { "while", "wh", Token::Type::WHILE },
+        { "abort", "", Token::Type::FN_ABORT },
+        { "closure", "", Token::Type::FN_CLOSURE },
+        { "dict", "", Token::Type::FN_DICT },
+        { "for", "", Token::Type::FOR },
+        { "if", "", Token::Type::IF },
+        { "in", "", Token::Type::IN },
+        { "is", "", Token::Type::OP_IS },
+        { "isnot", "", Token::Type::OP_ISNOT },
+        { "let", "", Token::Type::CMD_LET },
+        { "range", "", Token::Type::FN_RANGE },
+    },
     m_lReSpec {
         { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::GEN_NAME },
-    },
-    m_lDelimitedSpecKeys {
-        // clang-format off
-        "let",
-        "echo",
-        "set",
-        "if",
-        "elseif",
-        "else",
-        "endif",
-        "while",
-        "endwhile",
-        "for",
-        "in",
-        "endfor",
-        "break",
-        "continue",
-        "return",
-        "is",
-        "isnot",
-        "function",
-        "endfunction",
-        "range",
-        "abort",
-        "dict",
-        "closure",
-        // clang-format on
-    },
-    m_mDelimitedSpec {
-        { "let", Token::Type::CMD_LET },
-        { "echo", Token::Type::CMD_ECHO },
-        { "set", Token::Type::CMD_SET },
-        { "if", Token::Type::IF },
-        { "elseif", Token::Type::ELSEIF },
-        { "else", Token::Type::ELSE },
-        { "endif", Token::Type::ENDIF },
-        { "while", Token::Type::WHILE },
-        { "endwhile", Token::Type::ENDWHILE },
-        { "for", Token::Type::FOR },
-        { "in", Token::Type::IN },
-        { "endfor", Token::Type::ENDFOR },
-        { "break", Token::Type::BREAK },
-        { "continue", Token::Type::CONTINUE },
-        { "return", Token::Type::RETURN },
-        { "is", Token::Type::OP_IS },
-        { "isnot", Token::Type::OP_ISNOT },
-        { "function", Token::Type::FUNCTION },
-        { "endfunction", Token::Type::ENDFUNCTION },
-        { "range", Token::Type::FN_RANGE },
-        { "abort", Token::Type::FN_ABORT },
-        { "dict", Token::Type::FN_DICT },
-        { "closure", Token::Type::FN_CLOSURE },
     },
     m_lFixedWidthSpecKeys {
         // clang-format off
@@ -226,12 +200,12 @@ Token* TokenSpec::match(const Source& acSource)
         return new Token(Token::Type::INTEGER, std::string { lsStr }, acSource.pos());
     }
 
-    // Look for a delimited token
-    for (const std::string& lsKey : m_lDelimitedSpecKeys)
+    // Look for a keyword
+    for (const Keyword& lcKeyword : m_lKeywords)
     {
-        if (startswith(acSource.remaining_text(), lsKey, "! \n\t"))
+        if (startswith(acSource.remaining_text(), lcKeyword.sFull, "! \n\t"))
         {
-            return new Token(m_mDelimitedSpec.at(lsKey), lsKey, acSource.pos());
+            return new Token(lcKeyword.eTokenType, lcKeyword.sFull, acSource.pos());
         }
     }
 
