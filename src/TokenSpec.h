@@ -27,12 +27,16 @@ private:
         Token::Type eTokenType = Token::Type::NONE;
     };
 
+    // Punctuators, operators, or other fixed-width symbols
+    struct Symbol
+    {
+        std::string sLexeme = "";
+        Token::Type eTokenType = Token::Type::NONE;
+    };
+
     const std::vector<Keyword> m_lKeywords;
-
+    const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
-
-    const std::vector<std::string> m_lFixedWidthSpecKeys;
-    const std::map<std::string, Token::Type> m_mFixedWidthSpec;
 
     /**
      *  @brief
