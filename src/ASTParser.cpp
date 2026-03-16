@@ -771,9 +771,18 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                         break;
                 }
 
-                // TODO (gh-36): Verify CasedBinaryOp LHS vs. RHS binding power
-                pRhs = expr(lnLhsOpBindingPower);
-                pLhs = new ast::CasedBinaryOp(pOp, pLhs, pRhs, pCaseSensitivity);
+                pRhs = expr(lnRhsOpBindingPower);
+
+                if (pCaseSensitivity == nullptr)
+                {
+                    pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
+                }
+                else
+                {
+                    // TODO (gh-36): Verify CasedBinaryOp LHS vs. RHS binding power
+                    pLhs = new ast::CasedBinaryOp(pOp, pLhs, pRhs, pCaseSensitivity);
+                }
+
                 break;
             }
             default:
