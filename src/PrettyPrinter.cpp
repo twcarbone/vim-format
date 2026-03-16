@@ -119,7 +119,7 @@ void PrettyPrinter::visit(const ast::DictExpr* apDictExpr)
         if (i != lDictEntries.size() - 1)
         {
             write(',');
-            write(Settings::SpaceAfterDictSeparator, ' ');
+            write(' ', Settings::SpaceAfterDictSeparator);
         }
     }
 
