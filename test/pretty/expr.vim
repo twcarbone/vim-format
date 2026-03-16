@@ -4,6 +4,7 @@ let   i=42
 let i = 42    
 
 let g:foo = "baz"
+let  g:d = {  "a":1 ,	"b"  :	2}   
 
 echo    'hello'
 echo   3+   3
