@@ -21,7 +21,7 @@ Program
         Literal 0
     EmptyStmt <>
     ExprCmd echo <>
-      CasedBinaryOp ==
+      BinaryOp ==
         Literal 1
         Literal 2
     ExprCmd echo <>
@@ -33,31 +33,31 @@ Program
         Literal 1
         Literal 2
     ExprCmd echo <>
-      CasedBinaryOp !=
+      BinaryOp !=
         Literal 1
         Literal 2
     ExprCmd echo <>
-      CasedBinaryOp >
+      BinaryOp >
         Literal 6
         Literal 4
     ExprCmd echo <>
-      CasedBinaryOp >=
+      BinaryOp >=
         Literal 1
         Literal 5
     ExprCmd echo <>
-      CasedBinaryOp <
+      BinaryOp <
         Literal 5
         Literal 3
     ExprCmd echo <>
-      CasedBinaryOp <=
+      BinaryOp <=
         Literal 3
         Literal 2
     ExprCmd echo <>
-      CasedBinaryOp is
+      BinaryOp is
         Literal "foo"
         Literal "bar"
     ExprCmd echo <>
-      CasedBinaryOp isnot
+      BinaryOp isnot
         Literal "foo"
         Literal "bar"
     EmptyStmt <>
