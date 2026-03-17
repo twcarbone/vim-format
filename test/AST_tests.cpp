@@ -49,9 +49,9 @@ TEST_F(ASTTest, while_stmt)
     test_file("../../test/ast/while_stmt.vim");
 }
 
-TEST_F(ASTTest, expr)
+TEST_F(ASTTest, eval)
 {
-    test_file("../../test/ast/expr.vim");
+    test_file("../../test/ast/eval.vim");
 }
 
 TEST_F(ASTTest, comment)
