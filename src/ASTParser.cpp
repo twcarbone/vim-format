@@ -382,6 +382,8 @@ ast::FnStmt* ASTParser::fn_stmt()
 
     consume(Token::Type::ENDFUNCTION);
 
+    // TODO (gh-105): endfunction does not support [argument]
+
     return new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
 }
 
