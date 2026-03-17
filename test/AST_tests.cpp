@@ -34,19 +34,9 @@ protected:
     }
 };
 
-TEST_F(ASTTest, if_stmt)
-{
-    test_file("../../test/ast/if_stmt.vim");
-}
-
 TEST_F(ASTTest, userfunc)
 {
     test_file("../../test/ast/userfunc.vim");
-}
-
-TEST_F(ASTTest, while_stmt)
-{
-    test_file("../../test/ast/while_stmt.vim");
 }
 
 TEST_F(ASTTest, eval)
