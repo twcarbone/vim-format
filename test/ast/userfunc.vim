@@ -1,10 +1,11 @@
 function! One() range abort dict closure
     echo 1
+    retu 2
 endfunction
 
-function! Two(...)
+fu! Two(...)
     return 1
-endfunction
+endf
 
 function! Three(a)
     return
