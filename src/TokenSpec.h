@@ -27,6 +27,10 @@ private:
         Token::Type eTokenType = Token::Type::NONE;
     };
 
+    struct Command : Keyword
+    {
+    };
+
     // Punctuators, operators, or other fixed-width symbols
     struct Symbol
     {
@@ -34,6 +38,7 @@ private:
         Token::Type eTokenType = Token::Type::NONE;
     };
 
+    const std::vector<Command> m_lCommands;
     const std::vector<Keyword> m_lKeywords;
     const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
