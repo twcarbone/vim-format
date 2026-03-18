@@ -1,5 +1,126 @@
 Program
   StmtList
+    AssignStmt = <>
+      Var aa
+      ListExpr
+        Literal 1
+        Literal 2
+        Literal 3
+    AssignStmt = <>
+      Var bb
+      Literal 10
+    AssignStmt += <>
+      Var bb
+      Literal 2
+    AssignStmt -= <>
+      Var bb
+      Literal 2
+    AssignStmt *= <>
+      Var bb
+      Literal 2
+    AssignStmt /= <>
+      Var bb
+      Literal 2
+    AssignStmt %= <>
+      Var bb
+      Literal 2
+    AssignStmt .= <>
+      Var bb
+      Literal 2
+    AssignStmt ..= <>
+      Var bb
+      Literal 2
+    EmptyStmt <>
+    CommentStmt " for <trailing = no>
+    EmptyStmt <>
+    ForStmt <>
+      Var item
+      Var aa
+      StmtList
+        JumpStmt continue <>
+          NULL
+        JumpStmt break <>
+          NULL
+    EmptyStmt <>
+    ForStmt <>
+      ListExpr
+        Var a
+        Var b
+      ListExpr
+        ListExpr
+          Literal 4
+          Literal 5
+        ListExpr
+          Literal 6
+          Literal 7
+      StmtList
+        JumpStmt con <>
+          NULL
+        JumpStmt brea <>
+          NULL
+    EmptyStmt <>
+    CommentStmt " while <trailing = no>
+    EmptyStmt <>
+    WhileStmt <>
+      Literal 0
+      StmtList
+        ExprCmd echo <>
+          Literal "string"
+    EmptyStmt <>
+    WhileStmt <>
+      Literal 0
+      StmtList
+        ExprCmd ec <>
+          Literal "string"
+    EmptyStmt <>
+    CommentStmt " if <trailing = no>
+    EmptyStmt <>
+    IfStmt <>
+      IfBranch
+        Literal 1
+        StmtList
+    EmptyStmt <>
+    IfStmt <>
+      IfBranch
+        Literal 1
+        StmtList
+      IfBranch
+        Literal 2
+        StmtList
+    EmptyStmt <>
+    IfStmt <>
+      IfBranch
+        Literal 1
+        StmtList
+      IfBranch
+        NULL
+        StmtList
+    EmptyStmt <>
+    IfStmt <>
+      IfBranch
+        Literal 1
+        StmtList
+      IfBranch
+        Literal 2
+        StmtList
+      IfBranch
+        NULL
+        StmtList
+    EmptyStmt <>
+    IfStmt <>
+      IfBranch
+        Literal 1
+        StmtList
+      IfBranch
+        Literal 2
+        StmtList
+      IfBranch
+        NULL
+        StmtList
+    EmptyStmt <>
+    CommentStmt " expression-syntax <trailing = no>
+    EmptyStmt <>
+    CommentStmt " expr1 <trailing = no>
     ExprCmd echo <>
       TernaryOp ? :
         Literal 1
@@ -10,16 +131,19 @@ Program
         Literal "us"
         Literal "them"
     EmptyStmt <>
+    CommentStmt " expr2 <trailing = no>
     ExprCmd echo <>
       BinaryOp ||
         Literal 1
         Literal 0
     EmptyStmt <>
+    CommentStmt " expr3 <trailing = no>
     ExprCmd echo <>
       BinaryOp &&
         Literal 1
         Literal 0
     EmptyStmt <>
+    CommentStmt " expr4 <trailing = no>
     ExprCmd echo <>
       BinaryOp ==
         Literal 1
@@ -61,6 +185,7 @@ Program
         Literal "foo"
         Literal "bar"
     EmptyStmt <>
+    CommentStmt " expr5 <trailing = no>
     ExprCmd echo <>
       BinaryOp <<
         Literal 1
@@ -70,6 +195,7 @@ Program
         Literal 2
         Literal 1
     EmptyStmt <>
+    CommentStmt " expr6 <trailing = no>
     ExprCmd echo <>
       BinaryOp +
         Literal 1
@@ -87,6 +213,7 @@ Program
         Literal "sp"
         Literal "am"
     EmptyStmt <>
+    CommentStmt " expr7 <trailing = no>
     ExprCmd echo <>
       BinaryOp *
         Literal 2
@@ -100,6 +227,7 @@ Program
         Literal 6
         Literal 4
     EmptyStmt <>
+    CommentStmt " expr9 <trailing = no>
     ExprCmd echo <>
       UnaryOp !
         Literal 1
@@ -110,33 +238,7 @@ Program
       UnaryOp +
         Literal 1
     EmptyStmt <>
-    ExprCmd echo <>
-      BinaryOp -
-        BinaryOp *
-          GroupExpr
-            BinaryOp +
-              Literal 1
-              GroupExpr
-                BinaryOp +
-                  Literal 3
-                  Literal 4
-          Literal 2
-        GroupExpr
-          Literal 10
-    ExprCmd echo <>
-      Literal 'string with "embedded" double quote'
-    EmptyStmt <>
-    AssignStmt = <>
-      Var g:m_bar
-      Literal 42
-    EmptyStmt <>
-    AssignStmt = <>
-      Var b:items
-      ListExpr
-        Literal 0
-        Literal 1
-        Literal 2
-        Literal 3
+    CommentStmt " expr10 <trailing = no>
     ExprCmd echo <>
       IndexExpr
         ListExpr
@@ -182,7 +284,48 @@ Program
         BinaryOp /
           Literal 6
           Literal 2
+    ExprCmd echo <>
+      BinaryOp .
+        Var g:dict
+        Var a
+    ExprCmd echo <>
+      CallExpr
+        CallExpr
+          Var ReturnsFuncRef
+          FnArgList
+        FnArgList
+          Literal "passed to returned FuncRef"
+    ExprCmd echo <>
+      MethodCallExpr ->
+        Literal 2
+        CallExpr
+          Var Add
+          FnArgList
+            Literal 3
+    ExprCmd echo <>
+      MethodCallExpr ->
+        MethodCallExpr ->
+          Literal 3
+          CallExpr
+            Var Add
+            FnArgList
+              Literal 4
+        CallExpr
+          Var Add
+          FnArgList
+            Literal 5
     EmptyStmt <>
+    CommentStmt " expr11 <trailing = no>
+    AssignStmt = <>
+      Var g:m_bar
+      Literal 42
+    AssignStmt = <>
+      Var b:items
+      ListExpr
+        Literal 0
+        Literal 1
+        Literal 2
+        Literal 3
     AssignStmt = <>
       Var dict_a
       DictExpr
@@ -211,24 +354,6 @@ Program
         DictEntry
           Var g:m_bar
           Literal 43
-    EmptyStmt <>
-    FnStmt Add ! <>
-      FnParamList
-        FnParam
-          Var a
-          NULL
-        FnParam
-          Var b
-          NULL
-      StmtList
-    EmptyStmt <>
-    ExprCmd echo <>
-      CallExpr
-        CallExpr
-          Var ReturnsFuncRef
-          FnArgList
-        FnArgList
-          Literal "passed to returned FuncRef"
     ExprCmd echo <>
       CallExpr
         IndexExpr
@@ -243,21 +368,17 @@ Program
           Literal 1
           Literal 2
     ExprCmd echo <>
-      MethodCallExpr ->
-        Literal 2
-        CallExpr
-          Var Add
-          FnArgList
-            Literal 3
+      BinaryOp -
+        BinaryOp *
+          GroupExpr
+            BinaryOp +
+              Literal 1
+              GroupExpr
+                BinaryOp +
+                  Literal 3
+                  Literal 4
+          Literal 2
+        GroupExpr
+          Literal 10
     ExprCmd echo <>
-      MethodCallExpr ->
-        MethodCallExpr ->
-          Literal 3
-          CallExpr
-            Var Add
-            FnArgList
-              Literal 4
-        CallExpr
-          Var Add
-          FnArgList
-            Literal 5
+      Literal 'string with "embedded" double quote'

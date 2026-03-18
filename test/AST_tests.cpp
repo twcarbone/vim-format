@@ -34,27 +34,17 @@ protected:
     }
 };
 
-TEST_F(ASTTest, if_stmt)
+TEST_F(ASTTest, userfunc)
 {
-    test_file("../../test/ast/if_stmt.vim");
+    test_file("../../test/ast/userfunc.vim");
 }
 
-TEST_F(ASTTest, func_stmt)
+TEST_F(ASTTest, eval)
 {
-    test_file("../../test/ast/func_stmt.vim");
+    test_file("../../test/ast/eval.vim");
 }
 
-TEST_F(ASTTest, while_stmt)
+TEST_F(ASTTest, cmdline)
 {
-    test_file("../../test/ast/while_stmt.vim");
-}
-
-TEST_F(ASTTest, expr)
-{
-    test_file("../../test/ast/expr.vim");
-}
-
-TEST_F(ASTTest, comment)
-{
-    test_file("../../test/ast/comment.vim");
+    test_file("../../test/ast/cmdline.vim");
 }

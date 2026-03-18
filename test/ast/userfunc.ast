@@ -5,6 +5,8 @@ Program
       StmtList
         ExprCmd echo <>
           Literal 1
+        JumpStmt retu <>
+          Literal 2
     EmptyStmt <>
     FnStmt Two ! <>
       FnParamList

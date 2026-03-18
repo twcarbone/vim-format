@@ -166,9 +166,9 @@ TEST(SourceTest, file_test_01)
 TEST(SourceTest, file_test_02)
 {
     Source lcSource;
-    lcSource.read_file("../../test/ast/while_stmt.vim");
+    lcSource.read_file("../../test/ast/eval.vim");
 
-    lcSource.advance(30);
+    lcSource.advance(148);
 
     EXPECT_EQ(lcSource.indent(), 4);
 }
