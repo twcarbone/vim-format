@@ -114,133 +114,132 @@ bool Lexer::disambiguate(Token* apCurrentToken)
     {
         const Token* pPrevToken = *rit;
 
-        if (apCurrentToken->type() == Token::Type::GEN_MINUS)
+        switch (apCurrentToken->type())
         {
-            switch (pPrevToken->type())
-            {
-                case Token::Type::TAB:
-                case Token::Type::SPACE:
-                    continue;
-                case Token::Type::FLOAT:
-                case Token::Type::STRING:
-                case Token::Type::INTEGER:
-                case Token::Type::R_PAREN:
-                case Token::Type::IDENTIFIER:
-                    apCurrentToken->setType(Token::Type::OP_SUB);
-                    break;
-                default:
-                    apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
-            }
-        }
+            case Token::Type::GEN_MINUS:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                        continue;
+                    case Token::Type::FLOAT:
+                    case Token::Type::STRING:
+                    case Token::Type::INTEGER:
+                    case Token::Type::R_PAREN:
+                    case Token::Type::IDENTIFIER:
+                        apCurrentToken->setType(Token::Type::OP_SUB);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::OP_UNARY_MINUS);
+                }
 
-        else if (apCurrentToken->type() == Token::Type::GEN_PLUS)
-        {
-            switch (pPrevToken->type())
-            {
-                case Token::Type::TAB:
-                case Token::Type::SPACE:
-                    continue;
-                case Token::Type::FLOAT:
-                case Token::Type::STRING:
-                case Token::Type::INTEGER:
-                case Token::Type::R_PAREN:
-                case Token::Type::IDENTIFIER:
-                    apCurrentToken->setType(Token::Type::OP_ADD);
-                    break;
-                default:
-                    apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
-            }
-        }
+                break;
+            case Token::Type::GEN_PLUS:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                        continue;
+                    case Token::Type::FLOAT:
+                    case Token::Type::STRING:
+                    case Token::Type::INTEGER:
+                    case Token::Type::R_PAREN:
+                    case Token::Type::IDENTIFIER:
+                        apCurrentToken->setType(Token::Type::OP_ADD);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
+                }
 
-        else if (apCurrentToken->type() == Token::Type::GEN_QUESTION)
-        {
-            switch (pPrevToken->type())
-            {
-                case Token::Type::TAB:
-                case Token::Type::SPACE:
-                    continue;
-                case Token::Type::OP_EQUAL:
-                case Token::Type::OP_NEQUAL:
-                case Token::Type::OP_GT:
-                case Token::Type::OP_GTE:
-                case Token::Type::OP_LT:
-                case Token::Type::OP_LTE:
-                case Token::Type::OP_MATCH:
-                case Token::Type::OP_NMATCH:
-                case Token::Type::OP_IS:
-                case Token::Type::OP_ISNOT:
-                    apCurrentToken->setType(Token::Type::OP_IGNORE_CASE);
-                    break;
-                default:
-                    apCurrentToken->setType(Token::Type::OP_TERNARY_IF);
-            }
-        }
+                break;
+            case Token::Type::GEN_QUESTION:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                        continue;
+                    case Token::Type::OP_EQUAL:
+                    case Token::Type::OP_NEQUAL:
+                    case Token::Type::OP_GT:
+                    case Token::Type::OP_GTE:
+                    case Token::Type::OP_LT:
+                    case Token::Type::OP_LTE:
+                    case Token::Type::OP_MATCH:
+                    case Token::Type::OP_NMATCH:
+                    case Token::Type::OP_IS:
+                    case Token::Type::OP_ISNOT:
+                        apCurrentToken->setType(Token::Type::OP_IGNORE_CASE);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::OP_TERNARY_IF);
+                }
 
-        else if (apCurrentToken->type() == Token::Type::GEN_NAME)
-        {
-            switch (pPrevToken->type())
-            {
-                case Token::Type::TAB:
-                case Token::Type::SPACE:
-                    continue;
-                case Token::Type::OP_OPTION:
-                    apCurrentToken->setType(Token::Type::OPTION);
-                    break;
-                default:
-                    apCurrentToken->setType(Token::Type::IDENTIFIER);
-            }
-        }
+                break;
+            case Token::Type::GEN_NAME:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                        continue;
+                    case Token::Type::OP_OPTION:
+                        apCurrentToken->setType(Token::Type::OPTION);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::IDENTIFIER);
+                }
 
-        else if (apCurrentToken->type() == Token::Type::GEN_EXCLAMATION)
-        {
-            switch (pPrevToken->type())
-            {
-                case Token::Type::TAB:
-                case Token::Type::SPACE:
-                    continue;
-                case Token::Type::FUNCTION:
-                    apCurrentToken->setType(Token::Type::OP_BANG);
-                    break;
-                default:
-                    apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
-            }
-        }
+                break;
+            case Token::Type::GEN_EXCLAMATION:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                        continue;
+                    case Token::Type::FUNCTION:
+                        apCurrentToken->setType(Token::Type::OP_BANG);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
+                }
 
-        else if (apCurrentToken->type() == Token::Type::GEN_DOT)
-        {
-            switch (pPrevToken->type())
-            {
-                case Token::Type::IDENTIFIER:
-                    apCurrentToken->setType(Token::Type::OP_DOT);
-                    break;
-                default:
-                    apCurrentToken->setType(Token::Type::OP_CAT_OLD);
-            }
-        }
+                break;
+            case Token::Type::GEN_DOT:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::IDENTIFIER:
+                        apCurrentToken->setType(Token::Type::OP_DOT);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::OP_CAT_OLD);
+                }
 
-        else if (apCurrentToken->type() == Token::Type::GEN_COLON)
-        {
-            switch (pPrevToken->type())
-            {
-                case Token::Type::TAB:
-                case Token::Type::SPACE:
-                    continue;
-                case Token::Type::IDENTIFIER:
-                    if (rit == m_lTokens.crbegin() && vf::is_one_of(pPrevToken->str(), "bwtglsav"))
-                    {
-                        // Previous token must be non-whitespace, single-character, valid
-                        // identifier to make this colon a scope resolution operator
-                        apCurrentToken->setType(Token::Type::OP_SCOPE);
-                    }
-                    else
-                    {
+                break;
+            case Token::Type::GEN_COLON:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                        continue;
+                    case Token::Type::IDENTIFIER:
+                        if (rit == m_lTokens.crbegin() && vf::is_one_of(pPrevToken->str(), "bwtglsav"))
+                        {
+                            // Previous token must be non-whitespace, single-character, valid
+                            // identifier to make this colon a scope resolution operator
+                            apCurrentToken->setType(Token::Type::OP_SCOPE);
+                        }
+                        else
+                        {
+                            apCurrentToken->setType(Token::Type::COLON);
+                        }
+
+                        break;
+                    default:
                         apCurrentToken->setType(Token::Type::COLON);
-                    }
+                }
 
-                    break;
-                default:
-                    apCurrentToken->setType(Token::Type::COLON);
-            }
+                break;
+            default:
+                break;
         }
 
         // 2. Stop looking at preceding tokens if the current token was disambiguated.
