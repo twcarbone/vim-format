@@ -18,9 +18,71 @@ Token::~Token()
 {
 }
 
+bool Token::command() const
+{
+    switch (m_eType)
+    {
+        case Token::Type::IF:
+        case Token::Type::ELSEIF:
+        case Token::Type::ELSE:
+        case Token::Type::ENDIF:
+        case Token::Type::FOR:
+        case Token::Type::IN:
+        case Token::Type::ENDFOR:
+        case Token::Type::WHILE:
+        case Token::Type::ENDWHILE:
+        case Token::Type::BREAK:
+        case Token::Type::CONTINUE:
+        case Token::Type::FUNCTION:
+        case Token::Type::RETURN:
+        case Token::Type::ENDFUNCTION:
+        case Token::Type::CMD_LET:
+        case Token::Type::CMD_SET:
+        case Token::Type::CMD_ECHO:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool Token::keyword() const
+{
+    switch (m_eType)
+    {
+        case Token::Type::FN_ABORT:
+        case Token::Type::FN_CLOSURE:
+        case Token::Type::FN_DICT:
+        case Token::Type::FN_RANGE:
+        case Token::Type::IN:
+        case Token::Type::OP_IS:
+        case Token::Type::OP_ISNOT:
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool Token::ambiguous() const
 {
     return TypeToStr(m_eType).substr(0, 4) == "GEN_";
+}
+
+bool Token::assignment() const
+{
+    switch (m_eType)
+    {
+        case Token::Type::ASSIGN_ADD:
+        case Token::Type::ASSIGN_MINUS:
+        case Token::Type::ASSIGN_MUL:
+        case Token::Type::ASSIGN_DIV:
+        case Token::Type::ASSIGN_EQ:
+        case Token::Type::ASSIGN_MODULO:
+        case Token::Type::ASSIGN_CAT_NEW:
+        case Token::Type::ASSIGN_CAT_OLD:
+            return true;
+        default:
+            return false;
+    }
 }
 
 bool Token::delimiting_wp() const

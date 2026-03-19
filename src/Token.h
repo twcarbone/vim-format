@@ -113,7 +113,10 @@ public:
 
     ~Token();
 
+    bool command() const;
+    bool keyword() const;
     bool ambiguous() const;
+    bool assignment() const;
     bool delimiting_wp() const;
     bool structural_wp() const;
 
