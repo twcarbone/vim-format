@@ -18,7 +18,7 @@ Token::~Token()
 {
 }
 
-bool Token::command() const
+bool Token::is_command() const
 {
     switch (m_eType)
     {
@@ -45,7 +45,7 @@ bool Token::command() const
     }
 }
 
-bool Token::keyword() const
+bool Token::is_keyword() const
 {
     switch (m_eType)
     {
@@ -62,12 +62,12 @@ bool Token::keyword() const
     }
 }
 
-bool Token::ambiguous() const
+bool Token::is_ambiguous() const
 {
     return TypeToStr(m_eType).substr(0, 4) == "GEN_";
 }
 
-bool Token::assignment() const
+bool Token::is_assignment() const
 {
     switch (m_eType)
     {
@@ -85,7 +85,7 @@ bool Token::assignment() const
     }
 }
 
-bool Token::delimiting_wp() const
+bool Token::is_horizontal_wp() const
 {
     switch (m_eType)
     {
@@ -97,7 +97,7 @@ bool Token::delimiting_wp() const
     }
 }
 
-bool Token::structural_wp() const
+bool Token::is_vertical_wp() const
 {
     return m_eType == Type::NEWLINE;
 }
@@ -126,7 +126,7 @@ std::string Token::toString() const
 {
     std::string lsTmp = "[Token] " + TypeToStr(m_eType);
 
-    if (!delimiting_wp() && !structural_wp())
+    if (!is_horizontal_wp() && !is_vertical_wp())
     {
         lsTmp += " " + m_sStr;
     }

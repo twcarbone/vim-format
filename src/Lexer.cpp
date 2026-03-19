@@ -41,7 +41,7 @@ std::vector<Token*> Lexer::tokens() const
 
     for (Token* pToken : m_lTokens)
     {
-        if (!pToken->delimiting_wp())
+        if (!pToken->is_horizontal_wp())
         {
             llTokens.push_back(pToken);
         }
@@ -86,12 +86,12 @@ Token* Lexer::do_next()
             throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.context());
         }
 
-        if (pToken->ambiguous() && !disambiguate(pToken))
+        if (pToken->is_ambiguous() && !disambiguate(pToken))
         {
             throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
         }
 
-        if (pToken->keyword())
+        if (pToken->is_keyword())
         {
             retype_keyword(pToken);
         }
@@ -248,7 +248,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
         }
 
         // 2. Stop looking at preceding tokens if the current token was disambiguated.
-        if (!apCurrentToken->ambiguous())
+        if (!apCurrentToken->is_ambiguous())
         {
             break;
         }
@@ -276,7 +276,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
     }
 
     // 4. Return true only if the current token was disambiguated.
-    return !apCurrentToken->ambiguous();
+    return !apCurrentToken->is_ambiguous();
 }
 
 void Lexer::retype_keyword(Token* apCurrentToken)
@@ -294,7 +294,7 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                 break;
         }
 
-        if (pPrevToken->command() || pPrevToken->assignment())
+        if (pPrevToken->is_command() || pPrevToken->is_assignment())
         {
             apCurrentToken->setType(Token::Type::IDENTIFIER);
         }

@@ -113,12 +113,12 @@ public:
 
     ~Token();
 
-    bool command() const;
-    bool keyword() const;
-    bool ambiguous() const;
-    bool assignment() const;
-    bool delimiting_wp() const;
-    bool structural_wp() const;
+    bool is_command() const;
+    bool is_keyword() const;
+    bool is_ambiguous() const;
+    bool is_assignment() const;
+    bool is_horizontal_wp() const;
+    bool is_vertical_wp() const;
 
     Type type() const;
     void setType(Type type);
