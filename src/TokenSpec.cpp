@@ -8,6 +8,8 @@
 
 const std::string g_sKeyWordDelimiters = "! \n\t";
 
+// TODO (gh-108): Link Token categories and Keyword/Command lists
+
 TokenSpec::TokenSpec() :
     // clang-format off
     m_lCommands {
