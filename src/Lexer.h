@@ -50,6 +50,7 @@ private:
     Token* do_next();
     void freeTokens();
     bool disambiguate(Token* token);
+    void retype_keyword(Token* token);
 };
 
 #endif  // TOKENIZER_H

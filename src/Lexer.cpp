@@ -91,6 +91,11 @@ Token* Lexer::do_next()
             throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
         }
 
+        if (pToken->keyword())
+        {
+            retype_keyword(pToken);
+        }
+
         m_cSource.advance(pToken->str().size());
     }
 
@@ -272,4 +277,28 @@ bool Lexer::disambiguate(Token* apCurrentToken)
 
     // 4. Return true only if the current token was disambiguated.
     return !apCurrentToken->ambiguous();
+}
+
+void Lexer::retype_keyword(Token* apCurrentToken)
+{
+    for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+    {
+        Token* pPrevToken = *rit;
+
+        switch (pPrevToken->type())
+        {
+            case Token::Type::TAB:
+            case Token::Type::SPACE:
+                continue;
+            default:
+                break;
+        }
+
+        if (pPrevToken->command() || pPrevToken->assignment())
+        {
+            apCurrentToken->setType(Token::Type::IDENTIFIER);
+        }
+
+        return;
+    }
 }
