@@ -20,6 +20,7 @@ public:
     Token* match(const Source& source);
 
 private:
+    // TODO (gh-107): Keywords may not require an abbreviation
     struct Keyword
     {
         std::string sFull = "";
