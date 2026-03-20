@@ -1,5 +1,7 @@
-function! One() range abort dict closure
+function! One() range abort dict
     echo 1
+    function! Inner() closure
+    endfunction
     retu 2
 endfunction
 

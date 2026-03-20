@@ -1,10 +1,13 @@
 Program
   StmtList
-    FnStmt One ! range abort dict closure <>
+    FnStmt One ! range abort dict <>
       FnParamList
       StmtList
         ExprCmd echo <>
           Literal 1
+        FnStmt Inner ! closure <>
+          FnParamList
+          StmtList
         JumpStmt retu <>
           Literal 2
     EmptyStmt <>
