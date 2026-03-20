@@ -290,6 +290,9 @@ void Lexer::retype_keyword(Token* apCurrentToken)
             case Token::Type::TAB:
             case Token::Type::SPACE:
                 continue;
+            case Token::Type::OP_SCOPE:
+                apCurrentToken->setType(Token::Type::IDENTIFIER);
+                return;
             default:
                 break;
         }
