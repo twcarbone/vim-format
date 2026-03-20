@@ -1,7 +1,7 @@
 Program
   StmtList
     AssignStmt = <>
-      Var aa
+      Var g:abort
       ListExpr
         Literal 1
         Literal 2
@@ -30,12 +30,18 @@ Program
     AssignStmt ..= <>
       Var bb
       Literal 2
+    AssignStmt = <>
+      Var cc
+      Var g:abort
+    AssignStmt = <>
+      Var is
+      Var bb
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
     ForStmt <>
-      Var item
-      Var aa
+      Var fu
+      Var g:abort
       StmtList
         JumpStmt continue <>
           NULL
@@ -45,7 +51,7 @@ Program
     ForStmt <>
       ListExpr
         Var a
-        Var b
+        Var isnot
       ListExpr
         ListExpr
           Literal 4
@@ -54,6 +60,8 @@ Program
           Literal 6
           Literal 7
       StmtList
+        ExprCmd echo <>
+          Var isnot
         JumpStmt con <>
           NULL
         JumpStmt brea <>
@@ -125,7 +133,7 @@ Program
       TernaryOp ? :
         Literal 1
         Literal "this"
-        Literal "that"
+        Var is
     ExprCmd echo <>
       BinaryOp ??
         Literal "us"
@@ -287,7 +295,7 @@ Program
     ExprCmd echo <>
       BinaryOp .
         Var g:dict
-        Var a
+        Var closure
     ExprCmd echo <>
       CallExpr
         CallExpr
@@ -320,7 +328,7 @@ Program
       Var g:m_bar
       Literal 42
     AssignStmt = <>
-      Var b:items
+      Var b:in
       ListExpr
         Literal 0
         Literal 1

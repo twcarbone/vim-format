@@ -30,7 +30,7 @@ protected:
 
         std::string lsAstStr = vf::read_file(lcSrcPath.replace_extension("ast"));
 
-        EXPECT_EQ(lcAstStrStream.str(), lsAstStr);
+        EXPECT_EQ(lsAstStr, lcAstStrStream.str());
     }
 };
 

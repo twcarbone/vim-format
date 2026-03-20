@@ -20,11 +20,16 @@ public:
     Token* match(const Source& source);
 
 private:
+    // TODO (gh-107): Keywords may not require an abbreviation
     struct Keyword
     {
         std::string sFull = "";
         std::string sAbrv = "";
         Token::Type eTokenType = Token::Type::NONE;
+    };
+
+    struct Command : Keyword
+    {
     };
 
     // Punctuators, operators, or other fixed-width symbols
@@ -34,6 +39,7 @@ private:
         Token::Type eTokenType = Token::Type::NONE;
     };
 
+    const std::vector<Command> m_lCommands;
     const std::vector<Keyword> m_lKeywords;
     const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;

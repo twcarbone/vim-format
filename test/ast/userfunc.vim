@@ -1,5 +1,7 @@
-function! One() range abort dict closure
+function! One() range abort dict
     echo 1
+    function! Inner() closure
+    endfunction
     retu 2
 endfunction
 
@@ -7,7 +9,7 @@ fu! Two(...)
     return 1
 endf
 
-function! Three(a)
+function! Three(isnot)
     return
 endfunction
 
@@ -19,6 +21,8 @@ function! Five(a, ...)
     echo 1
 endfunction
 
-function! Six(a, b = 1)
+let is = 5
+
+function! Six(a, b = is)
     echo 1
 endfunction

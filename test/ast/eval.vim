@@ -1,4 +1,4 @@
-let aa = [1, 2, 3]
+let g:abort = [1, 2, 3]
 let bb = 10
 let bb += 2
 let bb -= 2
@@ -7,15 +7,18 @@ let bb /= 2
 let bb %= 2
 let bb .= 2
 let bb ..= 2
+let cc = g:abort
+let is = bb
 
 " for
 
-for item in aa
+for fu in g:abort
     continue
     break
 endfor
 
-for [a, b] in [[4, 5], [6, 7]]
+for [a, isnot] in [[4, 5], [6, 7]]
+    echo isnot
     con
     brea
 endfo
@@ -56,7 +59,7 @@ en
 " expression-syntax
 
 " expr1
-echo 1 ? "this" : "that"
+echo 1 ? "this" : is
 echo "us" ?? "them"
 
 " expr2
@@ -104,14 +107,14 @@ echo [0, 1, 2, 3][:2]
 echo b:items[2:]
 echo b:items[1:3]
 echo b:items[1 + 1:6 / 2]
-echo g:dict.a
+echo g:dict.closure
 echo ReturnsFuncRef()("passed to returned FuncRef")
 echo 2->Add(3)
 echo 3->Add(4)->Add(5)
 
 " expr11
 let g:m_bar = 42
-let b:items = [0, 1, 2, 3]
+let b:in = [0, 1, 2, 3]
 let dict_a = {"apple": 4, "banana": [1 * 2, 2], "cherry": "pie"}
 let dict_b = {"test": g:m_bar}
 let dict_c = {g:m_bar: 43}

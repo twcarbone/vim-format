@@ -8,9 +8,11 @@
 
 const std::string g_sKeyWordDelimiters = "! \n\t";
 
+// TODO (gh-108): Link Token categories and Keyword/Command lists
+
 TokenSpec::TokenSpec() :
     // clang-format off
-    m_lKeywords {
+    m_lCommands {
         { "break", "brea", Token::Type::BREAK },
         { "continue", "con", Token::Type::CONTINUE },
         { "echo", "ec", Token::Type::CMD_ECHO },
@@ -24,15 +26,18 @@ TokenSpec::TokenSpec() :
         { "return", "retu", Token::Type::RETURN },
         { "set", "se", Token::Type::CMD_SET },
         { "while", "wh", Token::Type::WHILE },
-        { "abort", "", Token::Type::FN_ABORT },
-        { "closure", "", Token::Type::FN_CLOSURE },
-        { "dict", "", Token::Type::FN_DICT },
         { "for", "", Token::Type::FOR },
         { "if", "", Token::Type::IF },
         { "in", "", Token::Type::IN },
+        { "let", "", Token::Type::CMD_LET },
+    },
+    m_lKeywords {
+        { "abort", "", Token::Type::FN_ABORT },
+        { "closure", "", Token::Type::FN_CLOSURE },
+        { "dict", "", Token::Type::FN_DICT },
+        { "in", "", Token::Type::IN },
         { "is", "", Token::Type::OP_IS },
         { "isnot", "", Token::Type::OP_ISNOT },
-        { "let", "", Token::Type::CMD_LET },
         { "range", "", Token::Type::FN_RANGE },
     },
     m_lSymbols {
@@ -154,6 +159,26 @@ Token* TokenSpec::match(const Source& acSource)
     if (vf::startswith_int(acSource.remaining_text(), lsStr))
     {
         return new Token(Token::Type::INTEGER, std::string { lsStr }, acSource.pos());
+    }
+
+    // Look for a command
+    if (acSource.column() == acSource.indent())
+    {
+        for (const Command& lcCommand : m_lCommands)
+        {
+            if (vf::startswith(acSource.remaining_text(), lcCommand.sFull, g_sKeyWordDelimiters))
+            {
+                return new Token(lcCommand.eTokenType, lcCommand.sFull, acSource.pos());
+            }
+            else if (lcCommand.sAbrv.empty())
+            {
+                continue;
+            }
+            else if (vf::startswith(acSource.remaining_text(), lcCommand.sAbrv, g_sKeyWordDelimiters))
+            {
+                return new Token(lcCommand.eTokenType, lcCommand.sAbrv, acSource.pos());
+            }
+        }
     }
 
     // Look for a keyword
