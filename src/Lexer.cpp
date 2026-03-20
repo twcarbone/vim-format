@@ -281,27 +281,59 @@ bool Lexer::disambiguate(Token* apCurrentToken)
 
 void Lexer::retype_keyword(Token* apCurrentToken)
 {
-    for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+    switch (apCurrentToken->type())
     {
-        Token* pPrevToken = *rit;
-
-        switch (pPrevToken->type())
+        case Token::Type::FN_ABORT:
+        case Token::Type::FN_CLOSURE:
+        case Token::Type::FN_DICT:
+        case Token::Type::FN_RANGE:
         {
-            case Token::Type::TAB:
-            case Token::Type::SPACE:
-                continue;
-            case Token::Type::OP_SCOPE:
-                apCurrentToken->setType(Token::Type::IDENTIFIER);
-                return;
-            default:
-                break;
-        }
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
 
-        if (pPrevToken->is_command() || pPrevToken->is_assignment())
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::FN_ABORT:
+                    case Token::Type::FN_CLOSURE:
+                    case Token::Type::FN_DICT:
+                    case Token::Type::FN_RANGE:
+                        continue;
+                    case Token::Type::R_PAREN:
+                        return;
+                    default:
+                        apCurrentToken->setType(Token::Type::IDENTIFIER);
+                        return;
+                }
+            }
+        }
+        case Token::Type::IN:
         {
-            apCurrentToken->setType(Token::Type::IDENTIFIER);
-        }
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
 
-        return;
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                        continue;
+                    case Token::Type::R_BRACKET:
+                    case Token::Type::IDENTIFIER:
+                        return;
+                    default:
+                        apCurrentToken->setType(Token::Type::IDENTIFIER);
+                        return;
+                }
+            }
+        }
+        case Token::Type::OP_IS:
+        case Token::Type::OP_ISNOT:
+            // WIP: Handle OP_IS and OP_ISNOT in Lexer::retype_keyword(Token*)
+            return;
+        default:
+            throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
     }
 }
