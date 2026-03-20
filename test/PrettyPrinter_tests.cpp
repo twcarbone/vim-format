@@ -30,7 +30,7 @@ protected:
 
         std::string lsPrettyStr = vf::read_file(vf::with_tail(lcSrcPath, "pretty.vim"));
 
-        EXPECT_EQ(lcPrettyStrStream.str(), lsPrettyStr);
+        EXPECT_EQ(lsPrettyStr, lcPrettyStrStream.str());
     }
 };
 
