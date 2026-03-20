@@ -23,7 +23,7 @@ Program
     FnStmt Three ! <>
       FnParamList
         FnParam
-          Var a
+          Var isnot
           NULL
       StmtList
         JumpStmt return <>
@@ -50,6 +50,10 @@ Program
         ExprCmd echo <>
           Literal 1
     EmptyStmt <>
+    AssignStmt = <>
+      Var is
+      Literal 5
+    EmptyStmt <>
     FnStmt Six ! <>
       FnParamList
         FnParam
@@ -57,7 +61,7 @@ Program
           NULL
         FnParam
           Var b
-          Literal 1
+          Var is
       StmtList
         ExprCmd echo <>
           Literal 1

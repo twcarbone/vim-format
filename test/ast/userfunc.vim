@@ -9,7 +9,7 @@ fu! Two(...)
     return 1
 endf
 
-function! Three(a)
+function! Three(isnot)
     return
 endfunction
 
@@ -21,6 +21,8 @@ function! Five(a, ...)
     echo 1
 endfunction
 
-function! Six(a, b = 1)
+let is = 5
+
+function! Six(a, b = is)
     echo 1
 endfunction
