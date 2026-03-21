@@ -29,3 +29,7 @@ format:
 .PHONY: format/check
 format/check:
 	find src/ test/ -type f \( -name '*.h' -or -name '*.cpp' \) -exec clang-format --dry-run -Werror {} +
+
+.PHONY: tags
+tags:
+	./scripts/cmds.py > ./reference/ex_cmds.txt
