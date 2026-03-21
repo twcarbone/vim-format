@@ -1,401 +1,401 @@
 /usr/local/share/vim/vim91/doc/terminal.txt:
-1814352925  191  :terminal  :[range]ter[minal] [options] [command]
+     1814352925  191  :terminal  :[range]ter[minal] [options] [command]
 
 /usr/local/share/vim/vim91/doc/eval.txt:
-1813411950  2813  :let          :let {var-name} = {expr1}
-0127630265  2819  :let          :let {var-name}[{idx}] = {expr1}
-4211754421  2833  :let          :let {var-name}[{idx1}:{idx2}] = {expr1}
-1974695300  2844  :let          :let {var} += {expr1}
-2024605123  2845  :let          :let {var} -= {expr1}
-2591104698  2846  :let          :let {var} *= {expr1}
-2086196734  2847  :let          :let {var} /= {expr1}
-1803175223  2848  :let          :let {var} %= {expr1}
-2476392128  2849  :let          :let {var} .= {expr1}
-3269168211  2850  :let          :let {var} ..= {expr1}
-0379281600  2859  :let          :let ${env-name} = {expr1}
-3260976525  2868  :let          :let ${env-name} .= {expr1}
-1394056515  2873  :let          :let @{reg-name} = {expr1}
-3064648682  2887  :let          :let @{reg-name} .= {expr1}
-0956216668  2891  :let          :let &{option-name} = {expr1}
-1003042615  2906  :let          :let &{option-name} .= {expr1}
-3722509427  2910  :let          :let &{option-name} += {expr1}
-3506342964  2911  :let          :let &{option-name} -= {expr1}
-0757707588  2915  :let          :let &l:{option-name} = {expr1}
-0682653799  2916  :let          :let &l:{option-name} .= {expr1}
-3466179363  2917  :let          :let &l:{option-name} += {expr1}
-3280454500  2918  :let          :let &l:{option-name} -= {expr1}
-0886019744  2922  :let          :let &g:{option-name} = {expr1}
-2412689443  2923  :let          :let &g:{option-name} .= {expr1}
-1776776039  2924  :let          :let &g:{option-name} += {expr1}
-1694040864  2925  :let          :let &g:{option-name} -= {expr1}
-1350391715  2929  :let          :let [{name1}, {name2}, ...] = {expr1}
-0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
-4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
-4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
-2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
-3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
-1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
-1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
-2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
-3932339600  3052  :let          :let {var-name}
-2969427802  3064  :let          :let
-3280446171  3071  :unlet        :unl[et][!] {name} ...
-4056585016  3091  :unlet        :unl[et] ${env-name} ...
-4268781155  3100  :const        :cons[t] {var-name} = {expr1}
-2303425390  3101  :const        :cons[t] [{name1}, {name2}, ...] = {expr1}
-1611952212  3102  :const        :cons[t] [{name}, ..., ; {lastname}] = {expr1}
-1754248955  3103  :const        :cons[t] {var-name} =<< [trim] [eval] {marker}
-1396436383  3136  :const        :cons[t]
-2417506279  3137  :const        :cons[t] {var-name}
-2415878059  3141  :lockvar      :lockv[ar][!] [depth] {name} ...
-3963642186  3200  :unlockvar    :unlo[ckvar][!] [depth] {name} ...
-4058558481  3208  :if           :if {expr1}
-0010687229  3209  :endif        :en[dif]
-3530542534  3242  :else         :el[se]
-3767655736  3249  :elseif       :elsei[f] {expr1}
-0743278179  3254  :while        :wh[ile] {expr1}
-3137047372  3256  :endwhile     :endw[hile]
-2662856482  3272  :for          :for {var} in {object}
-2432440349  3273  :endfor       :endfo[r]
-3291519474  3315  :for          :for [{var1}, {var2}, ...] in {listlist}
-2432440349  3316  :endfor       :endfo[r]
-2096733821  3325  :continue     :con[tinue]
-0178149365  3337  :break        :brea[k]
-3657094585  3350  :try          :try
-0570234797  3352  :endtry       :endt[ry]
-3246459693  3392  :catch        :cat[ch] /{pattern}/
-4034836909  3422  :finally      :fina[lly]
-4194538044  3434  :throw        :th[row] {expr1}
-1417249700  3459  :echo         :ec[ho] {expr1} ..
-0611365865  3479  :echon        :echon {expr1} ..
-3292911339  3502  :echohl       :echoh[l] {name}
-1408577583  3510  :echomsg      :echom[sg] {expr1} ..
-3317283107  3527  :echowindow   :[N]echow[indow] {expr1} ..
-0348216287  3542  :echoerr      :echoe[rr] {expr1} ..
-0703956562  3555  :echoconsole  :echoc[onsole] {expr1} ..
-2769173961  3561  :eval         :eval {expr}
-0330570849  3582  :execute      :exe[cute] {expr1} ..
-0310003832  4835  :sandbox      :san[dbox] {cmd}
+  Y  1813411950  2813  :let          :let {var-name} = {expr1}
+     0127630265  2819  :let          :let {var-name}[{idx}] = {expr1}
+     4211754421  2833  :let          :let {var-name}[{idx1}:{idx2}] = {expr1}
+  Y  1974695300  2844  :let          :let {var} += {expr1}
+  Y  2024605123  2845  :let          :let {var} -= {expr1}
+  Y  2591104698  2846  :let          :let {var} *= {expr1}
+  Y  2086196734  2847  :let          :let {var} /= {expr1}
+  Y  1803175223  2848  :let          :let {var} %= {expr1}
+  Y  2476392128  2849  :let          :let {var} .= {expr1}
+  Y  3269168211  2850  :let          :let {var} ..= {expr1}
+     0379281600  2859  :let          :let ${env-name} = {expr1}
+     3260976525  2868  :let          :let ${env-name} .= {expr1}
+     1394056515  2873  :let          :let @{reg-name} = {expr1}
+     3064648682  2887  :let          :let @{reg-name} .= {expr1}
+     0956216668  2891  :let          :let &{option-name} = {expr1}
+     1003042615  2906  :let          :let &{option-name} .= {expr1}
+     3722509427  2910  :let          :let &{option-name} += {expr1}
+     3506342964  2911  :let          :let &{option-name} -= {expr1}
+     0757707588  2915  :let          :let &l:{option-name} = {expr1}
+     0682653799  2916  :let          :let &l:{option-name} .= {expr1}
+     3466179363  2917  :let          :let &l:{option-name} += {expr1}
+     3280454500  2918  :let          :let &l:{option-name} -= {expr1}
+     0886019744  2922  :let          :let &g:{option-name} = {expr1}
+     2412689443  2923  :let          :let &g:{option-name} .= {expr1}
+     1776776039  2924  :let          :let &g:{option-name} += {expr1}
+     1694040864  2925  :let          :let &g:{option-name} -= {expr1}
+     1350391715  2929  :let          :let [{name1}, {name2}, ...] = {expr1}
+     0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
+     4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
+     4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
+     2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
+     3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
+     1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
+     1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
+     2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
+     3932339600  3052  :let          :let {var-name}
+     2969427802  3064  :let          :let
+     3280446171  3071  :unlet        :unl[et][!] {name} ...
+     4056585016  3091  :unlet        :unl[et] ${env-name} ...
+     4268781155  3100  :const        :cons[t] {var-name} = {expr1}
+     2303425390  3101  :const        :cons[t] [{name1}, {name2}, ...] = {expr1}
+     1611952212  3102  :const        :cons[t] [{name}, ..., ; {lastname}] = {expr1}
+     1754248955  3103  :const        :cons[t] {var-name} =<< [trim] [eval] {marker}
+     1396436383  3136  :const        :cons[t]
+     2417506279  3137  :const        :cons[t] {var-name}
+     2415878059  3141  :lockvar      :lockv[ar][!] [depth] {name} ...
+     3963642186  3200  :unlockvar    :unlo[ckvar][!] [depth] {name} ...
+  Y  4058558481  3208  :if           :if {expr1}
+  Y  0010687229  3209  :endif        :en[dif]
+  Y  3530542534  3242  :else         :el[se]
+  Y  3767655736  3249  :elseif       :elsei[f] {expr1}
+  Y  0743278179  3254  :while        :wh[ile] {expr1}
+  Y  3137047372  3256  :endwhile     :endw[hile]
+  Y  2662856482  3272  :for          :for {var} in {object}
+  Y  2432440349  3273  :endfor       :endfo[r]
+     3291519474  3315  :for          :for [{var1}, {var2}, ...] in {listlist}
+  Y  2432440349  3316  :endfor       :endfo[r]
+  Y  2096733821  3325  :continue     :con[tinue]
+  Y  0178149365  3337  :break        :brea[k]
+     3657094585  3350  :try          :try
+     0570234797  3352  :endtry       :endt[ry]
+     3246459693  3392  :catch        :cat[ch] /{pattern}/
+     4034836909  3422  :finally      :fina[lly]
+     4194538044  3434  :throw        :th[row] {expr1}
+  Y  1417249700  3459  :echo         :ec[ho] {expr1} ..
+     0611365865  3479  :echon        :echon {expr1} ..
+     3292911339  3502  :echohl       :echoh[l] {name}
+     1408577583  3510  :echomsg      :echom[sg] {expr1} ..
+     3317283107  3527  :echowindow   :[N]echow[indow] {expr1} ..
+     0348216287  3542  :echoerr      :echoe[rr] {expr1} ..
+     0703956562  3555  :echoconsole  :echoc[onsole] {expr1} ..
+     2769173961  3561  :eval         :eval {expr}
+     0330570849  3582  :execute      :exe[cute] {expr1} ..
+     0310003832  4835  :sandbox      :san[dbox] {cmd}
 
 /usr/local/share/vim/vim91/doc/if_lua.txt:
-2890840371  26  :lua      :[range]lua {chunk}
-3237750770  35  :lua      :[range]lua << [trim] [{endmarker}]
-3450343782  69  :luado    :[range]luado {body}
-1459311118  88  :luafile  :[range]luafile {file}
-1637228528  99  :luado)   :luado) or a file (:luafile) with the given line [range]. Similarly to the Lua
+     2890840371  26  :lua      :[range]lua {chunk}
+     3237750770  35  :lua      :[range]lua << [trim] [{endmarker}]
+     3450343782  69  :luado    :[range]luado {body}
+     1459311118  88  :luafile  :[range]luafile {file}
+     1637228528  99  :luado)   :luado) or a file (:luafile) with the given line [range]. Similarly to the Lua
 
 /usr/local/share/vim/vim91/doc/netbeans.txt:
-2713420786  857  :nbstart  :nbs[tart] {connection}
-0574828672  865  :nbclose  :nbc[lose]
-4136354382  869  :nbkey    :nb[key] {key}
+     2713420786  857  :nbstart  :nbs[tart] {connection}
+     0574828672  865  :nbclose  :nbc[lose]
+     4136354382  869  :nbkey    :nb[key] {key}
 
 /usr/local/share/vim/vim91/doc/todo.txt:
-1250788438  714   :unmap  :unmap <c-n> gives error but does remove the mapping. (Antony Scriven, 2019
-1634482687  897   :call   :call settabwinvar(1, 1, '&cmdheight', 2) also doesn't work well.
-3792731251  1422  :map    :map X may print invalid data. (Nikolay Pavlov, 2017 Jul 3, #1816)
-3414729439  1770  :help   :help gives example for z?, but it does not work.  m? and t? do work.
+     1250788438  714   :unmap  :unmap <c-n> gives error but does remove the mapping. (Antony Scriven, 2019
+     1634482687  897   :call   :call settabwinvar(1, 1, '&cmdheight', 2) also doesn't work well.
+     3792731251  1422  :map    :map X may print invalid data. (Nikolay Pavlov, 2017 Jul 3, #1816)
+     3414729439  1770  :help   :help gives example for z?, but it does not work.  m? and t? do work.
 
 /usr/local/share/vim/vim91/doc/pi_tar.txt:
 
 /usr/local/share/vim/vim91/doc/os_vms.txt:
-1890606435  335  :fixdel  :fixdel doesn't do the trick, but the solution is (without "<" in 'cpo'): >
+     1890606435  335  :fixdel  :fixdel doesn't do the trick, but the solution is (without "<" in 'cpo'): >
 
 /usr/local/share/vim/vim91/doc/pi_spec.txt:
 
 /usr/local/share/vim/vim91/doc/windows.txt:
-4268102191  154   :split        :[N]sp[lit] [++opt] [+cmd] [file]
-2607593463  178   :vsplit       :[N]vs[plit] [++opt] [+cmd] [file]
-0137453086  193   :new          :[N]new [++opt] [+cmd]
-1275836014  212   :new          :[N]new [++opt] [+cmd] {file}
-3265542097  213   :split        :[N]sp[lit] [++opt] [+cmd] {file}
-4022240461  225   :vnew         :[N]vne[w] [++opt] [+cmd] [file]
-3120258124  230   :sview        :[N]sv[iew] [++opt] [+cmd] [file]
-2700434323  233   :sfind        :[N]sf[ind] [++opt] [+cmd] {file}
-1406858224  257   :vertical     :vert[ical] {cmd}
-2602735466  264   :horizontal   :hor[izontal] {cmd}
-0283527701  269   :leftabove    :lefta[bove] {cmd}
-2143963040  270   :aboveleft    :abo[veleft] {cmd}
-2545685913  277   :rightbelow   :rightb[elow] {cmd}
-3056087550  278   :belowright   :bel[owright] {cmd}
-2449893888  286   :topleft      :to[pleft] {cmd}
-3934234289  294   :botright     :bo[tright] {cmd}
-1538012262  311   :quit         :q[uit]
-2184237990  312   :quit         :{count}q[uit]
-0987862922  342   :quit         :q[uit]!
-2707212765  343   :quit         :{count}q[uit]!
-0359909691  352   :close        :clo[se][!]
-3983036030  353   :close        :{count}clo[se][!]
-0940027591  379   :hide         :hid[e]
-3785050375  380   :hide         :{count}hid[e]
-0176182685  394   :hide         :hid[e] {cmd}
-2953664557  401   :only         :on[ly][!]
-3374609648  402   :only         :{count}on[ly][!]
-2620744687  477   :wincmd       :[count]winc[md] {arg}
-2148029639  566   :resize       :res[ize] -N
-3595760449  570   :resize       :res[ize] +N
-2451868001  574   :resize       :res[ize] [N]
-2396117013  578   :resize       :{winnr}res[ize] [+-]N
-1588724644  590   :vertical     :vert[ical] res[ize] [N]
-0924487585  734   :all          :[N]al[l][!] [N]
-2853642935  735   :sall         :[N]sal[l][!] [N]
-1484646788  757   :sargument    :[N]sa[rgument][!] [++opt] [+cmd] [N]
-0800233773  762   :snext        :[N]sn[ext][!] [++opt] [+cmd] [file ..]
-3128834294  767   :sprevious    :[N]spr[evious][!] [++opt] [+cmd] [N]
-0648004039  768   :sNext        :[N]sN[ext][!] [++opt] [+cmd] [N]
-4001288922  774   :srewind      :sre[wind][!] [++opt] [+cmd]
-1576720756  780   :sfirst       :sfir[st] [++opt] [+cmd]
-3817170243  784   :slast        :sla[st][!] [++opt] [+cmd]
-2545489567  790   :drop         :dr[op] [++opt] [+cmd] {file} ..
-2748587908  810   :windo        :[range]windo {cmd}
-1609557877  830   :bufdo!       :[range]bufdo[!] {cmd}
-0233254321  873   :stag         :sta[g][!] [tagname]
-2930879256  965   :ptag         :pta[g][!] [tagname]
-1462438415  980   :pclose       :pc[lose][!]
-0009089595  987   :ppop         :[count]pp[op][!]
-3962743638  1002  :pedit        :ped[it][!] [++opt] [+cmd] {file}
-3326543494  1009  :psearch      :[range]ps[earch][!] [count] [/]pattern[/]
-2274451649  1113  :files!       :files[!] [flags]
-2530502612  1114  :buffers!     :buffers[!] [flags]
-2463866953  1115  :ls!          :ls[!] [flags]
-2969040673  1176  :badd         :bad[d]
-1266472538  1185  :balt         :balt [+lnum] {fname}
-1375593097  1189  :bdelete      :[N]bd[elete][!]
-1921632734  1190  :bdelete      :bd[elete][!] [N]
-3681977824  1207  :bdelete!     :bdelete[!] {bufname}
-3004370328  1211  :bdelete!     :bdelete[!] N1 N2 ...
-1315508965  1217  :N,Mbdelete!  :N,Mbdelete[!]
-0771385663  1220  :bwipeout     :[N]bw[ipeout][!]
-3471278406  1221  :bwipeout     :bw[ipeout][!] {bufname}
-1032733353  1222  :N,Mbwipeout  :N,Mbw[ipeout][!]
-2793539902  1223  :bwipeout     :bw[ipeout][!] N1 N2 ...
-2628210280  1234  :bunload      :[N]bun[load][!]
-1772699732  1235  :bunload      :bun[load][!] [N]
-4233639746  1246  :bunload!     :bunload[!] {bufname}
-0429851760  1250  :N,Mbunload!  :N,Mbunload[!]
-2487074618  1253  :bunload!     :bunload[!] N1 N2 ...
-0252766744  1259  :buffer       :[N]b[uffer][!] [+cmd] [N]
-3122140117  1268  :buffer       :[N]b[uffer][!] [+cmd] {bufname}
-0720642693  1280  :sbuffer      :[N]sb[uffer] [+cmd] [N]
-2770265910  1288  :sbuffer      :[N]sb[uffer] [+cmd] {bufname}
-2513942315  1297  :bnext        :[N]bn[ext][!] [+cmd] [N]
-1239236688  1310  :sbnext       :[N]sbn[ext] [+cmd] [N]
-2402019104  1315  :bNext        :[N]bN[ext][!] [+cmd] [N]
-3243298563  1316  :bprevious    :[N]bp[revious][!] [+cmd] [N]
-1736340138  1322  :sbNext       :[N]sbN[ext] [+cmd] [N]
-0216156786  1323  :sbprevious   :[N]sbp[revious] [+cmd] [N]
-1714028157  1329  :brewind      :br[ewind][!] [+cmd]
-2522982290  1334  :bfirst       :bf[irst] [+cmd]
-1132117898  1338  :sbrewind     :sbr[ewind] [+cmd]
-1273926016  1344  :sbfirst      :sbf[irst] [+cmd]
-2504601756  1347  :blast        :bl[ast][!] [+cmd]
-3344469256  1352  :sblast       :sbl[ast] [+cmd]
-2647114046  1357  :bmodified    :[N]bm[odified][!] [+cmd] [N]
-4142485143  1362  :sbmodified   :[N]sbm[odified] [+cmd] [N]
-1654240389  1367  :unhide       :[N]unh[ide] [N]
-1810685119  1368  :sunhide      :[N]sun[hide] [N]
-4068472490  1373  :ball         :[N]ba[ll] [N]
-1210691590  1374  :sball        :[N]sba[ll] [N]
+     4268102191  154   :split        :[N]sp[lit] [++opt] [+cmd] [file]
+     2607593463  178   :vsplit       :[N]vs[plit] [++opt] [+cmd] [file]
+     0137453086  193   :new          :[N]new [++opt] [+cmd]
+     1275836014  212   :new          :[N]new [++opt] [+cmd] {file}
+     3265542097  213   :split        :[N]sp[lit] [++opt] [+cmd] {file}
+     4022240461  225   :vnew         :[N]vne[w] [++opt] [+cmd] [file]
+     3120258124  230   :sview        :[N]sv[iew] [++opt] [+cmd] [file]
+     2700434323  233   :sfind        :[N]sf[ind] [++opt] [+cmd] {file}
+     1406858224  257   :vertical     :vert[ical] {cmd}
+     2602735466  264   :horizontal   :hor[izontal] {cmd}
+     0283527701  269   :leftabove    :lefta[bove] {cmd}
+     2143963040  270   :aboveleft    :abo[veleft] {cmd}
+     2545685913  277   :rightbelow   :rightb[elow] {cmd}
+     3056087550  278   :belowright   :bel[owright] {cmd}
+     2449893888  286   :topleft      :to[pleft] {cmd}
+     3934234289  294   :botright     :bo[tright] {cmd}
+     1538012262  311   :quit         :q[uit]
+     2184237990  312   :quit         :{count}q[uit]
+     0987862922  342   :quit         :q[uit]!
+     2707212765  343   :quit         :{count}q[uit]!
+     0359909691  352   :close        :clo[se][!]
+     3983036030  353   :close        :{count}clo[se][!]
+     0940027591  379   :hide         :hid[e]
+     3785050375  380   :hide         :{count}hid[e]
+     0176182685  394   :hide         :hid[e] {cmd}
+     2953664557  401   :only         :on[ly][!]
+     3374609648  402   :only         :{count}on[ly][!]
+     2620744687  477   :wincmd       :[count]winc[md] {arg}
+     2148029639  566   :resize       :res[ize] -N
+     3595760449  570   :resize       :res[ize] +N
+     2451868001  574   :resize       :res[ize] [N]
+     2396117013  578   :resize       :{winnr}res[ize] [+-]N
+     1588724644  590   :vertical     :vert[ical] res[ize] [N]
+     0924487585  734   :all          :[N]al[l][!] [N]
+     2853642935  735   :sall         :[N]sal[l][!] [N]
+     1484646788  757   :sargument    :[N]sa[rgument][!] [++opt] [+cmd] [N]
+     0800233773  762   :snext        :[N]sn[ext][!] [++opt] [+cmd] [file ..]
+     3128834294  767   :sprevious    :[N]spr[evious][!] [++opt] [+cmd] [N]
+     0648004039  768   :sNext        :[N]sN[ext][!] [++opt] [+cmd] [N]
+     4001288922  774   :srewind      :sre[wind][!] [++opt] [+cmd]
+     1576720756  780   :sfirst       :sfir[st] [++opt] [+cmd]
+     3817170243  784   :slast        :sla[st][!] [++opt] [+cmd]
+     2545489567  790   :drop         :dr[op] [++opt] [+cmd] {file} ..
+     2748587908  810   :windo        :[range]windo {cmd}
+     1609557877  830   :bufdo!       :[range]bufdo[!] {cmd}
+     0233254321  873   :stag         :sta[g][!] [tagname]
+     2930879256  965   :ptag         :pta[g][!] [tagname]
+     1462438415  980   :pclose       :pc[lose][!]
+     0009089595  987   :ppop         :[count]pp[op][!]
+     3962743638  1002  :pedit        :ped[it][!] [++opt] [+cmd] {file}
+     3326543494  1009  :psearch      :[range]ps[earch][!] [count] [/]pattern[/]
+     2274451649  1113  :files!       :files[!] [flags]
+     2530502612  1114  :buffers!     :buffers[!] [flags]
+     2463866953  1115  :ls!          :ls[!] [flags]
+     2969040673  1176  :badd         :bad[d]
+     1266472538  1185  :balt         :balt [+lnum] {fname}
+     1375593097  1189  :bdelete      :[N]bd[elete][!]
+     1921632734  1190  :bdelete      :bd[elete][!] [N]
+     3681977824  1207  :bdelete!     :bdelete[!] {bufname}
+     3004370328  1211  :bdelete!     :bdelete[!] N1 N2 ...
+     1315508965  1217  :N,Mbdelete!  :N,Mbdelete[!]
+     0771385663  1220  :bwipeout     :[N]bw[ipeout][!]
+     3471278406  1221  :bwipeout     :bw[ipeout][!] {bufname}
+     1032733353  1222  :N,Mbwipeout  :N,Mbw[ipeout][!]
+     2793539902  1223  :bwipeout     :bw[ipeout][!] N1 N2 ...
+     2628210280  1234  :bunload      :[N]bun[load][!]
+     1772699732  1235  :bunload      :bun[load][!] [N]
+     4233639746  1246  :bunload!     :bunload[!] {bufname}
+     0429851760  1250  :N,Mbunload!  :N,Mbunload[!]
+     2487074618  1253  :bunload!     :bunload[!] N1 N2 ...
+     0252766744  1259  :buffer       :[N]b[uffer][!] [+cmd] [N]
+     3122140117  1268  :buffer       :[N]b[uffer][!] [+cmd] {bufname}
+     0720642693  1280  :sbuffer      :[N]sb[uffer] [+cmd] [N]
+     2770265910  1288  :sbuffer      :[N]sb[uffer] [+cmd] {bufname}
+     2513942315  1297  :bnext        :[N]bn[ext][!] [+cmd] [N]
+     1239236688  1310  :sbnext       :[N]sbn[ext] [+cmd] [N]
+     2402019104  1315  :bNext        :[N]bN[ext][!] [+cmd] [N]
+     3243298563  1316  :bprevious    :[N]bp[revious][!] [+cmd] [N]
+     1736340138  1322  :sbNext       :[N]sbN[ext] [+cmd] [N]
+     0216156786  1323  :sbprevious   :[N]sbp[revious] [+cmd] [N]
+     1714028157  1329  :brewind      :br[ewind][!] [+cmd]
+     2522982290  1334  :bfirst       :bf[irst] [+cmd]
+     1132117898  1338  :sbrewind     :sbr[ewind] [+cmd]
+     1273926016  1344  :sbfirst      :sbf[irst] [+cmd]
+     2504601756  1347  :blast        :bl[ast][!] [+cmd]
+     3344469256  1352  :sblast       :sbl[ast] [+cmd]
+     2647114046  1357  :bmodified    :[N]bm[odified][!] [+cmd] [N]
+     4142485143  1362  :sbmodified   :[N]sbm[odified] [+cmd] [N]
+     1654240389  1367  :unhide       :[N]unh[ide] [N]
+     1810685119  1368  :sunhide      :[N]sun[hide] [N]
+     4068472490  1373  :ball         :[N]ba[ll] [N]
+     1210691590  1374  :sball        :[N]sba[ll] [N]
 
 /usr/local/share/vim/vim91/doc/fold.txt:
-3264315408  300  :fold          :{range}fo[ld]
-3489947422  402  :foldopen      :{range}foldo[pen][!]
-2042693374  408  :foldclose     :{range}foldc[lose][!]
-2087771471  452  :folddoopen    :[range]foldd[oopen] {cmd}
-0011678683  467  :folddoclosed  :[range]folddoc[losed] {cmd}
+     3264315408  300  :fold          :{range}fo[ld]
+     3489947422  402  :foldopen      :{range}foldo[pen][!]
+     2042693374  408  :foldclose     :{range}foldc[lose][!]
+     2087771471  452  :folddoopen    :[range]foldd[oopen] {cmd}
+     0011678683  467  :folddoclosed  :[range]folddoc[losed] {cmd}
 
 /usr/local/share/vim/vim91/doc/vietnamese.txt:
 
 /usr/local/share/vim/vim91/doc/develop.txt:
 
 /usr/local/share/vim/vim91/doc/tagsrch.txt:
-2714121681  40   :tag         :[count]ta[g][!] {name}
-0742916149  120  :pop         :[count]po[p][!]
-0721239552  123  :tag         :[count]ta[g][!]
-1665866752  127  :tags        :tags
-3753079656  223  :tselect     :ts[elect][!] [name]
-1094475699  258  :stselect    :sts[elect][!] [name]
-1732606876  269  :tjump       :tj[ump][!] [name]
-3490399065  273  :stjump      :stj[ump][!] [name]
-1615825981  284  :tnext       :[count]tn[ext][!]
-2961006380  288  :tprevious   :[count]tp[revious][!]
-3804106398  292  :tNext       :[count]tN[ext][!]
-2839825859  295  :trewind     :[count]tr[ewind][!]
-1368076993  299  :tfirst      :[count]tf[irst][!]
-2148878851  302  :tlast       :tl[ast][!]
-3752525214  305  :ltag        :lt[ag][!] [name]
-4002747001  338  :ptselect    :pts[elect][!] [name]
-0982359611  342  :ptjump      :ptj[ump][!] [name]
-2851705736  346  :ptnext      :[count]ptn[ext][!]
-3716970211  349  :ptprevious  :[count]ptp[revious][!]
-0721948971  352  :ptNext      :[count]ptN[ext][!]
-3187594109  355  :ptrewind    :[count]ptr[ewind][!]
-3930702813  358  :ptfirst     :[count]ptf[irst][!]
-1522442894  361  :ptlast      :ptl[ast][!]
-0940622306  752  :isearch     :[range]is[earch][!] [count] [/]pattern[/]
-3735646302  767  :ilist       :[range]il[ist][!] [/]pattern[/]
-4097627093  785  :ijump       :[range]ij[ump][!] [count] [/]pattern[/]
-1448989641  800  :isplit      :[range]isp[lit][!] [count] [/]pattern[/]
-1343569647  815  :dsearch     :[range]ds[earch][!] [count] [/]string[/]
-2561630924  830  :dlist       :[range]dli[st][!] [/]string[/]
-3018507168  848  :djump       :[range]dj[ump][!] [count] [/]string[/]
-2493025098  861  :dsplit      :[range]dsp[lit][!] [count] [/]string[/]
-3646313198  867  :checkpath   :che[ckpath]
-3640682238  869  :checkpath   :che[ckpath]!
+     2714121681  40   :tag         :[count]ta[g][!] {name}
+     0742916149  120  :pop         :[count]po[p][!]
+     0721239552  123  :tag         :[count]ta[g][!]
+     1665866752  127  :tags        :tags
+     3753079656  223  :tselect     :ts[elect][!] [name]
+     1094475699  258  :stselect    :sts[elect][!] [name]
+     1732606876  269  :tjump       :tj[ump][!] [name]
+     3490399065  273  :stjump      :stj[ump][!] [name]
+     1615825981  284  :tnext       :[count]tn[ext][!]
+     2961006380  288  :tprevious   :[count]tp[revious][!]
+     3804106398  292  :tNext       :[count]tN[ext][!]
+     2839825859  295  :trewind     :[count]tr[ewind][!]
+     1368076993  299  :tfirst      :[count]tf[irst][!]
+     2148878851  302  :tlast       :tl[ast][!]
+     3752525214  305  :ltag        :lt[ag][!] [name]
+     4002747001  338  :ptselect    :pts[elect][!] [name]
+     0982359611  342  :ptjump      :ptj[ump][!] [name]
+     2851705736  346  :ptnext      :[count]ptn[ext][!]
+     3716970211  349  :ptprevious  :[count]ptp[revious][!]
+     0721948971  352  :ptNext      :[count]ptN[ext][!]
+     3187594109  355  :ptrewind    :[count]ptr[ewind][!]
+     3930702813  358  :ptfirst     :[count]ptf[irst][!]
+     1522442894  361  :ptlast      :ptl[ast][!]
+     0940622306  752  :isearch     :[range]is[earch][!] [count] [/]pattern[/]
+     3735646302  767  :ilist       :[range]il[ist][!] [/]pattern[/]
+     4097627093  785  :ijump       :[range]ij[ump][!] [count] [/]pattern[/]
+     1448989641  800  :isplit      :[range]isp[lit][!] [count] [/]pattern[/]
+     1343569647  815  :dsearch     :[range]ds[earch][!] [count] [/]string[/]
+     2561630924  830  :dlist       :[range]dli[st][!] [/]string[/]
+     3018507168  848  :djump       :[range]dj[ump][!] [count] [/]string[/]
+     2493025098  861  :dsplit      :[range]dsp[lit][!] [count] [/]string[/]
+     3646313198  867  :checkpath   :che[ckpath]
+     3640682238  869  :checkpath   :che[ckpath]!
 
 /usr/local/share/vim/vim91/doc/os_beos.txt:
 
 /usr/local/share/vim/vim91/doc/various.txt:
-2465335712  20   :redraw         :redr[aw][!]
-0525630311  26   :redrawstatus   :redraws[tatus][!]
-1414243412  35   :redrawtabline  :redrawt[abline]
-1374356445  47   :ascii          :as[cii]
-3164371843  100  :print          :[range]p[rint] [flags]
-3384362210  109  :print          :[range]p[rint] {count} [flags]
-3244880967  115  :Print          :[range]P[rint] [count] [flags]
-1539289411  123  :list           :[range]l[ist] [count] [flags]
-0681378191  130  :number         :[range]nu[mber] [count] [flags]
-0948522978  137  :#              :[range]# [count] [flags]
-3662775668  141  :#!{anything}   :#!{anything}
-0050686232  153  :z+-^.=         :[range]z[+-^.=][count]
-0285010520  182  :z!+-^.=        :[range]z![+-^.=][count]
-1300320329  186  :z!             :[range]z[!]#[+-^.=][count]
-3324296877  190  :=              := [flags]
-0672185268  193  :=              :{range}= [flags]
-0375739465  198  :normal         :norm[al][!] {commands}
-0214731319  238  :normal         :{range}norm[al][!] {commands}
-2523665680  246  :shell          :sh[ell]
-2503246227  256  :!{cmd}         :!{cmd}
-0374062313  311  :!!             :!!
-3047340651  314  :version        :ve[rsion]
-0357184522  524  :version        :ve[rsion] {nr}
-2180800898  530  :redir          :redi[r][!] > {file}
-0975483070  548  :redir          :redi[r] >> {file}
-2994979278  551  :redir          :redi[r] @{a-zA-Z}
-1863163472  552  :redir          :redi[r] @{a-zA-Z}>
-0937520837  556  :redir          :redi[r] @{a-z}>>
-0058310324  558  :redir          :redi[r] @*>
-0442666997  559  :redir          :redi[r] @+>
-3748461581  562  :redir          :redi[r] @*>>
-3735983674  563  :redir          :redi[r] @+>>
-3416274108  565  :redir          :redi[r] @">
-3514805685  568  :redir          :redi[r] @">>
-2300814967  570  :redir          :redi[r] => {var}
-3478163683  587  :redir          :redi[r] =>> {var}
-3035843294  590  :redir          :redi[r] END
-0166650731  593  :filter         :filt[er][!] {pattern} {command}
-3892095440  594  :filter         :filt[er][!] /{pattern}/ {command}
-0019808827  632  :silent         :sil[ent][!] {command}
-0891785542  666  :unsilent       :uns[ilent] {command}
-0632558038  677  :verbose        :[count]verb[ose] {command}
-0819872430  742  :sleep          :[N]sl[eep] [N][m]
-2060687441  758  :sleep          :[N]sl[eep]! [N][m]
-3339196308  761  :xrestore       :xr[estore] [display]
+     2465335712  20   :redraw         :redr[aw][!]
+     0525630311  26   :redrawstatus   :redraws[tatus][!]
+     1414243412  35   :redrawtabline  :redrawt[abline]
+     1374356445  47   :ascii          :as[cii]
+     3164371843  100  :print          :[range]p[rint] [flags]
+     3384362210  109  :print          :[range]p[rint] {count} [flags]
+     3244880967  115  :Print          :[range]P[rint] [count] [flags]
+     1539289411  123  :list           :[range]l[ist] [count] [flags]
+     0681378191  130  :number         :[range]nu[mber] [count] [flags]
+     0948522978  137  :#              :[range]# [count] [flags]
+     3662775668  141  :#!{anything}   :#!{anything}
+     0050686232  153  :z+-^.=         :[range]z[+-^.=][count]
+     0285010520  182  :z!+-^.=        :[range]z![+-^.=][count]
+     1300320329  186  :z!             :[range]z[!]#[+-^.=][count]
+     3324296877  190  :=              := [flags]
+     0672185268  193  :=              :{range}= [flags]
+     0375739465  198  :normal         :norm[al][!] {commands}
+     0214731319  238  :normal         :{range}norm[al][!] {commands}
+     2523665680  246  :shell          :sh[ell]
+     2503246227  256  :!{cmd}         :!{cmd}
+     0374062313  311  :!!             :!!
+     3047340651  314  :version        :ve[rsion]
+     0357184522  524  :version        :ve[rsion] {nr}
+     2180800898  530  :redir          :redi[r][!] > {file}
+     0975483070  548  :redir          :redi[r] >> {file}
+     2994979278  551  :redir          :redi[r] @{a-zA-Z}
+     1863163472  552  :redir          :redi[r] @{a-zA-Z}>
+     0937520837  556  :redir          :redi[r] @{a-z}>>
+     0058310324  558  :redir          :redi[r] @*>
+     0442666997  559  :redir          :redi[r] @+>
+     3748461581  562  :redir          :redi[r] @*>>
+     3735983674  563  :redir          :redi[r] @+>>
+     3416274108  565  :redir          :redi[r] @">
+     3514805685  568  :redir          :redi[r] @">>
+     2300814967  570  :redir          :redi[r] => {var}
+     3478163683  587  :redir          :redi[r] =>> {var}
+     3035843294  590  :redir          :redi[r] END
+     0166650731  593  :filter         :filt[er][!] {pattern} {command}
+     3892095440  594  :filter         :filt[er][!] /{pattern}/ {command}
+     0019808827  632  :silent         :sil[ent][!] {command}
+     0891785542  666  :unsilent       :uns[ilent] {command}
+     0632558038  677  :verbose        :[count]verb[ose] {command}
+     0819872430  742  :sleep          :[N]sl[eep] [N][m]
+     2060687441  758  :sleep          :[N]sl[eep]! [N][m]
+     3339196308  761  :xrestore       :xr[estore] [display]
 
 /usr/local/share/vim/vim91/doc/mlang.txt:
-0581137308  36   :language       :lan[guage]
-2754820283  37   :language       :lan[guage] mes[sages]
-2263875674  38   :language       :lan[guage] cty[pe]
-1792475641  39   :language       :lan[guage] tim[e]
-0084188629  40   :language       :lan[guage] col[late]
-2030004590  56   :language       :lan[guage] {name}
-0240015908  57   :language       :lan[guage] mes[sages] {name}
-3879634937  58   :language       :lan[guage] cty[pe] {name}
-3043594299  59   :language       :lan[guage] tim[e] {name}
-2059466551  60   :language       :lan[guage] col[late] {name}
-2837606303  185  :menutranslate  :menut[ranslate] clear
-2144504875  188  :menutranslate  :menut[ranslate] {english} {mylang}
+     0581137308  36   :language       :lan[guage]
+     2754820283  37   :language       :lan[guage] mes[sages]
+     2263875674  38   :language       :lan[guage] cty[pe]
+     1792475641  39   :language       :lan[guage] tim[e]
+     0084188629  40   :language       :lan[guage] col[late]
+     2030004590  56   :language       :lan[guage] {name}
+     0240015908  57   :language       :lan[guage] mes[sages] {name}
+     3879634937  58   :language       :lan[guage] cty[pe] {name}
+     3043594299  59   :language       :lan[guage] tim[e] {name}
+     2059466551  60   :language       :lan[guage] col[late] {name}
+     2837606303  185  :menutranslate  :menut[ranslate] clear
+     2144504875  188  :menutranslate  :menut[ranslate] {english} {mylang}
 
 /usr/local/share/vim/vim91/doc/motion.txt:
-0695480472  353   :range       :[range]
-3073391592  366   :goto        :[range]go[to] [count]
-0988442931  804   :mark        :[range]ma[rk] {a-zA-Z'}
-2349524309  809   :k{a-zA-Z'}  :[range]k{a-zA-Z'}
-4000024614  832   :marks       :marks
-4155717922  837   :marks       :marks {arg}
-4012046571  843   :delmarks    :delm[arks] {marks}
-0993374735  855   :delmarks    :delm[arks]!
-2460179664  988   :lockmarks   :loc[kmarks] {command}
-2471951554  1015  :keepmarks   :kee[pmarks] {command}
-0432354928  1030  :keepjumps   :keepj[umps] {command}
-3333464365  1076  :jumps       :ju[mps]
-2198275397  1079  :clearjumps  :cle[arjumps]
-3429103519  1230  :changes     :changes
+     0695480472  353   :range       :[range]
+     3073391592  366   :goto        :[range]go[to] [count]
+     0988442931  804   :mark        :[range]ma[rk] {a-zA-Z'}
+     2349524309  809   :k{a-zA-Z'}  :[range]k{a-zA-Z'}
+     4000024614  832   :marks       :marks
+     4155717922  837   :marks       :marks {arg}
+     4012046571  843   :delmarks    :delm[arks] {marks}
+     0993374735  855   :delmarks    :delm[arks]!
+     2460179664  988   :lockmarks   :loc[kmarks] {command}
+     2471951554  1015  :keepmarks   :kee[pmarks] {command}
+     0432354928  1030  :keepjumps   :keepj[umps] {command}
+     3333464365  1076  :jumps       :ju[mps]
+     2198275397  1079  :clearjumps  :cle[arjumps]
+     3429103519  1230  :changes     :changes
 
 /usr/local/share/vim/vim91/doc/textprop.txt:
 
 /usr/local/share/vim/vim91/doc/tabpage.txt:
-2852528308  62   :tabedit      :[count]tabe[dit]
-0088867646  63   :tabnew       :[count]tabnew
-1759347996  76   :tabedit      :[count]tabe[dit] [++opt] [+cmd] {file}
-3239228618  77   :tabnew       :[count]tabnew [++opt] [+cmd] {file}
-1134042203  81   :tabfind      :[count]tabf[ind] [++opt] [+cmd] {file}
-3743430291  85   :tab          :[count]tab {cmd}
-1167769234  122  :tabclose     :tabc[lose][!]
-3446421025  131  :tabclose     :{count}tabc[lose][!]
-2910307868  132  :tabclose     :tabc[lose][!] {count}
-1249255411  149  :tabonly      :tabo[nly][!]
-3030665771  160  :tabonly      :{count}tabo[nly][!]
-3007115979  161  :tabonly      :tabo[nly][!] {count}
-1154624037  185  :tabnext      :tabn[ext]
-1039861496  191  :tabnext      :{count}tabn[ext]
-3030968892  192  :tabnext      :tabn[ext] {count}
-0822337674  210  :tabprevious  :tabp[revious]
-1132343059  211  :tabNext      :tabN[ext]
-1207468012  216  :tabprevious  :tabp[revious] {count}
-2043450084  217  :tabNext      :tabN[ext] {count}
-1270918088  223  :tabrewind    :tabr[ewind]
-3616271940  224  :tabfirst     :tabfir[st]
-2318267288  227  :tablast      :tabl[ast]
-0507308101  235  :tabs         :tabs
-0410275127  248  :tabmove      :tabm[ove] [N]
-3750281450  249  :tabmove      :[N]tabm[ove]
-1866502931  266  :tabmove      :tabm[ove] +[N]
-1244384463  267  :tabmove      :tabm[ove] -[N]
-3177398273  277  :Ntabmove.    :Ntabmove. And move it by N places by using :+Ntabmove. For clarification what
-3310814804  284  :tabdo        :[range]tabd[o] {cmd}
+     2852528308  62   :tabedit      :[count]tabe[dit]
+     0088867646  63   :tabnew       :[count]tabnew
+     1759347996  76   :tabedit      :[count]tabe[dit] [++opt] [+cmd] {file}
+     3239228618  77   :tabnew       :[count]tabnew [++opt] [+cmd] {file}
+     1134042203  81   :tabfind      :[count]tabf[ind] [++opt] [+cmd] {file}
+     3743430291  85   :tab          :[count]tab {cmd}
+     1167769234  122  :tabclose     :tabc[lose][!]
+     3446421025  131  :tabclose     :{count}tabc[lose][!]
+     2910307868  132  :tabclose     :tabc[lose][!] {count}
+     1249255411  149  :tabonly      :tabo[nly][!]
+     3030665771  160  :tabonly      :{count}tabo[nly][!]
+     3007115979  161  :tabonly      :tabo[nly][!] {count}
+     1154624037  185  :tabnext      :tabn[ext]
+     1039861496  191  :tabnext      :{count}tabn[ext]
+     3030968892  192  :tabnext      :tabn[ext] {count}
+     0822337674  210  :tabprevious  :tabp[revious]
+     1132343059  211  :tabNext      :tabN[ext]
+     1207468012  216  :tabprevious  :tabp[revious] {count}
+     2043450084  217  :tabNext      :tabN[ext] {count}
+     1270918088  223  :tabrewind    :tabr[ewind]
+     3616271940  224  :tabfirst     :tabfir[st]
+     2318267288  227  :tablast      :tabl[ast]
+     0507308101  235  :tabs         :tabs
+     0410275127  248  :tabmove      :tabm[ove] [N]
+     3750281450  249  :tabmove      :[N]tabm[ove]
+     1866502931  266  :tabmove      :tabm[ove] +[N]
+     1244384463  267  :tabmove      :tabm[ove] -[N]
+     3177398273  277  :Ntabmove.    :Ntabmove. And move it by N places by using :+Ntabmove. For clarification what
+     3310814804  284  :tabdo        :[range]tabd[o] {cmd}
 
 /usr/local/share/vim/vim91/doc/builtin.txt:
 
 /usr/local/share/vim/vim91/doc/helphelp.txt:
-1305163589  18   :help       :h[elp]
-3343741936  29   :help       :h[elp] {subject}
-0606343284  100  :help       :h[elp]! [subject]
-4133680276  105  :helpclose  :helpc[lose]
-0199124494  112  :helpgrep   :helpg[rep] {pattern}[@xx]
-0759471609  140  :lhelpgrep  :lh[elpgrep] {pattern}[@xx]
-1344493190  150  :exusage    :exu[sage]
-1971263879  154  :viusage    :viu[sage]
-2682816528  221  :helpfind   :helpf[ind]
-1902196238  228  :helptags   :helpt[ags] [++t] {dir}
+     1305163589  18   :help       :h[elp]
+     3343741936  29   :help       :h[elp] {subject}
+     0606343284  100  :help       :h[elp]! [subject]
+     4133680276  105  :helpclose  :helpc[lose]
+     0199124494  112  :helpgrep   :helpg[rep] {pattern}[@xx]
+     0759471609  140  :lhelpgrep  :lh[elpgrep] {pattern}[@xx]
+     1344493190  150  :exusage    :exu[sage]
+     1971263879  154  :viusage    :viu[sage]
+     2682816528  221  :helpfind   :helpf[ind]
+     1902196238  228  :helptags   :helpt[ags] [++t] {dir}
 
 /usr/local/share/vim/vim91/doc/starting.txt:
-3906200319  1277  :suspend    :sus[pend][!]
-2617693300  1278  :stop       :st[op][!]
-1657954877  1320  :mkexrc     :mk[exrc] [file]
-2821925916  1324  :mkexrc     :mk[exrc]! [file]
-0588175235  1329  :mkvimrc    :mkv[imrc][!] [file]
-3394263444  1400  :mksession  :mks[ession][!] [file]
-1388491902  1456  :mkview     :mkvie[w][!] [file]
-0339722382  1505  :loadview   :lo[adview] [nr]
-1815717545  1712  :rviminfo   :rv[iminfo][!] [file]
-1202943670  1720  :wviminfo   :wv[iminfo][!] [file]
-0686274344  1735  :oldfiles   :ol[dfiles]
-1966529320  1744  :browse     :bro[wse] ol[dfiles][!]
+     3906200319  1277  :suspend    :sus[pend][!]
+     2617693300  1278  :stop       :st[op][!]
+     1657954877  1320  :mkexrc     :mk[exrc] [file]
+     2821925916  1324  :mkexrc     :mk[exrc]! [file]
+     0588175235  1329  :mkvimrc    :mkv[imrc][!] [file]
+     3394263444  1400  :mksession  :mks[ession][!] [file]
+     1388491902  1456  :mkview     :mkvie[w][!] [file]
+     0339722382  1505  :loadview   :lo[adview] [nr]
+     1815717545  1712  :rviminfo   :rv[iminfo][!] [file]
+     1202943670  1720  :wviminfo   :wv[iminfo][!] [file]
+     0686274344  1735  :oldfiles   :ol[dfiles]
+     1966529320  1744  :browse     :bro[wse] ol[dfiles][!]
 
 /usr/local/share/vim/vim91/doc/tips.txt:
-3565884199  128  :>    :> Another question is that after exiting vim, the screen is left as it
-0503304537  129  :>    :> was, i.e. the contents of the file I was viewing (editing) was left on
-2852120790  130  :>    :> the screen. The output from my previous like "ls" were lost,
-3051348592  131  :>    :> ie. no longer in the scrolling buffer. I know that there is a way to
-2299672411  132  :>    :> restore the screen after exiting vim or other vi like editors,
-2112783093  133  :>    :> I just don't know how. Helps are appreciated. Thanks.
-3072038869  135  :I    :I imagine someone else can answer this.  I assume though that vim and vi do
-2301411464  136  :the  :the same thing as each other for a given xterm setup.
+     3565884199  128  :>    :> Another question is that after exiting vim, the screen is left as it
+     0503304537  129  :>    :> was, i.e. the contents of the file I was viewing (editing) was left on
+     2852120790  130  :>    :> the screen. The output from my previous like "ls" were lost,
+     3051348592  131  :>    :> ie. no longer in the scrolling buffer. I know that there is a way to
+     2299672411  132  :>    :> restore the screen after exiting vim or other vi like editors,
+     2112783093  133  :>    :> I just don't know how. Helps are appreciated. Thanks.
+     3072038869  135  :I    :I imagine someone else can answer this.  I assume though that vim and vi do
+     2301411464  136  :the  :the same thing as each other for a given xterm setup.
 
 /usr/local/share/vim/vim91/doc/howto.txt:
 
 /usr/local/share/vim/vim91/doc/visual.txt:
-0511095559  426  :set  :set hls
+     0511095559  426  :set  :set hls
 
 /usr/local/share/vim/vim91/doc/os_mac.txt:
 
@@ -404,65 +404,65 @@
 /usr/local/share/vim/vim91/doc/pi_gzip.txt:
 
 /usr/local/share/vim/vim91/doc/change.txt:
-1069524916  75    :delete        :[range]d[elete] [x]
-2217416763  90    :delete        :[range]d[elete] [x] {count}
-3498309271  131   :join          :[range]j[oin][!] [flags]
-1993071107  139   :join          :[range]j[oin][!] {count} [flags]
-1123580757  258   :change        :{range}c[hange][!]
-0059833420  512   :<             :[range]<
-0459032813  515   :<             :[range]< {count}
-3100891305  519   :left          :[range]le[ft] [indent]
-1241513948  523   :>             :[range]> [flags]
-0928172464  527   :>             :[range]> {count} [flags]
-2768730671  588   :!!            :{range}![!]{filter} [!][arg]
-0177582363  642   :substitute    :[range]s[ubstitute]/{pattern}/{string}/[flags] [count]
-3687551059  660   :substitute    :[range]s[ubstitute] [flags] [count]
-2265307525  661   :&&            :[range]&[&][flags] [count]
-3505263394  673   :~&            :[range]~[&][flags] [count]
-0425179114  693   :snomagic      :[range]sno[magic] ...
-3845594821  696   :smagic        :[range]sm[agic] ...
-0117169738  883   :s/aa/a^Ma/    :s/aa/a^Ma/
-2283665306  884   :s/aa/a\^Ma/   :s/aa/a\^Ma/
-0239125351  885   :s/aa/a\\^Ma/  :s/aa/a\\^Ma/
-4086028483  976   :promptfind    :promptf[ind] [string]
-4173677747  982   :promptrepl    :promptr[epl] [string]
-1900421839  990   :retab         :[range]ret[ab][!] [new_tabstop]
-4052399060  1035  :registers     :reg[isters]
-0010603191  1044  :registers     :reg[isters] {arg}
-2454984990  1051  :display       :di[splay] [arg]
-3225166275  1087  :yank          :[range]y[ank] [x]
-2604203648  1091  :yank          :[range]y[ank] [x] {count}
-1831839081  1128  :put           :[line]pu[t] [x]
-2692551406  1147  :put           :[line]pu[t]! [x]
-3460390207  1404  :copy          :[range]co[py] {address}
-0857242019  1409  :t             :t
-3012942633  1414  :move          :[range]m[ove] {address}
-2707871604  1423  :center        :[range]ce[nter] [width]
-3945753220  1427  :right         :[range]ri[ght] [width]
-3100891305  1432  :left          :[range]le[ft] [indent]
-2639226909  1836  :autocmd       :autocmd command to prepare different settings for different types of file.
-2460656338  1894  :sort          :[range]sor[t][!] [b][f][i][l][n][o][r][u][x] [/{pattern}/]
+     1069524916  75    :delete        :[range]d[elete] [x]
+     2217416763  90    :delete        :[range]d[elete] [x] {count}
+     3498309271  131   :join          :[range]j[oin][!] [flags]
+     1993071107  139   :join          :[range]j[oin][!] {count} [flags]
+     1123580757  258   :change        :{range}c[hange][!]
+     0059833420  512   :<             :[range]<
+     0459032813  515   :<             :[range]< {count}
+     3100891305  519   :left          :[range]le[ft] [indent]
+     1241513948  523   :>             :[range]> [flags]
+     0928172464  527   :>             :[range]> {count} [flags]
+     2768730671  588   :!!            :{range}![!]{filter} [!][arg]
+     0177582363  642   :substitute    :[range]s[ubstitute]/{pattern}/{string}/[flags] [count]
+     3687551059  660   :substitute    :[range]s[ubstitute] [flags] [count]
+     2265307525  661   :&&            :[range]&[&][flags] [count]
+     3505263394  673   :~&            :[range]~[&][flags] [count]
+     0425179114  693   :snomagic      :[range]sno[magic] ...
+     3845594821  696   :smagic        :[range]sm[agic] ...
+     0117169738  883   :s/aa/a^Ma/    :s/aa/a^Ma/
+     2283665306  884   :s/aa/a\^Ma/   :s/aa/a\^Ma/
+     0239125351  885   :s/aa/a\\^Ma/  :s/aa/a\\^Ma/
+     4086028483  976   :promptfind    :promptf[ind] [string]
+     4173677747  982   :promptrepl    :promptr[epl] [string]
+     1900421839  990   :retab         :[range]ret[ab][!] [new_tabstop]
+     4052399060  1035  :registers     :reg[isters]
+     0010603191  1044  :registers     :reg[isters] {arg}
+     2454984990  1051  :display       :di[splay] [arg]
+     3225166275  1087  :yank          :[range]y[ank] [x]
+     2604203648  1091  :yank          :[range]y[ank] [x] {count}
+     1831839081  1128  :put           :[line]pu[t] [x]
+     2692551406  1147  :put           :[line]pu[t]! [x]
+     3460390207  1404  :copy          :[range]co[py] {address}
+     0857242019  1409  :t             :t
+     3012942633  1414  :move          :[range]m[ove] {address}
+     2707871604  1423  :center        :[range]ce[nter] [width]
+     3945753220  1427  :right         :[range]ri[ght] [width]
+     3100891305  1432  :left          :[range]le[ft] [indent]
+     2639226909  1836  :autocmd       :autocmd command to prepare different settings for different types of file.
+     2460656338  1894  :sort          :[range]sor[t][!] [b][f][i][l][n][o][r][u][x] [/{pattern}/]
 
 /usr/local/share/vim/vim91/doc/arabic.txt:
 
 /usr/local/share/vim/vim91/doc/print.txt:
-2036526557  32  :hardcopy  :[range]ha[rdcopy][!] [arguments]
-2305601566  51  :hardcopy  :[range]ha[rdcopy][!] >{filename}
+     2036526557  32  :hardcopy  :[range]ha[rdcopy][!] [arguments]
+     2305601566  51  :hardcopy  :[range]ha[rdcopy][!] >{filename}
 
 /usr/local/share/vim/vim91/doc/os_haiku.txt:
 
 /usr/local/share/vim/vim91/doc/os_unix.txt:
 
 /usr/local/share/vim/vim91/doc/userfunc.txt:
-2105142526  48   :function     :fu[nction]
-3637372984  50   :function     :fu[nction] {name}
-0800212106  62   :function     :fu[nction] /{pattern}
-2041554108  77   :function     :fu[nction][!] {name}([arguments]) [range] [abort] [dict] [closure]
-0652864269  162  :endfunction  :endf[unction] [argument]
-2983123773  181  :delfunction  :delf[unction][!] {name}
-1883144826  192  :return       :retu[rn] [expr]
-2774610658  331  :call         :[range]cal[l] {name}([arguments])
-4095465667  397  :defer        :defer {func}({args})
+     2105142526  48   :function     :fu[nction]
+     3637372984  50   :function     :fu[nction] {name}
+     0800212106  62   :function     :fu[nction] /{pattern}
+  Y  2041554108  77   :function     :fu[nction][!] {name}([arguments]) [range] [abort] [dict] [closure]
+     0652864269  162  :endfunction  :endf[unction] [argument]
+     2983123773  181  :delfunction  :delf[unction][!] {name}
+  Y  1883144826  192  :return       :retu[rn] [expr]
+     2774610658  331  :call         :[range]cal[l] {name}([arguments])
+     4095465667  397  :defer        :defer {func}({args})
 
 /usr/local/share/vim/vim91/doc/popup.txt:
 
@@ -471,245 +471,245 @@
 /usr/local/share/vim/vim91/doc/debugger.txt:
 
 /usr/local/share/vim/vim91/doc/sign.txt:
-2917354907  118  :sign  :sign define {name} {argument}...
-1112488132  171  :sign  :sign undefine {name}
-1114843718  183  :sign  :sign list
-3995001856  185  :sign  :sign list {name}
-2102203263  193  :sign  :sign place {id} line={lnum} name={name} file={fname}
-2841976934  227  :sign  :sign place {id} line={lnum} name={name} [buffer={nr}]
-0960477064  236  :sign  :sign place {id} name={name} file={fname}
-2331522429  250  :sign  :sign place {id} name={name} [buffer={nr}]
-1206383492  263  :sign  :sign unplace {id} file={fname}
-1256448656  267  :sign  :sign unplace {id} group={group} file={fname}
-0380569652  270  :sign  :sign unplace {id} group=* file={fname}
-0065785650  273  :sign  :sign unplace * file={fname}
-1692168520  276  :sign  :sign unplace * group={group} file={fname}
-3007588032  279  :sign  :sign unplace * group=* file={fname}
-0115829430  282  :sign  :sign unplace {id} buffer={nr}
-1872511036  285  :sign  :sign unplace {id} group={group} buffer={nr}
-2417811591  289  :sign  :sign unplace {id} group=* buffer={nr}
-0251047898  293  :sign  :sign unplace * buffer={nr}
-3825342785  296  :sign  :sign unplace * group={group} buffer={nr}
-1904705440  299  :sign  :sign unplace * group=* buffer={nr}
-3787959475  302  :sign  :sign unplace {id}
-3449572928  306  :sign  :sign unplace {id} group={group}
-4154823337  310  :sign  :sign unplace {id} group=*
-0332360663  314  :sign  :sign unplace *
-4024063173  317  :sign  :sign unplace * group={group}
-1947802813  320  :sign  :sign unplace * group=*
-0711074861  323  :sign  :sign unplace
-2071090696  327  :sign  :sign unplace group={group}
-2705508712  331  :sign  :sign unplace group=*
-0863703006  339  :sign  :sign place file={fname}
-0416677138  343  :sign  :sign place group={group} file={fname}
-0392243104  346  :sign  :sign place group=* file={fname}
-0734636597  349  :sign  :sign place buffer={nr}
-0828503183  352  :sign  :sign place group={group} buffer={nr}
-2235724486  355  :sign  :sign place group=* buffer={nr}
-4173894892  358  :sign  :sign place
-1180068438  360  :sign  :sign place group={group}
-2089410512  363  :sign  :sign place group=*
-3345956422  371  :sign  :sign jump {id} file={fname}
-0581355117  378  :sign  :sign jump {id} group={group} file={fname}
-4141517379  381  :sign  :sign jump {id} [buffer={nr}]
-1518582523  386  :sign  :sign jump {id} group={group} [buffer={nr}]
+     2917354907  118  :sign  :sign define {name} {argument}...
+     1112488132  171  :sign  :sign undefine {name}
+     1114843718  183  :sign  :sign list
+     3995001856  185  :sign  :sign list {name}
+     2102203263  193  :sign  :sign place {id} line={lnum} name={name} file={fname}
+     2841976934  227  :sign  :sign place {id} line={lnum} name={name} [buffer={nr}]
+     0960477064  236  :sign  :sign place {id} name={name} file={fname}
+     2331522429  250  :sign  :sign place {id} name={name} [buffer={nr}]
+     1206383492  263  :sign  :sign unplace {id} file={fname}
+     1256448656  267  :sign  :sign unplace {id} group={group} file={fname}
+     0380569652  270  :sign  :sign unplace {id} group=* file={fname}
+     0065785650  273  :sign  :sign unplace * file={fname}
+     1692168520  276  :sign  :sign unplace * group={group} file={fname}
+     3007588032  279  :sign  :sign unplace * group=* file={fname}
+     0115829430  282  :sign  :sign unplace {id} buffer={nr}
+     1872511036  285  :sign  :sign unplace {id} group={group} buffer={nr}
+     2417811591  289  :sign  :sign unplace {id} group=* buffer={nr}
+     0251047898  293  :sign  :sign unplace * buffer={nr}
+     3825342785  296  :sign  :sign unplace * group={group} buffer={nr}
+     1904705440  299  :sign  :sign unplace * group=* buffer={nr}
+     3787959475  302  :sign  :sign unplace {id}
+     3449572928  306  :sign  :sign unplace {id} group={group}
+     4154823337  310  :sign  :sign unplace {id} group=*
+     0332360663  314  :sign  :sign unplace *
+     4024063173  317  :sign  :sign unplace * group={group}
+     1947802813  320  :sign  :sign unplace * group=*
+     0711074861  323  :sign  :sign unplace
+     2071090696  327  :sign  :sign unplace group={group}
+     2705508712  331  :sign  :sign unplace group=*
+     0863703006  339  :sign  :sign place file={fname}
+     0416677138  343  :sign  :sign place group={group} file={fname}
+     0392243104  346  :sign  :sign place group=* file={fname}
+     0734636597  349  :sign  :sign place buffer={nr}
+     0828503183  352  :sign  :sign place group={group} buffer={nr}
+     2235724486  355  :sign  :sign place group=* buffer={nr}
+     4173894892  358  :sign  :sign place
+     1180068438  360  :sign  :sign place group={group}
+     2089410512  363  :sign  :sign place group=*
+     3345956422  371  :sign  :sign jump {id} file={fname}
+     0581355117  378  :sign  :sign jump {id} group={group} file={fname}
+     4141517379  381  :sign  :sign jump {id} [buffer={nr}]
+     1518582523  386  :sign  :sign jump {id} group={group} [buffer={nr}]
 
 /usr/local/share/vim/vim91/doc/russian.txt:
 
 /usr/local/share/vim/vim91/doc/ft_context.txt:
 
 /usr/local/share/vim/vim91/doc/if_perl.txt:
-2724964926  53  :perl    :pe[rl] {cmd}
-1900483656  58  :perl    :pe[rl] << [trim] [{endmarker}]
-0488547712  93  :perldo  :[range]perld[o] {cmd}
+     2724964926  53  :perl    :pe[rl] {cmd}
+     1900483656  58  :perl    :pe[rl] << [trim] [{endmarker}]
+     0488547712  93  :perldo  :[range]perld[o] {cmd}
 
 /usr/local/share/vim/vim91/doc/wayland.txt:
-0935828535  29  :wlrestore  :wl[restore] [display]
+     0935828535  29  :wlrestore  :wl[restore] [display]
 
 /usr/local/share/vim/vim91/doc/cmdline.txt:
-3704103611  345   :history       :his[tory]
-3500821729  349   :history       :his[tory] [{name}] [{first}][, [{last}]]
-0910587926  380   :keeppatterns  :keepp[atterns] {command}
-3217753424  892   :*             :*
-1331519411  1251  :quit          :quit
-0979974156  1254  :qall          :qall
-2548554432  1255  :qall!         :qall!
+     3704103611  345   :history       :his[tory]
+     3500821729  349   :history       :his[tory] [{name}] [{first}][, [{last}]]
+     0910587926  380   :keeppatterns  :keepp[atterns] {command}
+     3217753424  892   :*             :*
+     1331519411  1251  :quit          :quit
+     0979974156  1254  :qall          :qall
+     2548554432  1255  :qall!         :qall!
 
 /usr/local/share/vim/vim91/doc/editing.txt:
-1027048848  44    :keepalt    :keepalt {cmd}
-0178392985  58    :file       :f[ile]
-0397571644  64    :file       :f[ile]!
-0708436407  95    :file       :f[ile][!] {name}
-0512042844  101   :0file      :0f[ile][!]
-2765048169  104   :buffers    :buffers
-3560190508  105   :files      :files
-3606691193  106   :ls         :ls
-3041810280  198   :edit       :e[dit] [++opt] [+cmd]
-1785253024  206   :edit       :e[dit]! [++opt] [+cmd]
-1881596910  213   :edit       :e[dit] [++opt] [+cmd] {file}
-3368265705  221   :edit       :e[dit]! [++opt] [+cmd] {file}
-0026976547  226   :edit       :e[dit] [++opt] [+cmd] #[count]
-4143019711  234   :enew       :ene[w]
-3309543608  243   :enew       :ene[w]!
-1675601349  248   :find       :fin[d][!] [++opt] [+cmd] {file}
-1498412365  251   :find       :{count}fin[d][!] [++opt] [+cmd] {file}
-2536500176  259   :ex         :ex [++opt] [+cmd] [file]
-1600253021  263   :visual     :vi[sual][!] [++opt] [+cmd] [file]
-1292221708  268   :view       :vie[w][!] [++opt] [+cmd] file
-2442729544  644   :args       :ar[gs]
-0394669583  647   :args       :ar[gs] [++opt] [+cmd] {arglist}
-1991492281  653   :args       :ar[gs]! [++opt] [+cmd] {arglist}
-3304866488  659   :argedit    :[count]arge[dit][!] [++opt] [+cmd] {name} ..
-3338235671  674   :argadd     :[count]arga[dd] {name} ..
-0859501403  675   :argadd     :[count]arga[dd]
-2330336506  700   :argdedupe  :argded[upe]
-0298860582  705   :argdelete  :argd[elete] {pattern} ..
-1407867630  715   :argdelete  :[range]argd[elete]
-2239432351  730   :argument   :[count]argu[ment] [count] [++opt] [+cmd]
-0311690629  737   :argument   :[count]argu[ment]! [count] [++opt] [+cmd]
-3796693945  743   :next       :[count]n[ext] [++opt] [+cmd]
-2615880774  748   :next       :[count]n[ext]! [++opt] [+cmd]
-0041516837  752   :next       :n[ext] [++opt] [+cmd] {arglist}
-2904421438  755   :next       :n[ext]! [++opt] [+cmd] {arglist}
-0884590110  758   :Next       :[count]N[ext] [count] [++opt] [+cmd]
-2291823859  764   :Next       :[count]N[ext]! [count] [++opt] [+cmd]
-3910996620  769   :previous   :[count]prev[ious] [count] [++opt] [+cmd]
-0246512674  773   :rewind     :rew[ind] [++opt] [+cmd]
-4242184965  779   :rewind     :rew[ind]! [++opt] [+cmd]
-2047925457  785   :first      :fir[st][!] [++opt] [+cmd]
-3895903447  789   :last       :la[st] [++opt] [+cmd]
-0837491246  795   :last       :la[st]! [++opt] [+cmd]
-2351932766  801   :wnext      :[count]wn[ext] [++opt]
-3401458242  805   :wnext      :[count]wn[ext] [++opt] {file}
-1079567976  811   :wnext      :[count]wn[ext]! [++opt] {file}
-0162947983  815   :wNext      :[count]wN[ext][!] [++opt] [file]
-2040293441  816   :wprevious  :[count]wp[revious][!] [++opt] [file]
-0372589034  860   :arglocal   :argl[ocal]
-3781960576  863   :arglocal   :argl[ocal][!] [++opt] [+cmd] {arglist}
-1160725525  868   :argglobal  :argg[lobal]
-1098958048  871   :argglobal  :argg[lobal][!] [++opt] [+cmd] {arglist}
-3310913689  889   :argdo!     :[range]argdo[!] {cmd}
-3823529003  933   :write      :w[rite] [++opt]
-2280135217  940   :write      :w[rite]! [++opt]
-3623134306  947   :write      :[range]w[rite][!] [++opt]
-1279970282  953   :write      :[range]w[rite] [++opt]
-2017558463  958   :write      :[range]w[rite]! [++opt] {file}
-2084620629  963   :write      :[range]w[rite][!] [++opt] >>
-0713772962  966   :write      :[range]w[rite][!] [++opt] >> {file}
-1239741008  971   :write      :[range]w[rite] [++opt] !{cmd}
-3222667149  992   :saveas     :sav[eas][!] [++opt] {file}
-3472693428  1002  :update     :[range]up[date][!] [++opt] [>>] [file]
-2723804643  1010  :wall       :wa[ll]
-2815038948  1014  :wall       :wa[ll]!
-1538012262  1141  :quit       :q[uit]
-3757264420  1152  :confirm    :conf[irm] q[uit]
-0987862922  1156  :quit       :q[uit]!
-0027449248  1165  :cquit      :cq[uit]
-0955040070  1170  :wq         :wq [++opt]
-3023048057  1176  :wq!        :wq! [++opt]
-0827324001  1180  :wq         :wq [++opt] {file}
-3804522190  1184  :wq!        :wq! [++opt] {file}
-0531710931  1187  :wq!        :[range]wq[!] [++opt] [file]
-1794862755  1191  :xit        :[range]x[it][!] [++opt] [file]
-0906973050  1201  :exit       :[range]exi[t][!] [++opt] [file]
-1946162942  1217  :qall       :qa[ll]
-4032785596  1222  :confirm    :conf[irm] qa[ll]
-3290046686  1226  :qall       :qa[ll]!
-1557734723  1231  :quitall    :quita[ll][!]
-3846873763  1233  :wqall      :wqa[ll] [++opt]
-1393510198  1234  :xall       :xa[ll]
-2013449194  1238  :confirm    :conf[irm] wqa[ll] [++opt]
-3612360052  1239  :confirm    :conf[irm] xa[ll]
-1687010797  1244  :wqall      :wqa[ll]! [++opt]
-1367500045  1245  :xall       :xa[ll]!
-2870166270  1254  :confirm    :conf[irm] {command}
-2311255933  1274  :browse     :bro[wse] {command}
-2270761306  1358  :cd!        :cd[!]
-2478179092  1365  :cd!        :cd[!] {path}
-3144054877  1377  :cd!        :cd[!] -
-0486395781  1381  :chdir      :chd[ir][!] [path]
-4254366716  1384  :tcd        :tc[d][!] {path}
-0534336781  1391  :tcd        :tc[d][!] -
-0231530859  1395  :tchdir     :tch[dir][!]
-1988044852  1398  :lcd        :lc[d][!] {path}
-0270205847  1404  :lcd!       :lcd[!] -
-0435799269  1408  :lchdir     :lch[dir][!]
-1874575161  1411  :pwd        :pw[d]
-0029365568  1530  :X          :X
-2616013895  1684  :checktime  :checkt[ime]
-2485084095  1707  :checktime  :[N]checkt[ime] {filename}
-4233131970  1708  :checktime  :[N]checkt[ime] [N]
+     1027048848  44    :keepalt    :keepalt {cmd}
+     0178392985  58    :file       :f[ile]
+     0397571644  64    :file       :f[ile]!
+     0708436407  95    :file       :f[ile][!] {name}
+     0512042844  101   :0file      :0f[ile][!]
+     2765048169  104   :buffers    :buffers
+     3560190508  105   :files      :files
+     3606691193  106   :ls         :ls
+     3041810280  198   :edit       :e[dit] [++opt] [+cmd]
+     1785253024  206   :edit       :e[dit]! [++opt] [+cmd]
+     1881596910  213   :edit       :e[dit] [++opt] [+cmd] {file}
+     3368265705  221   :edit       :e[dit]! [++opt] [+cmd] {file}
+     0026976547  226   :edit       :e[dit] [++opt] [+cmd] #[count]
+     4143019711  234   :enew       :ene[w]
+     3309543608  243   :enew       :ene[w]!
+     1675601349  248   :find       :fin[d][!] [++opt] [+cmd] {file}
+     1498412365  251   :find       :{count}fin[d][!] [++opt] [+cmd] {file}
+     2536500176  259   :ex         :ex [++opt] [+cmd] [file]
+     1600253021  263   :visual     :vi[sual][!] [++opt] [+cmd] [file]
+     1292221708  268   :view       :vie[w][!] [++opt] [+cmd] file
+     2442729544  644   :args       :ar[gs]
+     0394669583  647   :args       :ar[gs] [++opt] [+cmd] {arglist}
+     1991492281  653   :args       :ar[gs]! [++opt] [+cmd] {arglist}
+     3304866488  659   :argedit    :[count]arge[dit][!] [++opt] [+cmd] {name} ..
+     3338235671  674   :argadd     :[count]arga[dd] {name} ..
+     0859501403  675   :argadd     :[count]arga[dd]
+     2330336506  700   :argdedupe  :argded[upe]
+     0298860582  705   :argdelete  :argd[elete] {pattern} ..
+     1407867630  715   :argdelete  :[range]argd[elete]
+     2239432351  730   :argument   :[count]argu[ment] [count] [++opt] [+cmd]
+     0311690629  737   :argument   :[count]argu[ment]! [count] [++opt] [+cmd]
+     3796693945  743   :next       :[count]n[ext] [++opt] [+cmd]
+     2615880774  748   :next       :[count]n[ext]! [++opt] [+cmd]
+     0041516837  752   :next       :n[ext] [++opt] [+cmd] {arglist}
+     2904421438  755   :next       :n[ext]! [++opt] [+cmd] {arglist}
+     0884590110  758   :Next       :[count]N[ext] [count] [++opt] [+cmd]
+     2291823859  764   :Next       :[count]N[ext]! [count] [++opt] [+cmd]
+     3910996620  769   :previous   :[count]prev[ious] [count] [++opt] [+cmd]
+     0246512674  773   :rewind     :rew[ind] [++opt] [+cmd]
+     4242184965  779   :rewind     :rew[ind]! [++opt] [+cmd]
+     2047925457  785   :first      :fir[st][!] [++opt] [+cmd]
+     3895903447  789   :last       :la[st] [++opt] [+cmd]
+     0837491246  795   :last       :la[st]! [++opt] [+cmd]
+     2351932766  801   :wnext      :[count]wn[ext] [++opt]
+     3401458242  805   :wnext      :[count]wn[ext] [++opt] {file}
+     1079567976  811   :wnext      :[count]wn[ext]! [++opt] {file}
+     0162947983  815   :wNext      :[count]wN[ext][!] [++opt] [file]
+     2040293441  816   :wprevious  :[count]wp[revious][!] [++opt] [file]
+     0372589034  860   :arglocal   :argl[ocal]
+     3781960576  863   :arglocal   :argl[ocal][!] [++opt] [+cmd] {arglist}
+     1160725525  868   :argglobal  :argg[lobal]
+     1098958048  871   :argglobal  :argg[lobal][!] [++opt] [+cmd] {arglist}
+     3310913689  889   :argdo!     :[range]argdo[!] {cmd}
+     3823529003  933   :write      :w[rite] [++opt]
+     2280135217  940   :write      :w[rite]! [++opt]
+     3623134306  947   :write      :[range]w[rite][!] [++opt]
+     1279970282  953   :write      :[range]w[rite] [++opt]
+     2017558463  958   :write      :[range]w[rite]! [++opt] {file}
+     2084620629  963   :write      :[range]w[rite][!] [++opt] >>
+     0713772962  966   :write      :[range]w[rite][!] [++opt] >> {file}
+     1239741008  971   :write      :[range]w[rite] [++opt] !{cmd}
+     3222667149  992   :saveas     :sav[eas][!] [++opt] {file}
+     3472693428  1002  :update     :[range]up[date][!] [++opt] [>>] [file]
+     2723804643  1010  :wall       :wa[ll]
+     2815038948  1014  :wall       :wa[ll]!
+     1538012262  1141  :quit       :q[uit]
+     3757264420  1152  :confirm    :conf[irm] q[uit]
+     0987862922  1156  :quit       :q[uit]!
+     0027449248  1165  :cquit      :cq[uit]
+     0955040070  1170  :wq         :wq [++opt]
+     3023048057  1176  :wq!        :wq! [++opt]
+     0827324001  1180  :wq         :wq [++opt] {file}
+     3804522190  1184  :wq!        :wq! [++opt] {file}
+     0531710931  1187  :wq!        :[range]wq[!] [++opt] [file]
+     1794862755  1191  :xit        :[range]x[it][!] [++opt] [file]
+     0906973050  1201  :exit       :[range]exi[t][!] [++opt] [file]
+     1946162942  1217  :qall       :qa[ll]
+     4032785596  1222  :confirm    :conf[irm] qa[ll]
+     3290046686  1226  :qall       :qa[ll]!
+     1557734723  1231  :quitall    :quita[ll][!]
+     3846873763  1233  :wqall      :wqa[ll] [++opt]
+     1393510198  1234  :xall       :xa[ll]
+     2013449194  1238  :confirm    :conf[irm] wqa[ll] [++opt]
+     3612360052  1239  :confirm    :conf[irm] xa[ll]
+     1687010797  1244  :wqall      :wqa[ll]! [++opt]
+     1367500045  1245  :xall       :xa[ll]!
+     2870166270  1254  :confirm    :conf[irm] {command}
+     2311255933  1274  :browse     :bro[wse] {command}
+     2270761306  1358  :cd!        :cd[!]
+     2478179092  1365  :cd!        :cd[!] {path}
+     3144054877  1377  :cd!        :cd[!] -
+     0486395781  1381  :chdir      :chd[ir][!] [path]
+     4254366716  1384  :tcd        :tc[d][!] {path}
+     0534336781  1391  :tcd        :tc[d][!] -
+     0231530859  1395  :tchdir     :tch[dir][!]
+     1988044852  1398  :lcd        :lc[d][!] {path}
+     0270205847  1404  :lcd!       :lcd[!] -
+     0435799269  1408  :lchdir     :lch[dir][!]
+     1874575161  1411  :pwd        :pw[d]
+     0029365568  1530  :X          :X
+     2616013895  1684  :checktime  :checkt[ime]
+     2485084095  1707  :checktime  :[N]checkt[ime] {filename}
+     4233131970  1708  :checktime  :[N]checkt[ime] [N]
 
 /usr/local/share/vim/vim91/doc/pi_netrw.txt:
-2235787410  745   :Nwrite         :[range]Nw[rite]
-2320857010  749   :Nwrite         :[range]Nw[rite] {netfile} [{netfile}]...
-1033169188  753   :Nread          :Nr[ead]
-3582596700  756   :Nread          :Nr[ead] {netfile} {netfile}...
-0137823684  760   :Nsource        :Ns[ource] {netfile}
-1805197294  769   :call           :call NetUserPass()
-0987489834  774   :call           :call NetUserPass("userid")
-0469840964  779   :call           :call NetUserPass("userid","passwd")
-0254591042  786   :NetrwSettings  :NetrwSettings  This command is described in |netrw-settings| -- used to
-1060801206  1649  :Explore        :Explore  will open the local-directory browser on the current file's
-3746713205  1655  :Explore!       :Explore! is like :Explore, but will use vertical splitting.
-3191858373  1658  :Hexplore       :Hexplore  [dir] does an :Explore with |:belowright| horizontal splitting.
-4095820269  1659  :Hexplore!      :Hexplore! [dir] does an :Explore with |:aboveleft|  horizontal splitting.
-3874823646  1662  :Lexplore       :[N]Lexplore [dir] toggles a full height Explorer window on the left hand side
-3931658262  1681  :Lexplore!      :[N]Lexplore! [dir] is similar to :Lexplore, except that the full-height
-1867657357  1691  :Sexplore       :[N]Sexplore will always split the window before invoking the local-directory
-0325848068  1694  :Sexplore!      :[N]Sexplore! [dir] is like :Sexplore, but the splitting will be done vertically.
-0872063523  1697  :Texplore       :Texplore  [dir] does a |:tabnew| before generating the browser window
-0644367191  1700  :Vexplore       :[N]Vexplore  [dir] does an :Explore with |:leftabove|  vertical splitting.
-0260882132  1701  :Vexplore!      :[N]Vexplore! [dir] does an :Explore with |:rightbelow| vertical splitting.
-2983292624  1718  :Rexplore       :Rexplore  This command is a little different from the other Explore commands
-2232899505  3283  :NetrwC         :NetrwC [win#] command, or by setting |g:netrw_chgwin| to the selected window
+     2235787410  745   :Nwrite         :[range]Nw[rite]
+     2320857010  749   :Nwrite         :[range]Nw[rite] {netfile} [{netfile}]...
+     1033169188  753   :Nread          :Nr[ead]
+     3582596700  756   :Nread          :Nr[ead] {netfile} {netfile}...
+     0137823684  760   :Nsource        :Ns[ource] {netfile}
+     1805197294  769   :call           :call NetUserPass()
+     0987489834  774   :call           :call NetUserPass("userid")
+     0469840964  779   :call           :call NetUserPass("userid","passwd")
+     0254591042  786   :NetrwSettings  :NetrwSettings  This command is described in |netrw-settings| -- used to
+     1060801206  1649  :Explore        :Explore  will open the local-directory browser on the current file's
+     3746713205  1655  :Explore!       :Explore! is like :Explore, but will use vertical splitting.
+     3191858373  1658  :Hexplore       :Hexplore  [dir] does an :Explore with |:belowright| horizontal splitting.
+     4095820269  1659  :Hexplore!      :Hexplore! [dir] does an :Explore with |:aboveleft|  horizontal splitting.
+     3874823646  1662  :Lexplore       :[N]Lexplore [dir] toggles a full height Explorer window on the left hand side
+     3931658262  1681  :Lexplore!      :[N]Lexplore! [dir] is similar to :Lexplore, except that the full-height
+     1867657357  1691  :Sexplore       :[N]Sexplore will always split the window before invoking the local-directory
+     0325848068  1694  :Sexplore!      :[N]Sexplore! [dir] is like :Sexplore, but the splitting will be done vertically.
+     0872063523  1697  :Texplore       :Texplore  [dir] does a |:tabnew| before generating the browser window
+     0644367191  1700  :Vexplore       :[N]Vexplore  [dir] does an :Explore with |:leftabove|  vertical splitting.
+     0260882132  1701  :Vexplore!      :[N]Vexplore! [dir] does an :Explore with |:rightbelow| vertical splitting.
+     2983292624  1718  :Rexplore       :Rexplore  This command is a little different from the other Explore commands
+     2232899505  3283  :NetrwC         :NetrwC [win#] command, or by setting |g:netrw_chgwin| to the selected window
 
 /usr/local/share/vim/vim91/doc/pi_getscript.txt:
-3043077903  252  :AutoInstall:  :AutoInstall: option.
+     3043077903  252  :AutoInstall:  :AutoInstall: option.
 
 /usr/local/share/vim/vim91/doc/rileft.txt:
 
 /usr/local/share/vim/vim91/doc/os_390.txt:
 
 /usr/local/share/vim/vim91/doc/pi_tutor.txt:
-3323616472  21  :Tutor  :Tutor [tutorial]
+     3323616472  21  :Tutor  :Tutor [tutorial]
 
 /usr/local/share/vim/vim91/doc/debug.txt:
 
 /usr/local/share/vim/vim91/doc/ft_rust.txt:
-1577947156  290  :Cargo                :Cargo <args>                                                       *:Cargo*
-2992631688  293  :Cbuild               :Cbuild <args>                                                     *:Cbuild*
-3247541825  296  :Cclean               :Cclean <args>                                                     *:Cclean*
-2136860852  299  :Cdoc                 :Cdoc <args>                                                         *:Cdoc*
-2022408242  302  :Cinit                :Cinit <args>                                                       *:Cinit*
-2948528477  305  :Crun                 :Crun <args>                                                         *:Crun*
-0367396240  308  :Ctest                :Ctest <args>                                                       *:Ctest*
-3252592283  311  :Cupdate              :Cupdate <args>                                                   *:Cupdate*
-2086788717  314  :Cbench               :Cbench <args>                                                     *:Cbench*
-3790403788  317  :Csearch              :Csearch <args>                                                   *:Csearch*
-1395322109  320  :Cpublish             :Cpublish <args>                                                 *:Cpublish*
-1662095612  323  :Cinstall             :Cinstall <args>                                                 *:Cinstall*
-2415841010  326  :Cruntarget           :Cruntarget <args>                                                 *:Cruntarget*
-0914918508  333  :RustFmt              :RustFmt                                                       *:RustFmt*
-1448253541  343  :RustFmtRange         :RustFmtRange                                                  *:RustFmtRange*
-3837358201  351  :RustPlay             :RustPlay                                                          *:RustPlay*
-1664674966  377  :RustRun              :RustRun  [args]                                                    *:RustRun*
-1072937079  378  :RustRun!             :RustRun! [rustc-args] [--] [args]
-3828991203  395  :RustExpand           :RustExpand  [args]                                              *:RustExpand*
-3899752855  396  :RustExpand!          :RustExpand! [TYPE] [args]
-3651011614  414  :RustEmitIr           :RustEmitIr [args]                                               *:RustEmitIr*
-3560781029  425  :RustEmitAsm          :RustEmitAsm [args]                                             *:RustEmitAsm*
-1707154071  440  :RustTest!            :[N]RustTest[!] [options]                                       *:RustTest*
-0344526590  469  :RustInfo             :RustInfo                                                          *:RustInfo*
-2379701377  472  :RustInfoToClipboard  :RustInfoToClipboard                                      *:RustInfoClipboard*
-2592897482  476  :RustInfoToFile       :RustInfoToFile [filename]                                   *:RustInfoToFile*
+     1577947156  290  :Cargo                :Cargo <args>                                                       *:Cargo*
+     2992631688  293  :Cbuild               :Cbuild <args>                                                     *:Cbuild*
+     3247541825  296  :Cclean               :Cclean <args>                                                     *:Cclean*
+     2136860852  299  :Cdoc                 :Cdoc <args>                                                         *:Cdoc*
+     2022408242  302  :Cinit                :Cinit <args>                                                       *:Cinit*
+     2948528477  305  :Crun                 :Crun <args>                                                         *:Crun*
+     0367396240  308  :Ctest                :Ctest <args>                                                       *:Ctest*
+     3252592283  311  :Cupdate              :Cupdate <args>                                                   *:Cupdate*
+     2086788717  314  :Cbench               :Cbench <args>                                                     *:Cbench*
+     3790403788  317  :Csearch              :Csearch <args>                                                   *:Csearch*
+     1395322109  320  :Cpublish             :Cpublish <args>                                                 *:Cpublish*
+     1662095612  323  :Cinstall             :Cinstall <args>                                                 *:Cinstall*
+     2415841010  326  :Cruntarget           :Cruntarget <args>                                                 *:Cruntarget*
+     0914918508  333  :RustFmt              :RustFmt                                                       *:RustFmt*
+     1448253541  343  :RustFmtRange         :RustFmtRange                                                  *:RustFmtRange*
+     3837358201  351  :RustPlay             :RustPlay                                                          *:RustPlay*
+     1664674966  377  :RustRun              :RustRun  [args]                                                    *:RustRun*
+     1072937079  378  :RustRun!             :RustRun! [rustc-args] [--] [args]
+     3828991203  395  :RustExpand           :RustExpand  [args]                                              *:RustExpand*
+     3899752855  396  :RustExpand!          :RustExpand! [TYPE] [args]
+     3651011614  414  :RustEmitIr           :RustEmitIr [args]                                               *:RustEmitIr*
+     3560781029  425  :RustEmitAsm          :RustEmitAsm [args]                                             *:RustEmitAsm*
+     1707154071  440  :RustTest!            :[N]RustTest[!] [options]                                       *:RustTest*
+     0344526590  469  :RustInfo             :RustInfo                                                          *:RustInfo*
+     2379701377  472  :RustInfoToClipboard  :RustInfoToClipboard                                      *:RustInfoClipboard*
+     2592897482  476  :RustInfoToFile       :RustInfoToFile [filename]                                   *:RustInfoToFile*
 
 /usr/local/share/vim/vim91/doc/quickref.txt:
 
 /usr/local/share/vim/vim91/doc/index.txt:
 
 /usr/local/share/vim/vim91/doc/scroll.txt:
-2380075665  222  :syncbind  :syncbind
+     2380075665  222  :syncbind  :syncbind
 
 /usr/local/share/vim/vim91/doc/os_qnx.txt:
 
@@ -718,311 +718,311 @@
 /usr/local/share/vim/vim91/doc/ft_ps1.txt:
 
 /usr/local/share/vim/vim91/doc/if_tcl.txt:
-3966836419  29  :tcl      :tcl {cmd}
-3149632934  33  :tcl      :[range]tcl << [trim] [{endmarker}]
-2065347533  62  :tcldo    :[range]tcld[o] {cmd}
-1854963840  72  :tclfile  :tclf[ile] {file}
+     3966836419  29  :tcl      :tcl {cmd}
+     3149632934  33  :tcl      :[range]tcl << [trim] [{endmarker}]
+     2065347533  62  :tcldo    :[range]tcld[o] {cmd}
+     1854963840  72  :tclfile  :tclf[ile] {file}
 
 /usr/local/share/vim/vim91/doc/os_mint.txt:
 
 /usr/local/share/vim/vim91/doc/if_mzsch.txt:
-2171601683  39  :mzscheme  :[range]mz[scheme] {stmt}
-0788690976  42  :mzscheme  :[range]mz[scheme] << [trim] [{endmarker}]
-2454292105  57  :mzfile    :[range]mzf[ile] {file}
+     2171601683  39  :mzscheme  :[range]mz[scheme] {stmt}
+     0788690976  42  :mzscheme  :[range]mz[scheme] << [trim] [{endmarker}]
+     2454292105  57  :mzfile    :[range]mzf[ile] {file}
 
 /usr/local/share/vim/vim91/doc/mbyte.txt:
 
 /usr/local/share/vim/vim91/doc/ft_ada.txt:
-2459599795  373  :AdaRainbow  :AdaRainbow
-1284668439  377  :AdaLines    :AdaLines
-1201095742  380  :AdaSpaces   :AdaSpaces
-3301554839  383  :AdaTagDir   :AdaTagDir
-4282204755  386  :AdaTagFile  :AdaTagFile
-1520662961  389  :AdaTypes    :AdaTypes
-0585444472  392  :GnatFind    :GnatFind
-4294293769  395  :GnatPretty  :GnatPretty
-2230836314  398  :GnatTags    :GnatTags
+     2459599795  373  :AdaRainbow  :AdaRainbow
+     1284668439  377  :AdaLines    :AdaLines
+     1201095742  380  :AdaSpaces   :AdaSpaces
+     3301554839  383  :AdaTagDir   :AdaTagDir
+     4282204755  386  :AdaTagFile  :AdaTagFile
+     1520662961  389  :AdaTypes    :AdaTypes
+     0585444472  392  :GnatFind    :GnatFind
+     4294293769  395  :GnatPretty  :GnatPretty
+     2230836314  398  :GnatTags    :GnatTags
 
 /usr/local/share/vim/vim91/doc/vim9.txt:
-0984985242  59    :vim9cmd      :vim9[cmd] {cmd}
-2870726713  64    :legacy       :leg[acy] {cmd}
-2837095023  1220  :def!         :def[!] {name}([arguments])[: {return-type}]
-2827299456  1256  :enddef       :enddef
-3005972065  1272  :defcompile   :defc[ompile]
-3843537003  1277  :defcompile   :defc[ompile] MyClass
-4273327853  1279  :defcompile   :defc[ompile] {func}
-0458307461  1280  :defcompile   :defc[ompile] debug {func}
-3385383354  1281  :defcompile   :defc[ompile] profile {func}
-0877387430  1291  :disassemble  :disa[ssemble] {func}
-1457263580  1296  :disassemble  :disa[ssemble] profile {func}
-3836684458  1300  :disassemble  :disa[ssemble] debug {func}
+     0984985242  59    :vim9cmd      :vim9[cmd] {cmd}
+     2870726713  64    :legacy       :leg[acy] {cmd}
+     2837095023  1220  :def!         :def[!] {name}([arguments])[: {return-type}]
+     2827299456  1256  :enddef       :enddef
+     3005972065  1272  :defcompile   :defc[ompile]
+     3843537003  1277  :defcompile   :defc[ompile] MyClass
+     4273327853  1279  :defcompile   :defc[ompile] {func}
+     0458307461  1280  :defcompile   :defc[ompile] debug {func}
+     3385383354  1281  :defcompile   :defc[ompile] profile {func}
+     0877387430  1291  :disassemble  :disa[ssemble] {func}
+     1457263580  1296  :disassemble  :disa[ssemble] profile {func}
+     3836684458  1300  :disassemble  :disa[ssemble] debug {func}
 
 /usr/local/share/vim/vim91/doc/repeat.txt:
-1195626681  50    :global          :[range]g[lobal]/{pattern}/[cmd]
-3806796635  54    :global          :[range]g[lobal]!/{pattern}/[cmd]
-0219667501  59    :vglobal         :[range]v[global]/{pattern}/[cmd]
-0706297159  160   :@{0-9a-z".=*+}  :[addr]@{0-9a-z".=*+}
-3603159640  177   :*{0-9a-z".=+}   :[addr]*{0-9a-z".=+}
-0342567329  185   :@:              :[addr]@:
-1696570880  188   :@               :[addr]@
-2763764099  189   :@@              :[addr]@@
-3144444358  198   :source          :so[urce] {file}
-4291034818  202   :source          :[range]so[urce] [++clear]
-3833495875  238   :source          :so[urce]! {file}
-4040365618  248   :runtime         :ru[ntime][!] [where] {file} ..
-2168024750  290   :packadd         :pa[ckadd][!] {name}
-2021147764  330   :packloadall     :packl[oadall][!]
-0288184534  360   :scriptencoding  :scripte[ncoding] [encoding]
-0429750263  393   :scriptversion   :scriptv[ersion] {version}
-1484696513  405   :vim9script      :vim9s[cript] [noclear]
-1402051646  416   :scriptnames     :scr[iptnames]
-2342185592  430   :scriptnames     :scr[iptnames][!] {scriptId}
-0019208114  437   :finish          :fini[sh]
-1806939981  1263  :breakadd        :breaka[dd] func [lnum] {name}
-1285601264  1269  :breakadd        :breaka[dd] file [lnum] {name}
-3749934509  1273  :breakadd        :breaka[dd] here
-4158585959  1280  :breakadd        :breaka[dd] expr {expression}
-2608496598  1328  :breakdel        :breakd[el] {nr}
-3001762499  1332  :breakdel        :breakd[el] *
-2974425475  1335  :breakdel        :breakd[el] func [lnum] {name}
-2522423614  1338  :breakdel        :breakd[el] file [lnum] {name}
-3337613328  1341  :breakdel        :breakd[el] here
-2184106055  1352  :breaklist       :breakl[ist]
-3002993235  1359  :debuggreedy     :debugg[reedy]
-3439949359  1365  :0debuggreedy    :0debugg[reedy]
-1809789052  1388  :profile         :prof[ile] start {fname}
-2821090265  1395  :profile         :prof[ile] stop
-0176594521  1400  :profile         :prof[ile] pause
-1761636237  1405  :profile         :prof[ile] continue
-3897504019  1408  :profile         :prof[ile] func {pattern}
-3885306473  1412  :profile         :prof[ile][!] file {pattern}
-1444678730  1423  :profile         :prof[ile] dump
-4022520536  1428  :profdel         :profd[el] ...
+     1195626681  50    :global          :[range]g[lobal]/{pattern}/[cmd]
+     3806796635  54    :global          :[range]g[lobal]!/{pattern}/[cmd]
+     0219667501  59    :vglobal         :[range]v[global]/{pattern}/[cmd]
+     0706297159  160   :@{0-9a-z".=*+}  :[addr]@{0-9a-z".=*+}
+     3603159640  177   :*{0-9a-z".=+}   :[addr]*{0-9a-z".=+}
+     0342567329  185   :@:              :[addr]@:
+     1696570880  188   :@               :[addr]@
+     2763764099  189   :@@              :[addr]@@
+     3144444358  198   :source          :so[urce] {file}
+     4291034818  202   :source          :[range]so[urce] [++clear]
+     3833495875  238   :source          :so[urce]! {file}
+     4040365618  248   :runtime         :ru[ntime][!] [where] {file} ..
+     2168024750  290   :packadd         :pa[ckadd][!] {name}
+     2021147764  330   :packloadall     :packl[oadall][!]
+     0288184534  360   :scriptencoding  :scripte[ncoding] [encoding]
+     0429750263  393   :scriptversion   :scriptv[ersion] {version}
+     1484696513  405   :vim9script      :vim9s[cript] [noclear]
+     1402051646  416   :scriptnames     :scr[iptnames]
+     2342185592  430   :scriptnames     :scr[iptnames][!] {scriptId}
+     0019208114  437   :finish          :fini[sh]
+     1806939981  1263  :breakadd        :breaka[dd] func [lnum] {name}
+     1285601264  1269  :breakadd        :breaka[dd] file [lnum] {name}
+     3749934509  1273  :breakadd        :breaka[dd] here
+     4158585959  1280  :breakadd        :breaka[dd] expr {expression}
+     2608496598  1328  :breakdel        :breakd[el] {nr}
+     3001762499  1332  :breakdel        :breakd[el] *
+     2974425475  1335  :breakdel        :breakd[el] func [lnum] {name}
+     2522423614  1338  :breakdel        :breakd[el] file [lnum] {name}
+     3337613328  1341  :breakdel        :breakd[el] here
+     2184106055  1352  :breaklist       :breakl[ist]
+     3002993235  1359  :debuggreedy     :debugg[reedy]
+     3439949359  1365  :0debuggreedy    :0debugg[reedy]
+     1809789052  1388  :profile         :prof[ile] start {fname}
+     2821090265  1395  :profile         :prof[ile] stop
+     0176594521  1400  :profile         :prof[ile] pause
+     1761636237  1405  :profile         :prof[ile] continue
+     3897504019  1408  :profile         :prof[ile] func {pattern}
+     3885306473  1412  :profile         :prof[ile][!] file {pattern}
+     1444678730  1423  :profile         :prof[ile] dump
+     4022520536  1428  :profdel         :profd[el] ...
 
 /usr/local/share/vim/vim91/doc/autocmd.txt:
-2175276496  76    :autocmd    :au[tocmd] [group] {event} {aupat} [++once] [++nested] {cmd}
-1658152267  178   :autocmd    :au[tocmd]! [group] {event} {aupat} [++once] [++nested] {cmd}
-3494491355  184   :autocmd    :au[tocmd]! [group] {event} {aupat}
-2263271688  188   :autocmd    :au[tocmd]! [group] * {aupat}
-0105695955  192   :autocmd    :au[tocmd]! [group] {event}
-3083291473  198   :autocmd    :au[tocmd]! [group]
-1864660658  210   :autocmd    :au[tocmd] [group] {event} {aupat}
-3666615470  214   :autocmd    :au[tocmd] [group] * {aupat}
-1874111802  218   :autocmd    :au[tocmd] [group] {event}
-0124403898  221   :autocmd    :au[tocmd] [group]
-1071386918  1662  :augroup    :aug[roup] {name}
-3563680915  1670  :augroup    :aug[roup]! {name}
-2005820041  1709  :doautocmd  :do[autocmd] [<nomodeline>] [group] {event} [fname]
-1012495494  1740  :doautoall  :doautoa[ll] [<nomodeline>] [group] {event} [fname]
+     2175276496  76    :autocmd    :au[tocmd] [group] {event} {aupat} [++once] [++nested] {cmd}
+     1658152267  178   :autocmd    :au[tocmd]! [group] {event} {aupat} [++once] [++nested] {cmd}
+     3494491355  184   :autocmd    :au[tocmd]! [group] {event} {aupat}
+     2263271688  188   :autocmd    :au[tocmd]! [group] * {aupat}
+     0105695955  192   :autocmd    :au[tocmd]! [group] {event}
+     3083291473  198   :autocmd    :au[tocmd]! [group]
+     1864660658  210   :autocmd    :au[tocmd] [group] {event} {aupat}
+     3666615470  214   :autocmd    :au[tocmd] [group] * {aupat}
+     1874111802  218   :autocmd    :au[tocmd] [group] {event}
+     0124403898  221   :autocmd    :au[tocmd] [group]
+     1071386918  1662  :augroup    :aug[roup] {name}
+     3563680915  1670  :augroup    :aug[roup]! {name}
+     2005820041  1709  :doautocmd  :do[autocmd] [<nomodeline>] [group] {event} [fname]
+     1012495494  1740  :doautoall  :doautoa[ll] [<nomodeline>] [group] {event} [fname]
 
 /usr/local/share/vim/vim91/doc/os_win32.txt:
-1892522579  33  :cd  :cd command
+     1892522579  33  :cd  :cd command
 
 /usr/local/share/vim/vim91/doc/if_ole.txt:
-1009981441  117  :normal  :normal command via OLE automation.  Any attempt to do so will fail, probably
+     1009981441  117  :normal  :normal command via OLE automation.  Any attempt to do so will fail, probably
 
 /usr/local/share/vim/vim91/doc/sponsor.txt:
 
 /usr/local/share/vim/vim91/doc/spell.txt:
-3518967914  118  :spellgood    :[count]spe[llgood] {word}
-2117661816  123  :spellgood    :spe[llgood]! {word}
-3341799810  127  :spellwrong   :[count]spellw[rong] {word}
-0871627889  132  :spellwrong   :spellw[rong]! {word}
-2052962222  136  :spellrare    :[count]spellra[re] {word}
-3801747542  149  :spellrare    :spellra[re]! {word}
-0529789948  152  :spellundo    :[count]spellu[ndo] {word}
-1738206922  155  :spellundo    :spellu[ndo]! {word}
-2879923236  213  :spellrepall  :spellr[epall]
-3286866068  531  :mkspell      :mksp[ell][!] [-ascii] {outname} {inname} ...
-3693103093  573  :mkspell      :mksp[ell] [-ascii] {name}.{enc}.add
-2913191896  578  :mkspell      :mksp[ell] [-ascii] {name}
-0860426522  637  :spelldump    :spelld[ump]
-1664765880  642  :spelldump    :spelld[ump]!
-3384816421  926  :spellinfo    :spelli[nfo]
+     3518967914  118  :spellgood    :[count]spe[llgood] {word}
+     2117661816  123  :spellgood    :spe[llgood]! {word}
+     3341799810  127  :spellwrong   :[count]spellw[rong] {word}
+     0871627889  132  :spellwrong   :spellw[rong]! {word}
+     2052962222  136  :spellrare    :[count]spellra[re] {word}
+     3801747542  149  :spellrare    :spellra[re]! {word}
+     0529789948  152  :spellundo    :[count]spellu[ndo] {word}
+     1738206922  155  :spellundo    :spellu[ndo]! {word}
+     2879923236  213  :spellrepall  :spellr[epall]
+     3286866068  531  :mkspell      :mksp[ell][!] [-ascii] {outname} {inname} ...
+     3693103093  573  :mkspell      :mksp[ell] [-ascii] {name}.{enc}.add
+     2913191896  578  :mkspell      :mksp[ell] [-ascii] {name}
+     0860426522  637  :spelldump    :spelld[ump]
+     1664765880  642  :spelldump    :spelld[ump]!
+     3384816421  926  :spellinfo    :spelli[nfo]
 
 /usr/local/share/vim/vim91/doc/ft_raku.txt:
 
 /usr/local/share/vim/vim91/doc/gui.txt:
-1624130170  135   :winpos   :winp[os]
-1915467160  140   :winpos   :winp[os] {X} {Y}
-2743092337  150   :winsize  :win[size] {width} {height}
-2242683972  271   :behave   :be[have] {model}
-2978123664  903   :emenu    :[range]em[enu] {menu}
-1464883509  911   :emenu    :[range]em[enu] {mode} {menu}
-1734323121  993   :tmenu    :tm[enu] {menupath} {rhs}
-1934988151  996   :tmenu    :tm[enu] [menupath]
-1424106216  999   :tunmenu  :tu[nmenu] {menupath}
-0372052978  1042  :popup    :popu[p] {name}
-1442747228  1048  :popup    :popu[p]! {name}
+     1624130170  135   :winpos   :winp[os]
+     1915467160  140   :winpos   :winp[os] {X} {Y}
+     2743092337  150   :winsize  :win[size] {width} {height}
+     2242683972  271   :behave   :be[have] {model}
+     2978123664  903   :emenu    :[range]em[enu] {menu}
+     1464883509  911   :emenu    :[range]em[enu] {mode} {menu}
+     1734323121  993   :tmenu    :tm[enu] {menupath} {rhs}
+     1934988151  996   :tmenu    :tm[enu] [menupath]
+     1424106216  999   :tunmenu  :tu[nmenu] {menupath}
+     0372052978  1042  :popup    :popu[p] {name}
+     1442747228  1048  :popup    :popu[p]! {name}
 
 /usr/local/share/vim/vim91/doc/syntax.txt:
-1184261423  421   :TOhtml       :[range]TOhtml
-0820519745  4112  :syntax       :sy[ntax] case [match | ignore]
-3290627297  4118  :syntax       :sy[ntax] case
-1094371457  4124  :syntax       :sy[ntax] foldlevel start
-0161679741  4125  :syntax       :sy[ntax] foldlevel minimum
-3529925464  4137  :syntax       :sy[ntax] foldlevel
-0335947354  4145  :syntax       :sy[ntax] spell toplevel
-1658502048  4146  :syntax       :sy[ntax] spell notoplevel
-0354687320  4147  :syntax       :sy[ntax] spell default
-0014938399  4161  :syntax       :sy[ntax] spell
-3636460048  4168  :syntax       :sy[ntax] iskeyword [clear | {option}]
-3824288554  4195  :syntax       :sy[ntax] keyword {group-name} [{options}] {keyword} .. [{options}]
-3502075711  4248  :syntax       :sy[ntax] match {group-name} [{options}]
-1745254571  4277  :syntax       :sy[ntax] region {group-name} [{options}]
-0324756261  4452  :syntax       :syntax keyword
-4271594916  4453  :syntax       :syntax match
-2922881680  4454  :syntax       :syntax region
-0065815327  4757  :syntax       :sy[ntax] conceal [on|off]
-3420954581  4765  :syntax       :sy[ntax] conceal
-3186128382  4949  :syntax       :sy[ntax] cluster {cluster-name} [contains={group-name}..]
-1723693569  5011  :syntax       :sy[ntax] include [@{grouplist-name}] {file-name}
-3377164455  5040  :syntax       :sy[ntax] sync [ccomment [group-name] | minlines={N} | ...]
-2666583650  5255  :colorscheme  :colo[rscheme]
-0762899598  5262  :colorscheme  :colo[rscheme] {name}
-2247502530  5337  :highlight    :hi[ghlight]
-1878992783  5340  :highlight    :hi[ghlight] {group-name}
-0106936964  5344  :highlight    :hi[ghlight] clear
-2571820330  5350  :highlight    :hi[ghlight] clear {group-name}
-1024203071  5351  :highlight    :hi[ghlight] {group-name} NONE
-2566609972  5355  :highlight    :hi[ghlight] [default] {group-name} {key}={arg} ..
-0267991128  6265  :syntime      :syntime on
-3686105366  6269  :syntime      :syntime off
-2904045281  6271  :syntime      :syntime clear
-4194937240  6273  :syntime      :syntime report
+     1184261423  421   :TOhtml       :[range]TOhtml
+     0820519745  4112  :syntax       :sy[ntax] case [match | ignore]
+     3290627297  4118  :syntax       :sy[ntax] case
+     1094371457  4124  :syntax       :sy[ntax] foldlevel start
+     0161679741  4125  :syntax       :sy[ntax] foldlevel minimum
+     3529925464  4137  :syntax       :sy[ntax] foldlevel
+     0335947354  4145  :syntax       :sy[ntax] spell toplevel
+     1658502048  4146  :syntax       :sy[ntax] spell notoplevel
+     0354687320  4147  :syntax       :sy[ntax] spell default
+     0014938399  4161  :syntax       :sy[ntax] spell
+     3636460048  4168  :syntax       :sy[ntax] iskeyword [clear | {option}]
+     3824288554  4195  :syntax       :sy[ntax] keyword {group-name} [{options}] {keyword} .. [{options}]
+     3502075711  4248  :syntax       :sy[ntax] match {group-name} [{options}]
+     1745254571  4277  :syntax       :sy[ntax] region {group-name} [{options}]
+     0324756261  4452  :syntax       :syntax keyword
+     4271594916  4453  :syntax       :syntax match
+     2922881680  4454  :syntax       :syntax region
+     0065815327  4757  :syntax       :sy[ntax] conceal [on|off]
+     3420954581  4765  :syntax       :sy[ntax] conceal
+     3186128382  4949  :syntax       :sy[ntax] cluster {cluster-name} [contains={group-name}..]
+     1723693569  5011  :syntax       :sy[ntax] include [@{grouplist-name}] {file-name}
+     3377164455  5040  :syntax       :sy[ntax] sync [ccomment [group-name] | minlines={N} | ...]
+     2666583650  5255  :colorscheme  :colo[rscheme]
+     0762899598  5262  :colorscheme  :colo[rscheme] {name}
+     2247502530  5337  :highlight    :hi[ghlight]
+     1878992783  5340  :highlight    :hi[ghlight] {group-name}
+     0106936964  5344  :highlight    :hi[ghlight] clear
+     2571820330  5350  :highlight    :hi[ghlight] clear {group-name}
+     1024203071  5351  :highlight    :hi[ghlight] {group-name} NONE
+     2566609972  5355  :highlight    :hi[ghlight] [default] {group-name} {key}={arg} ..
+     0267991128  6265  :syntime      :syntime on
+     3686105366  6269  :syntime      :syntime off
+     2904045281  6271  :syntime      :syntime clear
+     4194937240  6273  :syntime      :syntime report
 
 /usr/local/share/vim/vim91/doc/vi_diff.txt:
-1341212365  31  :open  :[range]o[pen]
-1183242090  34  :open  :[range]o[pen] /pattern/
+     1341212365  31  :open  :[range]o[pen]
+     1183242090  34  :open  :[range]o[pen] /pattern/
 
 /usr/local/share/vim/vim91/doc/ft_mp.txt:
 
 /usr/local/share/vim/vim91/doc/quickfix.txt:
-3099398471  88    :cc!          :cc[!] [nr]
-1819762949  89    :cc!          :[nr]cc[!]
-2517599515  103   :ll!          :ll[!] [nr]
-3057968770  104   :ll!          :[nr]ll[!]
-2772244140  107   :cnext        :[count]cn[ext][!]
-1009635937  113   :lnext        :[count]lne[xt][!]
-0667718671  116   :cNext        :[count]cN[ext][!]
-3003304320  117   :cprevious    :[count]cp[revious][!]
-3603419010  123   :lNext        :[count]lN[ext][!]
-3851844982  124   :lprevious    :[count]lp[revious][!]
-3463257080  129   :cabove       :[count]cabo[ve]
-1017477348  140   :labove       :[count]lab[ove]
-3458442017  144   :cbelow       :[count]cbel[ow]
-0386118029  155   :lbelow       :[count]lbel[ow]
-3672491019  159   :cbefore      :[count]cbe[fore]
-0089918426  169   :lbefore      :[count]lbe[fore]
-3807338879  173   :cafter       :[count]caf[ter]
-1003451347  183   :lafter       :[count]laf[ter]
-0400430768  187   :cnfile       :[count]cnf[ile][!]
-2217140854  194   :lnfile       :[count]lnf[ile][!]
-1484985696  197   :cNfile       :[count]cNf[ile][!]
-0783919083  198   :cpfile       :[count]cpf[ile][!]
-3413893542  205   :lNfile       :[count]lNf[ile][!]
-3175174957  206   :lpfile       :[count]lpf[ile][!]
-1272968675  211   :crewind      :cr[ewind][!] [nr]
-2371733046  215   :lrewind      :lr[ewind][!] [nr]
-1510501555  219   :cfirst       :cfir[st][!] [nr]
-3571583881  222   :lfirst       :lfir[st][!] [nr]
-3746135757  225   :clast        :cla[st][!] [nr]
-2344729936  229   :llast        :lla[st][!] [nr]
-0691334292  233   :cquit        :cq[uit][!]
-2448757045  234   :cquit        :{N}cq[uit][!]
-4074679349  235   :cquit        :cq[uit][!] {N}
-2960772489  248   :cfile        :cf[ile][!] [errorfile]
-1826870729  259   :lfile        :lf[ile][!] [errorfile]
-2409113765  265   :cgetfile     :cg[etfile] [errorfile]
-1392652517  273   :lgetfile     :lg[etfile] [errorfile]
-0685316410  278   :caddfile     :caddf[ile] [errorfile]
-4098031994  286   :laddfile     :laddf[ile] [errorfile]
-1026209339  290   :cbuffer      :[range]cb[uffer][!] [bufnr]
-1102431770  300   :lbuffer      :[range]lb[uffer][!] [bufnr]
-1440654914  305   :cgetbuffer   :[range]cgetb[uffer] [bufnr]
-0692180579  310   :lgetbuffer   :[range]lgetb[uffer] [bufnr]
-0641058245  316   :caddbuffer   :[range]cad[dbuffer] [bufnr]
-1285485292  323   :laddbuffer   :[range]laddb[uffer] [bufnr]
-0692412507  329   :cexpr        :cex[pr][!] {expr}
-4022817678  344   :lexpr        :lex[pr][!] {expr}
-2858432244  348   :cgetexpr     :cgete[xpr] {expr}
-1826751777  352   :lgetexpr     :lgete[xpr] {expr}
-0649640084  356   :caddexpr     :cadde[xpr] {expr}
-1039550364  365   :laddexpr     :lad[dexpr] {expr}
-2605449346  369   :clist        :cl[ist] [from] [, [to]]
-1127017911  379   :clist        :cl[ist] +{count}
-0752110024  383   :clist        :cl[ist]! [from] [, [to]]
-3750313579  386   :clist        :cl[ist]! +{count}
-3847250145  396   :llist        :lli[st] [from] [, [to]]
-4161889610  400   :llist        :lli[st]! [from] [, [to]]
-3853618036  493   :cdo!         :cdo[!] {cmd}
-1411604631  520   :cfdo!        :cfdo[!] {cmd}
-2667094696  530   :ldo          :ld[o][!] {cmd}
-1934865826  542   :lfdo!        :lfdo[!] {cmd}
-2120191577  582   :copen        :cope[n] [height]
-4029869542  609   :lopen        :lop[en] [height]
-2977635790  616   :cclose       :ccl[ose]
-1750798178  619   :lclose       :lcl[ose]
-1963227703  623   :cwindow      :cw[indow] [height]
-2205933151  628   :lwindow      :lw[indow] [height]
-0515989858  632   :cbottom      :cbo[ttom]
-3245911731  639   :lbottom      :lbo[ttom]
-4204025723  869   :colder       :col[der] [count]
-1954426945  874   :lolder       :lol[der] [count]
-2722113704  878   :cnewer       :cnew[er] [count]
-0749358994  883   :lnewer       :lnew[er] [count]
-2626195443  887   :chistory     :[count]chi[story]
-1837356158  899   :lhistory     :[count]lhi[story]
-2221062341  921   :make         :mak[e][!] [arguments]
-2702902396  947   :lmake        :lmak[e][!] [arguments]
-2574479592  1041  :vimgrep      :vim[grep][!] /{pattern}/[g][j][f] {file} ...
-3566920533  1078  :vimgrep      :{count}vim[grep] ...
-3981950980  1093  :vimgrep      :vim[grep][!] {pattern} {file} ...
-2461491297  1101  :lvimgrep     :lv[imgrep][!] /{pattern}/[g][j][f] {file} ...
-2944153047  1102  :lvimgrep     :lv[imgrep][!] {pattern} {file} ...
-3157926823  1107  :vimgrepadd   :vimgrepa[dd][!] /{pattern}/[g][j][f] {file} ...
-1871901761  1108  :vimgrepadd   :vimgrepa[dd][!] {pattern} {file} ...
-2255122363  1114  :lvimgrepadd  :lvimgrepa[dd][!] /{pattern}/[g][j][f] {file} ...
-0610489019  1115  :lvimgrepadd  :lvimgrepa[dd][!] {pattern} {file} ...
-3066730607  1129  :grep         :gr[ep][!] [arguments]
-2477991126  1139  :lgrep        :lgr[ep][!] [arguments]
-4175790883  1143  :grepadd      :grepa[dd][!] [arguments]
-1405316789  1166  :lgrepadd     :lgrepa[dd][!] [arguments]
-2344194433  1248  :compiler     :comp[iler][!] {name}
-4125694000  1781  :set          :set command and one to avoid recognizing the comma as a separator of error
+     3099398471  88    :cc!          :cc[!] [nr]
+     1819762949  89    :cc!          :[nr]cc[!]
+     2517599515  103   :ll!          :ll[!] [nr]
+     3057968770  104   :ll!          :[nr]ll[!]
+     2772244140  107   :cnext        :[count]cn[ext][!]
+     1009635937  113   :lnext        :[count]lne[xt][!]
+     0667718671  116   :cNext        :[count]cN[ext][!]
+     3003304320  117   :cprevious    :[count]cp[revious][!]
+     3603419010  123   :lNext        :[count]lN[ext][!]
+     3851844982  124   :lprevious    :[count]lp[revious][!]
+     3463257080  129   :cabove       :[count]cabo[ve]
+     1017477348  140   :labove       :[count]lab[ove]
+     3458442017  144   :cbelow       :[count]cbel[ow]
+     0386118029  155   :lbelow       :[count]lbel[ow]
+     3672491019  159   :cbefore      :[count]cbe[fore]
+     0089918426  169   :lbefore      :[count]lbe[fore]
+     3807338879  173   :cafter       :[count]caf[ter]
+     1003451347  183   :lafter       :[count]laf[ter]
+     0400430768  187   :cnfile       :[count]cnf[ile][!]
+     2217140854  194   :lnfile       :[count]lnf[ile][!]
+     1484985696  197   :cNfile       :[count]cNf[ile][!]
+     0783919083  198   :cpfile       :[count]cpf[ile][!]
+     3413893542  205   :lNfile       :[count]lNf[ile][!]
+     3175174957  206   :lpfile       :[count]lpf[ile][!]
+     1272968675  211   :crewind      :cr[ewind][!] [nr]
+     2371733046  215   :lrewind      :lr[ewind][!] [nr]
+     1510501555  219   :cfirst       :cfir[st][!] [nr]
+     3571583881  222   :lfirst       :lfir[st][!] [nr]
+     3746135757  225   :clast        :cla[st][!] [nr]
+     2344729936  229   :llast        :lla[st][!] [nr]
+     0691334292  233   :cquit        :cq[uit][!]
+     2448757045  234   :cquit        :{N}cq[uit][!]
+     4074679349  235   :cquit        :cq[uit][!] {N}
+     2960772489  248   :cfile        :cf[ile][!] [errorfile]
+     1826870729  259   :lfile        :lf[ile][!] [errorfile]
+     2409113765  265   :cgetfile     :cg[etfile] [errorfile]
+     1392652517  273   :lgetfile     :lg[etfile] [errorfile]
+     0685316410  278   :caddfile     :caddf[ile] [errorfile]
+     4098031994  286   :laddfile     :laddf[ile] [errorfile]
+     1026209339  290   :cbuffer      :[range]cb[uffer][!] [bufnr]
+     1102431770  300   :lbuffer      :[range]lb[uffer][!] [bufnr]
+     1440654914  305   :cgetbuffer   :[range]cgetb[uffer] [bufnr]
+     0692180579  310   :lgetbuffer   :[range]lgetb[uffer] [bufnr]
+     0641058245  316   :caddbuffer   :[range]cad[dbuffer] [bufnr]
+     1285485292  323   :laddbuffer   :[range]laddb[uffer] [bufnr]
+     0692412507  329   :cexpr        :cex[pr][!] {expr}
+     4022817678  344   :lexpr        :lex[pr][!] {expr}
+     2858432244  348   :cgetexpr     :cgete[xpr] {expr}
+     1826751777  352   :lgetexpr     :lgete[xpr] {expr}
+     0649640084  356   :caddexpr     :cadde[xpr] {expr}
+     1039550364  365   :laddexpr     :lad[dexpr] {expr}
+     2605449346  369   :clist        :cl[ist] [from] [, [to]]
+     1127017911  379   :clist        :cl[ist] +{count}
+     0752110024  383   :clist        :cl[ist]! [from] [, [to]]
+     3750313579  386   :clist        :cl[ist]! +{count}
+     3847250145  396   :llist        :lli[st] [from] [, [to]]
+     4161889610  400   :llist        :lli[st]! [from] [, [to]]
+     3853618036  493   :cdo!         :cdo[!] {cmd}
+     1411604631  520   :cfdo!        :cfdo[!] {cmd}
+     2667094696  530   :ldo          :ld[o][!] {cmd}
+     1934865826  542   :lfdo!        :lfdo[!] {cmd}
+     2120191577  582   :copen        :cope[n] [height]
+     4029869542  609   :lopen        :lop[en] [height]
+     2977635790  616   :cclose       :ccl[ose]
+     1750798178  619   :lclose       :lcl[ose]
+     1963227703  623   :cwindow      :cw[indow] [height]
+     2205933151  628   :lwindow      :lw[indow] [height]
+     0515989858  632   :cbottom      :cbo[ttom]
+     3245911731  639   :lbottom      :lbo[ttom]
+     4204025723  869   :colder       :col[der] [count]
+     1954426945  874   :lolder       :lol[der] [count]
+     2722113704  878   :cnewer       :cnew[er] [count]
+     0749358994  883   :lnewer       :lnew[er] [count]
+     2626195443  887   :chistory     :[count]chi[story]
+     1837356158  899   :lhistory     :[count]lhi[story]
+     2221062341  921   :make         :mak[e][!] [arguments]
+     2702902396  947   :lmake        :lmak[e][!] [arguments]
+     2574479592  1041  :vimgrep      :vim[grep][!] /{pattern}/[g][j][f] {file} ...
+     3566920533  1078  :vimgrep      :{count}vim[grep] ...
+     3981950980  1093  :vimgrep      :vim[grep][!] {pattern} {file} ...
+     2461491297  1101  :lvimgrep     :lv[imgrep][!] /{pattern}/[g][j][f] {file} ...
+     2944153047  1102  :lvimgrep     :lv[imgrep][!] {pattern} {file} ...
+     3157926823  1107  :vimgrepadd   :vimgrepa[dd][!] /{pattern}/[g][j][f] {file} ...
+     1871901761  1108  :vimgrepadd   :vimgrepa[dd][!] {pattern} {file} ...
+     2255122363  1114  :lvimgrepadd  :lvimgrepa[dd][!] /{pattern}/[g][j][f] {file} ...
+     0610489019  1115  :lvimgrepadd  :lvimgrepa[dd][!] {pattern} {file} ...
+     3066730607  1129  :grep         :gr[ep][!] [arguments]
+     2477991126  1139  :lgrep        :lgr[ep][!] [arguments]
+     4175790883  1143  :grepadd      :grepa[dd][!] [arguments]
+     1405316789  1166  :lgrepadd     :lgrepa[dd][!] [arguments]
+     2344194433  1248  :compiler     :comp[iler][!] {name}
+     4125694000  1781  :set          :set command and one to avoid recognizing the comma as a separator of error
 
 /usr/local/share/vim/vim91/doc/indent.txt:
-0231947726  104  :	Reindent  :	Reindent a line when a ':' is typed which is after a label or case
+     0231947726  104  :	Reindent  :	Reindent a line when a ':' is typed which is after a label or case
 
 /usr/local/share/vim/vim91/doc/recover.txt:
-3571668346  90   :noswapfile  :nos[wapfile]   {command}
-1895405089  128  :preserve    :pre[serve]
-0728570059  171  :recover     :rec[over] [file]
-4238656591  176  :recover     :rec[over]! [file]
+     3571668346  90   :noswapfile  :nos[wapfile]   {command}
+     1895405089  128  :preserve    :pre[serve]
+     0728570059  171  :recover     :rec[over] [file]
+     4238656591  176  :recover     :rec[over]! [file]
 
 /usr/local/share/vim/vim91/doc/os_risc.txt:
 
 /usr/local/share/vim/vim91/doc/workshop.txt:
 
 /usr/local/share/vim/vim91/doc/digraph.txt:
-1603427660  26  :digraphs  :dig[raphs][!]
-1051460190  30  :digraphs  :dig[raphs] {char1}{char2} {number} ...
+     1603427660  26  :digraphs  :dig[raphs][!]
+     1051460190  30  :digraphs  :dig[raphs] {char1}{char2} {number} ...
 
 /usr/local/share/vim/vim91/doc/term.txt:
-0737169438  856  :mode  :mod[e] [mode]
+     0737169438  856  :mode  :mod[e] [mode]
 
 /usr/local/share/vim/vim91/doc/insert.txt:
-0276009185  1872  :XMLns          :XMLns {name} [{namespace}]
-2143904622  1885  :XMLent         :XMLent {name}
-2784313290  1987  :append         :{range}a[ppend][!]
-3780056557  1997  :insert         :{range}i[nsert][!]
-3097887064  2032  :startinsert    :star[tinsert][!]
-2563570570  2042  :stopinsert     :stopi[nsert]
-1374972784  2048  :startreplace   :startr[eplace][!]
-2249189593  2058  :startgreplace  :startg[replace][!]
-1672370694  2065  :read           :r[ead] [++opt] [name]
-0279206162  2070  :read           :{range}r[ead] [++opt] [name]
-0608274214  2076  :read           :[range]r[ead] [++opt] !{cmd}
+     0276009185  1872  :XMLns          :XMLns {name} [{namespace}]
+     2143904622  1885  :XMLent         :XMLent {name}
+     2784313290  1987  :append         :{range}a[ppend][!]
+     3780056557  1997  :insert         :{range}i[nsert][!]
+     3097887064  2032  :startinsert    :star[tinsert][!]
+     2563570570  2042  :stopinsert     :stopi[nsert]
+     1374972784  2048  :startreplace   :startr[eplace][!]
+     2249189593  2058  :startgreplace  :startg[replace][!]
+     1672370694  2065  :read           :r[ead] [++opt] [name]
+     0279206162  2070  :read           :{range}r[ead] [++opt] [name]
+     0608274214  2076  :read           :[range]r[ead] [++opt] !{cmd}
 
 /usr/local/share/vim/vim91/doc/ft_sql.txt:
 
@@ -1033,34 +1033,34 @@
 /usr/local/share/vim/vim91/doc/uganda.txt:
 
 /usr/local/share/vim/vim91/doc/filetype.txt:
-2198242748  105  :filetype  :filetype on
-2086557898  106  :filetype  :filetype off
-3781964252  107  :filetype  :filetype plugin on
-0831410982  108  :filetype  :filetype plugin off
-2731515665  109  :filetype  :filetype indent on
-3558362757  110  :filetype  :filetype indent off
-3935294195  111  :filetype  :filetype plugin indent on
-2589232540  112  :filetype  :filetype plugin indent off
+     2198242748  105  :filetype  :filetype on
+     2086557898  106  :filetype  :filetype off
+     3781964252  107  :filetype  :filetype plugin on
+     0831410982  108  :filetype  :filetype plugin off
+     2731515665  109  :filetype  :filetype indent on
+     3558362757  110  :filetype  :filetype indent off
+     3935294195  111  :filetype  :filetype plugin indent on
+     2589232540  112  :filetype  :filetype plugin indent off
 
 /usr/local/share/vim/vim91/doc/if_sniff.txt:
 
 /usr/local/share/vim/vim91/doc/intro.txt:
 
 /usr/local/share/vim/vim91/doc/diff.txt:
-1471961191  90   :diffsplit   :diffs[plit] {filename}
-0004225104  96   :diffthis    :difft[his]
-2581415969  99   :diffpatch   :diffp[atch] {patchfile}
-0166902498  128  :diffoff     :diffo[ff]
-3496382013  131  :diffoff     :diffo[ff]!
-3226386174  195  :diffupdate  :dif[fupdate][!]
-1817099262  261  :diffget     :[range]diffg[et] [bufspec]
-1213065068  270  :diffput     :[range]diffpu[t] [bufspec]
+     1471961191  90   :diffsplit   :diffs[plit] {filename}
+     0004225104  96   :diffthis    :difft[his]
+     2581415969  99   :diffpatch   :diffp[atch] {patchfile}
+     0166902498  128  :diffoff     :diffo[ff]
+     3496382013  131  :diffoff     :diffo[ff]!
+     3226386174  195  :diffupdate  :dif[fupdate][!]
+     1817099262  261  :diffget     :[range]diffg[et] [bufspec]
+     1213065068  270  :diffput     :[range]diffpu[t] [bufspec]
 
 /usr/local/share/vim/vim91/doc/if_ruby.txt:
-1850298927  28  :ruby      :rub[y] {cmd}
-3649620104  31  :ruby      :rub[y] << [trim] [{endmarker}]
-2613985922  70  :rubydo    :[range]rubyd[o] {cmd}
-4023430597  78  :rubyfile  :rubyf[ile] {file}
+     1850298927  28  :ruby      :rub[y] {cmd}
+     3649620104  31  :ruby      :rub[y] << [trim] [{endmarker}]
+     2613985922  70  :rubydo    :[range]rubyd[o] {cmd}
+     4023430597  78  :rubyfile  :rubyf[ile] {file}
 
 /usr/local/share/vim/vim91/doc/hangulin.txt:
 
@@ -1071,167 +1071,167 @@
 /usr/local/share/vim/vim91/doc/vim9class.txt:
 
 /usr/local/share/vim/vim91/doc/gui_w32.txt:
-1216754273  367  :tearoff  :te[aroff] {name}
-2613560946  404  :simalt   :sim[alt] {key}
+     1216754273  367  :tearoff  :te[aroff] {name}
+     2613560946  404  :simalt   :sim[alt] {key}
 
 /usr/local/share/vim/vim91/doc/channel.txt:
 
 /usr/local/share/vim/vim91/doc/pi_vimball.txt:
 
 /usr/local/share/vim/vim91/doc/options.txt:
-0211237740  25   :set          :se[t][!]
-0727173841  29   :set          :se[t][!] all
-2918317900  33   :set          :se[t] termcap
-3063918285  40   :set          :se[t]! termcap
-1560808071  43   :set          :se[t] {option}?
-1870394851  45   :set          :se[t] {option}
-1681896505  49   :set          :se[t] no{option}
-2538851091  52   :set          :se[t] {option}!   or
-3147922160  53   :set          :se[t] inv{option}
-0962830919  56   :set          :se[t] {option}&
-2335323926  58   :set          :se[t] {option}&vi
-0358511886  59   :set          :se[t] {option}&vim
-0308311285  61   :set          :se[t] all&
-3100047156  75   :set          :se[t] {option}={value}
-2986606125  76   :set          :se[t] {option}:{value}
-3643446449  92   :set          :se[t] {option}+={value}
-1662915115  102  :set          :se[t] {option}^={value}
-2855333179  109  :set          :se[t] {option}-={value}
-0121002671  355  :setlocal     :setl[ocal][!] ...
-3288423229  370  :set          :se[t] {option}<
-1018881721  377  :setlocal     :setl[ocal] {option}<
-1758645477  390  :setglobal    :setg[lobal][!] ...
-0075701693  402  :setglobal    :setglobal option=value
-2659015013  405  :setglobal    :setglobal option?
-3193074891  476  :setfiletype  :setf[iletype] [FALLBACK] {filetype}
-1187871705  494  :browse       :bro[wse] se[t]
-1767488081  495  :options      :opt[ions]
-3687116771  543  :fixdel       :fix[del]
-0497841186  638  :	            :	
+     0211237740  25   :set          :se[t][!]
+     0727173841  29   :set          :se[t][!] all
+     2918317900  33   :set          :se[t] termcap
+     3063918285  40   :set          :se[t]! termcap
+     1560808071  43   :set          :se[t] {option}?
+     1870394851  45   :set          :se[t] {option}
+     1681896505  49   :set          :se[t] no{option}
+     2538851091  52   :set          :se[t] {option}!   or
+     3147922160  53   :set          :se[t] inv{option}
+     0962830919  56   :set          :se[t] {option}&
+     2335323926  58   :set          :se[t] {option}&vi
+     0358511886  59   :set          :se[t] {option}&vim
+     0308311285  61   :set          :se[t] all&
+     3100047156  75   :set          :se[t] {option}={value}
+     2986606125  76   :set          :se[t] {option}:{value}
+     3643446449  92   :set          :se[t] {option}+={value}
+     1662915115  102  :set          :se[t] {option}^={value}
+     2855333179  109  :set          :se[t] {option}-={value}
+     0121002671  355  :setlocal     :setl[ocal][!] ...
+     3288423229  370  :set          :se[t] {option}<
+     1018881721  377  :setlocal     :setl[ocal] {option}<
+     1758645477  390  :setglobal    :setg[lobal][!] ...
+     0075701693  402  :setglobal    :setglobal option=value
+     2659015013  405  :setglobal    :setglobal option?
+     3193074891  476  :setfiletype  :setf[iletype] [FALLBACK] {filetype}
+     1187871705  494  :browse       :bro[wse] se[t]
+     1767488081  495  :options      :opt[ions]
+     3687116771  543  :fixdel       :fix[del]
+     0497841186  638  :	            :	
 
 /usr/local/share/vim/vim91/doc/map.txt:
-3527324784  52    :map           :map
-2917107135  53    :nmap          :nm[ap]
-1113195849  54    :vmap          :vm[ap]
-2018534457  55    :xmap          :xm[ap]
-0953494497  56    :smap          :smap
-1719883290  57    :omap          :om[ap]
-3468472411  58    :map!          :map!
-2967123207  59    :imap          :im[ap]
-3759613108  60    :lmap          :lm[ap]
-0289511009  61    :cmap          :cm[ap]
-3120094401  62    :tmap          :tma[p]
-1663674164  72    :noremap       :no[remap]  {lhs} {rhs}
-0754586987  73    :nnoremap      :nn[oremap] {lhs} {rhs}
-1011775786  74    :vnoremap      :vn[oremap] {lhs} {rhs}
-4160488874  75    :xnoremap      :xn[oremap] {lhs} {rhs}
-1111266677  76    :snoremap      :snor[emap] {lhs} {rhs}
-1403724064  77    :onoremap      :ono[remap] {lhs} {rhs}
-3200220849  78    :noremap       :no[remap]! {lhs} {rhs}
-0559578016  79    :inoremap      :ino[remap] {lhs} {rhs}
-0044752107  80    :lnoremap      :ln[oremap] {lhs} {rhs}
-3058275360  81    :cnoremap      :cno[remap] {lhs} {rhs}
-2053627937  82    :tnoremap      :tno[remap] {lhs} {rhs}
-1357164815  91    :unmap         :unm[ap]  {lhs}
-0326438359  92    :nunmap        :nun[map] {lhs}
-2468972999  93    :vunmap        :vu[nmap] {lhs}
-1488116807  94    :xunmap        :xu[nmap] {lhs}
-1729049280  95    :sunmap        :sunm[ap] {lhs}
-1540180715  96    :ounmap        :ou[nmap] {lhs}
-4136876731  97    :unmap         :unm[ap]! {lhs}
-2735669597  98    :iunmap        :iu[nmap] {lhs}
-0665612080  99    :lunmap        :lu[nmap] {lhs}
-1899551686  100   :cunmap        :cu[nmap] {lhs}
-3322724541  101   :tunmap        :tunma[p] {lhs}
-2952302040  110   :mapclear      :mapc[lear]
-2312342168  111   :nmapclear     :nmapc[lear]
-2649141014  112   :vmapclear     :vmapc[lear]
-3482354704  113   :xmapclear     :xmapc[lear]
-3971023700  114   :smapclear     :smapc[lear]
-1214076248  115   :omapclear     :omapc[lear]
-0382492088  116   :mapclear      :mapc[lear]!
-2699599643  117   :imapclear     :imapc[lear]
-3518968665  118   :lmapclear     :lmapc[lear]
-1112000415  119   :cmapclear     :cmapc[lear]
-3314161367  120   :tmapclear     :tmapc[lear]
-3527324784  128   :map           :map
-2917107135  129   :nmap          :nm[ap]
-1113195849  130   :vmap          :vm[ap]
-2018534457  131   :xmap          :xm[ap]
-0311923962  132   :smap          :sm[ap]
-1719883290  133   :omap          :om[ap]
-3468472411  134   :map!          :map!
-2967123207  135   :imap          :im[ap]
-3759613108  136   :lmap          :lm[ap]
-0289511009  137   :cmap          :cm[ap]
-3120094401  138   :tmap          :tma[p]
-3283784731  143   :map           :map    {lhs}
-0418609506  144   :nmap          :nm[ap] {lhs}
-0317186656  145   :vmap          :vm[ap] {lhs}
-4225118590  146   :xmap          :xm[ap] {lhs}
-2319750512  147   :smap          :sm[ap] {lhs}
-2203464973  148   :omap          :om[ap] {lhs}
-3569451096  149   :map!          :map!   {lhs}
-1818988781  150   :imap          :im[ap] {lhs}
-4106807293  151   :lmap          :lm[ap] {lhs}
-2254207116  152   :cmap          :cm[ap] {lhs}
-0974267458  153   :tmap          :tma[p] {lhs}
-3310683684  433   :map           :map   :noremap  :unmap     Normal, Visual, Select, Operator-pending
-1557153038  434   :nmap          :nmap  :nnoremap :nunmap    Normal
-0888672642  435   :vmap          :vmap  :vnoremap :vunmap    Visual and Select
-3006180404  436   :smap          :smap  :snoremap :sunmap    Select
-3644986846  437   :xmap          :xmap  :xnoremap :xunmap    Visual
-1369179339  438   :omap          :omap  :onoremap :ounmap    Operator-pending
-2255882549  439   :map!          :map!  :noremap! :unmap!    Insert and Command-line
-0494846613  440   :imap          :imap  :inoremap :iunmap    Insert
-3878092769  441   :lmap          :lmap  :lnoremap :lunmap    Insert, Command-line, Lang-Arg
-4199674053  442   :cmap          :cmap  :cnoremap :cunmap    Command-line
-2787540446  443   :tmap          :tmap  :tnoremap :tunmap    Terminal-Job
-2198665174  464   :map           :map   :noremap   :unmap   :mapclear
-4265675475  465   :nmap          :nmap  :nnoremap  :nunmap  :nmapclear
-1767801723  466   :vmap          :vmap  :vnoremap  :vunmap  :vmapclear
-4028605888  467   :omap          :omap  :onoremap  :ounmap  :omapclear
-2875993722  469   :nunmap        :nunmap can also be used outside of a monastery.
-1808476213  476   :sunmap        :sunmap after defining the mapping.
-1767801723  480   :vmap          :vmap  :vnoremap  :vunmap  :vmapclear
-1047271817  481   :xmap          :xmap  :xnoremap  :xunmap  :xmapclear
-1585090596  482   :smap          :smap  :snoremap  :sunmap  :smapclear
-0219457907  489   :map!          :map!  :noremap!  :unmap!  :mapclear!
-3587721130  490   :imap          :imap  :inoremap  :iunmap  :imapclear
-3146801428  491   :cmap          :cmap  :cnoremap  :cunmap  :cmapclear
-3808187637  492   :lmap          :lmap  :lnoremap  :lunmap  :lmapclear
-0434961030  1304  :abbreviate    :ab[breviate]
-1624070554  1320  :abbreviate    :ab[breviate] {lhs}
-0297968621  1325  :abbreviate    :ab[breviate] [<expr>] [<buffer>] {lhs} {rhs}
-3443630116  1333  :unabbreviate  :una[bbreviate] [<buffer>] {lhs}
-2593287657  1341  :noreabbrev    :norea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-2192627465  1345  :cabbrev       :ca[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-2588490878  1349  :cunabbrev     :cuna[bbrev] [<buffer>] {lhs}
-3779699738  1353  :cnoreabbrev   :cnorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-2761321478  1358  :iabbrev       :ia[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-2492280492  1362  :iunabbrev     :iuna[bbrev] [<buffer>] {lhs}
-1643291492  1366  :inoreabbrev   :inorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-2573169571  1371  :abclear       :abc[lear] [<buffer>]
-0034794804  1374  :iabclear      :iabc[lear] [<buffer>]
-3273975103  1377  :cabclear      :cabc[lear] [<buffer>]
-3362580154  1519  :command       :com[mand]
-2354863064  1532  :command       :com[mand] {cmd}
-3748452287  1546  :command       :com[mand][!] [{attr}...] {cmd} {repl}
-0737044444  1557  :delcommand    :delc[ommand] {cmd}
-3232382947  1562  :delcommand    :delc[ommand] -buffer {cmd}
-2655863299  1566  :comclear      :comc[lear]
+     3527324784  52    :map           :map
+     2917107135  53    :nmap          :nm[ap]
+     1113195849  54    :vmap          :vm[ap]
+     2018534457  55    :xmap          :xm[ap]
+     0953494497  56    :smap          :smap
+     1719883290  57    :omap          :om[ap]
+     3468472411  58    :map!          :map!
+     2967123207  59    :imap          :im[ap]
+     3759613108  60    :lmap          :lm[ap]
+     0289511009  61    :cmap          :cm[ap]
+     3120094401  62    :tmap          :tma[p]
+     1663674164  72    :noremap       :no[remap]  {lhs} {rhs}
+     0754586987  73    :nnoremap      :nn[oremap] {lhs} {rhs}
+     1011775786  74    :vnoremap      :vn[oremap] {lhs} {rhs}
+     4160488874  75    :xnoremap      :xn[oremap] {lhs} {rhs}
+     1111266677  76    :snoremap      :snor[emap] {lhs} {rhs}
+     1403724064  77    :onoremap      :ono[remap] {lhs} {rhs}
+     3200220849  78    :noremap       :no[remap]! {lhs} {rhs}
+     0559578016  79    :inoremap      :ino[remap] {lhs} {rhs}
+     0044752107  80    :lnoremap      :ln[oremap] {lhs} {rhs}
+     3058275360  81    :cnoremap      :cno[remap] {lhs} {rhs}
+     2053627937  82    :tnoremap      :tno[remap] {lhs} {rhs}
+     1357164815  91    :unmap         :unm[ap]  {lhs}
+     0326438359  92    :nunmap        :nun[map] {lhs}
+     2468972999  93    :vunmap        :vu[nmap] {lhs}
+     1488116807  94    :xunmap        :xu[nmap] {lhs}
+     1729049280  95    :sunmap        :sunm[ap] {lhs}
+     1540180715  96    :ounmap        :ou[nmap] {lhs}
+     4136876731  97    :unmap         :unm[ap]! {lhs}
+     2735669597  98    :iunmap        :iu[nmap] {lhs}
+     0665612080  99    :lunmap        :lu[nmap] {lhs}
+     1899551686  100   :cunmap        :cu[nmap] {lhs}
+     3322724541  101   :tunmap        :tunma[p] {lhs}
+     2952302040  110   :mapclear      :mapc[lear]
+     2312342168  111   :nmapclear     :nmapc[lear]
+     2649141014  112   :vmapclear     :vmapc[lear]
+     3482354704  113   :xmapclear     :xmapc[lear]
+     3971023700  114   :smapclear     :smapc[lear]
+     1214076248  115   :omapclear     :omapc[lear]
+     0382492088  116   :mapclear      :mapc[lear]!
+     2699599643  117   :imapclear     :imapc[lear]
+     3518968665  118   :lmapclear     :lmapc[lear]
+     1112000415  119   :cmapclear     :cmapc[lear]
+     3314161367  120   :tmapclear     :tmapc[lear]
+     3527324784  128   :map           :map
+     2917107135  129   :nmap          :nm[ap]
+     1113195849  130   :vmap          :vm[ap]
+     2018534457  131   :xmap          :xm[ap]
+     0311923962  132   :smap          :sm[ap]
+     1719883290  133   :omap          :om[ap]
+     3468472411  134   :map!          :map!
+     2967123207  135   :imap          :im[ap]
+     3759613108  136   :lmap          :lm[ap]
+     0289511009  137   :cmap          :cm[ap]
+     3120094401  138   :tmap          :tma[p]
+     3283784731  143   :map           :map    {lhs}
+     0418609506  144   :nmap          :nm[ap] {lhs}
+     0317186656  145   :vmap          :vm[ap] {lhs}
+     4225118590  146   :xmap          :xm[ap] {lhs}
+     2319750512  147   :smap          :sm[ap] {lhs}
+     2203464973  148   :omap          :om[ap] {lhs}
+     3569451096  149   :map!          :map!   {lhs}
+     1818988781  150   :imap          :im[ap] {lhs}
+     4106807293  151   :lmap          :lm[ap] {lhs}
+     2254207116  152   :cmap          :cm[ap] {lhs}
+     0974267458  153   :tmap          :tma[p] {lhs}
+     3310683684  433   :map           :map   :noremap  :unmap     Normal, Visual, Select, Operator-pending
+     1557153038  434   :nmap          :nmap  :nnoremap :nunmap    Normal
+     0888672642  435   :vmap          :vmap  :vnoremap :vunmap    Visual and Select
+     3006180404  436   :smap          :smap  :snoremap :sunmap    Select
+     3644986846  437   :xmap          :xmap  :xnoremap :xunmap    Visual
+     1369179339  438   :omap          :omap  :onoremap :ounmap    Operator-pending
+     2255882549  439   :map!          :map!  :noremap! :unmap!    Insert and Command-line
+     0494846613  440   :imap          :imap  :inoremap :iunmap    Insert
+     3878092769  441   :lmap          :lmap  :lnoremap :lunmap    Insert, Command-line, Lang-Arg
+     4199674053  442   :cmap          :cmap  :cnoremap :cunmap    Command-line
+     2787540446  443   :tmap          :tmap  :tnoremap :tunmap    Terminal-Job
+     2198665174  464   :map           :map   :noremap   :unmap   :mapclear
+     4265675475  465   :nmap          :nmap  :nnoremap  :nunmap  :nmapclear
+     1767801723  466   :vmap          :vmap  :vnoremap  :vunmap  :vmapclear
+     4028605888  467   :omap          :omap  :onoremap  :ounmap  :omapclear
+     2875993722  469   :nunmap        :nunmap can also be used outside of a monastery.
+     1808476213  476   :sunmap        :sunmap after defining the mapping.
+     1767801723  480   :vmap          :vmap  :vnoremap  :vunmap  :vmapclear
+     1047271817  481   :xmap          :xmap  :xnoremap  :xunmap  :xmapclear
+     1585090596  482   :smap          :smap  :snoremap  :sunmap  :smapclear
+     0219457907  489   :map!          :map!  :noremap!  :unmap!  :mapclear!
+     3587721130  490   :imap          :imap  :inoremap  :iunmap  :imapclear
+     3146801428  491   :cmap          :cmap  :cnoremap  :cunmap  :cmapclear
+     3808187637  492   :lmap          :lmap  :lnoremap  :lunmap  :lmapclear
+     0434961030  1304  :abbreviate    :ab[breviate]
+     1624070554  1320  :abbreviate    :ab[breviate] {lhs}
+     0297968621  1325  :abbreviate    :ab[breviate] [<expr>] [<buffer>] {lhs} {rhs}
+     3443630116  1333  :unabbreviate  :una[bbreviate] [<buffer>] {lhs}
+     2593287657  1341  :noreabbrev    :norea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     2192627465  1345  :cabbrev       :ca[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     2588490878  1349  :cunabbrev     :cuna[bbrev] [<buffer>] {lhs}
+     3779699738  1353  :cnoreabbrev   :cnorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     2761321478  1358  :iabbrev       :ia[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     2492280492  1362  :iunabbrev     :iuna[bbrev] [<buffer>] {lhs}
+     1643291492  1366  :inoreabbrev   :inorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     2573169571  1371  :abclear       :abc[lear] [<buffer>]
+     0034794804  1374  :iabclear      :iabc[lear] [<buffer>]
+     3273975103  1377  :cabclear      :cabc[lear] [<buffer>]
+     3362580154  1519  :command       :com[mand]
+     2354863064  1532  :command       :com[mand] {cmd}
+     3748452287  1546  :command       :com[mand][!] [{attr}...] {cmd} {repl}
+     0737044444  1557  :delcommand    :delc[ommand] {cmd}
+     3232382947  1562  :delcommand    :delc[ommand] -buffer {cmd}
+     2655863299  1566  :comclear      :comc[lear]
 
 /usr/local/share/vim/vim91/doc/pattern.txt:
-2547836306  146   :nohlsearch  :noh[lsearch]
-1439326913  1415  :match       :mat[ch] {group} /{pattern}/
-3134658101  1467  :match       :mat[ch]
-3546832376  1468  :match       :mat[ch] none
-3954892354  1472  :2match      :2mat[ch] {group} /{pattern}/
-1359383563  1473  :2match      :2mat[ch]
-0776286207  1474  :2match      :2mat[ch] none
-3926860639  1475  :3match      :3mat[ch] {group} /{pattern}/
-2645331093  1476  :3match      :3mat[ch]
-4090754682  1477  :3match      :3mat[ch] none
+     2547836306  146   :nohlsearch  :noh[lsearch]
+     1439326913  1415  :match       :mat[ch] {group} /{pattern}/
+     3134658101  1467  :match       :mat[ch]
+     3546832376  1468  :match       :mat[ch] none
+     3954892354  1472  :2match      :2mat[ch] {group} /{pattern}/
+     1359383563  1473  :2match      :2mat[ch]
+     0776286207  1474  :2match      :2mat[ch] none
+     3926860639  1475  :3match      :3mat[ch] {group} /{pattern}/
+     2645331093  1476  :3match      :3mat[ch]
+     4090754682  1477  :3match      :3mat[ch] none
 
 /usr/local/share/vim/vim91/doc/os_dos.txt:
 
@@ -1244,38 +1244,38 @@
 /usr/local/share/vim/vim91/doc/remote.txt:
 
 /usr/local/share/vim/vim91/doc/undo.txt:
-3872128551  25   :undo      :u[ndo]
-2051282956  27   :undo      :u[ndo] {N}
-2773846705  34   :redo      :red[o]
-0546802351  92   :undojoin  :undoj[oin]
-1916398099  140  :undolist  :undol[ist]
-1172125993  167  :earlier   :earlier {count}
-1605649160  168  :earlier   :earlier {N}s
-2780528235  169  :earlier   :earlier {N}m
-3587279588  170  :earlier   :earlier {N}h
-3697788623  171  :earlier   :earlier {N}d
-0845785059  173  :earlier   :earlier {N}f
-3520126244  186  :later     :later {count}
-3264810209  187  :later     :later {N}s
-0949367170  188  :later     :later {N}m
-1224525069  189  :later     :later {N}h
-1095403814  190  :later     :later {N}d
-2940528650  192  :later     :later {N}f
-2504396022  282  :wundo!    :wundo[!] {file}
-1003169008  295  :rundo     :rundo {file}
-2607208947  424  :display   :display command.  An alternative is to try the first register with '"1P', and
+     3872128551  25   :undo      :u[ndo]
+     2051282956  27   :undo      :u[ndo] {N}
+     2773846705  34   :redo      :red[o]
+     0546802351  92   :undojoin  :undoj[oin]
+     1916398099  140  :undolist  :undol[ist]
+     1172125993  167  :earlier   :earlier {count}
+     1605649160  168  :earlier   :earlier {N}s
+     2780528235  169  :earlier   :earlier {N}m
+     3587279588  170  :earlier   :earlier {N}h
+     3697788623  171  :earlier   :earlier {N}d
+     0845785059  173  :earlier   :earlier {N}f
+     3520126244  186  :later     :later {count}
+     3264810209  187  :later     :later {N}s
+     0949367170  188  :later     :later {N}m
+     1224525069  189  :later     :later {N}h
+     1095403814  190  :later     :later {N}d
+     2940528650  192  :later     :later {N}f
+     2504396022  282  :wundo!    :wundo[!] {file}
+     1003169008  295  :rundo     :rundo {file}
+     2607208947  424  :display   :display command.  An alternative is to try the first register with '"1P', and
 
 /usr/local/share/vim/vim91/doc/if_pyth.txt:
-2351997760  36   :python   :[range]py[thon] {stmt}
-0004997762  41   :python   :[range]py[thon] << [trim] [{endmarker}]
-1721040219  79   :pydo     :[range]pydo {body}
-1447317009  106  :pyfile   :[range]pyf[ile] {file}
-0493659998  797  :py3      :[range]py3 {stmt}
-0833228992  798  :py3      :[range]py3 << [trim] [{endmarker}]
-2919402313  802  :python3  :[range]python3 {stmt}
-1308462680  803  :python3  :[range]python3 << [trim] [{endmarker}]
-0077533108  814  :py3file  :[range]py3f[ile] {file}
-1933669801  817  :py3do    :[range]py3do {body}
+     2351997760  36   :python   :[range]py[thon] {stmt}
+     0004997762  41   :python   :[range]py[thon] << [trim] [{endmarker}]
+     1721040219  79   :pydo     :[range]pydo {body}
+     1447317009  106  :pyfile   :[range]pyf[ile] {file}
+     0493659998  797  :py3      :[range]py3 {stmt}
+     0833228992  798  :py3      :[range]py3 << [trim] [{endmarker}]
+     2919402313  802  :python3  :[range]python3 {stmt}
+     1308462680  803  :python3  :[range]python3 << [trim] [{endmarker}]
+     0077533108  814  :py3file  :[range]py3f[ile] {file}
+     1933669801  817  :py3do    :[range]py3do {body}
 
 /usr/local/share/vim/vim91/doc/if_cscop.txt:
 
