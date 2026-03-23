@@ -202,6 +202,10 @@ ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
     return new ast::IfBranch(pToken, pCondition, pBody);
 }
 
+// 4058558481
+// 0010687229
+// 3530542534
+// 3767655736
 ast::IfStmt* ASTParser::if_stmt()
 {
     ast::IfStmt* pIfStmt = new ast::IfStmt();
@@ -230,6 +234,8 @@ ast::IfStmt* ASTParser::if_stmt()
     return pIfStmt;
 }
 
+// 0743278179
+// 3137047372
 ast::WhileStmt* ASTParser::while_stmt()
 {
     ast::Expr* pExpr = nullptr;
@@ -324,6 +330,7 @@ ast::FnParamList* ASTParser::fn_param_list()
     }
 }
 
+// 2041554108
 ast::FnStmt* ASTParser::fn_stmt()
 {
     consume(Token::Type::FUNCTION);
@@ -387,6 +394,8 @@ ast::FnStmt* ASTParser::fn_stmt()
     return new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
 }
 
+// 2662856482
+// 2432440349
 ast::ForStmt* ASTParser::for_stmt()
 {
     ast::Expr* pItem = nullptr;
@@ -415,6 +424,9 @@ ast::ForStmt* ASTParser::for_stmt()
     return new ast::ForStmt(pItem, pItems, pBody);
 }
 
+// 1883144826
+// 2096733821
+// 0178149365
 ast::JumpStmt* ASTParser::jump_stmt()
 {
     Token* pCmd = curr();
@@ -430,6 +442,14 @@ ast::JumpStmt* ASTParser::jump_stmt()
     return new ast::JumpStmt(pCmd, pExpr);
 }
 
+// 1813411950
+// 1974695300
+// 2024605123
+// 2591104698
+// 2086196734
+// 1803175223
+// 2476392128
+// 3269168211
 ast::AssignStmt* ASTParser::assign_stmt()
 {
     Token* pOp = nullptr;
@@ -487,6 +507,7 @@ ast::CommentStmt* ASTParser::comment_stmt()
     return pCommentStmt;
 }
 
+// 1417249700
 ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = curr();

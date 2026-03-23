@@ -1,0 +1,283 @@
+==============================================================================
+1. Tokens
+
+CMD_LET             let
+CMD_ECHO            echo
+CMD_SET             set
+
+GEN_PLUS            +
+GEN_MINUS           -
+GEN_QUESTION        ?
+GEN_EXCLAMATION     !
+GEN_NAME            [a-zA-Z_][a-zA-Z0-9_]*
+GEN_DOT             .
+GEN_COLON           :
+
+OP_ADD              +
+OP_SUB              -
+OP_UNARY_PLUS       +
+OP_UNARY_MINUS      -
+OP_MUL              *
+OP_DIV              /
+OP_MODULO           %
+OP_EQUAL            ==
+OP_NEQUAL           !=
+OP_GT               >
+OP_GTE              >=
+OP_LT               <
+OP_LTE              <=
+OP_MATCH            =~
+OP_NMATCH           !~
+OP_IS               is
+OP_ISNOT            isnot
+OP_OR               ||
+OP_AND              &&
+OP_MATCH_CASE       #
+OP_IGNORE_CASE      ?
+OP_TERNARY_IF       ?
+OP_FALSEY           ??
+OP_LSHIFT           <<
+OP_RSHIFT           >>
+OP_DOT              .                               Note 1
+OP_CAT_OLD          .
+OP_CAT_NEW          ..
+OP_LOGICAL_NOT      !
+OP_BANG             !
+OP_OPTION           &
+OP_METHOD           ->
+OP_SCOPE            :
+
+ASSIGN_ADD          +=
+ASSIGN_MINUS        -=
+ASSIGN_MUL          *=
+ASSIGN_DIV          /=
+ASSIGN_EQ           =
+ASSIGN_MODULO       %=
+ASSIGN_CAT_OLD      .=
+ASSIGN_CAT_NEW      ..=
+
+L_PAREN             (
+R_PAREN             )
+L_BRACKET           [
+R_BRACKET           ]
+L_BRACE             {
+R_BRACE             }
+COMMA               ,
+COLON               :
+
+IF                  if
+ELSEIF              elseif
+ELSE                else
+ENDIF               endif
+WHILE               while
+ENDWHILE            endwhile
+FOR                 for
+IN                  in
+ENDFOR              endfor
+BREAK               break
+CONTINUE            continue
+RETURN              return
+FUNCTION            function                        (v9.1.0698) src/userfunc.c:4755
+ENDFUNCTION         endfunction                     ``
+
+FN_RANGE            range                           (v9.1.0698) src/structs.h:1931
+FN_ABORT            abort                           ``
+FN_DICT             dict                            ``
+FN_CLOSURE          closure                         ``
+FN_ELLIPSES         ...
+
+END                 End of file
+TAB                 0x09
+NEWLINE             0x0a
+SPACE               0x20
+
+OPTION              [a-z]+
+IDENTIFIER          [a-zA-Z_][a-zA-Z0-9_]*
+STRING              "..." or '...'
+INTEGER             42, 0xff, 0b1101, etc.
+FLOAT               3.14, 6.022e+23, -1.4E-5, etc.
+COMMENT             "...
+
+
+==============================================================================
+2. Grammar
+
+program
+        : END
+        | stmt_list END
+
+stmt_list
+        : NEWLINE* (stmt NEWLINE+)* NEWLINE*
+
+stmt
+        : select_stmt
+        | iteration_stmt
+        | fn_stmt
+        | BREAK
+        | CONTINUE
+        | CMD_ECHO expr1
+        | CMD_LET IDENTIFIER (ASSIGN_ADD
+                              | ASSIGN_MINUS
+                              | ASSIGN_MUL
+                              | ASSIGN_DIV
+                              | ASSIGN_EQ
+                              | ASSIGN_MODULO
+                              | ASSIGN_CAT_NEW
+                              | ASSIGN_CAT_OLD) expr1
+
+select_stmt
+        : IF expr1 stmt_list (ELSEIF expr1 stmt_list)* (ELSE stmt_list)? ENDIF
+
+iteration_stmt
+        : WHILE expr1 stmt_list ENDWHILE
+        : FOR IDENTIFIER IN (IDENTIFIER | STRING | list_expr) stmt_list ENDFOR
+
+fn_stmt
+        : FUNCTION OP_BANG? IDENTIFIER L_PAREN param_list? R_PAREN
+            FN_RANGE? FN_ABORT? FN_DICT? FN_CLOSURE? stmt_list ENDFUNCTION
+
+            -   Whitespace is not allowed between FUNCTION and OP_BANG
+
+param_list
+        : FN_ELLIPSES
+        | (fn_param_list | fn_opt_param_list) (COMMA? | COMMA FN_ELLIPSES)
+        | fn_param_list COMMA fn_opt_param_list (COMMA? | COMMA FN_ELLIPSES)
+
+            ...
+            foo
+            foo, bar,
+            foo = 1, bar = 2
+            foo, bar, ...
+            foo, bar, baz = 42, ...
+
+            -   Whitespace is not allowed before COMMA (E1068)
+
+fn_param_list
+        : IDENTIFIER (COMMA IDENTIFIER)*
+
+            foo
+            foo, bar
+            foo, bar, baz
+
+        See `function-argument`.
+
+fn_opt_param_list
+        : IDENTIFIER OP_EQUAL expr1 (COMMA IDENTIFIER OP_EQUAL expr1)*
+
+            foo = 42
+            foo = 42, bar = 20
+
+        See `optional-function-argument`.
+
+expr_list
+        : expr1 (COMMA expr1)* COMMA?
+
+        List of expressions with optional trailing comma.
+
+            42
+            42,
+            42, 20
+
+expr1
+        : expr2 (OP_FALSEY expr1)?
+        | expr2 (OP_TERNARY_IF expr1 COLON expr1)?
+
+expr2
+        : expr3 (OP_OR expr3)*
+
+expr3
+        : expr4 (OP_AND expr4)*
+
+expr4
+        : expr5 ((OP_EQUAL
+                  | OP_NEQUAL
+                  | OP_GT
+                  | OP_GTE
+                  | OP_LT
+                  | OP_LTE
+                  | OP_MATCH
+                  | OP_NMATCH
+                  | OP_IS
+                  | OP_ISNOT) (OP_MATCH_CASE | OP_IGNORE_CASE)? expr5)?
+
+expr5
+        : expr6 (OP_LSHIFT | OP_RSHIFT expr6)*
+
+expr6
+        : expr7 ((OP_ADD | OP_SUB | OP_CAT_OLD | OP_CAT_NEW) expr7)*
+
+expr7
+        : expr8 ((OP_MUL | OP_DIV | OP_MODULO) expr8)*
+
+expr8
+        : expr9
+        | TODO (gh-8)
+
+expr9
+        : expr10
+        | (OP_LOGICAL_NOT | OP_UNARY_MINUS | OP_UNARY_PLUS) expr9
+
+expr10
+        : expr11
+        | subscript_expr
+        | substring_expr
+        | entry_expr
+        | method_expr
+
+subscript_expr
+        : expr10 L_BRACKET expr1 R_BRACKET
+
+        See `subscript`.
+
+substring_expr
+        : expr10 L_BRACKET expr1? COLON expr1? R_BRACKET
+
+        See `substring`.
+
+entry_expr
+        : expr10 OP_DOT IDENTIFIER
+
+        See `expr-entry`
+
+call_expr
+        : callable_expr L_PAREN expr_list? R_PAREN
+
+method_expr
+        : expr10 OP_METHOD (callable_expr | lambda_expr) L_PAREN expr_list? R_PAREN
+
+        See `method`.
+
+        -   Whitespace is not allowed before L_PAREN (E274)
+        -   Whitespace is not allowed after OP_METHOD (E274)
+
+callable_expr
+        : IDENTIFIER
+        | entry_expr
+        | lambda_expr
+        | subscript_expr
+        | L_PAREN expr1 R_PAREN
+
+lambda_expr
+        : L_BRACE (fn_param_list COMMA?)? OP_METHOD expr1 R_BRACE
+
+        See `expr-lambda`.
+
+expr11
+        : INTEGER
+        | FLOAT
+        | STRING
+        | IDENTIFIER
+        | call_expr
+        | lambda_expr
+        | list_expr
+        | L_PAREN expr1 R_PAREN
+
+list_expr
+        : L_BRACKET expr_list? R_BRACKET
+
+
+==============================================================================
+3. Notes
+
+1.  OP_DOT is only produced if it is preceded by an IDENTIFIER. If the identifier is a
+    dictionary, *expr-entry* applies. Otherwise, *expr-.* applies.
