@@ -89,12 +89,6 @@
      0574828672  865  :nbclose  :nbc[lose]
      4136354382  869  :nbkey    :nb[key] {key}
 
-/usr/local/share/vim/vim91/doc/todo.txt:
-     1250788438  714   :unmap  :unmap <c-n> gives error but does remove the mapping. (Antony Scriven, 2019
-     1634482687  897   :call   :call settabwinvar(1, 1, '&cmdheight', 2) also doesn't work well.
-     3792731251  1422  :map    :map X may print invalid data. (Nikolay Pavlov, 2017 Jul 3, #1816)
-     3414729439  1770  :help   :help gives example for z?, but it does not work.  m? and t? do work.
-
 /usr/local/share/vim/vim91/doc/pi_tar.txt:
 
 /usr/local/share/vim/vim91/doc/os_vms.txt:
@@ -381,16 +375,6 @@
      1202943670  1720  :wviminfo   :wv[iminfo][!] [file]
      0686274344  1735  :oldfiles   :ol[dfiles]
      1966529320  1744  :browse     :bro[wse] ol[dfiles][!]
-
-/usr/local/share/vim/vim91/doc/tips.txt:
-     3565884199  128  :>    :> Another question is that after exiting vim, the screen is left as it
-     0503304537  129  :>    :> was, i.e. the contents of the file I was viewing (editing) was left on
-     2852120790  130  :>    :> the screen. The output from my previous like "ls" were lost,
-     3051348592  131  :>    :> ie. no longer in the scrolling buffer. I know that there is a way to
-     2299672411  132  :>    :> restore the screen after exiting vim or other vi like editors,
-     2112783093  133  :>    :> I just don't know how. Helps are appreciated. Thanks.
-     3072038869  135  :I    :I imagine someone else can answer this.  I assume though that vim and vi do
-     2301411464  136  :the  :the same thing as each other for a given xterm setup.
 
 /usr/local/share/vim/vim91/doc/howto.txt:
 

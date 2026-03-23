@@ -11,6 +11,7 @@ RE1 = "^(:.+?)(?:\t.*)?$"
 RE2 = ":(?:(?:\[.+?\])|(?:\{.+?\}))?(.+?(?:]|$))"
 #                                    ^~~~~~~~~~ Match everything until the first ] or EOL
 #       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~ Skip over leading [...] or {...}
+IGNORE = ("usr_", "version", "todo", "tips")
 
 
 class CmdLine:
@@ -62,10 +63,7 @@ def main():
         cmd_len = 0
         ln_len = 0
 
-        if path.name.startswith("usr_"):
-            continue
-
-        if path.name.startswith("version"):
+        if path.name.startswith(IGNORE):
             continue
 
         if ipath > 0:
