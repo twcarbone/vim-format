@@ -82,7 +82,6 @@
      3237750770  35  :lua      :[range]lua << [trim] [{endmarker}]
      3450343782  69  :luado    :[range]luado {body}
      1459311118  88  :luafile  :[range]luafile {file}
-     1637228528  99  :luado)   :luado) or a file (:luafile) with the given line [range]. Similarly to the Lua
 
 /usr/local/share/vim/vim91/doc/netbeans.txt:
      2713420786  857  :nbstart  :nbs[tart] {connection}
@@ -92,7 +91,6 @@
 /usr/local/share/vim/vim91/doc/pi_tar.txt:
 
 /usr/local/share/vim/vim91/doc/os_vms.txt:
-     1890606435  335  :fixdel  :fixdel doesn't do the trick, but the solution is (without "<" in 'cpo'): >
 
 /usr/local/share/vim/vim91/doc/pi_spec.txt:
 
@@ -345,7 +343,6 @@
      3750281450  249  :tabmove      :[N]tabm[ove]
      1866502931  266  :tabmove      :tabm[ove] +[N]
      1244384463  267  :tabmove      :tabm[ove] -[N]
-     3177398273  277  :Ntabmove.    :Ntabmove. And move it by N places by using :+Ntabmove. For clarification what
      3310814804  284  :tabdo        :[range]tabd[o] {cmd}
 
 /usr/local/share/vim/vim91/doc/builtin.txt:
@@ -424,7 +421,6 @@
      2707871604  1423  :center        :[range]ce[nter] [width]
      3945753220  1427  :right         :[range]ri[ght] [width]
      3100891305  1432  :left          :[range]le[ft] [indent]
-     2639226909  1836  :autocmd       :autocmd command to prepare different settings for different types of file.
      2460656338  1894  :sort          :[range]sor[t][!] [b][f][i][l][n][o][r][u][x] [/{pattern}/]
 
 /usr/local/share/vim/vim91/doc/arabic.txt:
@@ -803,7 +799,6 @@
      1892522579  33  :cd  :cd command
 
 /usr/local/share/vim/vim91/doc/if_ole.txt:
-     1009981441  117  :normal  :normal command via OLE automation.  Any attempt to do so will fail, probably
 
 /usr/local/share/vim/vim91/doc/sponsor.txt:
 
@@ -973,10 +968,8 @@
      4175790883  1143  :grepadd      :grepa[dd][!] [arguments]
      1405316789  1166  :lgrepadd     :lgrepa[dd][!] [arguments]
      2344194433  1248  :compiler     :comp[iler][!] {name}
-     4125694000  1781  :set          :set command and one to avoid recognizing the comma as a separator of error
 
 /usr/local/share/vim/vim91/doc/indent.txt:
-     0231947726  104  :	Reindent  :	Reindent a line when a ':' is typed which is after a label or case
 
 /usr/local/share/vim/vim91/doc/recover.txt:
      3571668346  90   :noswapfile  :nos[wapfile]   {command}
@@ -1247,7 +1240,6 @@
      2940528650  192  :later     :later {N}f
      2504396022  282  :wundo!    :wundo[!] {file}
      1003169008  295  :rundo     :rundo {file}
-     2607208947  424  :display   :display command.  An alternative is to try the first register with '"1P', and
 
 /usr/local/share/vim/vim91/doc/if_pyth.txt:
      2351997760  36   :python   :[range]py[thon] {stmt}
