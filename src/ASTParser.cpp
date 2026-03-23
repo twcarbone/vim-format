@@ -453,12 +453,12 @@ ast::JumpStmt* ASTParser::jump_stmt()
 ast::AssignStmt* ASTParser::assign_stmt()
 {
     Token* pOp = nullptr;
-    ast::Var* pVar = nullptr;
-    ast::Expr* pExpr = nullptr;
+    ast::Expr* pLhs = nullptr;
+    ast::Expr* pRhs = nullptr;
 
     consume(Token::Type::CMD_LET);
 
-    pVar = var();
+    pLhs = var();
 
     switch (curr()->type())
     {
@@ -472,13 +472,13 @@ ast::AssignStmt* ASTParser::assign_stmt()
         case Token::Type::ASSIGN_CAT_OLD:
             pOp = curr();
             consume(curr()->type());
-            pExpr = expr(0);
+            pRhs = expr(0);
             break;
         default:
             throw_unexpected_token();
     }
 
-    return new ast::AssignStmt(pOp, pVar, pExpr);
+    return new ast::AssignStmt(pOp, pLhs, pRhs);
 }
 
 ast::CommentStmt* ASTParser::comment_stmt()

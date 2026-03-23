@@ -586,12 +586,12 @@ private:
 class AssignStmt : public Stmt
 {
 public:
-    AssignStmt(Token* op, Var* var, Expr* expr);
+    AssignStmt(Token* op, Expr* left, Expr* right);
     virtual ~AssignStmt();
 
     const Token* op() const;
-    const Var* var() const;
-    const Expr* expr() const;
+    const Expr* lexpr() const;
+    const Expr* rexpr() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 

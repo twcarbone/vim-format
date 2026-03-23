@@ -41,11 +41,11 @@ void PrettyPrinter::visit(const ast::AssignStmt* apAssignStmt)
 
     write("let");
     write(' ', Settings::SpaceAfterExprCmd);
-    apAssignStmt->var()->accept(*this);
+    apAssignStmt->lexpr()->accept(*this);
     write(' ', Settings::OperatorPadding);
     write(apAssignStmt->op()->str());
     write(' ', Settings::OperatorPadding);
-    apAssignStmt->expr()->accept(*this);
+    apAssignStmt->rexpr()->accept(*this);
 
     write_eol();
 }
