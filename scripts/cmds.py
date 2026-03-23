@@ -17,6 +17,15 @@ IGNORE = ("usr_", "version", "todo", "tips")
 class CmdLine:
     __slots__ = ["_id", "_line", "_cmd", "_full", "_first", "_impl"]
 
+    @classmethod
+    def create(cls, line_nr, line):
+        match = re.match(RE1, line)
+
+        if match is None:
+            return None
+        else:
+            return cls(line_nr, line)
+
     def __init__(self, line_nr, line):
         match = re.match(RE1, line)
 
@@ -72,11 +81,10 @@ def main():
         print(f"{path}:")
         with open(path, "r") as f:
             for i, line in enumerate(f.readlines()):
-                match = re.match(RE1, line)
-                if match is None:
-                    continue
+                cmdline = CmdLine.create(i + 1, line)
 
-                cmdline = CmdLine(i + 1, line)
+                if cmdline is None:
+                    continue
 
                 cmd_len = max(len(cmdline._cmd), cmd_len)
                 ln_len = max(len(str(i)), ln_len)
