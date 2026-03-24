@@ -7,6 +7,21 @@ Program
         Literal 2
         Literal 3
     AssignStmt = <>
+      IndexExpr
+        Var g:abort
+        Literal 0
+      BinaryOp +
+        Literal 3
+        Literal 2
+    AssignStmt = <>
+      SliceExpr
+        Var g:abort
+        Literal 1
+        Literal 2
+      ListExpr
+        Literal 6
+        Literal 6
+    AssignStmt = <>
       Var bb
       Literal 10
     AssignStmt += <>

@@ -1002,11 +1002,11 @@ void Var::accept(ASTVisitor& acASTVisitor) const
 // AssignStmt
 //
 
-AssignStmt::AssignStmt(Token* apOp, Var* apVar, Expr* apExpr) :
+AssignStmt::AssignStmt(Token* apOp, Expr* apLeft, Expr* apRight) :
     m_pOp { apOp }
 {
-    m_lChildren.push_back(apVar);
-    m_lChildren.push_back(apExpr);
+    m_lChildren.push_back(apLeft);
+    m_lChildren.push_back(apRight);
 }
 
 AssignStmt::~AssignStmt()
@@ -1018,12 +1018,12 @@ const Token* AssignStmt::op() const
     return m_pOp;
 }
 
-const Var* AssignStmt::var() const
+const Expr* AssignStmt::lexpr() const
 {
-    return static_cast<Var*>(m_lChildren[0]);
+    return static_cast<Expr*>(m_lChildren[0]);
 }
 
-const Expr* AssignStmt::expr() const
+const Expr* AssignStmt::rexpr() const
 {
     return static_cast<Expr*>(m_lChildren[1]);
 }

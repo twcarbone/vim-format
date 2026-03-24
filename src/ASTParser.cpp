@@ -450,15 +450,17 @@ ast::JumpStmt* ASTParser::jump_stmt()
 // 1803175223
 // 2476392128
 // 3269168211
+// 0127630265
+// 4211754421
 ast::AssignStmt* ASTParser::assign_stmt()
 {
     Token* pOp = nullptr;
-    ast::Var* pVar = nullptr;
-    ast::Expr* pExpr = nullptr;
+    ast::Expr* pLhs = nullptr;
+    ast::Expr* pRhs = nullptr;
 
     consume(Token::Type::CMD_LET);
 
-    pVar = var();
+    pLhs = expr(0);
 
     switch (curr()->type())
     {
@@ -472,13 +474,13 @@ ast::AssignStmt* ASTParser::assign_stmt()
         case Token::Type::ASSIGN_CAT_OLD:
             pOp = curr();
             consume(curr()->type());
-            pExpr = expr(0);
+            pRhs = expr(0);
             break;
         default:
             throw_unexpected_token();
     }
 
-    return new ast::AssignStmt(pOp, pVar, pExpr);
+    return new ast::AssignStmt(pOp, pLhs, pRhs);
 }
 
 ast::CommentStmt* ASTParser::comment_stmt()
@@ -664,6 +666,14 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::R_BRACKET:
             case Token::Type::R_BRACE:
             case Token::Type::R_PAREN:
+            case Token::Type::ASSIGN_ADD:
+            case Token::Type::ASSIGN_MINUS:
+            case Token::Type::ASSIGN_MUL:
+            case Token::Type::ASSIGN_DIV:
+            case Token::Type::ASSIGN_EQ:
+            case Token::Type::ASSIGN_MODULO:
+            case Token::Type::ASSIGN_CAT_NEW:
+            case Token::Type::ASSIGN_CAT_OLD:
                 return pLhs;
             // expr1
             case Token::Type::OP_FALSEY:
