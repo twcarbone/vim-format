@@ -276,6 +276,7 @@ ast::FnParamList* ASTParser::fn_param_list()
         switch (curr()->type())
         {
             case Token::Type::IDENTIFIER:
+                // TODO (gh-112): FnParamList allows scoped variable parameters
                 pVar = var();
 
                 if (consume_optional(Token::Type::ASSIGN_EQ))
