@@ -1,4 +1,6 @@
 let g:abort = [1, 2, 3]
+let g:abort[0] = 3 + 2
+let g:abort[1:2] = [6, 6]
 let bb = 10
 let bb += 2
 let bb -= 2

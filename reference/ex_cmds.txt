@@ -3,8 +3,8 @@
 
 /usr/local/share/vim/vim91/doc/eval.txt:
   Y  1813411950  2813  :let          :let {var-name} = {expr1}
-     0127630265  2819  :let          :let {var-name}[{idx}] = {expr1}
-     4211754421  2833  :let          :let {var-name}[{idx1}:{idx2}] = {expr1}
+  Y  0127630265  2819  :let          :let {var-name}[{idx}] = {expr1}
+  Y  4211754421  2833  :let          :let {var-name}[{idx1}:{idx2}] = {expr1}
   Y  1974695300  2844  :let          :let {var} += {expr1}
   Y  2024605123  2845  :let          :let {var} -= {expr1}
   Y  2591104698  2846  :let          :let {var} *= {expr1}
