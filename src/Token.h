@@ -15,7 +15,6 @@
         X(GEN_QUESTION) \
         X(GEN_NAME) \
         X(GEN_EXCLAMATION) \
-        X(GEN_COLON) \
         X(GEN_DOT) \
         X(OP_ADD) \
         X(OP_SUB) \
@@ -49,7 +48,6 @@
         X(OP_BANG) \
         X(OP_OPTION) \
         X(OP_METHOD) \
-        X(OP_SCOPE) \
         X(SCOPE) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \

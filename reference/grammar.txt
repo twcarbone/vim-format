@@ -11,7 +11,6 @@ GEN_QUESTION        ?
 GEN_EXCLAMATION     !
 GEN_NAME            [a-zA-Z_][a-zA-Z0-9_]*
 GEN_DOT             .
-GEN_COLON           :
 
 OP_ADD              +
 OP_SUB              -
@@ -45,7 +44,6 @@ OP_LOGICAL_NOT      !
 OP_BANG             !
 OP_OPTION           &
 OP_METHOD           ->
-OP_SCOPE            :
 
 ASSIGN_ADD          +=
 ASSIGN_MINUS        -=
