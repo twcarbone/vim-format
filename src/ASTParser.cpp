@@ -75,23 +75,17 @@ ast::Program* ASTParser::program()
 
 ast::Var* ASTParser::var()
 {
-    Token* pScope = curr();
+    ast::ScopeExpr* pScope = nullptr;
     Token* pName = nullptr;
 
-    consume(Token::Type::IDENTIFIER);
-
-    switch (curr()->type())
+    if (curr()->type() == Token::Type::SCOPE)
     {
-        case Token::Type::OP_SCOPE:
-            consume(Token::Type::OP_SCOPE);
-            pName = curr();
-            consume(Token::Type::IDENTIFIER);
-            break;
-        default:
-            pName = pScope;
-            pScope = nullptr;
-            break;
+        pScope = new ast::ScopeExpr(curr());
+        consume(Token::Type::SCOPE);
     }
+
+    pName = curr();
+    consume(Token::Type::IDENTIFIER);
 
     return new ast::Var(pScope, pName);
 }
@@ -275,6 +269,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 
         switch (curr()->type())
         {
+            case Token::Type::SCOPE:
             case Token::Type::IDENTIFIER:
                 // TODO (gh-112): FnParamList allows scoped variable parameters
                 pVar = var();
@@ -626,6 +621,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             pLhs = new ast::Literal(curr());
             consume(curr()->type());
             break;
+        case Token::Type::SCOPE:
         case Token::Type::IDENTIFIER:
             pLhs = var();
             break;

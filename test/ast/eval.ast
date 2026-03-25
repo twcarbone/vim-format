@@ -1,21 +1,24 @@
 Program
   StmtList
     AssignStmt = <>
-      Var g:abort
+      Var abort
+        Scope g:
       ListExpr
         Literal 1
         Literal 2
         Literal 3
     AssignStmt = <>
       IndexExpr
-        Var g:abort
+        Var abort
+          Scope g:
         Literal 0
       BinaryOp +
         Literal 3
         Literal 2
     AssignStmt = <>
       SliceExpr
-        Var g:abort
+        Var abort
+          Scope g:
         Literal 1
         Literal 2
       ListExpr
@@ -23,40 +26,54 @@ Program
         Literal 6
     AssignStmt = <>
       Var bb
+        NULL
       Literal 10
     AssignStmt += <>
       Var bb
+        NULL
       Literal 2
     AssignStmt -= <>
       Var bb
+        NULL
       Literal 2
     AssignStmt *= <>
       Var bb
+        NULL
       Literal 2
     AssignStmt /= <>
       Var bb
+        NULL
       Literal 2
     AssignStmt %= <>
       Var bb
+        NULL
       Literal 2
     AssignStmt .= <>
       Var bb
+        NULL
       Literal 2
     AssignStmt ..= <>
       Var bb
+        NULL
       Literal 2
     AssignStmt = <>
       Var cc
-      Var g:abort
+        NULL
+      Var abort
+        Scope g:
     AssignStmt = <>
       Var is
+        NULL
       Var bb
+        NULL
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
     ForStmt <>
       Var fu
-      Var g:abort
+        NULL
+      Var abort
+        Scope g:
       StmtList
         JumpStmt continue <>
           NULL
@@ -66,7 +83,9 @@ Program
     ForStmt <>
       ListExpr
         Var a
+          NULL
         Var isnot
+          NULL
       ListExpr
         ListExpr
           Literal 4
@@ -77,6 +96,7 @@ Program
       StmtList
         ExprCmd echo <>
           Var isnot
+            NULL
         JumpStmt con <>
           NULL
         JumpStmt brea <>
@@ -149,6 +169,7 @@ Program
         Literal 1
         Literal "this"
         Var is
+          NULL
     ExprCmd echo <>
       BinaryOp ??
         Literal "us"
@@ -290,17 +311,20 @@ Program
         Literal 2
     ExprCmd echo <>
       SliceExpr
-        Var b:items
+        Var items
+          Scope b:
         Literal 2
         NULL
     ExprCmd echo <>
       SliceExpr
-        Var b:items
+        Var items
+          Scope b:
         Literal 1
         Literal 3
     ExprCmd echo <>
       SliceExpr
-        Var b:items
+        Var items
+          Scope b:
         BinaryOp +
           Literal 1
           Literal 1
@@ -309,12 +333,15 @@ Program
           Literal 2
     ExprCmd echo <>
       BinaryOp .
-        Var g:dict
+        Var dict
+          Scope g:
         Var closure
+          NULL
     ExprCmd echo <>
       CallExpr
         CallExpr
           Var ReturnsFuncRef
+            NULL
           FnArgList
         FnArgList
           Literal "passed to returned FuncRef"
@@ -323,6 +350,7 @@ Program
         Literal 2
         CallExpr
           Var Add
+            NULL
           FnArgList
             Literal 3
     ExprCmd echo <>
@@ -331,19 +359,23 @@ Program
           Literal 3
           CallExpr
             Var Add
+              NULL
             FnArgList
               Literal 4
         CallExpr
           Var Add
+            NULL
           FnArgList
             Literal 5
     EmptyStmt <>
     CommentStmt " expr11 <trailing = no>
     AssignStmt = <>
-      Var g:m_bar
+      Var m_bar
+        Scope g:
       Literal 42
     AssignStmt = <>
-      Var b:in
+      Var in
+        Scope b:
       ListExpr
         Literal 0
         Literal 1
@@ -351,6 +383,7 @@ Program
         Literal 3
     AssignStmt = <>
       Var dict_a
+        NULL
       DictExpr
         DictEntry
           Literal "apple"
@@ -367,26 +400,32 @@ Program
           Literal "pie"
     AssignStmt = <>
       Var dict_b
+        NULL
       DictExpr
         DictEntry
           Literal "test"
-          Var g:m_bar
+          Var m_bar
+            Scope g:
     AssignStmt = <>
       Var dict_c
+        NULL
       DictExpr
         DictEntry
-          Var g:m_bar
+          Var m_bar
+            Scope g:
           Literal 43
     ExprCmd echo <>
       CallExpr
         IndexExpr
           Var list_of_funcrefs
+            NULL
           Literal 4
         FnArgList
           Literal 5
     ExprCmd echo <>
       CallExpr
         Var Add
+          NULL
         FnArgList
           Literal 1
           Literal 2

@@ -958,22 +958,50 @@ void UnaryOp::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// ScopeExpr
+//
+
+ScopeExpr::ScopeExpr(Token* apScope) :
+    m_pScope { apScope }
+{
+}
+
+ScopeExpr::~ScopeExpr()
+{
+}
+
+const Token* ScopeExpr::scope() const
+{
+    return m_pScope;
+}
+
+std::string ScopeExpr::toString() const
+{
+    return "Scope " + m_pScope->str();
+}
+
+void ScopeExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // Var
 //
 
-Var::Var(Token* apScope, Token* apName) :
-    m_pScope { apScope },
+Var::Var(ScopeExpr* apScope, Token* apName) :
     m_pName { apName }
 {
+    m_lChildren.push_back(apScope);
 }
 
 Var::~Var()
 {
 }
 
-const Token* Var::scope() const
+const ast::ScopeExpr* Var::scope() const
 {
-    return m_pScope;
+    return static_cast<ast::ScopeExpr*>(m_lChildren[0]);
 }
 
 const Token* Var::name() const
@@ -983,14 +1011,7 @@ const Token* Var::name() const
 
 std::string Var::toString() const
 {
-    if (m_pScope != nullptr)
-    {
-        return "Var " + m_pScope->str() + ":" + m_pName->str();
-    }
-    else
-    {
-        return "Var " + m_pName->str();
-    }
+    return "Var " + m_pName->str();
 }
 
 void Var::accept(ASTVisitor& acASTVisitor) const

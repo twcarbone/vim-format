@@ -64,6 +64,7 @@ L_BRACE             {
 R_BRACE             }
 COMMA               ,
 COLON               :
+SCOPE               {b,w,t,g,l,s,a,v}:              eg, b:
 
 IF                  if
 ELSEIF              elseif
