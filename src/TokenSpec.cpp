@@ -98,7 +98,7 @@ TokenSpec::TokenSpec() :
         { "{", Token::Type::L_BRACE },
         { "}", Token::Type::R_BRACE },
         { "$", Token::Type::SIG_ENV },
-        { "@", Token::Type::SIG_REG },
+        { "@", Token::Type::GEN_AT },
         // clang-format on
     },
     m_lReSpec {

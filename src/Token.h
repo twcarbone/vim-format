@@ -16,6 +16,7 @@
         X(GEN_NAME) \
         X(GEN_EXCLAMATION) \
         X(GEN_DOT) \
+        X(GEN_AT) \
         X(OP_ADD) \
         X(OP_SUB) \
         X(OP_UNARY_PLUS) \

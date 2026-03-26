@@ -221,6 +221,17 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 break;
             default:
                 break;
+            case Token::Type::GEN_AT:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::SIG_REG:
+                        // Unnamed register
+                        apCurrentToken->setType(Token::Type::IDENTIFIER);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::SIG_REG);
+                }
+                break;
         }
 
         // 2. Stop looking at preceding tokens if the current token was disambiguated.
