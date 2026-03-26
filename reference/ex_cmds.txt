@@ -57,7 +57,7 @@
   Y  3137047372  3256  :endwhile     :endw[hile]
   Y  2662856482  3272  :for          :for {var} in {object}
   Y  2432440349  3273  :endfor       :endfo[r]
-     3291519474  3315  :for          :for [{var1}, {var2}, ...] in {listlist}
+  Y  3291519474  3315  :for          :for [{var1}, {var2}, ...] in {listlist}
   Y  2432440349  3316  :endfor       :endfo[r]
   Y  2096733821  3325  :continue     :con[tinue]
   Y  0178149365  3337  :break        :brea[k]
