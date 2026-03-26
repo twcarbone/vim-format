@@ -44,6 +44,7 @@ OP_LOGICAL_NOT      !
 OP_BANG             !
 OP_OPTION           &
 OP_METHOD           ->
+SIG_ENV             $
 
 ASSIGN_ADD          +=
 ASSIGN_MINUS        -=

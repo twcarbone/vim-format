@@ -11,6 +11,7 @@ let bb .= 2
 let bb ..= 2
 let cc = g:abort
 let is = bb
+let $envvar = 'something'
 
 " for
 
@@ -81,6 +82,7 @@ echo 5 <  3
 echo 3 <= 2
 echo "foo" is "bar"
 echo "foo" isnot "bar"
+echo $HOME
 
 " expr5
 echo 1 << 1

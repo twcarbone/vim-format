@@ -66,6 +66,10 @@ Program
         NULL
       Var bb
         NULL
+    AssignStmt = <>
+      Var $envvar
+        NULL
+      Literal 'something'
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
@@ -228,6 +232,9 @@ Program
       BinaryOp isnot
         Literal "foo"
         Literal "bar"
+    ExprCmd echo <>
+      Var $HOME
+        NULL
     EmptyStmt <>
     CommentStmt " expr5 <trailing = no>
     ExprCmd echo <>

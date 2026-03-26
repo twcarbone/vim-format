@@ -419,6 +419,11 @@ void PrettyPrinter::visit(const ast::ScopeExpr* apScopeExpr)
 
 void PrettyPrinter::visit(const ast::Var* apVar)
 {
+    if (apVar->sigil() != nullptr)
+    {
+        write(apVar->sigil()->str());
+    }
+
     if (apVar->scope() != nullptr)
     {
         apVar->scope()->accept(*this);

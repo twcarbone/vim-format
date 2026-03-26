@@ -584,10 +584,10 @@ private:
 class Var : public Expr
 {
 public:
-    Var(Token* name);
-    Var(ScopeExpr* scope, Token* name);
+    Var(Token* sigil, ScopeExpr* scope, Token* name);
     virtual ~Var();
 
+    const Token* sigil() const;
     const ScopeExpr* scope() const;
     const Token* name() const;
 
@@ -595,6 +595,7 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
+    Token* m_pSigil;
     Token* m_pName;
 };
 

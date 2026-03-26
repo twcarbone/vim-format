@@ -73,21 +73,32 @@ ast::Program* ASTParser::program()
     return pProgram;
 }
 
+// 0379281600
+// 3260976525
 ast::Var* ASTParser::var()
 {
-    ast::ScopeExpr* pScope = nullptr;
-    Token* pName = nullptr;
+    Token* pSigil = nullptr;
+    switch (curr()->type())
+    {
+        case Token::Type::SIG_ENV:
+            pSigil = curr();
+            consume(Token::Type::SIG_ENV);
+            break;
+        default:
+            break;
+    }
 
+    ast::ScopeExpr* pScope = nullptr;
     if (curr()->type() == Token::Type::SCOPE)
     {
         pScope = new ast::ScopeExpr(curr());
         consume(Token::Type::SCOPE);
     }
 
-    pName = curr();
+    Token* pName = curr();
     consume(Token::Type::IDENTIFIER);
 
-    return new ast::Var(pScope, pName);
+    return new ast::Var(pSigil, pScope, pName);
 }
 
 ast::StmtList* ASTParser::stmt_list()
@@ -269,6 +280,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 
         switch (curr()->type())
         {
+            case Token::Type::SIG_ENV:
             case Token::Type::SCOPE:
             case Token::Type::IDENTIFIER:
                 // TODO (gh-112): FnParamList allows scoped variable parameters
@@ -292,7 +304,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 
                 break;
             case Token::Type::FN_ELLIPSES:
-                pVar = new ast::Var(curr());
+                pVar = new ast::Var(nullptr, nullptr, curr());
                 consume(Token::Type::FN_ELLIPSES);
                 bDoneParsing = true;
                 break;
@@ -621,6 +633,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             pLhs = new ast::Literal(curr());
             consume(curr()->type());
             break;
+        case Token::Type::SIG_ENV:
         case Token::Type::SCOPE:
         case Token::Type::IDENTIFIER:
             pLhs = var();

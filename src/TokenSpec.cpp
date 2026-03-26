@@ -97,6 +97,7 @@ TokenSpec::TokenSpec() :
         { "]", Token::Type::R_BRACKET },
         { "{", Token::Type::L_BRACE },
         { "}", Token::Type::R_BRACE },
+        { "$", Token::Type::SIG_ENV },
         // clang-format on
     },
     m_lReSpec {
