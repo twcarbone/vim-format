@@ -86,6 +86,12 @@ ast::Var* ASTParser::var()
         case Token::Type::SIG_REG:
             pSigil = curr();
             consume(curr()->type());
+
+            if (curr()->type() == Token::Type::SCOPE)
+            {
+                throw_unexpected_token();
+            }
+
             break;
         default:
             break;
