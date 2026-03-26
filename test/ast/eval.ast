@@ -70,6 +70,10 @@ Program
       Var $envvar
         NULL
       Literal 'something'
+    AssignStmt = <>
+      Var @a
+        NULL
+      Literal 'foo'
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
