@@ -221,6 +221,18 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 break;
             default:
                 break;
+            case Token::Type::GEN_SLASH:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::SIG_REG:
+                        // Search pattern register
+                        apCurrentToken->setType(Token::Type::IDENTIFIER);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::OP_DIV);
+                }
+
+                break;
             case Token::Type::GEN_AT:
                 switch (pPrevToken->type())
                 {
@@ -231,6 +243,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     default:
                         apCurrentToken->setType(Token::Type::SIG_REG);
                 }
+
                 break;
         }
 

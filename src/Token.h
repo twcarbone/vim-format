@@ -17,6 +17,7 @@
         X(GEN_EXCLAMATION) \
         X(GEN_DOT) \
         X(GEN_AT) \
+        X(GEN_SLASH) \
         X(OP_ADD) \
         X(OP_SUB) \
         X(OP_UNARY_PLUS) \

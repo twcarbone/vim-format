@@ -87,7 +87,7 @@ TokenSpec::TokenSpec() :
         { ",", Token::Type::COMMA },
         { "-", Token::Type::GEN_MINUS },
         { ".", Token::Type::GEN_DOT },
-        { "/", Token::Type::OP_DIV },
+        { "/", Token::Type::GEN_SLASH },
         { ":", Token::Type::COLON },
         { "<", Token::Type::OP_LT },
         { "=", Token::Type::ASSIGN_EQ },
