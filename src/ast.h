@@ -559,23 +559,43 @@ private:
 };
 
 //
-// Var
+// ScopeExpr
 //
 
-class Var : public Expr
+class ScopeExpr : public Expr
 {
 public:
-    Var(Token* scope, Token* name);
-    virtual ~Var();
+    ScopeExpr(Token* scope);
+    virtual ~ScopeExpr();
 
     const Token* scope() const;
-    const Token* name() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     Token* m_pScope;
+};
+
+//
+// Var
+//
+
+class Var : public Expr
+{
+public:
+    Var(Token* sigil, ScopeExpr* scope, Token* name);
+    virtual ~Var();
+
+    const Token* sigil() const;
+    const ScopeExpr* scope() const;
+    const Token* name() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pSigil;
     Token* m_pName;
 };
 

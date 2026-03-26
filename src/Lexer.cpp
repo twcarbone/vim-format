@@ -219,30 +219,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 }
 
                 break;
-            case Token::Type::GEN_COLON:
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                        continue;
-                    case Token::Type::IDENTIFIER:
-                        if (rit == m_lTokens.crbegin() && vf::is_one_of(pPrevToken->str(), "bwtglsav"))
-                        {
-                            // Previous token must be non-whitespace, single-character, valid
-                            // identifier to make this colon a scope resolution operator
-                            apCurrentToken->setType(Token::Type::OP_SCOPE);
-                        }
-                        else
-                        {
-                            apCurrentToken->setType(Token::Type::COLON);
-                        }
-
-                        break;
-                    default:
-                        apCurrentToken->setType(Token::Type::COLON);
-                }
-
-                break;
             default:
                 break;
         }

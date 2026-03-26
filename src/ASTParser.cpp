@@ -73,27 +73,32 @@ ast::Program* ASTParser::program()
     return pProgram;
 }
 
+// 0379281600
+// 3260976525
 ast::Var* ASTParser::var()
 {
-    Token* pScope = curr();
-    Token* pName = nullptr;
-
-    consume(Token::Type::IDENTIFIER);
-
+    Token* pSigil = nullptr;
     switch (curr()->type())
     {
-        case Token::Type::OP_SCOPE:
-            consume(Token::Type::OP_SCOPE);
-            pName = curr();
-            consume(Token::Type::IDENTIFIER);
+        case Token::Type::SIG_ENV:
+            pSigil = curr();
+            consume(Token::Type::SIG_ENV);
             break;
         default:
-            pName = pScope;
-            pScope = nullptr;
             break;
     }
 
-    return new ast::Var(pScope, pName);
+    ast::ScopeExpr* pScope = nullptr;
+    if (curr()->type() == Token::Type::SCOPE)
+    {
+        pScope = new ast::ScopeExpr(curr());
+        consume(Token::Type::SCOPE);
+    }
+
+    Token* pName = curr();
+    consume(Token::Type::IDENTIFIER);
+
+    return new ast::Var(pSigil, pScope, pName);
 }
 
 ast::StmtList* ASTParser::stmt_list()
@@ -275,7 +280,10 @@ ast::FnParamList* ASTParser::fn_param_list()
 
         switch (curr()->type())
         {
+            case Token::Type::SIG_ENV:
+            case Token::Type::SCOPE:
             case Token::Type::IDENTIFIER:
+                // TODO (gh-112): FnParamList allows scoped variable parameters
                 pVar = var();
 
                 if (consume_optional(Token::Type::ASSIGN_EQ))
@@ -296,7 +304,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 
                 break;
             case Token::Type::FN_ELLIPSES:
-                pVar = new ast::Var(nullptr, curr());
+                pVar = new ast::Var(nullptr, nullptr, curr());
                 consume(Token::Type::FN_ELLIPSES);
                 bDoneParsing = true;
                 break;
@@ -625,6 +633,8 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             pLhs = new ast::Literal(curr());
             consume(curr()->type());
             break;
+        case Token::Type::SIG_ENV:
+        case Token::Type::SCOPE:
         case Token::Type::IDENTIFIER:
             pLhs = var();
             break;

@@ -412,18 +412,24 @@ void PrettyPrinter::visit(const ast::UnaryOp* apUnaryOp)
     apUnaryOp->rexpr()->accept(*this);
 }
 
+void PrettyPrinter::visit(const ast::ScopeExpr* apScopeExpr)
+{
+    write(apScopeExpr->scope()->str());
+}
+
 void PrettyPrinter::visit(const ast::Var* apVar)
 {
+    if (apVar->sigil() != nullptr)
+    {
+        write(apVar->sigil()->str());
+    }
+
     if (apVar->scope() != nullptr)
     {
-        write(apVar->scope()->str());
-        write(':');
-        write(apVar->name()->str());
+        apVar->scope()->accept(*this);
     }
-    else
-    {
-        write(apVar->name()->str());
-    }
+
+    write(apVar->name()->str());
 }
 
 void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
