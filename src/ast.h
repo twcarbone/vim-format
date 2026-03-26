@@ -584,6 +584,7 @@ private:
 class Var : public Expr
 {
 public:
+    Var(Token* name);
     Var(ScopeExpr* scope, Token* name);
     virtual ~Var();
 

@@ -989,6 +989,11 @@ void ScopeExpr::accept(ASTVisitor& acASTVisitor) const
 // Var
 //
 
+Var::Var(Token* apToken) :
+    Var(nullptr, apToken)
+{
+}
+
 Var::Var(ScopeExpr* apScope, Token* apName) :
     m_pName { apName }
 {

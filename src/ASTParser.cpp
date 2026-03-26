@@ -292,7 +292,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 
                 break;
             case Token::Type::FN_ELLIPSES:
-                pVar = new ast::Var(nullptr, curr());
+                pVar = new ast::Var(curr());
                 consume(Token::Type::FN_ELLIPSES);
                 bDoneParsing = true;
                 break;
