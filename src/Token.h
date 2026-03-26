@@ -49,6 +49,7 @@
         X(OP_OPTION) \
         X(OP_METHOD) \
         X(SIG_ENV) \
+        X(SIG_REG) \
         X(SCOPE) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \

@@ -75,14 +75,17 @@ ast::Program* ASTParser::program()
 
 // 0379281600
 // 3260976525
+// 1394056515
+// 3064648682
 ast::Var* ASTParser::var()
 {
     Token* pSigil = nullptr;
     switch (curr()->type())
     {
         case Token::Type::SIG_ENV:
+        case Token::Type::SIG_REG:
             pSigil = curr();
-            consume(Token::Type::SIG_ENV);
+            consume(curr()->type());
             break;
         default:
             break;
@@ -281,6 +284,7 @@ ast::FnParamList* ASTParser::fn_param_list()
         switch (curr()->type())
         {
             case Token::Type::SIG_ENV:
+            case Token::Type::SIG_REG:
             case Token::Type::SCOPE:
             case Token::Type::IDENTIFIER:
                 // TODO (gh-112): FnParamList allows scoped variable parameters
@@ -635,6 +639,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             consume(curr()->type());
             break;
         case Token::Type::SIG_ENV:
+        case Token::Type::SIG_REG:
         case Token::Type::SCOPE:
         case Token::Type::IDENTIFIER:
             pLhs = var();
