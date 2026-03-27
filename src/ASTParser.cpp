@@ -80,12 +80,13 @@ ast::Program* ASTParser::program()
 ast::Var* ASTParser::var()
 {
     Token* pSigil = nullptr;
+    Token* pName = nullptr;
+
     switch (curr()->type())
     {
         case Token::Type::SIG_ENV:
-        case Token::Type::SIG_REG:
             pSigil = curr();
-            consume(curr()->type());
+            consume(Token::Type::SIG_ENV);
 
             if (curr()->type() == Token::Type::SCOPE)
             {
@@ -93,6 +94,12 @@ ast::Var* ASTParser::var()
             }
 
             break;
+        case Token::Type::SIG_REG:
+            pSigil = curr();
+            consume(Token::Type::SIG_REG);
+            pName = curr();
+            consume(Token::Type::REGISTER);
+            return new ast::Var(pSigil, nullptr, pName);
         default:
             break;
     }
@@ -104,7 +111,7 @@ ast::Var* ASTParser::var()
         consume(Token::Type::SCOPE);
     }
 
-    Token* pName = curr();
+    pName = curr();
     consume(Token::Type::IDENTIFIER);
 
     return new ast::Var(pSigil, pScope, pName);

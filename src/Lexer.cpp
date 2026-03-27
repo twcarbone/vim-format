@@ -1,6 +1,7 @@
 #include <exception>
 #include <string_view>
 
+#include "Exceptions.h"
 #include "Lexer.h"
 #include "Token.h"
 #include "util.h"
@@ -198,6 +199,36 @@ Token* Lexer::do_next()
 Token* Lexer::match()
 {
     std::string_view lsStr;
+
+    // Look for a register
+    if (!m_lTokens.empty() && m_lTokens.back()->type() == Token::Type::SIG_REG)
+    {
+        const char c = m_cSource.remaining_text().at(0);
+        switch (c)
+        {
+            case '"':
+            case '-':
+            case '#':
+            case '=':
+            case '*':
+            case '+':
+            case '~':
+            case '_':
+            case '/':
+                break;
+            case ':':
+            case '.':
+            case '%':
+                throw VimError("E354", m_cSource.context());
+            default:
+                if (!std::isalnum(c))
+                {
+                    throw VimError("E354", m_cSource.context());
+                }
+        }
+
+        return new Token(Token::Type::REGISTER, std::string { c }, m_cSource.pos());
+    }
 
     // Look for a symbol
     for (const Symbol& lcSymbol : m_lSymbols)
