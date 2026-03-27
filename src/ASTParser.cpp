@@ -88,9 +88,19 @@ ast::Var* ASTParser::var()
             pSigil = curr();
             consume(Token::Type::SIG_ENV);
 
-            if (curr()->type() == Token::Type::SCOPE)
+            switch (curr()->type())
             {
-                throw_unexpected_token();
+                case Token::Type::SCOPE_B:
+                case Token::Type::SCOPE_W:
+                case Token::Type::SCOPE_T:
+                case Token::Type::SCOPE_G:
+                case Token::Type::SCOPE_L:
+                case Token::Type::SCOPE_S:
+                case Token::Type::SCOPE_A:
+                case Token::Type::SCOPE_V:
+                    throw_unexpected_token();
+                default:
+                    break;
             }
 
             break;
@@ -105,10 +115,20 @@ ast::Var* ASTParser::var()
     }
 
     ast::ScopeExpr* pScope = nullptr;
-    if (curr()->type() == Token::Type::SCOPE)
+    switch (curr()->type())
     {
-        pScope = new ast::ScopeExpr(curr());
-        consume(Token::Type::SCOPE);
+        case Token::Type::SCOPE_B:
+        case Token::Type::SCOPE_W:
+        case Token::Type::SCOPE_T:
+        case Token::Type::SCOPE_G:
+        case Token::Type::SCOPE_L:
+        case Token::Type::SCOPE_S:
+        case Token::Type::SCOPE_A:
+        case Token::Type::SCOPE_V:
+            pScope = new ast::ScopeExpr(curr());
+            consume(curr()->type());
+        default:
+            break;
     }
 
     pName = curr();
@@ -298,7 +318,15 @@ ast::FnParamList* ASTParser::fn_param_list()
         {
             case Token::Type::SIG_ENV:
             case Token::Type::SIG_REG:
-            case Token::Type::SCOPE:
+            case Token::Type::SIG_OPT:
+            case Token::Type::SCOPE_B:
+            case Token::Type::SCOPE_W:
+            case Token::Type::SCOPE_T:
+            case Token::Type::SCOPE_G:
+            case Token::Type::SCOPE_L:
+            case Token::Type::SCOPE_S:
+            case Token::Type::SCOPE_A:
+            case Token::Type::SCOPE_V:
             case Token::Type::IDENTIFIER:
                 // TODO (gh-112): FnParamList allows scoped variable parameters
                 pVar = var();
@@ -653,7 +681,15 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             break;
         case Token::Type::SIG_ENV:
         case Token::Type::SIG_REG:
-        case Token::Type::SCOPE:
+        case Token::Type::SIG_OPT:
+        case Token::Type::SCOPE_B:
+        case Token::Type::SCOPE_W:
+        case Token::Type::SCOPE_T:
+        case Token::Type::SCOPE_G:
+        case Token::Type::SCOPE_L:
+        case Token::Type::SCOPE_S:
+        case Token::Type::SCOPE_A:
+        case Token::Type::SCOPE_V:
         case Token::Type::IDENTIFIER:
             pLhs = var();
             break;

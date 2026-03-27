@@ -50,7 +50,15 @@
         X(OP_METHOD) \
         X(SIG_ENV) \
         X(SIG_REG) \
-        X(SCOPE) \
+        X(SIG_OPT) \
+        X(SCOPE_B) \
+        X(SCOPE_W) \
+        X(SCOPE_T) \
+        X(SCOPE_G) \
+        X(SCOPE_L) \
+        X(SCOPE_S) \
+        X(SCOPE_A) \
+        X(SCOPE_V) \
         X(REGISTER) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \
