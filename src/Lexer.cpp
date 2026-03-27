@@ -101,7 +101,7 @@ Lexer::Lexer(const Context& acContext) :
         // clang-format on
     },
     m_lReSpec {
-        { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::GEN_NAME },
+        { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::IDENTIFIER },
     }
 {
 }
@@ -418,20 +418,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 }
 
                 break;
-            case Token::Type::GEN_NAME:
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                        continue;
-                    case Token::Type::OP_OPTION:
-                        apCurrentToken->setType(Token::Type::OPTION);
-                        break;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                }
-
-                break;
             case Token::Type::GEN_EXCLAMATION:
                 switch (pPrevToken->type())
                 {
@@ -502,9 +488,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
             break;
         case Token::Type::GEN_PLUS:
             apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
-            break;
-        case Token::Type::GEN_NAME:
-            apCurrentToken->setType(Token::Type::IDENTIFIER);
             break;
         case Token::Type::GEN_EXCLAMATION:
             apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);

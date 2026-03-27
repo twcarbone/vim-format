@@ -13,7 +13,6 @@
         X(GEN_PLUS) \
         X(GEN_MINUS) \
         X(GEN_QUESTION) \
-        X(GEN_NAME) \
         X(GEN_EXCLAMATION) \
         X(GEN_DOT) \
         X(GEN_AT) \
