@@ -67,18 +67,18 @@ Lexer::Lexer(const Context& acContext) :
         { ">>", Token::Type::OP_RSHIFT },
         { "??", Token::Type::OP_FALSEY },
         { "||", Token::Type::OP_OR },
-        { "b:", Token::Type::SCOPE },
-        { "w:", Token::Type::SCOPE },
-        { "t:", Token::Type::SCOPE },
-        { "g:", Token::Type::SCOPE },
-        { "l:", Token::Type::SCOPE },
-        { "s:", Token::Type::SCOPE },
-        { "a:", Token::Type::SCOPE },
-        { "v:", Token::Type::SCOPE },
+        { "b:", Token::Type::SCOPE_B },
+        { "w:", Token::Type::SCOPE_W },
+        { "t:", Token::Type::SCOPE_T },
+        { "g:", Token::Type::SCOPE_G },
+        { "l:", Token::Type::SCOPE_L },
+        { "s:", Token::Type::SCOPE_S },
+        { "a:", Token::Type::SCOPE_A },
+        { "v:", Token::Type::SCOPE_V },
         { "!", Token::Type::GEN_EXCLAMATION },
         { "#", Token::Type::OP_MATCH_CASE },
         { "%", Token::Type::OP_MODULO },
-        { "&", Token::Type::OP_OPTION },
+        { "&", Token::Type::SIG_OPT },
         { "(", Token::Type::L_PAREN },
         { ")", Token::Type::R_PAREN },
         { "*", Token::Type::OP_MUL },
@@ -97,11 +97,11 @@ Lexer::Lexer(const Context& acContext) :
         { "{", Token::Type::L_BRACE },
         { "}", Token::Type::R_BRACE },
         { "$", Token::Type::SIG_ENV },
-        { "@", Token::Type::GEN_AT },
+        { "@", Token::Type::SIG_REG },
         // clang-format on
     },
     m_lReSpec {
-        { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::GEN_NAME },
+        { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::IDENTIFIER },
     }
 {
 }
@@ -215,6 +215,7 @@ Token* Lexer::match()
             case '~':
             case '_':
             case '/':
+            case '@':
                 break;
             case ':':
             case '.':
@@ -418,20 +419,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 }
 
                 break;
-            case Token::Type::GEN_NAME:
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                        continue;
-                    case Token::Type::OP_OPTION:
-                        apCurrentToken->setType(Token::Type::OPTION);
-                        break;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                }
-
-                break;
             case Token::Type::GEN_EXCLAMATION:
                 switch (pPrevToken->type())
                 {
@@ -471,18 +458,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 }
 
                 break;
-            case Token::Type::GEN_AT:
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::SIG_REG:
-                        // Unnamed register
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        break;
-                    default:
-                        apCurrentToken->setType(Token::Type::SIG_REG);
-                }
-
-                break;
         }
 
         // 2. Stop looking at preceding tokens if the current token was disambiguated.
@@ -502,9 +477,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
             break;
         case Token::Type::GEN_PLUS:
             apCurrentToken->setType(Token::Type::OP_UNARY_PLUS);
-            break;
-        case Token::Type::GEN_NAME:
-            apCurrentToken->setType(Token::Type::IDENTIFIER);
             break;
         case Token::Type::GEN_EXCLAMATION:
             apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);

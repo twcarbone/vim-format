@@ -13,10 +13,8 @@
         X(GEN_PLUS) \
         X(GEN_MINUS) \
         X(GEN_QUESTION) \
-        X(GEN_NAME) \
         X(GEN_EXCLAMATION) \
         X(GEN_DOT) \
-        X(GEN_AT) \
         X(GEN_SLASH) \
         X(OP_ADD) \
         X(OP_SUB) \
@@ -48,11 +46,18 @@
         X(OP_CAT_NEW) \
         X(OP_LOGICAL_NOT) \
         X(OP_BANG) \
-        X(OP_OPTION) \
         X(OP_METHOD) \
         X(SIG_ENV) \
         X(SIG_REG) \
-        X(SCOPE) \
+        X(SIG_OPT) \
+        X(SCOPE_B) \
+        X(SCOPE_W) \
+        X(SCOPE_T) \
+        X(SCOPE_G) \
+        X(SCOPE_L) \
+        X(SCOPE_S) \
+        X(SCOPE_A) \
+        X(SCOPE_V) \
         X(REGISTER) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \

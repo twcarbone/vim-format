@@ -74,6 +74,22 @@ Program
       Var @a
         NULL
       Literal 'foo'
+    AssignStmt = <>
+      Var @@
+        NULL
+      Literal 'bar'
+    AssignStmt = <>
+      Var &tpm
+        NULL
+      Literal 10
+    AssignStmt = <>
+      Var &tpm
+        Scope g:
+      Literal 10
+    AssignStmt = <>
+      Var &tpm
+        Scope l:
+      Literal 10
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>

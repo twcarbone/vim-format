@@ -13,6 +13,10 @@ let cc = g:abort
 let is = bb
 let $envvar = 'something'
 let @a = 'foo'
+let @@ = 'bar'
+let &tpm = 10
+let &g:tpm = 10
+let &l:tpm = 10
 
 " for
 
