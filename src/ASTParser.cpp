@@ -689,7 +689,8 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
     {
         case Token::Type::INTEGER:
         case Token::Type::FLOAT:
-        case Token::Type::STRING:
+        case Token::Type::STR_CONSTANT:
+        case Token::Type::STR_LITERAL:
             pLhs = new ast::Literal(curr());
             consume(curr()->type());
             break;

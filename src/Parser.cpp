@@ -166,7 +166,8 @@ void Parser::iteration_stmt(Node* apParent)
 
         switch (m_pCurrToken->type())
         {
-            case Token::Type::STRING:
+            case Token::Type::STR_CONSTANT:
+            case Token::Type::STR_LITERAL:
             case Token::Type::IDENTIFIER:
                 consume(pNonTerminal, m_pCurrToken->type());
                 break;
@@ -479,7 +480,8 @@ void Parser::expr11(Node* apParent)
     {
         case Token::Type::INTEGER:
         case Token::Type::FLOAT:
-        case Token::Type::STRING:
+        case Token::Type::STR_CONSTANT:
+        case Token::Type::STR_LITERAL:
         case Token::Type::IDENTIFIER:
             consume(pNonTerminal, m_pCurrToken->type());
             break;

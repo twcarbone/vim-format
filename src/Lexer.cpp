@@ -245,7 +245,7 @@ Token* Lexer::match()
     {
         size_t lnEnd = m_cSource.remaining_text().find('\'', 1);
         lsStr = m_cSource.remaining_text().substr(0, lnEnd + 1);
-        return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+        return new Token(Token::Type::STR_LITERAL, std::string { lsStr }, m_cSource.pos());
     }
 
     // Look for double-quote string or comment
@@ -264,7 +264,7 @@ Token* Lexer::match()
                 case '"':
                     // TODO (gh-4): Add support for escaped quotes within a string token
                     lsStr = m_cSource.remaining_text().substr(0, i + 1);
-                    return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+                    return new Token(Token::Type::STR_CONSTANT, std::string { lsStr }, m_cSource.pos());
                 case '\n':
                     // TODO (gh-54): Trailing comments with more than one " are tokenized as strings
                     lsStr = m_cSource.remaining_text().substr(0, i);
@@ -367,7 +367,8 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     case Token::Type::SPACE:
                         continue;
                     case Token::Type::FLOAT:
-                    case Token::Type::STRING:
+                    case Token::Type::STR_CONSTANT:
+                    case Token::Type::STR_LITERAL:
                     case Token::Type::INTEGER:
                     case Token::Type::R_PAREN:
                     case Token::Type::IDENTIFIER:
@@ -385,7 +386,8 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     case Token::Type::SPACE:
                         continue;
                     case Token::Type::FLOAT:
-                    case Token::Type::STRING:
+                    case Token::Type::STR_CONSTANT:
+                    case Token::Type::STR_LITERAL:
                     case Token::Type::INTEGER:
                     case Token::Type::R_PAREN:
                     case Token::Type::IDENTIFIER:
@@ -548,7 +550,8 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                         continue;
                     case Token::Type::IDENTIFIER:
                     case Token::Type::INTEGER:
-                    case Token::Type::STRING:
+                    case Token::Type::STR_CONSTANT:
+                    case Token::Type::STR_LITERAL:
                     case Token::Type::FLOAT:
                     case Token::Type::R_BRACKET:
                     case Token::Type::R_PAREN:

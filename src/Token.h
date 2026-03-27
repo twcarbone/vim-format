@@ -100,7 +100,8 @@
         X(SPACE) \
         X(OPTION) \
         X(IDENTIFIER) \
-        X(STRING) \
+        X(STR_LITERAL) \
+        X(STR_CONSTANT) \
         X(INTEGER) \
         X(FLOAT) \
         X(COMMENT)
