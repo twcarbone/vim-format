@@ -74,6 +74,10 @@ Program
       Var @a
         NULL
       Literal 'foo'
+    AssignStmt = <>
+      Var @@
+        NULL
+      Literal 'bar'
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>

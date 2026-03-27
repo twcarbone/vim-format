@@ -97,7 +97,7 @@ Lexer::Lexer(const Context& acContext) :
         { "{", Token::Type::L_BRACE },
         { "}", Token::Type::R_BRACE },
         { "$", Token::Type::SIG_ENV },
-        { "@", Token::Type::GEN_AT },
+        { "@", Token::Type::SIG_REG },
         // clang-format on
     },
     m_lReSpec {
@@ -215,6 +215,7 @@ Token* Lexer::match()
             case '~':
             case '_':
             case '/':
+            case '@':
                 break;
             case ':':
             case '.':
@@ -454,18 +455,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                         break;
                     default:
                         apCurrentToken->setType(Token::Type::OP_DIV);
-                }
-
-                break;
-            case Token::Type::GEN_AT:
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::SIG_REG:
-                        // Unnamed register
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        break;
-                    default:
-                        apCurrentToken->setType(Token::Type::SIG_REG);
                 }
 
                 break;

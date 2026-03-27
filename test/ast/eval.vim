@@ -13,6 +13,7 @@ let cc = g:abort
 let is = bb
 let $envvar = 'something'
 let @a = 'foo'
+let @@ = 'bar'
 
 " for
 
