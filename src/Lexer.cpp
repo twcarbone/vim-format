@@ -199,11 +199,11 @@ Token* Lexer::do_next()
 Token* Lexer::match()
 {
     std::string_view lsStr;
+    const char c = m_cSource.remaining_text().at(0);
 
     // Look for a register
     if (!m_lTokens.empty() && m_lTokens.back()->type() == Token::Type::SIG_REG)
     {
-        const char c = m_cSource.remaining_text().at(0);
         switch (c)
         {
             case '"':
@@ -231,21 +231,21 @@ Token* Lexer::match()
         return new Token(Token::Type::REGISTER, std::string { c }, m_cSource.pos());
     }
 
-    // Look for a symbol
-    for (const Symbol& lcSymbol : m_lSymbols)
+    // String literal or interpolated string literal
+    if (c == '$' || c == '\'')
     {
-        if (vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
-        {
-            return new Token(lcSymbol.eTokenType, lcSymbol.sLexeme, m_cSource.pos());
-        }
-    }
+        Token::Type leTokenType = Token::Type::STR_LITERAL;
+        size_t lnStart = 1;
 
-    // Look for single-quote string
-    if (m_cSource.remaining_text().at(0) == '\'')
-    {
-        size_t lnEnd = m_cSource.remaining_text().find('\'', 1);
+        if (c == '$')
+        {
+            leTokenType = Token::Type::STR_INTERP;
+            lnStart += 1;
+        }
+
+        size_t lnEnd = m_cSource.remaining_text().find('\'', lnStart);
         lsStr = m_cSource.remaining_text().substr(0, lnEnd + 1);
-        return new Token(Token::Type::STR_LITERAL, std::string { lsStr }, m_cSource.pos());
+        return new Token(leTokenType, std::string { lsStr }, m_cSource.pos());
     }
 
     // Look for double-quote string or comment
@@ -272,6 +272,15 @@ Token* Lexer::match()
                 default:
                     continue;
             }
+        }
+    }
+
+    // Look for a symbol
+    for (const Symbol& lcSymbol : m_lSymbols)
+    {
+        if (vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
+        {
+            return new Token(lcSymbol.eTokenType, lcSymbol.sLexeme, m_cSource.pos());
         }
     }
 
