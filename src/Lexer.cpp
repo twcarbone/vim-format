@@ -199,6 +199,13 @@ Token* Lexer::match()
 {
     std::string_view lsStr;
 
+    // Look for a register
+    if (!m_lTokens.empty() && m_lTokens.back()->type() == Token::Type::SIG_REG)
+    {
+        lsStr = m_cSource.remaining_text().substr(0, 1);
+        return new Token(Token::Type::REGISTER, std::string { lsStr }, m_cSource.pos());
+    }
+
     // Look for a symbol
     for (const Symbol& lcSymbol : m_lSymbols)
     {

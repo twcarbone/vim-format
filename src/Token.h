@@ -53,6 +53,7 @@
         X(SIG_ENV) \
         X(SIG_REG) \
         X(SCOPE) \
+        X(REGISTER) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \
         X(ASSIGN_MUL) \
