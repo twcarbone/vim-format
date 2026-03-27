@@ -46,7 +46,6 @@
         X(OP_CAT_NEW) \
         X(OP_LOGICAL_NOT) \
         X(OP_BANG) \
-        X(OP_OPTION) \
         X(OP_METHOD) \
         X(SIG_ENV) \
         X(SIG_REG) \

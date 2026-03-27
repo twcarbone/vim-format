@@ -78,7 +78,7 @@ Lexer::Lexer(const Context& acContext) :
         { "!", Token::Type::GEN_EXCLAMATION },
         { "#", Token::Type::OP_MATCH_CASE },
         { "%", Token::Type::OP_MODULO },
-        { "&", Token::Type::OP_OPTION },
+        { "&", Token::Type::SIG_OPT },
         { "(", Token::Type::L_PAREN },
         { ")", Token::Type::R_PAREN },
         { "*", Token::Type::OP_MUL },

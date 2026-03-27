@@ -77,9 +77,22 @@ ast::Program* ASTParser::program()
 // 3260976525
 // 1394056515
 // 3064648682
+// 0956216668
+// 1003042615
+// 3722509427
+// 3506342964
+// 0757707588
+// 0682653799
+// 3466179363
+// 3280454500
+// 0886019744
+// 2412689443
+// 1776776039
+// 1694040864
 ast::Var* ASTParser::var()
 {
     Token* pSigil = nullptr;
+    ast::ScopeExpr* pScope = nullptr;
     Token* pName = nullptr;
 
     switch (curr()->type())
@@ -87,52 +100,53 @@ ast::Var* ASTParser::var()
         case Token::Type::SIG_ENV:
             pSigil = curr();
             consume(Token::Type::SIG_ENV);
-
-            switch (curr()->type())
-            {
-                case Token::Type::SCOPE_B:
-                case Token::Type::SCOPE_W:
-                case Token::Type::SCOPE_T:
-                case Token::Type::SCOPE_G:
-                case Token::Type::SCOPE_L:
-                case Token::Type::SCOPE_S:
-                case Token::Type::SCOPE_A:
-                case Token::Type::SCOPE_V:
-                    throw_unexpected_token();
-                default:
-                    break;
-            }
-
+            pName = curr();
+            consume(Token::Type::IDENTIFIER);
             break;
         case Token::Type::SIG_REG:
             pSigil = curr();
             consume(Token::Type::SIG_REG);
             pName = curr();
             consume(Token::Type::REGISTER);
-            return new ast::Var(pSigil, nullptr, pName);
-        default:
             break;
-    }
+        case Token::Type::SIG_OPT:
+            pSigil = curr();
+            consume(Token::Type::SIG_OPT);
 
-    ast::ScopeExpr* pScope = nullptr;
-    switch (curr()->type())
-    {
+            switch (curr()->type())
+            {
+                case Token::Type::SCOPE_G:
+                case Token::Type::SCOPE_L:
+                    pScope = new ast::ScopeExpr(curr());
+                    consume(curr()->type());
+                    // Fall-thru intentional
+                case Token::Type::IDENTIFIER:
+                    pName = curr();
+                    consume(Token::Type::IDENTIFIER);
+                    break;
+                default:
+                    throw_unexpected_token();
+            }
+
+            break;
         case Token::Type::SCOPE_B:
         case Token::Type::SCOPE_W:
         case Token::Type::SCOPE_T:
-        case Token::Type::SCOPE_G:
-        case Token::Type::SCOPE_L:
         case Token::Type::SCOPE_S:
         case Token::Type::SCOPE_A:
         case Token::Type::SCOPE_V:
+        case Token::Type::SCOPE_G:
+        case Token::Type::SCOPE_L:
             pScope = new ast::ScopeExpr(curr());
             consume(curr()->type());
-        default:
+            // Fall-thru intentional
+        case Token::Type::IDENTIFIER:
+            pName = curr();
+            consume(Token::Type::IDENTIFIER);
             break;
+        default:
+            throw_unexpected_token();
     }
-
-    pName = curr();
-    consume(Token::Type::IDENTIFIER);
 
     return new ast::Var(pSigil, pScope, pName);
 }
