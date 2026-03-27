@@ -12,6 +12,7 @@ let bb ..= 2
 let cc = g:abort
 let is = bb
 let $envvar = 'something'
+let @a = 'foo'
 
 " for
 
@@ -108,11 +109,15 @@ echo +1
 echo [0, 1, 2, 3][0]
 echo [0, 1, 2, 3][:]
 echo [0, 1, 2, 3][:2]
+let b:items = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 echo b:items[2:]
 echo b:items[1:3]
 echo b:items[1 + 1:6 / 2]
+let g:dict = {'closure': 'banana'}
 echo g:dict.closure
-echo ReturnsFuncRef()("passed to returned FuncRef")
+function Add(a, b)
+    return a:a + a:b
+endfunction
 echo 2->Add(3)
 echo 3->Add(4)->Add(5)
 
@@ -122,7 +127,6 @@ let b:in = [0, 1, 2, 3]
 let dict_a = {"apple": 4, "banana": [1 * 2, 2], "cherry": "pie"}
 let dict_b = {"test": g:m_bar}
 let dict_c = {g:m_bar: 43}
-echo list_of_funcrefs[4](5)
 echo Add(1, 2)
 echo (1 + (3 + 4)) * 2 - (10)
 echo 'string with "embedded" double quote'

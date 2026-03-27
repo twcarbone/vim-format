@@ -14,8 +14,8 @@
   Y  3269168211  2850  :let          :let {var} ..= {expr1}
   Y  0379281600  2859  :let          :let ${env-name} = {expr1}
   Y  3260976525  2868  :let          :let ${env-name} .= {expr1}
-     1394056515  2873  :let          :let @{reg-name} = {expr1}
-     3064648682  2887  :let          :let @{reg-name} .= {expr1}
+  Y  1394056515  2873  :let          :let @{reg-name} = {expr1}
+  Y  3064648682  2887  :let          :let @{reg-name} .= {expr1}
      0956216668  2891  :let          :let &{option-name} = {expr1}
      1003042615  2906  :let          :let &{option-name} .= {expr1}
      3722509427  2910  :let          :let &{option-name} += {expr1}

@@ -16,6 +16,8 @@
         X(GEN_NAME) \
         X(GEN_EXCLAMATION) \
         X(GEN_DOT) \
+        X(GEN_AT) \
+        X(GEN_SLASH) \
         X(OP_ADD) \
         X(OP_SUB) \
         X(OP_UNARY_PLUS) \
@@ -49,7 +51,9 @@
         X(OP_OPTION) \
         X(OP_METHOD) \
         X(SIG_ENV) \
+        X(SIG_REG) \
         X(SCOPE) \
+        X(REGISTER) \
         X(ASSIGN_ADD) \
         X(ASSIGN_MINUS) \
         X(ASSIGN_MUL) \

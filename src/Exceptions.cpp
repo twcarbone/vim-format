@@ -7,6 +7,7 @@ const std::unordered_map<std::string, std::string> VimError::s_mErrors {
     { "E125", "Illegal argument" },
     { "E475", "Invalid argument" },
     { "E989", "Non-default argument follows default argument" },
+    { "E354", "Invalid register name" },
 };
 
 VimError::VimError(std::string asCode, std::string asTraceback) :

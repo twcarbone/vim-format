@@ -9,11 +9,29 @@
 
 #include "Context.h"
 #include "Token.h"
-#include "TokenSpec.h"
 
 class Lexer
 {
 public:
+    // TODO (gh-107): Keywords may not require an abbreviation
+    struct Keyword
+    {
+        std::string sFull = "";
+        std::string sAbrv = "";
+        Token::Type eTokenType = Token::Type::NONE;
+    };
+
+    struct Command : Keyword
+    {
+    };
+
+    // Punctuators, operators, or other fixed-width symbols
+    struct Symbol
+    {
+        std::string sLexeme = "";
+        Token::Type eTokenType = Token::Type::NONE;
+    };
+
     Lexer(const Context& context);
     ~Lexer();
 
@@ -45,9 +63,13 @@ private:
     Source m_cSource;
     std::vector<Token*> m_lTokens;
 
-    TokenSpec* m_pTokenSpec;
+    const std::vector<Command> m_lCommands;
+    const std::vector<Keyword> m_lKeywords;
+    const std::vector<Symbol> m_lSymbols;
+    const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
 
     Token* do_next();
+    Token* match();
     void freeTokens();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);

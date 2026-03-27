@@ -70,6 +70,10 @@ Program
       Var $envvar
         NULL
       Literal 'something'
+    AssignStmt = <>
+      Var @a
+        NULL
+      Literal 'foo'
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
@@ -316,6 +320,20 @@ Program
           Literal 3
         NULL
         Literal 2
+    AssignStmt = <>
+      Var items
+        Scope b:
+      ListExpr
+        Literal 10
+        Literal 20
+        Literal 30
+        Literal 40
+        Literal 50
+        Literal 60
+        Literal 70
+        Literal 80
+        Literal 90
+        Literal 100
     ExprCmd echo <>
       SliceExpr
         Var items
@@ -338,20 +356,36 @@ Program
         BinaryOp /
           Literal 6
           Literal 2
+    AssignStmt = <>
+      Var dict
+        Scope g:
+      DictExpr
+        DictEntry
+          Literal 'closure'
+          Literal 'banana'
     ExprCmd echo <>
       BinaryOp .
         Var dict
           Scope g:
         Var closure
           NULL
-    ExprCmd echo <>
-      CallExpr
-        CallExpr
-          Var ReturnsFuncRef
+    FnStmt Add <>
+      FnParamList
+        FnParam
+          Var a
             NULL
-          FnArgList
-        FnArgList
-          Literal "passed to returned FuncRef"
+          NULL
+        FnParam
+          Var b
+            NULL
+          NULL
+      StmtList
+        JumpStmt return <>
+          BinaryOp +
+            Var a
+              Scope a:
+            Var b
+              Scope a:
     ExprCmd echo <>
       MethodCallExpr ->
         Literal 2
@@ -421,14 +455,6 @@ Program
           Var m_bar
             Scope g:
           Literal 43
-    ExprCmd echo <>
-      CallExpr
-        IndexExpr
-          Var list_of_funcrefs
-            NULL
-          Literal 4
-        FnArgList
-          Literal 5
     ExprCmd echo <>
       CallExpr
         Var Add
