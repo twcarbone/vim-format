@@ -102,6 +102,8 @@
         X(IDENTIFIER) \
         X(STR_LITERAL) \
         X(STR_CONSTANT) \
+        X(DQUOTE) \
+        X(SQUOTE) \
         X(INTEGER) \
         X(FLOAT) \
         X(COMMENT)

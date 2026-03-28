@@ -75,6 +75,8 @@ Lexer::Lexer(const Context& acContext) :
         { "s:", Token::Type::SCOPE_S },
         { "a:", Token::Type::SCOPE_A },
         { "v:", Token::Type::SCOPE_V },
+        { "\"", Token::Type::DQUOTE },
+        { "\'", Token::Type::SQUOTE },
         { "!", Token::Type::GEN_EXCLAMATION },
         { "#", Token::Type::OP_MATCH_CASE },
         { "%", Token::Type::OP_MODULO },
@@ -234,45 +236,51 @@ Token* Lexer::match()
     // Look for a symbol
     for (const Symbol& lcSymbol : m_lSymbols)
     {
-        if (vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
+        if (!vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
         {
-            return new Token(lcSymbol.eTokenType, lcSymbol.sLexeme, m_cSource.pos());
-        }
-    }
-
-    // Look for single-quote string
-    if (m_cSource.remaining_text().at(0) == '\'')
-    {
-        size_t lnEnd = m_cSource.remaining_text().find('\'', 1);
-        lsStr = m_cSource.remaining_text().substr(0, lnEnd + 1);
-        return new Token(Token::Type::STR_LITERAL, std::string { lsStr }, m_cSource.pos());
-    }
-
-    // Look for double-quote string or comment
-    if (m_cSource.remaining_text().at(0) == '"')
-    {
-        if (m_cSource.column() == m_cSource.indent())
-        {
-            lsStr = m_cSource.remaining_line();
-            return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
+            continue;
         }
 
-        for (size_t i = 1; i < m_cSource.remaining_text().size(); i++)
+        switch (lcSymbol.eTokenType)
         {
-            switch (m_cSource.remaining_text().at(i))
+            case Token::Type::SQUOTE:
             {
-                case '"':
-                    // TODO (gh-4): Add support for escaped quotes within a string token
-                    lsStr = m_cSource.remaining_text().substr(0, i + 1);
-                    return new Token(Token::Type::STR_CONSTANT, std::string { lsStr }, m_cSource.pos());
-                case '\n':
-                    // TODO (gh-54): Trailing comments with more than one " are tokenized as strings
-                    lsStr = m_cSource.remaining_text().substr(0, i);
-                    return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
-                default:
-                    continue;
+                size_t lnEnd = m_cSource.remaining_text().find('\'', 1);
+                lsStr = m_cSource.remaining_text().substr(0, lnEnd + 1);
+                return new Token(Token::Type::STR_LITERAL, std::string { lsStr }, m_cSource.pos());
             }
+            case Token::Type::DQUOTE:
+            {
+                if (m_cSource.column() == m_cSource.indent())
+                {
+                    lsStr = m_cSource.remaining_line();
+                    return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
+                }
+
+                for (size_t i = 1; i < m_cSource.remaining_text().size(); i++)
+                {
+                    const char c = m_cSource.remaining_text().at(i);
+
+                    if (c == '"')
+                    {
+                        // TODO (gh-4): Add support for escaped quotes within a string token
+                        lsStr = m_cSource.remaining_text().substr(0, i + 1);
+                        return new Token(Token::Type::STR_CONSTANT, std::string { lsStr }, m_cSource.pos());
+                    }
+
+                    if (c == '\n')
+                    {
+                        // TODO (gh-54): Trailing comments with more than one " are tokenized as strings
+                        lsStr = m_cSource.remaining_text().substr(0, i);
+                        return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
+                    }
+                }
+            }
+            default:
+                break;
         }
+
+        return new Token(lcSymbol.eTokenType, lcSymbol.sLexeme, m_cSource.pos());
     }
 
     // Look for a float
