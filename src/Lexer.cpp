@@ -76,7 +76,6 @@ Lexer::Lexer(const Context& acContext) :
         { "s:", Token::Type::SCOPE_S },
         { "a:", Token::Type::SCOPE_A },
         { "v:", Token::Type::SCOPE_V },
-        { "\"", Token::Type::DQUOTE },
         { "!", Token::Type::GEN_EXCLAMATION },
         { "#", Token::Type::OP_MATCH_CASE },
         { "%", Token::Type::OP_MODULO },
@@ -233,6 +232,12 @@ Token* Lexer::match()
         return new Token(Token::Type::REGISTER, std::string { c }, m_cSource.pos());
     }
 
+    if (chk_comment())
+    {
+        lsStr = m_cSource.remaining_line();
+        return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
+    }
+
     const char c = m_cSource.remaining_text().at(0);
 
     if (c == '\'')
@@ -240,55 +245,35 @@ Token* Lexer::match()
         toggle_state(Token::Type::SQUOTE);
         return new Token(Token::Type::SQUOTE, std::string { c }, m_cSource.pos());
     }
-    else if (m_eState == Token::Type::SQUOTE)
+
+    if (m_eState == Token::Type::SQUOTE)
     {
         size_t lnSize = m_cSource.remaining_text().find('\'', 1);
         lsStr = m_cSource.remaining_text().substr(0, lnSize);
         return new Token(Token::Type::STR_LITERAL, std::string { lsStr }, m_cSource.pos());
     }
 
+    if (c == '"')
+    {
+        toggle_state(Token::Type::DQUOTE);
+        return new Token(Token::Type::DQUOTE, std::string { c }, m_cSource.pos());
+    }
+
+    if (m_eState == Token::Type::DQUOTE)
+    {
+        // TODO (gh-4): Add support for escaped quotes within a string token
+        size_t lnSize = m_cSource.remaining_text().find('"', 1);
+        lsStr = m_cSource.remaining_text().substr(0, lnSize);
+        return new Token(Token::Type::STR_CONSTANT, std::string { lsStr }, m_cSource.pos());
+    }
+
     // Look for a symbol
     for (const Symbol& lcSymbol : m_lSymbols)
     {
-        if (!vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
+        if (vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
         {
-            continue;
+            return new Token(lcSymbol.eTokenType, lcSymbol.sLexeme, m_cSource.pos());
         }
-
-        switch (lcSymbol.eTokenType)
-        {
-            case Token::Type::DQUOTE:
-            {
-                if (m_cSource.column() == m_cSource.indent())
-                {
-                    lsStr = m_cSource.remaining_line();
-                    return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
-                }
-
-                for (size_t i = 1; i < m_cSource.remaining_text().size(); i++)
-                {
-                    const char c = m_cSource.remaining_text().at(i);
-
-                    if (c == '"')
-                    {
-                        // TODO (gh-4): Add support for escaped quotes within a string token
-                        lsStr = m_cSource.remaining_text().substr(0, i + 1);
-                        return new Token(Token::Type::STR_CONSTANT, std::string { lsStr }, m_cSource.pos());
-                    }
-
-                    if (c == '\n')
-                    {
-                        // TODO (gh-54): Trailing comments with more than one " are tokenized as strings
-                        lsStr = m_cSource.remaining_text().substr(0, i);
-                        return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
-                    }
-                }
-            }
-            default:
-                break;
-        }
-
-        return new Token(lcSymbol.eTokenType, lcSymbol.sLexeme, m_cSource.pos());
     }
 
     // Look for a float
@@ -462,8 +447,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 }
 
                 break;
-            default:
-                break;
             case Token::Type::GEN_SLASH:
                 switch (pPrevToken->type())
                 {
@@ -475,6 +458,8 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                         apCurrentToken->setType(Token::Type::OP_DIV);
                 }
 
+                break;
+            default:
                 break;
         }
 
@@ -566,8 +551,8 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                         continue;
                     case Token::Type::IDENTIFIER:
                     case Token::Type::INTEGER:
-                    case Token::Type::STR_CONSTANT:
-                    case Token::Type::STR_LITERAL:
+                    case Token::Type::SQUOTE:
+                    case Token::Type::DQUOTE:
                     case Token::Type::FLOAT:
                     case Token::Type::R_BRACKET:
                     case Token::Type::R_PAREN:
@@ -592,4 +577,43 @@ void Lexer::toggle_state(Token::Type aeState)
     {
         m_eState = Token::Type::NONE;
     }
+}
+
+bool Lexer::chk_comment() const
+{
+    if (m_eState == Token::Type::DQUOTE)
+    {
+        // If we are building a string constant, it's not a comment
+        return false;
+    }
+
+    if (m_cSource.remaining_text().at(0) != '"')
+    {
+        // A comment must start with a "
+        return false;
+    }
+
+    if (m_cSource.column() == m_cSource.indent())
+    {
+        // If " is the first non-whitespace of a line, it's a comment
+        return true;
+    }
+
+    for (size_t i = 1; i < m_cSource.remaining_text().size(); i++)
+    {
+        const char c = m_cSource.remaining_text().at(i);
+
+        if (c == '"')
+        {
+            // TODO (gh-54): Trailing comments with more than one " are tokenized as strings
+            return false;
+        }
+
+        if (c == '\n')
+        {
+            break;
+        }
+    }
+
+    return true;
 }

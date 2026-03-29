@@ -12,8 +12,8 @@ Program
       Var a
         NULL
       ListExpr
-        Literal "a"
-        Literal "b"
+        StrConst "a"
+        StrConst "b"
     CommentStmt "inline comment <trailing = yes>
     AssignStmt = <>
       Var a

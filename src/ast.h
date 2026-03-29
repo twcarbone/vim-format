@@ -495,6 +495,20 @@ public:
 };
 
 //
+// StrConst
+//
+
+class StrConst : public StrExpr
+{
+public:
+    using StrExpr::StrExpr;
+    virtual ~StrConst();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // Literal
 //
 

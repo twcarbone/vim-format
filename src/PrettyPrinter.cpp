@@ -380,6 +380,18 @@ void PrettyPrinter::visit(const ast::LiteralStr* apLiteralStr)
     write(apLiteralStr->rdelim()->str());
 }
 
+void PrettyPrinter::visit(const ast::StrConst* apStrConst)
+{
+    write(apStrConst->ldelim()->str());
+
+    if (apStrConst->str() != nullptr)
+    {
+        write(apStrConst->str()->str());
+    }
+
+    write(apStrConst->rdelim()->str());
+}
+
 void PrettyPrinter::visit(const ast::MethodCallExpr* apMethodCallExpr)
 {
     apMethodCallExpr->receiver()->accept(*this);

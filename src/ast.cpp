@@ -821,6 +821,31 @@ void LiteralStr::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// StrCont
+//
+
+StrConst::~StrConst()
+{
+}
+
+std::string StrConst::toString() const
+{
+    std::string lsStr = "";
+
+    if (m_pStr != nullptr)
+    {
+        lsStr = m_pStr->str();
+    }
+
+    return "StrConst \"" + lsStr + "\"";
+}
+
+void StrConst::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // Literal
 //
 

@@ -693,6 +693,16 @@ ast::StrExpr* ASTParser::str_expr()
             pRDelim = curr();
             consume(Token::Type::SQUOTE);
             return new ast::LiteralStr(pStr, pLDelim, pRDelim);
+        case Token::Type::DQUOTE:
+            pLDelim = curr();
+            consume(Token::Type::DQUOTE);
+            if (consume_optional(Token::Type::STR_CONSTANT))
+            {
+                pStr = prev();
+            }
+            pRDelim = curr();
+            consume(Token::Type::DQUOTE);
+            return new ast::StrConst(pStr, pLDelim, pRDelim);
         default:
             throw_unexpected_token();
     }
@@ -712,11 +722,11 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
     {
         case Token::Type::INTEGER:
         case Token::Type::FLOAT:
-        case Token::Type::STR_CONSTANT:
             pLhs = new ast::Literal(curr());
             consume(curr()->type());
             break;
         case Token::Type::SQUOTE:
+        case Token::Type::DQUOTE:
             pLhs = str_expr();
             break;
         case Token::Type::SIG_ENV:
