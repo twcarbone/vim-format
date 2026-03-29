@@ -87,7 +87,7 @@ Lexer::Lexer(const Context& acContext) :
         { ",", Token::Type::COMMA },
         { "-", Token::Type::GEN_MINUS },
         { ".", Token::Type::GEN_DOT },
-        { "/", Token::Type::GEN_SLASH },
+        { "/", Token::Type::OP_DIV },
         { ":", Token::Type::COLON },
         { "<", Token::Type::OP_LT },
         { "=", Token::Type::ASSIGN_EQ },
@@ -442,18 +442,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                         break;
                     default:
                         apCurrentToken->setType(Token::Type::OP_CAT_OLD);
-                }
-
-                break;
-            case Token::Type::GEN_SLASH:
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::SIG_REG:
-                        // Search pattern register
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        break;
-                    default:
-                        apCurrentToken->setType(Token::Type::OP_DIV);
                 }
 
                 break;
