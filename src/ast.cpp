@@ -766,6 +766,61 @@ void MethodCallExpr::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// StrExpr
+//
+
+StrExpr::StrExpr(Token* apStr, Token* apLeftDelim, Token* apRightDelim) :
+    m_pStr { apStr },
+    m_pLDelim { apLeftDelim },
+    m_pRDelim { apRightDelim }
+{
+}
+
+StrExpr::~StrExpr()
+{
+}
+
+const Token* StrExpr::str() const
+{
+    return m_pStr;
+}
+
+const Token* StrExpr::ldelim() const
+{
+    return m_pLDelim;
+}
+
+const Token* StrExpr::rdelim() const
+{
+    return m_pRDelim;
+}
+
+//
+// LiteralStr
+//
+
+LiteralStr::~LiteralStr()
+{
+}
+
+std::string LiteralStr::toString() const
+{
+    std::string lsStr = "";
+
+    if (m_pStr != nullptr)
+    {
+        lsStr = m_pStr->str();
+    }
+
+    return "LiteralStr \'" + lsStr + "\'";
+}
+
+void LiteralStr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // Literal
 //
 

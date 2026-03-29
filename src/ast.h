@@ -461,6 +461,40 @@ private:
 };
 
 //
+// StrExpr (virtual)
+//
+
+class StrExpr : public Expr
+{
+public:
+    StrExpr(Token* str, Token* ldelim, Token* rdelim);
+    virtual ~StrExpr();
+
+    const Token* str() const;
+    const Token* ldelim() const;
+    const Token* rdelim() const;
+
+protected:
+    Token* m_pStr;
+    Token* m_pLDelim;
+    Token* m_pRDelim;
+};
+
+//
+// LiteralStr
+//
+
+class LiteralStr : public StrExpr
+{
+public:
+    using StrExpr::StrExpr;
+    virtual ~LiteralStr();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // Literal
 //
 

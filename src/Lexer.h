@@ -61,6 +61,7 @@ public:
 
 private:
     Source m_cSource;
+    Token::Type m_eState;
     std::vector<Token*> m_lTokens;
 
     const std::vector<Command> m_lCommands;
@@ -73,6 +74,7 @@ private:
     void freeTokens();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
+    void toggle_state(Token::Type state);
 };
 
 #endif  // TOKENIZER_H

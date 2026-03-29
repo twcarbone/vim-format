@@ -33,6 +33,7 @@ class Program;
 class ScopeExpr;
 class SliceExpr;
 class StmtList;
+class LiteralStr;
 class TernaryOp;
 class UnaryOp;
 class Var;
@@ -77,6 +78,7 @@ public:
     virtual void visit(const ast::MethodCallExpr* ast);
     virtual void visit(const ast::Program* ast);
     virtual void visit(const ast::StmtList* ast);
+    virtual void visit(const ast::LiteralStr* ast);
     virtual void visit(const ast::TernaryOp* ast);
     virtual void visit(const ast::UnaryOp* ast);
     virtual void visit(const ast::Var* ast);

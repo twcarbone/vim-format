@@ -11,6 +11,7 @@ const std::string g_sKeyWordDelimiters = "! \n\t";
 Lexer::Lexer(const Context& acContext) :
     // clang-format off
     m_cSource { acContext.source() },
+    m_eState { Token::Type::NONE },
     m_lCommands {
         { "break", "brea", Token::Type::BREAK },
         { "continue", "con", Token::Type::CONTINUE },
@@ -76,7 +77,6 @@ Lexer::Lexer(const Context& acContext) :
         { "a:", Token::Type::SCOPE_A },
         { "v:", Token::Type::SCOPE_V },
         { "\"", Token::Type::DQUOTE },
-        { "\'", Token::Type::SQUOTE },
         { "!", Token::Type::GEN_EXCLAMATION },
         { "#", Token::Type::OP_MATCH_CASE },
         { "%", Token::Type::OP_MODULO },
@@ -233,6 +233,20 @@ Token* Lexer::match()
         return new Token(Token::Type::REGISTER, std::string { c }, m_cSource.pos());
     }
 
+    const char c = m_cSource.remaining_text().at(0);
+
+    if (c == '\'')
+    {
+        toggle_state(Token::Type::SQUOTE);
+        return new Token(Token::Type::SQUOTE, std::string { c }, m_cSource.pos());
+    }
+    else if (m_eState == Token::Type::SQUOTE)
+    {
+        size_t lnSize = m_cSource.remaining_text().find('\'', 1);
+        lsStr = m_cSource.remaining_text().substr(0, lnSize);
+        return new Token(Token::Type::STR_LITERAL, std::string { lsStr }, m_cSource.pos());
+    }
+
     // Look for a symbol
     for (const Symbol& lcSymbol : m_lSymbols)
     {
@@ -243,12 +257,6 @@ Token* Lexer::match()
 
         switch (lcSymbol.eTokenType)
         {
-            case Token::Type::SQUOTE:
-            {
-                size_t lnEnd = m_cSource.remaining_text().find('\'', 1);
-                lsStr = m_cSource.remaining_text().substr(0, lnEnd + 1);
-                return new Token(Token::Type::STR_LITERAL, std::string { lsStr }, m_cSource.pos());
-            }
             case Token::Type::DQUOTE:
             {
                 if (m_cSource.column() == m_cSource.indent())
@@ -571,5 +579,17 @@ void Lexer::retype_keyword(Token* apCurrentToken)
             }
         default:
             throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
+    }
+}
+
+void Lexer::toggle_state(Token::Type aeState)
+{
+    if (m_eState == Token::Type::NONE)
+    {
+        m_eState = aeState;
+    }
+    else
+    {
+        m_eState = Token::Type::NONE;
     }
 }

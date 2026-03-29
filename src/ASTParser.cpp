@@ -675,6 +675,29 @@ ast::FnArgList* ASTParser::fn_arg_list()
     return pFnArgList;
 }
 
+ast::StrExpr* ASTParser::str_expr()
+{
+    Token* pLDelim = nullptr;
+    Token* pRDelim = nullptr;
+    Token* pStr = nullptr;
+
+    switch (curr()->type())
+    {
+        case Token::Type::SQUOTE:
+            pLDelim = curr();
+            consume(Token::Type::SQUOTE);
+            if (consume_optional(Token::Type::STR_LITERAL))
+            {
+                pStr = prev();
+            }
+            pRDelim = curr();
+            consume(Token::Type::SQUOTE);
+            return new ast::LiteralStr(pStr, pLDelim, pRDelim);
+        default:
+            throw_unexpected_token();
+    }
+}
+
 ast::Expr* ASTParser::expr(int anMinBindingPower)
 {
     ast::Expr* pLhs = nullptr;
@@ -690,9 +713,11 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
         case Token::Type::INTEGER:
         case Token::Type::FLOAT:
         case Token::Type::STR_CONSTANT:
-        case Token::Type::STR_LITERAL:
             pLhs = new ast::Literal(curr());
             consume(curr()->type());
+            break;
+        case Token::Type::SQUOTE:
+            pLhs = str_expr();
             break;
         case Token::Type::SIG_ENV:
         case Token::Type::SIG_REG:

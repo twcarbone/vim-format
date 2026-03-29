@@ -69,15 +69,15 @@ Program
     AssignStmt = <>
       Var $envvar
         NULL
-      Literal 'something'
+      LiteralStr 'something'
     AssignStmt = <>
       Var @a
         NULL
-      Literal 'foo'
+      LiteralStr 'foo'
     AssignStmt = <>
       Var @@
         NULL
-      Literal 'bar'
+      LiteralStr 'bar'
     AssignStmt = <>
       Var &tpm
         NULL
@@ -377,8 +377,8 @@ Program
         Scope g:
       DictExpr
         DictEntry
-          Literal 'closure'
-          Literal 'banana'
+          LiteralStr 'closure'
+          LiteralStr 'banana'
     ExprCmd echo <>
       BinaryOp .
         Var dict
@@ -492,4 +492,4 @@ Program
         GroupExpr
           Literal 10
     ExprCmd echo <>
-      Literal 'string with "embedded" double quote'
+      LiteralStr 'string with "embedded" double quote'
