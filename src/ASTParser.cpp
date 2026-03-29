@@ -684,28 +684,27 @@ ast::StrExpr* ASTParser::str_expr()
     switch (curr()->type())
     {
         case Token::Type::SQUOTE:
-            pLDelim = curr();
-            consume(Token::Type::SQUOTE);
-            if (consume_optional(Token::Type::STR_LITERAL))
-            {
-                pStr = prev();
-            }
-            pRDelim = curr();
-            consume(Token::Type::SQUOTE);
-            return new ast::LiteralStr(pStr, pLDelim, pRDelim);
         case Token::Type::DQUOTE:
             pLDelim = curr();
-            consume(Token::Type::DQUOTE);
-            if (consume_optional(Token::Type::STR_CONSTANT))
-            {
-                pStr = prev();
-            }
-            pRDelim = curr();
-            consume(Token::Type::DQUOTE);
-            return new ast::StrConst(pStr, pLDelim, pRDelim);
+            consume(curr()->type());
         default:
-            throw_unexpected_token();
+            break;
     }
+
+    if (consume_optional(Token::Type::STRING))
+    {
+        pStr = prev();
+    }
+
+    pRDelim = curr();
+    consume(pLDelim->type());
+
+    if (pLDelim->type() == Token::Type::SQUOTE)
+    {
+        return new ast::LiteralStr(pStr, pLDelim, pRDelim);
+    }
+
+    return new ast::StrConst(pStr, pLDelim, pRDelim);
 }
 
 ast::Expr* ASTParser::expr(int anMinBindingPower)

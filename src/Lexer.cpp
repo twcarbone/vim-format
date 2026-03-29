@@ -250,7 +250,7 @@ Token* Lexer::match()
     {
         size_t lnSize = m_cSource.remaining_text().find('\'', 1);
         lsStr = m_cSource.remaining_text().substr(0, lnSize);
-        return new Token(Token::Type::STR_LITERAL, std::string { lsStr }, m_cSource.pos());
+        return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
     }
 
     if (c == '"')
@@ -264,7 +264,7 @@ Token* Lexer::match()
         // TODO (gh-4): Add support for escaped quotes within a string token
         size_t lnSize = m_cSource.remaining_text().find('"', 1);
         lsStr = m_cSource.remaining_text().substr(0, lnSize);
-        return new Token(Token::Type::STR_CONSTANT, std::string { lsStr }, m_cSource.pos());
+        return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
     }
 
     // Look for a symbol
@@ -368,8 +368,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     case Token::Type::SPACE:
                         continue;
                     case Token::Type::FLOAT:
-                    case Token::Type::STR_CONSTANT:
-                    case Token::Type::STR_LITERAL:
+                    case Token::Type::STRING:
                     case Token::Type::INTEGER:
                     case Token::Type::R_PAREN:
                     case Token::Type::IDENTIFIER:
@@ -387,8 +386,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     case Token::Type::SPACE:
                         continue;
                     case Token::Type::FLOAT:
-                    case Token::Type::STR_CONSTANT:
-                    case Token::Type::STR_LITERAL:
+                    case Token::Type::STRING:
                     case Token::Type::INTEGER:
                     case Token::Type::R_PAREN:
                     case Token::Type::IDENTIFIER:

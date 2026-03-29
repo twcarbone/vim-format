@@ -100,8 +100,7 @@
         X(SPACE) \
         X(OPTION) \
         X(IDENTIFIER) \
-        X(STR_LITERAL) \
-        X(STR_CONSTANT) \
+        X(STRING) \
         X(DQUOTE) \
         X(SQUOTE) \
         X(INTEGER) \
