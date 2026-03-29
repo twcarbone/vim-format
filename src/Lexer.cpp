@@ -201,34 +201,10 @@ Token* Lexer::match()
 {
     std::string_view lsStr;
 
-    // Look for a register
-    if (!m_lTokens.empty() && m_lTokens.back()->type() == Token::Type::SIG_REG)
-    {
-        const char c = m_cSource.remaining_text().at(0);
-        switch (c)
-        {
-            case '"':
-            case '-':
-            case '#':
-            case '=':
-            case '*':
-            case '+':
-            case '~':
-            case '_':
-            case '/':
-            case '@':
-                break;
-            case ':':
-            case '.':
-            case '%':
-                throw VimError("E354", m_cSource.context());
-            default:
-                if (!std::isalnum(c))
-                {
-                    throw VimError("E354", m_cSource.context());
-                }
-        }
+    const char c = m_cSource.remaining_text().at(0);
 
+    if (chk_register())
+    {
         return new Token(Token::Type::REGISTER, std::string { c }, m_cSource.pos());
     }
 
@@ -237,8 +213,6 @@ Token* Lexer::match()
         lsStr = m_cSource.remaining_line();
         return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
     }
-
-    const char c = m_cSource.remaining_text().at(0);
 
     if (c == '\'')
     {
@@ -602,4 +576,40 @@ bool Lexer::chk_comment() const
     }
 
     return true;
+}
+
+bool Lexer::chk_register() const
+{
+    if (!m_lTokens.empty() && m_lTokens.back()->type() == Token::Type::SIG_REG)
+    {
+        const char c = m_cSource.remaining_text().at(0);
+
+        switch (c)
+        {
+            case '"':
+            case '-':
+            case '#':
+            case '=':
+            case '*':
+            case '+':
+            case '~':
+            case '_':
+            case '/':
+            case '@':
+                break;
+            case ':':
+            case '.':
+            case '%':
+                throw VimError("E354", m_cSource.context());
+            default:
+                if (!std::isalnum(c))
+                {
+                    throw VimError("E354", m_cSource.context());
+                }
+        }
+
+        return true;
+    }
+
+    return false;
 }

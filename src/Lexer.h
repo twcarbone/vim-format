@@ -75,7 +75,9 @@ private:
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
     void toggle_state(Token::Type state);
+
     bool chk_comment() const;
+    bool chk_register() const;
 };
 
 #endif  // TOKENIZER_H
