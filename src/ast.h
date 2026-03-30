@@ -461,6 +461,22 @@ private:
 };
 
 //
+// InterpStr
+//
+
+class InterpStr : public Expr
+{
+public:
+    InterpStr() = default;
+    virtual ~InterpStr();
+
+    void push(Expr* expr);
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
 // StrExpr (virtual)
 //
 

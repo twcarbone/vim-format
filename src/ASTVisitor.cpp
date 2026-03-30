@@ -139,6 +139,11 @@ void ASTVisitor::visit(const ast::StmtList* apStmtList)
     handle_node(apStmtList);
 }
 
+void ASTVisitor::visit(const ast::InterpStr* apInterpStr)
+{
+    handle_node(apInterpStr);
+}
+
 void ASTVisitor::visit(const ast::LiteralStr* apLiteralStr)
 {
     handle_node(apLiteralStr);

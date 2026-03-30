@@ -100,6 +100,7 @@
         X(OPTION) \
         X(IDENTIFIER) \
         X(STRING) \
+        X(STR_INTERP) \
         X(DQUOTE) \
         X(SQUOTE) \
         X(INTEGER) \

@@ -60,8 +60,18 @@ public:
     const Source& source() const;
 
 private:
+    enum class State
+    {
+        NONE,
+        INTERP_STR,
+        INTERP_EXP,
+        STRING_CONSTANT,
+        LITERAL_STRING,
+    };
+
+    State m_eState;
+    size_t m_nBraceLevel;
     Source m_cSource;
-    Token::Type m_eState;
     std::vector<Token*> m_lTokens;
 
     const std::vector<Command> m_lCommands;
@@ -74,7 +84,7 @@ private:
     void freeTokens();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
-    void toggle_state(Token::Type state);
+    void toggle_state(State state);
 
     bool chk_comment() const;
     bool chk_register() const;

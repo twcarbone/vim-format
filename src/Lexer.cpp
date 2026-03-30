@@ -10,8 +10,9 @@ const std::string g_sKeyWordDelimiters = "! \n\t";
 
 Lexer::Lexer(const Context& acContext) :
     // clang-format off
+    m_eState { State::NONE },
+    m_nBraceLevel { 0 },
     m_cSource { acContext.source() },
-    m_eState { Token::Type::NONE },
     m_lCommands {
         { "break", "brea", Token::Type::BREAK },
         { "continue", "con", Token::Type::CONTINUE },
@@ -95,9 +96,6 @@ Lexer::Lexer(const Context& acContext) :
         { "?", Token::Type::GEN_QUESTION },
         { "[", Token::Type::L_BRACKET },
         { "]", Token::Type::R_BRACKET },
-        { "{", Token::Type::L_BRACE },
-        { "}", Token::Type::R_BRACE },
-        { "$", Token::Type::SIG_ENV },
         { "@", Token::Type::SIG_REG },
         // clang-format on
     },
@@ -214,26 +212,104 @@ Token* Lexer::match()
         return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
     }
 
-    if (c == '\'')
+    switch (c)
     {
-        toggle_state(Token::Type::SQUOTE);
-        return new Token(Token::Type::SQUOTE, std::string { c }, m_cSource.pos());
+        case '$':
+            if (m_cSource.remaining_text().size() > 1)
+            {
+                switch (m_cSource.remaining_text().at(1))
+                {
+                    case '\'':
+                    case '"':
+                        m_eState = State::INTERP_STR;
+                        return new Token(Token::Type::STR_INTERP, std::string { c }, m_cSource.pos());
+                    default:
+                        break;
+                }
+            }
+
+            return new Token(Token::Type::SIG_ENV, std::string { c }, m_cSource.pos());
+        case '\'':
+            switch (m_eState)
+            {
+                case State::LITERAL_STRING:
+                    m_eState = State::NONE;
+                    break;
+                case State::INTERP_STR:
+                    if (m_lTokens.back()->type() != Token::Type::STR_INTERP)
+                    {
+                        m_eState = State::NONE;
+                    }
+
+                    break;
+                default:
+                    m_eState = State::LITERAL_STRING;
+            }
+
+            return new Token(Token::Type::SQUOTE, std::string { c }, m_cSource.pos());
+        case '{':
+            switch (m_eState)
+            {
+                case State::INTERP_STR:
+                    m_eState = State::INTERP_EXP;
+                    break;
+                case State::INTERP_EXP:
+                    m_nBraceLevel++;
+                    break;
+                default:
+                    break;
+            }
+
+            return new Token(Token::Type::L_BRACE, std::string { c }, m_cSource.pos());
+        case '}':
+            switch (m_eState)
+            {
+                case State::INTERP_EXP:
+                    if (m_nBraceLevel == 0)
+                    {
+                        m_eState = State::INTERP_STR;
+                    }
+                    else
+                    {
+                        m_nBraceLevel--;
+                    }
+
+                    break;
+                case State::INTERP_STR:
+                default:
+                    break;
+            }
+
+            return new Token(Token::Type::R_BRACE, std::string { c }, m_cSource.pos());
+        default:
+            break;
     }
 
-    if (m_eState == Token::Type::SQUOTE)
+    switch (m_eState)
     {
-        size_t lnSize = m_cSource.remaining_text().find('\'', 1);
-        lsStr = m_cSource.remaining_text().substr(0, lnSize);
-        return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+        case State::LITERAL_STRING:
+        {
+            size_t lnSize = m_cSource.remaining_text().find('\'', 1);
+            lsStr = m_cSource.remaining_text().substr(0, lnSize);
+            return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+        }
+        case State::INTERP_STR:
+        {
+            size_t lnSize = m_cSource.remaining_text().find_first_of("{'", 1);
+            lsStr = m_cSource.remaining_text().substr(0, lnSize);
+            return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+        }
+        default:
+            break;
     }
 
     if (c == '"')
     {
-        toggle_state(Token::Type::DQUOTE);
+        toggle_state(State::STRING_CONSTANT);
         return new Token(Token::Type::DQUOTE, std::string { c }, m_cSource.pos());
     }
 
-    if (m_eState == Token::Type::DQUOTE)
+    if (m_eState == State::STRING_CONSTANT)
     {
         // TODO (gh-4): Add support for escaped quotes within a string token
         size_t lnSize = m_cSource.remaining_text().find('"', 1);
@@ -527,21 +603,21 @@ void Lexer::retype_keyword(Token* apCurrentToken)
     }
 }
 
-void Lexer::toggle_state(Token::Type aeState)
+void Lexer::toggle_state(State aeState)
 {
-    if (m_eState == Token::Type::NONE)
+    if (m_eState == State::NONE)
     {
         m_eState = aeState;
     }
     else
     {
-        m_eState = Token::Type::NONE;
+        m_eState = State::NONE;
     }
 }
 
 bool Lexer::chk_comment() const
 {
-    if (m_eState == Token::Type::DQUOTE)
+    if (m_eState == State::STRING_CONSTANT)
     {
         // If we are building a string constant, it's not a comment
         return false;

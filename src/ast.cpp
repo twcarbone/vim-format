@@ -766,6 +766,29 @@ void MethodCallExpr::accept(ASTVisitor& acASTVisitor) const
 }
 
 //
+// InterpStr
+//
+
+InterpStr::~InterpStr()
+{
+}
+
+void InterpStr::push(Expr* apExpr)
+{
+    m_lChildren.push_back(apExpr);
+}
+
+std::string InterpStr::toString() const
+{
+    return "InterpStr";
+}
+
+void InterpStr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+//
 // StrExpr
 //
 

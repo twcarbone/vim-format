@@ -392,6 +392,16 @@ void PrettyPrinter::visit(const ast::StrConst* apStrConst)
     write(apStrConst->rdelim()->str());
 }
 
+void PrettyPrinter::visit(const ast::InterpStr* apInterpStr)
+{
+    write('$');
+
+    for (ast::Node* pNode : apInterpStr->children())
+    {
+        pNode->accept(*this);
+    }
+}
+
 void PrettyPrinter::visit(const ast::MethodCallExpr* apMethodCallExpr)
 {
     apMethodCallExpr->receiver()->accept(*this);

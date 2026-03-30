@@ -707,6 +707,57 @@ ast::StrExpr* ASTParser::str_expr()
     return new ast::StrConst(pStr, pLDelim, pRDelim);
 }
 
+ast::InterpStr* ASTParser::interp_str()
+{
+    ast::InterpStr* pInterpStr = new ast::InterpStr();
+    ast::StrExpr* pStrExpr = nullptr;
+    Token* pLDelim = nullptr;
+    Token* pRDelim = nullptr;
+    Token* pStr = nullptr;
+
+    consume(Token::Type::STR_INTERP);
+
+    bool bLoop = true;
+    while (bLoop)
+    {
+        switch (curr()->type())
+        {
+            case Token::Type::SQUOTE:
+                if (prev()->type() == Token::Type::STR_INTERP)
+                {
+                    pLDelim = curr();
+                }
+                else
+                {
+                    pRDelim = curr();
+                    pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
+                    pInterpStr->push(pStrExpr);
+                    bLoop = false;
+                }
+
+                consume(Token::Type::SQUOTE);
+                break;
+            case Token::Type::L_BRACE:
+                pRDelim = curr();
+                consume(Token::Type::L_BRACE);
+                pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
+                pInterpStr->push(pStrExpr);
+                pInterpStr->push(expr(0));
+                break;
+            case Token::Type::R_BRACE:
+                pLDelim = curr();
+                consume(Token::Type::R_BRACE);
+                break;
+            default:
+                pStr = curr();
+                consume(Token::Type::STRING);
+                break;
+        }
+    }
+
+    return pInterpStr;
+}
+
 ast::Expr* ASTParser::expr(int anMinBindingPower)
 {
     ast::Expr* pLhs = nullptr;
@@ -727,6 +778,9 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
         case Token::Type::SQUOTE:
         case Token::Type::DQUOTE:
             pLhs = str_expr();
+            break;
+        case Token::Type::STR_INTERP:
+            pLhs = interp_str();
             break;
         case Token::Type::SIG_ENV:
         case Token::Type::SIG_REG:

@@ -38,6 +38,7 @@ private:
     ast::DictExpr* dict_expr();
     ast::IfBranch* if_branch(Token::Type type);
     ast::FnArgList* fn_arg_list();
+    ast::InterpStr* interp_str();
     ast::WhileStmt* while_stmt();
     ast::AssignStmt* assign_stmt();
     ast::FnParamList* fn_param_list();

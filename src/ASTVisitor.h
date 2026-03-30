@@ -33,6 +33,7 @@ class Program;
 class ScopeExpr;
 class SliceExpr;
 class StmtList;
+class InterpStr;
 class LiteralStr;
 class StrConst;
 class TernaryOp;
@@ -79,6 +80,7 @@ public:
     virtual void visit(const ast::MethodCallExpr* ast);
     virtual void visit(const ast::Program* ast);
     virtual void visit(const ast::StmtList* ast);
+    virtual void visit(const ast::InterpStr* ast);
     virtual void visit(const ast::LiteralStr* ast);
     virtual void visit(const ast::StrConst* ast);
     virtual void visit(const ast::TernaryOp* ast);

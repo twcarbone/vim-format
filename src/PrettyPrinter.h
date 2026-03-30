@@ -51,6 +51,7 @@ public:
     virtual void visit(const ast::ScopeExpr* ast);
     virtual void visit(const ast::SliceExpr* ast);
     virtual void visit(const ast::StmtList* ast);
+    virtual void visit(const ast::InterpStr* ast);
     virtual void visit(const ast::LiteralStr* ast);
     virtual void visit(const ast::StrConst* ast);
     virtual void visit(const ast::TernaryOp* ast);
