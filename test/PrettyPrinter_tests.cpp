@@ -11,12 +11,12 @@
 class PrettyPrinterTest : public testing::Test
 {
 protected:
-    void test_file(const std::string& asPath)
+    void test_file(const std::string& asInPath, const std::string& asOutPath)
     {
-        std::filesystem::path lcSrcPath { asPath };
+        std::filesystem::path lcSrcPath { asInPath };
 
         Context lcContext;
-        lcContext.add_path(asPath);
+        lcContext.add_path(asInPath);
 
         Lexer lcLexer(lcContext);
         lcLexer.tokenize();
@@ -28,7 +28,7 @@ protected:
         PrettyPrinter lcPrettyPrinter(lcPrettyStrStream);
         lcParser.root()->accept(lcPrettyPrinter);
 
-        std::string lsPrettyStr = vf::read_file(vf::with_tail(lcSrcPath, "pretty.vim"));
+        std::string lsPrettyStr = vf::read_file(asOutPath);
 
         EXPECT_EQ(lsPrettyStr, lcPrettyStrStream.str());
     }
@@ -36,10 +36,10 @@ protected:
 
 TEST_F(PrettyPrinterTest, expr)
 {
-    test_file("../../test/pretty/expr.vim");
+    test_file("../../test/pretty/expr.vim", "../../test/pretty/expr.pretty.vim");
 }
 
 TEST_F(PrettyPrinterTest, expr_pretty)
 {
-    test_file("../../test/pretty/expr.pretty.vim");
+    test_file("../../test/pretty/expr.pretty.vim", "../../test/pretty/expr.pretty.vim");
 }
