@@ -84,7 +84,7 @@ private:
     void freeTokens();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
-    void toggle_state(State state);
+    void state_toggle_str(State state);
 
     bool chk_comment() const;
     bool chk_register() const;

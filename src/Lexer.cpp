@@ -230,23 +230,11 @@ Token* Lexer::match()
 
             return new Token(Token::Type::SIG_ENV, std::string { c }, m_cSource.pos());
         case '\'':
-            switch (m_eState)
-            {
-                case State::LITERAL_STRING:
-                    m_eState = State::NONE;
-                    break;
-                case State::INTERP_STR:
-                    if (m_lTokens.back()->type() != Token::Type::STR_INTERP)
-                    {
-                        m_eState = State::NONE;
-                    }
-
-                    break;
-                default:
-                    m_eState = State::LITERAL_STRING;
-            }
-
+            state_toggle_str(State::LITERAL_STRING);
             return new Token(Token::Type::SQUOTE, std::string { c }, m_cSource.pos());
+        case '"':
+            state_toggle_str(State::STRING_CONSTANT);
+            return new Token(Token::Type::DQUOTE, std::string { c }, m_cSource.pos());
         case '{':
             switch (m_eState)
             {
@@ -293,28 +281,21 @@ Token* Lexer::match()
             lsStr = m_cSource.remaining_text().substr(0, lnSize);
             return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
         }
+        case State::STRING_CONSTANT:
+        {
+            // TODO (gh-4): Add support for escaped quotes within a string token
+            size_t lnSize = m_cSource.remaining_text().find('"', 1);
+            lsStr = m_cSource.remaining_text().substr(0, lnSize);
+            return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+        }
         case State::INTERP_STR:
         {
-            size_t lnSize = m_cSource.remaining_text().find_first_of("{'", 1);
+            size_t lnSize = m_cSource.remaining_text().find_first_of("{\"'", 1);
             lsStr = m_cSource.remaining_text().substr(0, lnSize);
             return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
         }
         default:
             break;
-    }
-
-    if (c == '"')
-    {
-        toggle_state(State::STRING_CONSTANT);
-        return new Token(Token::Type::DQUOTE, std::string { c }, m_cSource.pos());
-    }
-
-    if (m_eState == State::STRING_CONSTANT)
-    {
-        // TODO (gh-4): Add support for escaped quotes within a string token
-        size_t lnSize = m_cSource.remaining_text().find('"', 1);
-        lsStr = m_cSource.remaining_text().substr(0, lnSize);
-        return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
     }
 
     // Look for a symbol
@@ -603,24 +584,35 @@ void Lexer::retype_keyword(Token* apCurrentToken)
     }
 }
 
-void Lexer::toggle_state(State aeState)
+void Lexer::state_toggle_str(State aeState)
 {
-    if (m_eState == State::NONE)
+    if (m_eState == aeState)
     {
-        m_eState = aeState;
+        m_eState = State::NONE;
+    }
+    else if (m_eState == State::INTERP_STR)
+    {
+        if (m_lTokens.back()->type() != Token::Type::STR_INTERP)
+        {
+            m_eState = State::NONE;
+        }
     }
     else
     {
-        m_eState = State::NONE;
+        m_eState = aeState;
     }
 }
 
 bool Lexer::chk_comment() const
 {
-    if (m_eState == State::STRING_CONSTANT)
+    switch (m_eState)
     {
-        // If we are building a string constant, it's not a comment
-        return false;
+        case State::STRING_CONSTANT:
+        case State::INTERP_STR:
+            // If we are building a string constant, it's not a comment
+            return false;
+        default:
+            break;
     }
 
     if (m_cSource.remaining_text().at(0) != '"')

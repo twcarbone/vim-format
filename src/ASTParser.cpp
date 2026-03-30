@@ -716,6 +716,7 @@ ast::InterpStr* ASTParser::interp_str()
     Token* pStr = nullptr;
 
     consume(Token::Type::STR_INTERP);
+    Token::Type leQuoteType = curr()->type();
 
     bool bLoop = true;
     while (bLoop)
@@ -723,24 +724,42 @@ ast::InterpStr* ASTParser::interp_str()
         switch (curr()->type())
         {
             case Token::Type::SQUOTE:
+            case Token::Type::DQUOTE:
                 if (prev()->type() == Token::Type::STR_INTERP)
                 {
+                    // At opening quote
                     pLDelim = curr();
                 }
                 else
                 {
+                    // At closing quote
                     pRDelim = curr();
-                    pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
+                    if (leQuoteType == Token::Type::SQUOTE)
+                    {
+                        pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
+                    }
+                    else
+                    {
+                        pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
+                    }
+
                     pInterpStr->push(pStrExpr);
                     bLoop = false;
                 }
 
-                consume(Token::Type::SQUOTE);
+                consume(leQuoteType);
                 break;
             case Token::Type::L_BRACE:
                 pRDelim = curr();
                 consume(Token::Type::L_BRACE);
-                pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
+                if (leQuoteType == Token::Type::SQUOTE)
+                {
+                    pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
+                }
+                else
+                {
+                    pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
+                }
                 pInterpStr->push(pStrExpr);
                 pInterpStr->push(expr(0));
                 break;
