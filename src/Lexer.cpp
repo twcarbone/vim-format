@@ -237,7 +237,16 @@ bool Lexer::match()
                     break;
             }
 
-            return push_token(Token::Type::L_BRACE, c);
+            switch (m_eState)
+            {
+                case State::LITERAL_STRING:
+                case State::STRING_CONSTANT:
+                    break;
+                default:
+                    return push_token(Token::Type::L_BRACE, c);
+            }
+
+            break;
         case '}':
             switch (m_eState)
             {
@@ -257,7 +266,16 @@ bool Lexer::match()
                     break;
             }
 
-            return push_token(Token::Type::R_BRACE, c);
+            switch (m_eState)
+            {
+                case State::LITERAL_STRING:
+                case State::STRING_CONSTANT:
+                    break;
+                default:
+                    return push_token(Token::Type::R_BRACE, c);
+            }
+
+            break;
         default:
             break;
     }

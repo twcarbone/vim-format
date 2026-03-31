@@ -512,6 +512,12 @@ Program
         Var bb
           NULL
     ExprCmd echo <>
+      LiteralStr 'Before {bb} after'
+    ExprCmd echo <>
+      LiteralStr '{bb} after'
+    ExprCmd echo <>
+      LiteralStr 'Before {bb}'
+    ExprCmd echo <>
       StrConst ""
     ExprCmd echo <>
       InterpStr
@@ -529,3 +535,9 @@ Program
         StrConst "Before "
         Var bb
           NULL
+    ExprCmd echo <>
+      StrConst "Before {bb} after"
+    ExprCmd echo <>
+      StrConst "{bb} after"
+    ExprCmd echo <>
+      StrConst "Before {bb}"

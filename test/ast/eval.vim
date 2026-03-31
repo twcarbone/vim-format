@@ -138,7 +138,13 @@ echo 'string with "embedded" double quote'
 echo $'Before {bb} after'
 echo $'{bb} after'
 echo $'Before {bb}'
+echo 'Before {bb} after'
+echo '{bb} after'
+echo 'Before {bb}'
 echo ""
 echo $"Before {bb} after"
 echo $"{bb} after"
 echo $"Before {bb}"
+echo "Before {bb} after"
+echo "{bb} after"
+echo "Before {bb}"
