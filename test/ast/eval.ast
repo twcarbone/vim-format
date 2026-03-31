@@ -492,4 +492,40 @@ Program
         GroupExpr
           Literal 10
     ExprCmd echo <>
+      LiteralStr ''
+    ExprCmd echo <>
       LiteralStr 'string with "embedded" double quote'
+    ExprCmd echo <>
+      InterpStr
+        LiteralStr 'Before '
+        Var bb
+          NULL
+        LiteralStr ' after'
+    ExprCmd echo <>
+      InterpStr
+        Var bb
+          NULL
+        LiteralStr ' after'
+    ExprCmd echo <>
+      InterpStr
+        LiteralStr 'Before '
+        Var bb
+          NULL
+    ExprCmd echo <>
+      StrConst ""
+    ExprCmd echo <>
+      InterpStr
+        StrConst "Before "
+        Var bb
+          NULL
+        StrConst " after"
+    ExprCmd echo <>
+      InterpStr
+        Var bb
+          NULL
+        StrConst " after"
+    ExprCmd echo <>
+      InterpStr
+        StrConst "Before "
+        Var bb
+          NULL
