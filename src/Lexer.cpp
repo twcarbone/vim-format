@@ -12,6 +12,7 @@ Lexer::Lexer(const Context& acContext) :
     // clang-format off
     m_eState { State::NONE },
     m_nBraceLevel { 0 },
+    m_pCurrToken { nullptr },
     m_cSource { acContext.source() },
     m_lCommands {
         { "break", "brea", Token::Type::BREAK },
@@ -154,48 +155,37 @@ const Token& Lexer::token(size_t anIdx) const
     return *tokens().at(anIdx);
 }
 
-Token* Lexer::next()
+void Lexer::next()
 {
-    Token* pToken = do_next();
-    m_lTokens.push_back(pToken);
-    return pToken;
-}
-
-Token* Lexer::do_next()
-{
-    Token* pToken;
-
     if (m_cSource.eof())
     {
         // TODO (gh-6): throw exception if EOF has already been returned
-        pToken = new Token(Token::Type::END, "EOF", m_cSource.pos());
+        push_token(Token::Type::END, std::string { "EOF" });
     }
     else
     {
-        pToken = match();
-
-        if (pToken == nullptr)
+        if (!match())
         {
             throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.context());
         }
 
-        if (pToken->is_ambiguous() && !disambiguate(pToken))
+        if (m_pCurrToken->is_ambiguous() && !disambiguate(m_pCurrToken))
         {
             throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
         }
 
-        if (pToken->is_keyword())
+        if (m_pCurrToken->is_keyword())
         {
-            retype_keyword(pToken);
+            retype_keyword(m_pCurrToken);
         }
 
-        m_cSource.advance(pToken->str().size());
+        m_cSource.advance(m_pCurrToken->str().size());
     }
 
-    return pToken;
+    m_lTokens.push_back(m_pCurrToken);
 }
 
-Token* Lexer::match()
+bool Lexer::match()
 {
     std::string_view lsStr;
 
@@ -203,13 +193,12 @@ Token* Lexer::match()
 
     if (chk_register())
     {
-        return new Token(Token::Type::REGISTER, std::string { c }, m_cSource.pos());
+        return push_token(Token::Type::REGISTER, c);
     }
 
     if (chk_comment())
     {
-        lsStr = m_cSource.remaining_line();
-        return new Token(Token::Type::COMMENT, std::string { lsStr }, m_cSource.pos());
+        return push_token(Token::Type::COMMENT, m_cSource.remaining_line());
     }
 
     switch (c)
@@ -222,19 +211,19 @@ Token* Lexer::match()
                     case '\'':
                     case '"':
                         m_eState = State::INTERP_STR;
-                        return new Token(Token::Type::STR_INTERP, std::string { c }, m_cSource.pos());
+                        return push_token(Token::Type::STR_INTERP, c);
                     default:
                         break;
                 }
             }
 
-            return new Token(Token::Type::SIG_ENV, std::string { c }, m_cSource.pos());
+            return push_token(Token::Type::SIG_ENV, c);
         case '\'':
             state_toggle_str(State::LITERAL_STRING);
-            return new Token(Token::Type::SQUOTE, std::string { c }, m_cSource.pos());
+            return push_token(Token::Type::SQUOTE, c);
         case '"':
             state_toggle_str(State::STRING_CONSTANT);
-            return new Token(Token::Type::DQUOTE, std::string { c }, m_cSource.pos());
+            return push_token(Token::Type::DQUOTE, c);
         case '{':
             switch (m_eState)
             {
@@ -248,7 +237,7 @@ Token* Lexer::match()
                     break;
             }
 
-            return new Token(Token::Type::L_BRACE, std::string { c }, m_cSource.pos());
+            return push_token(Token::Type::L_BRACE, c);
         case '}':
             switch (m_eState)
             {
@@ -268,7 +257,7 @@ Token* Lexer::match()
                     break;
             }
 
-            return new Token(Token::Type::R_BRACE, std::string { c }, m_cSource.pos());
+            return push_token(Token::Type::R_BRACE, c);
         default:
             break;
     }
@@ -279,20 +268,20 @@ Token* Lexer::match()
         {
             size_t lnSize = m_cSource.remaining_text().find('\'', 1);
             lsStr = m_cSource.remaining_text().substr(0, lnSize);
-            return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+            return push_token(Token::Type::STRING, std::string { lsStr });
         }
         case State::STRING_CONSTANT:
         {
             // TODO (gh-4): Add support for escaped quotes within a string token
             size_t lnSize = m_cSource.remaining_text().find('"', 1);
             lsStr = m_cSource.remaining_text().substr(0, lnSize);
-            return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+            return push_token(Token::Type::STRING, std::string { lsStr });
         }
         case State::INTERP_STR:
         {
             size_t lnSize = m_cSource.remaining_text().find_first_of("{\"'", 1);
             lsStr = m_cSource.remaining_text().substr(0, lnSize);
-            return new Token(Token::Type::STRING, std::string { lsStr }, m_cSource.pos());
+            return push_token(Token::Type::STRING, std::string { lsStr });
         }
         default:
             break;
@@ -303,20 +292,20 @@ Token* Lexer::match()
     {
         if (vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
         {
-            return new Token(lcSymbol.eTokenType, lcSymbol.sLexeme, m_cSource.pos());
+            return push_token(lcSymbol.eTokenType, lcSymbol.sLexeme);
         }
     }
 
     // Look for a float
     if (vf::startswith_float(m_cSource.remaining_text(), lsStr))
     {
-        return new Token(Token::Type::FLOAT, std::string { lsStr }, m_cSource.pos());
+        return push_token(Token::Type::FLOAT, std::string { lsStr });
     }
 
     // Look for an integer
     if (vf::startswith_int(m_cSource.remaining_text(), lsStr))
     {
-        return new Token(Token::Type::INTEGER, std::string { lsStr }, m_cSource.pos());
+        return push_token(Token::Type::INTEGER, std::string { lsStr });
     }
 
     // Look for a command
@@ -326,7 +315,7 @@ Token* Lexer::match()
         {
             if (vf::startswith(m_cSource.remaining_text(), lcCommand.sFull, g_sKeyWordDelimiters))
             {
-                return new Token(lcCommand.eTokenType, lcCommand.sFull, m_cSource.pos());
+                return push_token(lcCommand.eTokenType, lcCommand.sFull);
             }
             else if (lcCommand.sAbrv.empty())
             {
@@ -334,7 +323,7 @@ Token* Lexer::match()
             }
             else if (vf::startswith(m_cSource.remaining_text(), lcCommand.sAbrv, g_sKeyWordDelimiters))
             {
-                return new Token(lcCommand.eTokenType, lcCommand.sAbrv, m_cSource.pos());
+                return push_token(lcCommand.eTokenType, lcCommand.sAbrv);
             }
         }
     }
@@ -344,7 +333,7 @@ Token* Lexer::match()
     {
         if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
         {
-            return new Token(lcKeyword.eTokenType, lcKeyword.sFull, m_cSource.pos());
+            return push_token(lcKeyword.eTokenType, lcKeyword.sFull);
         }
         else if (lcKeyword.sAbrv.empty())
         {
@@ -352,7 +341,7 @@ Token* Lexer::match()
         }
         else if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sAbrv, g_sKeyWordDelimiters))
         {
-            return new Token(lcKeyword.eTokenType, lcKeyword.sAbrv, m_cSource.pos());
+            return push_token(lcKeyword.eTokenType, lcKeyword.sAbrv);
         }
     }
 
@@ -366,11 +355,11 @@ Token* Lexer::match()
         std::string lsText { m_cSource.remaining_text() };
         if (std::regex_search(lsText, lcMatch, lcRe))
         {
-            return new Token(leTokenType, lcMatch.str(), m_cSource.pos());
+            return push_token(leTokenType, lcMatch.str());
         }
     }
 
-    return nullptr;
+    return false;
 }
 
 void Lexer::freeTokens()
@@ -680,4 +669,20 @@ bool Lexer::chk_register() const
     }
 
     return false;
+}
+
+bool Lexer::push_token(Token::Type aeTokenType, char asLexeme)
+{
+    return push_token(aeTokenType, std::string { asLexeme });
+}
+
+bool Lexer::push_token(Token::Type aeTokenType, std::string_view asLexeme)
+{
+    return push_token(aeTokenType, std::string { asLexeme });
+}
+
+bool Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
+{
+    m_pCurrToken = new Token(aeTokenType, asLexeme, m_cSource.pos());
+    return true;
 }
