@@ -734,6 +734,30 @@ ast::InterpStr* ASTParser::interp_str()
                 {
                     // At closing quote
                     pRDelim = curr();
+                    if (pStr != nullptr)
+                    {
+                        if (leQuoteType == Token::Type::SQUOTE)
+                        {
+                            pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
+                        }
+                        else
+                        {
+                            pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
+                        }
+
+                        pInterpStr->push(pStrExpr);
+                    }
+
+                    bLoop = false;
+                }
+
+                consume(leQuoteType);
+                break;
+            case Token::Type::L_BRACE:
+                pRDelim = curr();
+                consume(Token::Type::L_BRACE);
+                if (pStr != nullptr)
+                {
                     if (leQuoteType == Token::Type::SQUOTE)
                     {
                         pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
@@ -744,23 +768,9 @@ ast::InterpStr* ASTParser::interp_str()
                     }
 
                     pInterpStr->push(pStrExpr);
-                    bLoop = false;
+                    pStr = nullptr;
                 }
 
-                consume(leQuoteType);
-                break;
-            case Token::Type::L_BRACE:
-                pRDelim = curr();
-                consume(Token::Type::L_BRACE);
-                if (leQuoteType == Token::Type::SQUOTE)
-                {
-                    pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
-                }
-                else
-                {
-                    pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
-                }
-                pInterpStr->push(pStrExpr);
                 pInterpStr->push(expr(0));
                 break;
             case Token::Type::R_BRACE:
