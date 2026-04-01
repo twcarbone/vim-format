@@ -9,6 +9,7 @@ const std::unordered_map<std::string, std::string> VimError::s_mErrors {
     { "E989", "Non-default argument follows default argument" },
     { "E354", "Invalid register name" },
     { "E1278", "Stray '}' without a matching '{'" },
+    { "E1279", "Missing '}'" },
 };
 
 VimError::VimError(std::string asCode, std::string asTraceback) :
