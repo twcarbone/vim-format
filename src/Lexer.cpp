@@ -270,6 +270,7 @@ bool Lexer::match()
 
                     break;
                 case State::INTERP_STR:
+                    throw VimError("E1278", m_cSource.context());
                 default:
                     break;
             }
@@ -305,7 +306,7 @@ bool Lexer::match()
         }
         case State::INTERP_STR:
         {
-            size_t lnSize = m_cSource.remaining_text().find_first_of("{\"'", 1);
+            size_t lnSize = m_cSource.remaining_text().find_first_of("{}\"'", 1);
             lsStr = m_cSource.remaining_text().substr(0, lnSize);
             return push_token(Token::Type::STRING, std::string { lsStr });
         }

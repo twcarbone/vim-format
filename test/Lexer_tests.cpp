@@ -628,3 +628,13 @@ TEST_F(LexerTest, file_01)
     expect_token(4, "\n", Token::Type::NEWLINE, 10);
     expect_token(5, "EOF", Token::Type::END, 11);
 }
+
+//
+// exceptions
+//
+
+TEST_F(LexerTest, throws_E1278)
+{
+    EXPECT_THROW(tokenize_str("echo $'hello}'"), std::runtime_error);
+    EXPECT_THROW(tokenize_str("echo $'}'"), std::runtime_error);
+}

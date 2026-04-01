@@ -512,7 +512,7 @@ Program
         Var bb
           NULL
     ExprCmd echo <>
-      LiteralStr 'Before {bb} after'
+      LiteralStr 'Before bb} after'
     ExprCmd echo <>
       LiteralStr '{bb} after'
     ExprCmd echo <>
