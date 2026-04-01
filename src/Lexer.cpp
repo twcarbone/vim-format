@@ -204,20 +204,28 @@ bool Lexer::match()
     switch (c)
     {
         case '$':
-            if (m_cSource.remaining_text().size() > 1)
+            switch (m_eState)
             {
-                switch (m_cSource.remaining_text().at(1))
+                case State::LITERAL_STRING:
+                case State::STRING_CONSTANT:
+                    break;
+                default:
                 {
-                    case '\'':
-                    case '"':
-                        m_eState = State::INTERP_STR;
-                        return push_token(Token::Type::STR_INTERP, c);
-                    default:
-                        break;
+                    if (m_cSource.remaining_text().size() > 1)
+                    {
+                        const char c = m_cSource.remaining_text().at(1);
+                        if (c == '"' || c == '\'')
+                        {
+                            m_eState = State::INTERP_STR;
+                            return push_token(Token::Type::STR_INTERP, c);
+                        }
+                    }
+
+                    return push_token(Token::Type::SIG_ENV, c);
                 }
             }
 
-            return push_token(Token::Type::SIG_ENV, c);
+            break;
         case '\'':
             state_toggle_str(State::LITERAL_STRING);
             return push_token(Token::Type::SQUOTE, c);

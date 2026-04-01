@@ -518,6 +518,8 @@ Program
     ExprCmd echo <>
       LiteralStr 'Before {bb}'
     ExprCmd echo <>
+      LiteralStr '$var'
+    ExprCmd echo <>
       StrConst ""
     ExprCmd echo <>
       InterpStr
@@ -541,3 +543,5 @@ Program
       StrConst "{bb} after"
     ExprCmd echo <>
       StrConst "Before {bb}"
+    ExprCmd echo <>
+      StrConst "$var"

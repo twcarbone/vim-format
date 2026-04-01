@@ -141,6 +141,7 @@ echo $'Before {bb}'
 echo 'Before {bb} after'
 echo '{bb} after'
 echo 'Before {bb}'
+echo '$var'
 echo ""
 echo $"Before {bb} after"
 echo $"{bb} after"
@@ -148,3 +149,4 @@ echo $"Before {bb}"
 echo "Before {bb} after"
 echo "{bb} after"
 echo "Before {bb}"
+echo "$var"
