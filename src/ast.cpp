@@ -230,17 +230,17 @@ void IfBranch::accept(ASTVisitor& acASTVisitor) const
 // IfStmt
 //
 
-IfStmt::IfStmt()
+IfStmt::IfStmt(const std::vector<IfBranch*>& alIfBranches, Token* apExEndIf) :
+    m_pExEndIf { apExEndIf }
 {
+    for (IfBranch* pIfBranch : alIfBranches)
+    {
+        m_lChildren.push_back(pIfBranch);
+    }
 }
 
 IfStmt::~IfStmt()
 {
-}
-
-void IfStmt::push(ast::IfBranch* apIfBranch)
-{
-    m_lChildren.push_back(apIfBranch);
 }
 
 std::vector<const IfBranch*> IfStmt::branches() const
@@ -253,6 +253,11 @@ std::vector<const IfBranch*> IfStmt::branches() const
     }
 
     return lBranches;
+}
+
+const Token* IfStmt::ex_endif() const
+{
+    return m_pExEndIf;
 }
 
 void IfStmt::accept(ASTVisitor& acASTVisitor) const

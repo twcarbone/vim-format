@@ -263,11 +263,10 @@ ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
 // 3767655736
 ast::IfStmt* ASTParser::if_stmt()
 {
-    ast::IfStmt* pIfStmt = new ast::IfStmt();
-    ast::IfBranch* pIfBranch = nullptr;
+    std::vector<ast::IfBranch*> lIfBranches;
+    Token* pExEndIf = nullptr;
 
-    pIfBranch = if_branch(Token::Type::IF);
-    pIfStmt->push(pIfBranch);
+    lIfBranches.push_back(if_branch(Token::Type::IF));
 
     bool bLoop = true;
     while (bLoop)
@@ -276,17 +275,18 @@ ast::IfStmt* ASTParser::if_stmt()
         {
             case Token::Type::ELSEIF:
             case Token::Type::ELSE:
-                pIfBranch = if_branch(curr()->type());
-                pIfStmt->push(pIfBranch);
+                lIfBranches.push_back(if_branch(curr()->type()));
                 break;
             case Token::Type::ENDIF:
+                pExEndIf = curr();
                 consume(Token::Type::ENDIF);
+                // Fall-thru intentional
             default:
                 bLoop = false;
         }
     }
 
-    return pIfStmt;
+    return new ast::IfStmt(lIfBranches, pExEndIf);
 }
 
 // 0743278179

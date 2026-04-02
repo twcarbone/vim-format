@@ -180,17 +180,18 @@ private:
 class IfStmt : public Stmt
 {
 public:
-    IfStmt();
+    IfStmt(const std::vector<IfBranch*>& ifbranches, Token* ex_endif);
     virtual ~IfStmt();
 
-    void push(IfBranch* if_branch);
-
     std::vector<const IfBranch*> branches() const;
+    const Token* ex_endif() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     virtual std::string str_a() const;
+
+    Token* m_pExEndIf;
 };
 
 //

@@ -285,7 +285,7 @@ void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
     }
 
     write_bol();
-    write("endif");
+    write(apIfStmt->ex_endif()->str());
 
     write_eol();
 }
