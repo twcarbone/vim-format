@@ -244,7 +244,7 @@ void PrettyPrinter::visit(const ast::ForStmt* apForStmt)
     m_cIndent--;
 
     write_bol();
-    write("endfor");
+    write(apForStmt->ex_endfo()->str());
 
     write_eol();
 }

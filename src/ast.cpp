@@ -323,7 +323,8 @@ std::string WhileStmt::str_a() const
 // ForStmt
 //
 
-ForStmt::ForStmt(ast::Expr* apItem, ast::Expr* apItems, ast::StmtList* apStmts)
+ForStmt::ForStmt(ast::Expr* apItem, ast::Expr* apItems, ast::StmtList* apStmts, Token* apExEndFo) :
+    m_pExEndFo { apExEndFo }
 {
     m_lChildren.push_back(apItem);
     m_lChildren.push_back(apItems);
@@ -347,6 +348,11 @@ const Expr* ForStmt::items() const
 const StmtList* ForStmt::stmts() const
 {
     return static_cast<StmtList*>(m_lChildren[2]);
+}
+
+const Token* ForStmt::ex_endfo() const
+{
+    return m_pExEndFo;
 }
 
 void ForStmt::accept(ASTVisitor& acASTVisitor) const

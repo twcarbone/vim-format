@@ -225,17 +225,20 @@ private:
 class ForStmt : public Stmt
 {
 public:
-    ForStmt(Expr* item, Expr* items, StmtList* stmts);
+    ForStmt(Expr* item, Expr* items, StmtList* stmts, Token* ex_endfo);
     virtual ~ForStmt();
 
     const Expr* item() const;
     const Expr* items() const;
     const StmtList* stmts() const;
+    const Token* ex_endfo() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     virtual std::string str_a() const;
+
+    Token* m_pExEndFo;
 };
 
 //

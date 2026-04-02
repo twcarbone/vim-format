@@ -491,9 +491,10 @@ ast::ForStmt* ASTParser::for_stmt()
     pBody->take(pBody2);
     delete pBody2;
 
+    Token* pExEndFo = curr();
     consume(Token::Type::ENDFOR);
 
-    return new ast::ForStmt(pItem, pItems, pBody);
+    return new ast::ForStmt(pItem, pItems, pBody, pExEndFo);
 }
 
 // 1883144826
