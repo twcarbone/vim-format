@@ -136,7 +136,7 @@ void PrettyPrinter::visit(const ast::ExprCmd* apExprCmd)
 {
     write_bol();
 
-    write(apExprCmd->cmd()->str());
+    write(apExprCmd->ex_cmd()->str());
     write(' ', Settings::SpaceAfterExprCmd);
     apExprCmd->expr()->accept(*this);
 
@@ -330,7 +330,7 @@ void PrettyPrinter::visit(const ast::JumpStmt* apJumpStmt)
 {
     write_bol();
 
-    write(apJumpStmt->token()->str());
+    write(apJumpStmt->ex_cmd()->str());
 
     if (apJumpStmt->expr() != nullptr)
     {

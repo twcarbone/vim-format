@@ -134,7 +134,7 @@ void StmtList::accept(ASTVisitor& acASTVisitor) const
 //
 
 ExprCmd::ExprCmd(Token* apCmd, Expr* apExpr) :
-    m_pCmd { apCmd }
+    m_pExCmd { apCmd }
 {
     m_lChildren.push_back(apExpr);
 }
@@ -143,9 +143,9 @@ ExprCmd::~ExprCmd()
 {
 }
 
-const Token* ExprCmd::cmd() const
+const Token* ExprCmd::ex_cmd() const
 {
-    return m_pCmd;
+    return m_pExCmd;
 }
 
 const Expr* ExprCmd::expr() const
@@ -160,7 +160,7 @@ void ExprCmd::accept(ASTVisitor& acASTVisitor) const
 
 std::string ExprCmd::str_a() const
 {
-    return "ExprCmd " + m_pCmd->str();
+    return "ExprCmd " + m_pExCmd->str();
 }
 
 //
@@ -364,7 +364,7 @@ std::string ForStmt::str_a() const
 //
 
 JumpStmt::JumpStmt(Token* apToken, Expr* apExpr) :
-    m_pToken { apToken }
+    m_pExCmd { apToken }
 {
     m_lChildren.push_back(apExpr);
 }
@@ -373,9 +373,9 @@ JumpStmt::~JumpStmt()
 {
 }
 
-const Token* JumpStmt::token() const
+const Token* JumpStmt::ex_cmd() const
 {
-    return m_pToken;
+    return m_pExCmd;
 }
 
 const Expr* JumpStmt::expr() const
@@ -390,7 +390,7 @@ void JumpStmt::accept(ASTVisitor& acASTVisitor) const
 
 std::string JumpStmt::str_a() const
 {
-    return "JumpStmt " + m_pToken->str();
+    return "JumpStmt " + m_pExCmd->str();
 }
 
 //

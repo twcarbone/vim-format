@@ -108,7 +108,7 @@ public:
     ExprCmd(Token* cmd, Expr* expr);
     virtual ~ExprCmd();
 
-    const Token* cmd() const;
+    const Token* ex_cmd() const;
     const Expr* expr() const;
 
     virtual void accept(ASTVisitor& visitor) const;
@@ -116,7 +116,7 @@ public:
 private:
     virtual std::string str_a() const;
 
-    Token* m_pCmd;
+    Token* m_pExCmd;
 };
 
 //
@@ -248,7 +248,7 @@ public:
     JumpStmt(Token* token, Expr* expr);
     virtual ~JumpStmt();
 
-    const Token* token() const;
+    const Token* ex_cmd() const;
     const Expr* expr() const;
 
     virtual void accept(ASTVisitor& visitor) const;
@@ -256,7 +256,7 @@ public:
 private:
     virtual std::string str_a() const;
 
-    Token* m_pToken;
+    Token* m_pExCmd;
 };
 
 //
