@@ -201,16 +201,21 @@ private:
 class WhileStmt : public Stmt
 {
 public:
-    WhileStmt(Expr* condition, StmtList* stmts);
+    WhileStmt(Token* ex_while, Token* ex_endwhile, Expr* condition, StmtList* stmts);
     virtual ~WhileStmt();
 
     const Expr* condition() const;
+    const Token* ex_cmd_while() const;
+    const Token* ex_cmd_endwile() const;
     const StmtList* stmts() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     virtual std::string str_a() const;
+
+    Token* m_pExWhile;
+    Token* m_pExEndWhile;
 };
 
 //

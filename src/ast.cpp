@@ -274,7 +274,12 @@ std::string IfStmt::str_a() const
 // WhileStmt
 //
 
-WhileStmt::WhileStmt(ast::Expr* apCondition, ast::StmtList* apStmtList)
+WhileStmt::WhileStmt(Token* apExWhile,
+                     Token* apExEndWhile,
+                     ast::Expr* apCondition,
+                     ast::StmtList* apStmtList) :
+    m_pExWhile { apExWhile },
+    m_pExEndWhile { apExEndWhile }
 {
     m_lChildren.push_back(apCondition);
     m_lChildren.push_back(apStmtList);
@@ -287,6 +292,16 @@ WhileStmt::~WhileStmt()
 const Expr* WhileStmt::condition() const
 {
     return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Token* WhileStmt::ex_cmd_while() const
+{
+    return m_pExWhile;
+}
+
+const Token* WhileStmt::ex_cmd_endwile() const
+{
+    return m_pExEndWhile;
 }
 
 const StmtList* WhileStmt::stmts() const

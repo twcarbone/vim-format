@@ -470,7 +470,7 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
 {
     write_bol();
 
-    write("while");
+    write(apWhileStmt->ex_cmd_while()->str());
     write(' ', Settings::ControlStmtPadding);
     apWhileStmt->condition()->accept(*this);
     write_eol();
@@ -480,7 +480,7 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
     m_cIndent--;
 
     write_bol();
-    write("endwhile");
+    write(apWhileStmt->ex_cmd_endwile()->str());
 
     write_eol();
 }

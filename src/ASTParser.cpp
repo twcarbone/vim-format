@@ -293,11 +293,12 @@ ast::IfStmt* ASTParser::if_stmt()
 // 3137047372
 ast::WhileStmt* ASTParser::while_stmt()
 {
-    ast::Expr* pExpr = nullptr;
     ast::StmtList* pBody = new ast::StmtList();
 
+    Token* pExWhile = curr();
     consume(Token::Type::WHILE);
-    pExpr = expr(0);
+
+    ast::Expr* pExpr = expr(0);
 
     if (curr()->type() == Token::Type::COMMENT)
     {
@@ -310,9 +311,10 @@ ast::WhileStmt* ASTParser::while_stmt()
     pBody->take(pBody2);
     delete pBody2;
 
+    Token* pExEndWhile = curr();
     consume(Token::Type::ENDWHILE);
 
-    return new ast::WhileStmt(pExpr, pBody);
+    return new ast::WhileStmt(pExWhile, pExEndWhile, pExpr, pBody);
 }
 
 ast::FnParamList* ASTParser::fn_param_list()
