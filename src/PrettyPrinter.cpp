@@ -188,7 +188,7 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
 {
     write_bol();
 
-    write("function");
+    write(apFnStmt->ex_fu()->str());
 
     if (apFnStmt->bang() != nullptr)
     {
@@ -220,7 +220,7 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
     m_cIndent--;
 
     write_bol();
-    write("endfunction");
+    write(apFnStmt->ex_endfu()->str());
 
     write_eol();
 }

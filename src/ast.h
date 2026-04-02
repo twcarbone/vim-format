@@ -312,13 +312,17 @@ public:
 class FnStmt : public Stmt
 {
 public:
-    FnStmt(Token* name,
+    FnStmt(Token* ex_fu,
+           Token* ex_endf,
+           Token* name,
            Token* bang,
            FnParamList* params,
            const std::vector<Token*>& modifiers,
            StmtList* body);
     virtual ~FnStmt();
 
+    const Token* ex_fu() const;
+    const Token* ex_endfu() const;
     const Token* name() const;
     const Token* bang() const;
     const FnParamList* params() const;
@@ -330,8 +334,10 @@ public:
 private:
     virtual std::string str_a() const;
 
+    Token* m_pExFu;
     Token* m_pName;
     Token* m_pBang;
+    Token* m_pExEndFu;
     std::vector<Token*> m_lModifiers;
 };
 

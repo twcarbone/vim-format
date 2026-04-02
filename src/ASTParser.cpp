@@ -402,6 +402,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 // 2041554108
 ast::FnStmt* ASTParser::fn_stmt()
 {
+    Token* pExFu = curr();
     consume(Token::Type::FUNCTION);
 
     // Bang (!)
@@ -456,11 +457,12 @@ ast::FnStmt* ASTParser::fn_stmt()
     pBody->take(pBody2);
     delete pBody2;
 
+    Token* pExEndFu = curr();
     consume(Token::Type::ENDFUNCTION);
 
     // TODO (gh-105): endfunction does not support [argument]
 
-    return new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
+    return new ast::FnStmt(pExFu, pExEndFu, pName, pBang, pFnParamList, lModifiers, pBody);
 }
 
 // 2662856482
