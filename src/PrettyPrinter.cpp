@@ -68,10 +68,21 @@ void PrettyPrinter::visit(const ast::CommentStmt* apCommentStmt)
 
 void PrettyPrinter::visit(const ast::BinaryOp* apBinaryOp)
 {
+    std::string lsPadding;
+
+    switch (apBinaryOp->op()->type())
+    {
+        case Token::Type::OP_DOT:
+            lsPadding = "";
+            break;
+        default:
+            lsPadding = std::string(Settings::OperatorPadding, ' ');
+    }
+
     apBinaryOp->lexpr()->accept(*this);
-    write(' ', Settings::OperatorPadding);
+    write(lsPadding);
     write(apBinaryOp->op()->str());
-    write(' ', Settings::OperatorPadding);
+    write(lsPadding);
     apBinaryOp->rexpr()->accept(*this);
 }
 
