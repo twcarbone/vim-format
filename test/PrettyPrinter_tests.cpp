@@ -43,3 +43,8 @@ TEST_F(PrettyPrinterTest, expr_pretty)
 {
     test_file("../../test/pretty/expr.pretty.vim", "../../test/pretty/expr.pretty.vim");
 }
+
+TEST_F(PrettyPrinterTest, ast_eval)
+{
+    test_file("../../test/ast/eval.vim", "../../test/ast/eval.vim");
+}
