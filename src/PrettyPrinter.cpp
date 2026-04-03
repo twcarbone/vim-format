@@ -68,6 +68,8 @@ void PrettyPrinter::visit(const ast::CommentStmt* apCommentStmt)
 
 void PrettyPrinter::visit(const ast::BinaryOp* apBinaryOp)
 {
+    // TODO (gh-129): Add DictAccess AST node
+
     std::string lsPadding;
 
     switch (apBinaryOp->op()->type())
