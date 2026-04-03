@@ -875,7 +875,7 @@ std::string LiteralStr::toString() const
         lsStr = m_pStr->str();
     }
 
-    return "LiteralStr \'" + lsStr + "\'";
+    return "LiteralStr ;" + m_pLDelim->str() + ";" + lsStr + ";" + m_pRDelim->str() + ";";
 }
 
 void LiteralStr::accept(ASTVisitor& acASTVisitor) const
@@ -900,7 +900,7 @@ std::string StrConst::toString() const
         lsStr = m_pStr->str();
     }
 
-    return "StrConst \"" + lsStr + "\"";
+    return "StrConst ;" + m_pLDelim->str() + ";" + lsStr + ";" + m_pRDelim->str() + ";";
 }
 
 void StrConst::accept(ASTVisitor& acASTVisitor) const
