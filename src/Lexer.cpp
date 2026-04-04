@@ -475,7 +475,8 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 {
                     case Token::Type::TAB:
                     case Token::Type::SPACE:
-                        continue;
+                        apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
+                        break;
                     case Token::Type::FUNCTION:
                     case Token::Type::EX_UNLET:
                         apCurrentToken->setType(Token::Type::OP_BANG);
