@@ -124,7 +124,6 @@ public:
 
     ~Token();
 
-    bool is_command() const;
     bool is_keyword() const;
     bool is_ambiguous() const;
     bool is_assignment() const;

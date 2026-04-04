@@ -18,33 +18,6 @@ Token::~Token()
 {
 }
 
-bool Token::is_command() const
-{
-    switch (m_eType)
-    {
-        case Token::Type::IF:
-        case Token::Type::ELSEIF:
-        case Token::Type::ELSE:
-        case Token::Type::ENDIF:
-        case Token::Type::FOR:
-        case Token::Type::IN:
-        case Token::Type::ENDFOR:
-        case Token::Type::WHILE:
-        case Token::Type::ENDWHILE:
-        case Token::Type::BREAK:
-        case Token::Type::CONTINUE:
-        case Token::Type::FUNCTION:
-        case Token::Type::RETURN:
-        case Token::Type::ENDFUNCTION:
-        case Token::Type::EX_LET:
-        case Token::Type::EX_SET:
-        case Token::Type::EX_ECHO:
-            return true;
-        default:
-            return false;
-    }
-}
-
 bool Token::is_keyword() const
 {
     switch (m_eType)
