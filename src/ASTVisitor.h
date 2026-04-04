@@ -38,6 +38,7 @@ class LiteralStr;
 class StrConst;
 class TernaryOp;
 class UnaryOp;
+class UnletStmt;
 class Var;
 class WhileStmt;
 };
@@ -84,6 +85,7 @@ public:
     virtual void visit(const ast::LiteralStr* ast);
     virtual void visit(const ast::StrConst* ast);
     virtual void visit(const ast::TernaryOp* ast);
+    virtual void visit(const ast::UnletStmt* ast);
     virtual void visit(const ast::UnaryOp* ast);
     virtual void visit(const ast::Var* ast);
     virtual void visit(const ast::WhileStmt* ast);

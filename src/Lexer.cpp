@@ -32,6 +32,7 @@ Lexer::Lexer(const Context& acContext) :
         { "if", "", Token::Type::IF },
         { "in", "", Token::Type::IN },
         { "let", "", Token::Type::EX_LET },
+        { "unlet", "unl", Token::Type::EX_UNLET },
     },
     m_lKeywords {
         { "abort", "", Token::Type::FN_ABORT },
@@ -476,6 +477,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     case Token::Type::SPACE:
                         continue;
                     case Token::Type::FUNCTION:
+                    case Token::Type::EX_UNLET:
                         apCurrentToken->setType(Token::Type::OP_BANG);
                         break;
                     default:

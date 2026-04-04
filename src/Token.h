@@ -8,6 +8,7 @@
 #define TOKEN_TYPE_LIST \
         X(NONE) \
         X(EX_LET) \
+        X(EX_UNLET) \
         X(EX_ECHO) \
         X(EX_SET) \
         X(GEN_PLUS) \

@@ -1073,6 +1073,49 @@ std::string AssignStmt::str_a() const
     return "AssignStmt " + m_pOp->str();
 }
 
+UnletStmt::UnletStmt(Token* apExUnlet, Token* apBang, Expr* apExpr) :
+    m_pExUnlet { apExUnlet },
+    m_pBang { apBang }
+{
+    m_lChildren.push_back(apExpr);
+}
+
+UnletStmt::~UnletStmt()
+{
+}
+
+const Token* UnletStmt::ex_unlet() const
+{
+    return m_pExUnlet;
+}
+
+const Token* UnletStmt::bang() const
+{
+    return m_pBang;
+}
+
+const Expr* UnletStmt::expr() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+void UnletStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string UnletStmt::str_a() const
+{
+    std::string lsStr = "UnletStmt";
+
+    if (m_pBang != nullptr)
+    {
+        lsStr += " " + m_pBang->str();
+    }
+
+    return lsStr;
+}
+
 CommentStmt::CommentStmt(Token* apComment, bool abTrailing) :
     m_bTrailing { abTrailing },
     m_pComment { apComment }

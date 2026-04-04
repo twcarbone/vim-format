@@ -90,6 +90,15 @@ Program
       Var &tpm
         Scope l:
       Literal 10
+    UnletStmt <>
+      Var cc
+        NULL
+    UnletStmt ! <>
+      Var cc
+        NULL
+    UnletStmt ! <>
+      Var does_not_exist
+        Scope g:
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>

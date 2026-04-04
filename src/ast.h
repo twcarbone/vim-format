@@ -552,6 +552,25 @@ private:
     Token* m_pOp;
 };  // }}}
 
+class UnletStmt : public Stmt
+{  // {{{
+public:
+    UnletStmt(Token* ex_unlet, Token* bang, Expr* expr);
+    virtual ~UnletStmt();
+
+    const Token* ex_unlet() const;
+    const Token* bang() const;
+    const Expr* expr() const;
+
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
+
+    Token* m_pExUnlet;
+    Token* m_pBang;
+};  // }}}
+
 class CommentStmt : public Stmt
 {  // {{{
 public:
