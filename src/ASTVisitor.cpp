@@ -164,6 +164,11 @@ void ASTVisitor::visit(const ast::UnaryOp* apUnaryOp)
     handle_node(apUnaryOp);
 }
 
+void ASTVisitor::visit(const ast::UnletStmt* apUnletStmt)
+{
+    handle_node(apUnletStmt);
+}
+
 void ASTVisitor::visit(const ast::Var* apVar)
 {
     handle_node(apVar);

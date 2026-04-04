@@ -17,6 +17,9 @@ let @@ = 'bar'
 let &tpm = 10
 let &g:tpm = 10
 let &l:tpm = 10
+unlet cc
+unlet! cc
+unl! g:does_not_exist
 
 " for
 

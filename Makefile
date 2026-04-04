@@ -33,3 +33,9 @@ format/check:
 .PHONY: tags
 tags:
 	./scripts/cmds.py > ./reference/ex_cmds.txt
+
+.PHONY: ast
+ast:
+	./build/src/vim-format -p test/ast/eval.vim > test/ast/eval.ast
+	./build/src/vim-format -p test/ast/cmdline.vim > test/ast/cmdline.ast
+	./build/src/vim-format -p test/ast/userfunc.vim > test/ast/userfunc.ast

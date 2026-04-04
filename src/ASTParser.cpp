@@ -209,11 +209,14 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::FOR:
             pStmt = for_stmt();
             break;
-        case Token::Type::CMD_ECHO:
+        case Token::Type::EX_ECHO:
             pStmt = expr_cmd();
             break;
-        case Token::Type::CMD_LET:
+        case Token::Type::EX_LET:
             pStmt = assign_stmt();
+            break;
+        case Token::Type::EX_UNLET:
+            pStmt = unlet_stmt();
             break;
         case Token::Type::NEWLINE:
             pStmt = new ast::EmptyStmt();
@@ -315,6 +318,24 @@ ast::WhileStmt* ASTParser::while_stmt()
     consume(Token::Type::ENDWHILE);
 
     return new ast::WhileStmt(pExWhile, pExEndWhile, pExpr, pBody);
+}
+
+// 3280446171
+// 4056585016
+ast::UnletStmt* ASTParser::unlet_stmt()
+{
+    Token* pExUnlet = curr();
+    consume(Token::Type::EX_UNLET);
+
+    Token* pBang = nullptr;
+    if (consume_optional(Token::Type::OP_BANG))
+    {
+        pBang = prev();
+    }
+
+    ast::Expr* pExpr = expr(0);
+
+    return new ast::UnletStmt(pExUnlet, pBang, pExpr);
 }
 
 ast::FnParamList* ASTParser::fn_param_list()
@@ -533,7 +554,7 @@ ast::AssignStmt* ASTParser::assign_stmt()
     ast::Expr* pLhs = nullptr;
     ast::Expr* pRhs = nullptr;
 
-    consume(Token::Type::CMD_LET);
+    consume(Token::Type::EX_LET);
 
     pLhs = expr(0);
 

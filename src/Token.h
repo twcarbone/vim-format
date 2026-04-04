@@ -7,9 +7,10 @@
 // clang-format off
 #define TOKEN_TYPE_LIST \
         X(NONE) \
-        X(CMD_LET) \
-        X(CMD_ECHO) \
-        X(CMD_SET) \
+        X(EX_LET) \
+        X(EX_UNLET) \
+        X(EX_ECHO) \
+        X(EX_SET) \
         X(GEN_PLUS) \
         X(GEN_MINUS) \
         X(GEN_QUESTION) \
@@ -124,7 +125,6 @@ public:
 
     ~Token();
 
-    bool is_command() const;
     bool is_keyword() const;
     bool is_ambiguous() const;
     bool is_assignment() const;

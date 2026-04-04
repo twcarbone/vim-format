@@ -453,6 +453,23 @@ void PrettyPrinter::visit(const ast::TernaryOp* apTernaryOp)
     apTernaryOp->rexpr()->accept(*this);
 }
 
+void PrettyPrinter::visit(const ast::UnletStmt* apUnletStmt)
+{
+    write_bol();
+
+    write(apUnletStmt->ex_unlet()->str());
+
+    if (apUnletStmt->bang() != nullptr)
+    {
+        write(apUnletStmt->bang()->str());
+    }
+
+    write(' ', Settings::SpaceAfterExprCmd);
+    apUnletStmt->expr()->accept(*this);
+
+    write_eol();
+}
+
 void PrettyPrinter::visit(const ast::UnaryOp* apUnaryOp)
 {
     write(apUnaryOp->op()->str());
