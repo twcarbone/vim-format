@@ -10,7 +10,7 @@ namespace ast
 {
 
 class Node
-{
+{  // {{{
 public:
     virtual ~Node();
 
@@ -21,10 +21,10 @@ public:
 
 protected:
     std::vector<Node*> m_lChildren;
-};
+};  // }}}
 
 class Stmt : public Node
-{
+{  // {{{
 public:
     virtual ~Stmt() = default;
 
@@ -35,10 +35,10 @@ protected:
 
 private:
     virtual std::string str_a() const = 0;
-};
+};  // }}}
 
 class EmptyStmt : public Stmt
-{
+{  // {{{
 public:
     virtual ~EmptyStmt();
 
@@ -46,16 +46,16 @@ public:
 
 private:
     virtual std::string str_a() const;
-};
+};  // }}}
 
 class Expr : public Node
-{
+{  // {{{
 public:
     virtual ~Expr() = default;
-};
+};  // }}}
 
 class GroupExpr : public Expr
-{
+{  // {{{
 public:
     GroupExpr(Expr* expr);
     virtual ~GroupExpr();
@@ -64,18 +64,18 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class ExprList : public Node
-{
+{  // {{{
 public:
     virtual ~ExprList() = default;
 
     void push(Expr* expr);
-};
+};  // }}}
 
 class ExprCmd : public Stmt
-{
+{  // {{{
 public:
     ExprCmd(Token* cmd, Expr* expr);
     virtual ~ExprCmd();
@@ -89,10 +89,10 @@ private:
     virtual std::string str_a() const;
 
     Token* m_pExCmd;
-};
+};  // }}}
 
 class StmtList : public Node
-{
+{  // {{{
 public:
     StmtList() = default;
     virtual ~StmtList();
@@ -104,20 +104,20 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class Program : public Node
-{
+{  // {{{
 public:
     Program(ast::StmtList* stmts);
     virtual ~Program();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class IfBranch : public Node
-{
+{  // {{{
 public:
     IfBranch(Token* token, Expr* expr, StmtList* body);
     virtual ~IfBranch();
@@ -131,10 +131,10 @@ public:
 
 private:
     Token* m_pToken;
-};
+};  // }}}
 
 class IfStmt : public Stmt
-{
+{  // {{{
 public:
     IfStmt(const std::vector<IfBranch*>& ifbranches, Token* ex_endif);
     virtual ~IfStmt();
@@ -148,10 +148,10 @@ private:
     virtual std::string str_a() const;
 
     Token* m_pExEndIf;
-};
+};  // }}}
 
 class WhileStmt : public Stmt
-{
+{  // {{{
 public:
     WhileStmt(Token* ex_while, Token* ex_endwhile, Expr* condition, StmtList* stmts);
     virtual ~WhileStmt();
@@ -168,10 +168,10 @@ private:
 
     Token* m_pExWhile;
     Token* m_pExEndWhile;
-};
+};  // }}}
 
 class ForStmt : public Stmt
-{
+{  // {{{
 public:
     ForStmt(Expr* item, Expr* items, StmtList* stmts, Token* ex_endfo);
     virtual ~ForStmt();
@@ -187,10 +187,10 @@ private:
     virtual std::string str_a() const;
 
     Token* m_pExEndFo;
-};
+};  // }}}
 
 class JumpStmt : public Stmt
-{
+{  // {{{
 public:
     JumpStmt(Token* token, Expr* expr);
     virtual ~JumpStmt();
@@ -204,31 +204,31 @@ private:
     virtual std::string str_a() const;
 
     Token* m_pExCmd;
-};
+};  // }}}
 
 class FnParamList : public ExprList
-{
+{  // {{{
 public:
     FnParamList() = default;
     virtual ~FnParamList();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 // TODO (gh-37): Rename xxList to xxSeq to distinguish from a ListExpr
 class FnArgList : public ExprList
-{
+{  // {{{
 public:
     FnArgList() = default;
     virtual ~FnArgList();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class FnParam : public Expr
-{
+{  // {{{
 public:
     FnParam(Var* name, Expr* default_value);
     virtual ~FnParam();
@@ -238,10 +238,10 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class FnStmt : public Stmt
-{
+{  // {{{
 public:
     FnStmt(Token* ex_fu,
            Token* ex_endf,
@@ -270,10 +270,10 @@ private:
     Token* m_pBang;
     Token* m_pExEndFu;
     std::vector<Token*> m_lModifiers;
-};
+};  // }}}
 
 class BinaryOp : public Expr
-{
+{  // {{{
 public:
     BinaryOp(Token* op, Expr* left, Expr* right);
     virtual ~BinaryOp();
@@ -287,10 +287,10 @@ public:
 
 protected:
     Token* m_pOp;
-};
+};  // }}}
 
 class CasedBinaryOp : public BinaryOp
-{
+{  // {{{
 public:
     CasedBinaryOp(Token* op, Expr* left, Expr* right, Token* case_sensitivity);
     virtual ~CasedBinaryOp();
@@ -302,10 +302,10 @@ public:
 
 private:
     Token* m_pCaseSensitivity;
-};
+};  // }}}
 
 class DictEntry : public Node
-{
+{  // {{{
 public:
     DictEntry(Expr* key, Expr* value);
     virtual ~DictEntry();
@@ -315,10 +315,10 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class DictExpr : public Expr
-{
+{  // {{{
 public:
     DictExpr() = default;
     virtual ~DictExpr();
@@ -329,10 +329,10 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class ListExpr : public Expr
-{
+{  // {{{
 public:
     ListExpr() = default;
     virtual ~ListExpr();
@@ -343,10 +343,10 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class CallExpr : public Expr
-{
+{  // {{{
 public:
     CallExpr(Expr* callable, FnArgList* args);
     virtual ~CallExpr();
@@ -356,10 +356,10 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class MethodCallExpr : public Expr
-{
+{  // {{{
 public:
     MethodCallExpr(Token* op, Expr* receiver, Expr* call);
     virtual ~MethodCallExpr();
@@ -373,10 +373,10 @@ public:
 
 private:
     Token* m_pOp;
-};
+};  // }}}
 
 class InterpStr : public Expr
-{
+{  // {{{
 public:
     InterpStr() = default;
     virtual ~InterpStr();
@@ -385,10 +385,10 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class StrExpr : public Expr
-{
+{  // {{{
 public:
     StrExpr(Token* str, Token* ldelim, Token* rdelim);
     virtual ~StrExpr();
@@ -401,30 +401,30 @@ protected:
     Token* m_pStr;
     Token* m_pLDelim;
     Token* m_pRDelim;
-};
+};  // }}}
 
 class LiteralStr : public StrExpr
-{
+{  // {{{
 public:
     using StrExpr::StrExpr;
     virtual ~LiteralStr();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class StrConst : public StrExpr
-{
+{  // {{{
 public:
     using StrExpr::StrExpr;
     virtual ~StrConst();
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class Literal : public Expr
-{
+{  // {{{
 public:
     Literal(Token* token);
     virtual ~Literal();
@@ -436,10 +436,10 @@ public:
 
 private:
     Token* m_pToken;
-};
+};  // }}}
 
 class SliceExpr : public Expr
-{
+{  // {{{
 public:
     SliceExpr(Expr* sliceable, Expr* start, Expr* stop);
     virtual ~SliceExpr();
@@ -450,10 +450,10 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class IndexExpr : public Expr
-{
+{  // {{{
 public:
     IndexExpr(Expr* indexable, Expr* index);
     virtual ~IndexExpr();
@@ -463,10 +463,10 @@ public:
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
-};
+};  // }}}
 
 class TernaryOp : public Expr
-{
+{  // {{{
 public:
     TernaryOp(Token* left_op, Token* right_op, Expr* left, Expr* middle, Expr* right);
     virtual ~TernaryOp();
@@ -483,10 +483,10 @@ public:
 private:
     Token* m_pLeftOp;
     Token* m_pRightOp;
-};
+};  // }}}
 
 class UnaryOp : public Expr
-{
+{  // {{{
 public:
     UnaryOp(Token* op, Expr* right);
     virtual ~UnaryOp();
@@ -499,10 +499,10 @@ public:
 
 private:
     Token* m_pOp;
-};
+};  // }}}
 
 class ScopeExpr : public Expr
-{
+{  // {{{
 public:
     ScopeExpr(Token* scope);
     virtual ~ScopeExpr();
@@ -514,10 +514,10 @@ public:
 
 private:
     Token* m_pScope;
-};
+};  // }}}
 
 class Var : public Expr
-{
+{  // {{{
 public:
     Var(Token* sigil, ScopeExpr* scope, Token* name);
     virtual ~Var();
@@ -532,10 +532,10 @@ public:
 private:
     Token* m_pSigil;
     Token* m_pName;
-};
+};  // }}}
 
 class AssignStmt : public Stmt
-{
+{  // {{{
 public:
     AssignStmt(Token* op, Expr* left, Expr* right);
     virtual ~AssignStmt();
@@ -550,10 +550,10 @@ private:
     virtual std::string str_a() const;
 
     Token* m_pOp;
-};
+};  // }}}
 
 class CommentStmt : public Stmt
-{
+{  // {{{
 public:
     CommentStmt(Token* comment, bool trailing = false);
     virtual ~CommentStmt();
@@ -570,6 +570,8 @@ private:
 
     bool m_bTrailing;
     Token* m_pComment;
-};
+};  // }}}
 
 };
+
+// vim: set foldmethod=marker :
