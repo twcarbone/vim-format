@@ -604,6 +604,8 @@ void Lexer::retype_keyword(Token* apCurrentToken)
 
 void Lexer::state_toggle_str(State aeState)
 {
+    // TODO (gh-132): Throw E1279 for unclosed { in interpolated string
+
     if (m_eState == aeState)
     {
         m_eState = State::NONE;
