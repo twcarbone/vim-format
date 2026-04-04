@@ -270,6 +270,8 @@ bool Lexer::match()
 
                     break;
                 case State::INTERP_STR:
+                    // Ex:  $'one two} {three}'
+                    //               ^
                     throw VimError("E1278", m_cSource.context());
                 default:
                     break;
@@ -684,10 +686,14 @@ bool Lexer::chk_register() const
             case ':':
             case '.':
             case '%':
+                // Ex:  let @: = 'something'
+                //           ^
                 throw VimError("E354", m_cSource.context());
             default:
                 if (!std::isalnum(c))
                 {
+                    // Ex:  let @& = 'something'
+                    //           ^
                     throw VimError("E354", m_cSource.context());
                 }
         }

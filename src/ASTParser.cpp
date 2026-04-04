@@ -354,7 +354,8 @@ ast::FnParamList* ASTParser::fn_param_list()
                 }
                 else if (bGotDefaultParam)
                 {
-                    // A non-default param follows a default param.
+                    // Ex: function Foo(a = 1, b)
+                    //                         ^
                     throw_vim_error("E989");
                 }
 
@@ -370,7 +371,8 @@ ast::FnParamList* ASTParser::fn_param_list()
                 bDoneParsing = true;
                 break;
             case Token::Type::COMMA:
-                // The first token is a comma, or we got two commas after a param.
+                // Ex:  function Foo(a,,)
+                //                     ^
                 throw_vim_error("E125");
                 break;
             default:
@@ -657,6 +659,10 @@ ast::FnArgList* ASTParser::fn_arg_list()
         switch (curr()->type())
         {
             case Token::Type::COMMA:
+                // Ex:  call Foo(,a)
+                //               ^
+                //      call Foo(a,,)
+                //                 ^
                 throw_vim_error("E116");
                 break;
             case Token::Type::R_PAREN:
@@ -669,6 +675,7 @@ ast::FnArgList* ASTParser::fn_arg_list()
                 }
                 catch (const std::runtime_error& err)
                 {
+                    // Any invalid expression
                     throw_vim_error("E116");
                 }
 
