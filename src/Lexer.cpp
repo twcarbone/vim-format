@@ -17,7 +17,7 @@ Lexer::Lexer(const Context& acContext) :
     m_lCommands {
         { "break", "brea", Token::Type::BREAK },
         { "continue", "con", Token::Type::CONTINUE },
-        { "echo", "ec", Token::Type::CMD_ECHO },
+        { "echo", "ec", Token::Type::EX_ECHO },
         { "else", "el", Token::Type::ELSE },
         { "elseif", "elsei", Token::Type::ELSEIF },
         { "endfor", "endfo", Token::Type::ENDFOR },
@@ -26,12 +26,12 @@ Lexer::Lexer(const Context& acContext) :
         { "endwhile", "endwh", Token::Type::ENDWHILE },
         { "function", "fu", Token::Type::FUNCTION },
         { "return", "retu", Token::Type::RETURN },
-        { "set", "se", Token::Type::CMD_SET },
+        { "set", "se", Token::Type::EX_SET },
         { "while", "wh", Token::Type::WHILE },
         { "for", "", Token::Type::FOR },
         { "if", "", Token::Type::IF },
         { "in", "", Token::Type::IN },
-        { "let", "", Token::Type::CMD_LET },
+        { "let", "", Token::Type::EX_LET },
     },
     m_lKeywords {
         { "abort", "", Token::Type::FN_ABORT },

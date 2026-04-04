@@ -7,9 +7,9 @@
 // clang-format off
 #define TOKEN_TYPE_LIST \
         X(NONE) \
-        X(CMD_LET) \
-        X(CMD_ECHO) \
-        X(CMD_SET) \
+        X(EX_LET) \
+        X(EX_ECHO) \
+        X(EX_SET) \
         X(GEN_PLUS) \
         X(GEN_MINUS) \
         X(GEN_QUESTION) \

@@ -188,7 +188,7 @@ TEST_F(LexerTest, select_stmt_01)
     expect_tokens(8);
     expect_token(0, "if", Token::Type::IF, 0);
     expect_token(1, "1", Token::Type::INTEGER, 3);
-    expect_token(3, "echo", Token::Type::CMD_ECHO, 7);
+    expect_token(3, "echo", Token::Type::EX_ECHO, 7);
     expect_token(4, "1", Token::Type::INTEGER, 12);
     expect_token(6, "endif", Token::Type::ENDIF, 14);
 }
@@ -204,10 +204,10 @@ TEST_F(LexerTest, select_stmt_02)
     expect_tokens(13);
     expect_token(0, "if", Token::Type::IF, 0);
     expect_token(1, "1", Token::Type::INTEGER, 3);
-    expect_token(3, "echo", Token::Type::CMD_ECHO, 7);
+    expect_token(3, "echo", Token::Type::EX_ECHO, 7);
     expect_token(4, "1", Token::Type::INTEGER, 12);
     expect_token(6, "else", Token::Type::ELSE, 14);
-    expect_token(8, "echo", Token::Type::CMD_ECHO, 21);
+    expect_token(8, "echo", Token::Type::EX_ECHO, 21);
     expect_token(9, "2", Token::Type::INTEGER, 26);
     expect_token(11, "endif", Token::Type::ENDIF, 28);
 }
@@ -223,11 +223,11 @@ TEST_F(LexerTest, select_stmt_03)
     expect_tokens(14);
     expect_token(0, "if", Token::Type::IF, 0);
     expect_token(1, "1", Token::Type::INTEGER, 3);
-    expect_token(3, "echo", Token::Type::CMD_ECHO, 7);
+    expect_token(3, "echo", Token::Type::EX_ECHO, 7);
     expect_token(4, "1", Token::Type::INTEGER, 12);
     expect_token(6, "elseif", Token::Type::ELSEIF, 14);
     expect_token(7, "1", Token::Type::INTEGER, 21);
-    expect_token(9, "echo", Token::Type::CMD_ECHO, 25);
+    expect_token(9, "echo", Token::Type::EX_ECHO, 25);
     expect_token(10, "2", Token::Type::INTEGER, 30);
     expect_token(12, "endif", Token::Type::ENDIF, 32);
 }
@@ -245,14 +245,14 @@ TEST_F(LexerTest, select_stmt_04)
     expect_tokens(19);
     expect_token(0, "if", Token::Type::IF, 0);
     expect_token(1, "1", Token::Type::INTEGER, 3);
-    expect_token(3, "echo", Token::Type::CMD_ECHO, 7);
+    expect_token(3, "echo", Token::Type::EX_ECHO, 7);
     expect_token(4, "1", Token::Type::INTEGER, 12);
     expect_token(6, "elseif", Token::Type::ELSEIF, 14);
     expect_token(7, "1", Token::Type::INTEGER, 21);
-    expect_token(9, "echo", Token::Type::CMD_ECHO, 25);
+    expect_token(9, "echo", Token::Type::EX_ECHO, 25);
     expect_token(10, "2", Token::Type::INTEGER, 30);
     expect_token(12, "else", Token::Type::ELSE, 32);
-    expect_token(14, "echo", Token::Type::CMD_ECHO, 39);
+    expect_token(14, "echo", Token::Type::EX_ECHO, 39);
     expect_token(15, "3", Token::Type::INTEGER, 44);
     expect_token(17, "endif", Token::Type::ENDIF, 46);
 }
@@ -271,7 +271,7 @@ TEST_F(LexerTest, iteration_stmt_01)
     expect_tokens(10);
     expect_token(0, "while", Token::Type::WHILE, 0);
     expect_token(1, "1", Token::Type::INTEGER, 6);
-    expect_token(3, "echo", Token::Type::CMD_ECHO, 10);
+    expect_token(3, "echo", Token::Type::EX_ECHO, 10);
     expect_token(4, "1", Token::Type::INTEGER, 15);
     expect_token(6, "break", Token::Type::BREAK, 19);
     expect_token(8, "endwhile", Token::Type::ENDWHILE, 25);
@@ -319,7 +319,7 @@ TEST_F(LexerTest, function_stmt_01)
     expect_token(13, "abort", Token::Type::FN_ABORT, 35);
     expect_token(14, "dict", Token::Type::FN_DICT, 41);
     expect_token(15, "closure", Token::Type::FN_CLOSURE, 46);
-    expect_token(17, "echo", Token::Type::CMD_ECHO, 56);
+    expect_token(17, "echo", Token::Type::EX_ECHO, 56);
     expect_token(18, "1", Token::Type::INTEGER, 61);
     expect_token(20, "endfunction", Token::Type::ENDFUNCTION, 63);
 }
@@ -621,7 +621,7 @@ TEST_F(LexerTest, file_01)
     tokenize_file("../../test/sample/01.vim");
 
     expect_tokens(6);
-    expect_token(0, "let", Token::Type::CMD_LET, 0);
+    expect_token(0, "let", Token::Type::EX_LET, 0);
     expect_token(1, "i", Token::Type::IDENTIFIER, 4);
     expect_token(2, "=", Token::Type::ASSIGN_EQ, 6);
     expect_token(3, "42", Token::Type::INTEGER, 8);

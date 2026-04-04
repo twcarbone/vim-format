@@ -36,9 +36,9 @@ bool Token::is_command() const
         case Token::Type::FUNCTION:
         case Token::Type::RETURN:
         case Token::Type::ENDFUNCTION:
-        case Token::Type::CMD_LET:
-        case Token::Type::CMD_SET:
-        case Token::Type::CMD_ECHO:
+        case Token::Type::EX_LET:
+        case Token::Type::EX_SET:
+        case Token::Type::EX_ECHO:
             return true;
         default:
             return false;
