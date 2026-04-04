@@ -69,15 +69,15 @@ Program
     AssignStmt = <>
       Var $envvar
         NULL
-      Literal 'something'
+      LiteralStr ;';something;';
     AssignStmt = <>
       Var @a
         NULL
-      Literal 'foo'
+      LiteralStr ;';foo;';
     AssignStmt = <>
       Var @@
         NULL
-      Literal 'bar'
+      LiteralStr ;';bar;';
     AssignStmt = <>
       Var &tpm
         NULL
@@ -132,13 +132,13 @@ Program
       Literal 0
       StmtList
         ExprCmd echo <>
-          Literal "string"
+          StrConst ;";string;";
     EmptyStmt <>
     WhileStmt <>
       Literal 0
       StmtList
         ExprCmd ec <>
-          Literal "string"
+          StrConst ;";string;";
     EmptyStmt <>
     CommentStmt " if <trailing = no>
     EmptyStmt <>
@@ -191,13 +191,13 @@ Program
     ExprCmd echo <>
       TernaryOp ? :
         Literal 1
-        Literal "this"
+        StrConst ;";this;";
         Var is
           NULL
     ExprCmd echo <>
       BinaryOp ??
-        Literal "us"
-        Literal "them"
+        StrConst ;";us;";
+        StrConst ;";them;";
     EmptyStmt <>
     CommentStmt " expr2 <trailing = no>
     ExprCmd echo <>
@@ -246,12 +246,12 @@ Program
         Literal 2
     ExprCmd echo <>
       BinaryOp is
-        Literal "foo"
-        Literal "bar"
+        StrConst ;";foo;";
+        StrConst ;";bar;";
     ExprCmd echo <>
       BinaryOp isnot
-        Literal "foo"
-        Literal "bar"
+        StrConst ;";foo;";
+        StrConst ;";bar;";
     ExprCmd echo <>
       Var $HOME
         NULL
@@ -277,12 +277,12 @@ Program
         Literal 1
     ExprCmd echo <>
       BinaryOp ..
-        Literal "sp"
-        Literal "am"
+        StrConst ;";sp;";
+        StrConst ;";am;";
     ExprCmd echo <>
       BinaryOp .
-        Literal "sp"
-        Literal "am"
+        StrConst ;";sp;";
+        StrConst ;";am;";
     EmptyStmt <>
     CommentStmt " expr7 <trailing = no>
     ExprCmd echo <>
@@ -377,8 +377,8 @@ Program
         Scope g:
       DictExpr
         DictEntry
-          Literal 'closure'
-          Literal 'banana'
+          LiteralStr ;';closure;';
+          LiteralStr ;';banana;';
     ExprCmd echo <>
       BinaryOp .
         Var dict
@@ -443,24 +443,24 @@ Program
         NULL
       DictExpr
         DictEntry
-          Literal "apple"
+          StrConst ;";apple;";
           Literal 4
         DictEntry
-          Literal "banana"
+          StrConst ;";banana;";
           ListExpr
             BinaryOp *
               Literal 1
               Literal 2
             Literal 2
         DictEntry
-          Literal "cherry"
-          Literal "pie"
+          StrConst ;";cherry;";
+          StrConst ;";pie;";
     AssignStmt = <>
       Var dict_b
         NULL
       DictExpr
         DictEntry
-          Literal "test"
+          StrConst ;";test;";
           Var m_bar
             Scope g:
     AssignStmt = <>
@@ -492,4 +492,60 @@ Program
         GroupExpr
           Literal 10
     ExprCmd echo <>
-      Literal 'string with "embedded" double quote'
+      LiteralStr ;';;';
+    ExprCmd echo <>
+      LiteralStr ;';string with "embedded" double quote;';
+    ExprCmd echo <>
+      InterpStr
+        LiteralStr ;';Before ;{;
+        Var bb
+          NULL
+        LiteralStr ;}; after;';
+    ExprCmd echo <>
+      InterpStr
+        LiteralStr ;';;{;
+        Var bb
+          NULL
+        LiteralStr ;}; after;';
+    ExprCmd echo <>
+      InterpStr
+        LiteralStr ;';Before ;{;
+        Var bb
+          NULL
+        LiteralStr ;};;';
+    ExprCmd echo <>
+      LiteralStr ;';Before bb} after;';
+    ExprCmd echo <>
+      LiteralStr ;';{bb} after;';
+    ExprCmd echo <>
+      LiteralStr ;';Before {bb};';
+    ExprCmd echo <>
+      LiteralStr ;';$var;';
+    ExprCmd echo <>
+      StrConst ;";;";
+    ExprCmd echo <>
+      InterpStr
+        StrConst ;";Before ;{;
+        Var bb
+          NULL
+        StrConst ;}; after;";
+    ExprCmd echo <>
+      InterpStr
+        StrConst ;";;{;
+        Var bb
+          NULL
+        StrConst ;}; after;";
+    ExprCmd echo <>
+      InterpStr
+        StrConst ;";Before ;{;
+        Var bb
+          NULL
+        StrConst ;};;";
+    ExprCmd echo <>
+      StrConst ;";Before {bb} after;";
+    ExprCmd echo <>
+      StrConst ;";{bb} after;";
+    ExprCmd echo <>
+      StrConst ;";Before {bb};";
+    ExprCmd echo <>
+      StrConst ;";$var;";

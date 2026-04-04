@@ -15,7 +15,6 @@
         X(GEN_QUESTION) \
         X(GEN_EXCLAMATION) \
         X(GEN_DOT) \
-        X(GEN_SLASH) \
         X(OP_ADD) \
         X(OP_SUB) \
         X(OP_UNARY_PLUS) \
@@ -101,6 +100,9 @@
         X(OPTION) \
         X(IDENTIFIER) \
         X(STRING) \
+        X(STR_INTERP) \
+        X(DQUOTE) \
+        X(SQUOTE) \
         X(INTEGER) \
         X(FLOAT) \
         X(COMMENT)

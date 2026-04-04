@@ -31,6 +31,8 @@ Program
         JumpStmt return <>
           NULL
     EmptyStmt <>
+    CommentStmt " TODO (gh-130): Restore trailing commas to some tests, pending #130 <trailing = no>
+    EmptyStmt <>
     FnStmt Four ! <>
       FnParamList
         FnParam

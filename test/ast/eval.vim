@@ -81,9 +81,9 @@ echo 1 == 2
 echo 1 ==? 2
 echo 1 ==# 2
 echo 1 != 2
-echo 6 >  4
+echo 6 > 4
 echo 1 >= 5
-echo 5 <  3
+echo 5 < 3
 echo 3 <= 2
 echo "foo" is "bar"
 echo "foo" isnot "bar"
@@ -133,4 +133,20 @@ let dict_b = {"test": g:m_bar}
 let dict_c = {g:m_bar: 43}
 echo Add(1, 2)
 echo (1 + (3 + 4)) * 2 - (10)
+echo ''
 echo 'string with "embedded" double quote'
+echo $'Before {bb} after'
+echo $'{bb} after'
+echo $'Before {bb}'
+echo 'Before bb} after'
+echo '{bb} after'
+echo 'Before {bb}'
+echo '$var'
+echo ""
+echo $"Before {bb} after"
+echo $"{bb} after"
+echo $"Before {bb}"
+echo "Before {bb} after"
+echo "{bb} after"
+echo "Before {bb}"
+echo "$var"

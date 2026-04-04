@@ -108,7 +108,7 @@ public:
     ExprCmd(Token* cmd, Expr* expr);
     virtual ~ExprCmd();
 
-    const Token* cmd() const;
+    const Token* ex_cmd() const;
     const Expr* expr() const;
 
     virtual void accept(ASTVisitor& visitor) const;
@@ -116,7 +116,7 @@ public:
 private:
     virtual std::string str_a() const;
 
-    Token* m_pCmd;
+    Token* m_pExCmd;
 };
 
 //
@@ -180,17 +180,18 @@ private:
 class IfStmt : public Stmt
 {
 public:
-    IfStmt();
+    IfStmt(const std::vector<IfBranch*>& ifbranches, Token* ex_endif);
     virtual ~IfStmt();
 
-    void push(IfBranch* if_branch);
-
     std::vector<const IfBranch*> branches() const;
+    const Token* ex_endif() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     virtual std::string str_a() const;
+
+    Token* m_pExEndIf;
 };
 
 //
@@ -200,16 +201,21 @@ private:
 class WhileStmt : public Stmt
 {
 public:
-    WhileStmt(Expr* condition, StmtList* stmts);
+    WhileStmt(Token* ex_while, Token* ex_endwhile, Expr* condition, StmtList* stmts);
     virtual ~WhileStmt();
 
     const Expr* condition() const;
+    const Token* ex_cmd_while() const;
+    const Token* ex_cmd_endwile() const;
     const StmtList* stmts() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     virtual std::string str_a() const;
+
+    Token* m_pExWhile;
+    Token* m_pExEndWhile;
 };
 
 //
@@ -219,17 +225,20 @@ private:
 class ForStmt : public Stmt
 {
 public:
-    ForStmt(Expr* item, Expr* items, StmtList* stmts);
+    ForStmt(Expr* item, Expr* items, StmtList* stmts, Token* ex_endfo);
     virtual ~ForStmt();
 
     const Expr* item() const;
     const Expr* items() const;
     const StmtList* stmts() const;
+    const Token* ex_endfo() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     virtual std::string str_a() const;
+
+    Token* m_pExEndFo;
 };
 
 //
@@ -242,7 +251,7 @@ public:
     JumpStmt(Token* token, Expr* expr);
     virtual ~JumpStmt();
 
-    const Token* token() const;
+    const Token* ex_cmd() const;
     const Expr* expr() const;
 
     virtual void accept(ASTVisitor& visitor) const;
@@ -250,7 +259,7 @@ public:
 private:
     virtual std::string str_a() const;
 
-    Token* m_pToken;
+    Token* m_pExCmd;
 };
 
 //
@@ -306,13 +315,17 @@ public:
 class FnStmt : public Stmt
 {
 public:
-    FnStmt(Token* name,
+    FnStmt(Token* ex_fu,
+           Token* ex_endf,
+           Token* name,
            Token* bang,
            FnParamList* params,
            const std::vector<Token*>& modifiers,
            StmtList* body);
     virtual ~FnStmt();
 
+    const Token* ex_fu() const;
+    const Token* ex_endfu() const;
     const Token* name() const;
     const Token* bang() const;
     const FnParamList* params() const;
@@ -324,8 +337,10 @@ public:
 private:
     virtual std::string str_a() const;
 
+    Token* m_pExFu;
     Token* m_pName;
     Token* m_pBang;
+    Token* m_pExEndFu;
     std::vector<Token*> m_lModifiers;
 };
 
@@ -458,6 +473,70 @@ public:
 
 private:
     Token* m_pOp;
+};
+
+//
+// InterpStr
+//
+
+class InterpStr : public Expr
+{
+public:
+    InterpStr() = default;
+    virtual ~InterpStr();
+
+    void push(Expr* expr);
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// StrExpr (virtual)
+//
+
+class StrExpr : public Expr
+{
+public:
+    StrExpr(Token* str, Token* ldelim, Token* rdelim);
+    virtual ~StrExpr();
+
+    const Token* str() const;
+    const Token* ldelim() const;
+    const Token* rdelim() const;
+
+protected:
+    Token* m_pStr;
+    Token* m_pLDelim;
+    Token* m_pRDelim;
+};
+
+//
+// LiteralStr
+//
+
+class LiteralStr : public StrExpr
+{
+public:
+    using StrExpr::StrExpr;
+    virtual ~LiteralStr();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
+//
+// StrConst
+//
+
+class StrConst : public StrExpr
+{
+public:
+    using StrExpr::StrExpr;
+    virtual ~StrConst();
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
 };
 
 //

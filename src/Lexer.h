@@ -43,7 +43,7 @@ public:
      *      std::runtime_error if Token is unrecognized.
      *      std::runtime_error if Token cannot be disambiguated.
      */
-    Token* next();
+    void next();
 
     /**
      *  @brief
@@ -60,6 +60,18 @@ public:
     const Source& source() const;
 
 private:
+    enum class State
+    {
+        NONE,
+        INTERP_STR,
+        INTERP_EXP,
+        STRING_CONSTANT,
+        LITERAL_STRING,
+    };
+
+    State m_eState;
+    Token* m_pCurrToken;
+    size_t m_nBraceLevel;
     Source m_cSource;
     std::vector<Token*> m_lTokens;
 
@@ -68,11 +80,18 @@ private:
     const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
 
-    Token* do_next();
-    Token* match();
+    bool match();
     void freeTokens();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
+    void state_toggle_str(State state);
+
+    bool push_token(Token::Type type, char lexeme);
+    bool push_token(Token::Type type, std::string_view lexeme);
+    bool push_token(Token::Type type, const std::string& lexeme);
+
+    bool chk_comment() const;
+    bool chk_register() const;
 };
 
 #endif  // TOKENIZER_H
