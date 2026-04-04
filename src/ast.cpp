@@ -134,7 +134,7 @@ void StmtList::accept(ASTVisitor& acASTVisitor) const
 //
 
 ExprCmd::ExprCmd(Token* apCmd, Expr* apExpr) :
-    m_pCmd { apCmd }
+    m_pExCmd { apCmd }
 {
     m_lChildren.push_back(apExpr);
 }
@@ -143,9 +143,9 @@ ExprCmd::~ExprCmd()
 {
 }
 
-const Token* ExprCmd::cmd() const
+const Token* ExprCmd::ex_cmd() const
 {
-    return m_pCmd;
+    return m_pExCmd;
 }
 
 const Expr* ExprCmd::expr() const
@@ -160,7 +160,7 @@ void ExprCmd::accept(ASTVisitor& acASTVisitor) const
 
 std::string ExprCmd::str_a() const
 {
-    return "ExprCmd " + m_pCmd->str();
+    return "ExprCmd " + m_pExCmd->str();
 }
 
 //
@@ -230,17 +230,17 @@ void IfBranch::accept(ASTVisitor& acASTVisitor) const
 // IfStmt
 //
 
-IfStmt::IfStmt()
+IfStmt::IfStmt(const std::vector<IfBranch*>& alIfBranches, Token* apExEndIf) :
+    m_pExEndIf { apExEndIf }
 {
+    for (IfBranch* pIfBranch : alIfBranches)
+    {
+        m_lChildren.push_back(pIfBranch);
+    }
 }
 
 IfStmt::~IfStmt()
 {
-}
-
-void IfStmt::push(ast::IfBranch* apIfBranch)
-{
-    m_lChildren.push_back(apIfBranch);
 }
 
 std::vector<const IfBranch*> IfStmt::branches() const
@@ -253,6 +253,11 @@ std::vector<const IfBranch*> IfStmt::branches() const
     }
 
     return lBranches;
+}
+
+const Token* IfStmt::ex_endif() const
+{
+    return m_pExEndIf;
 }
 
 void IfStmt::accept(ASTVisitor& acASTVisitor) const
@@ -269,7 +274,12 @@ std::string IfStmt::str_a() const
 // WhileStmt
 //
 
-WhileStmt::WhileStmt(ast::Expr* apCondition, ast::StmtList* apStmtList)
+WhileStmt::WhileStmt(Token* apExWhile,
+                     Token* apExEndWhile,
+                     ast::Expr* apCondition,
+                     ast::StmtList* apStmtList) :
+    m_pExWhile { apExWhile },
+    m_pExEndWhile { apExEndWhile }
 {
     m_lChildren.push_back(apCondition);
     m_lChildren.push_back(apStmtList);
@@ -282,6 +292,16 @@ WhileStmt::~WhileStmt()
 const Expr* WhileStmt::condition() const
 {
     return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Token* WhileStmt::ex_cmd_while() const
+{
+    return m_pExWhile;
+}
+
+const Token* WhileStmt::ex_cmd_endwile() const
+{
+    return m_pExEndWhile;
 }
 
 const StmtList* WhileStmt::stmts() const
@@ -303,7 +323,8 @@ std::string WhileStmt::str_a() const
 // ForStmt
 //
 
-ForStmt::ForStmt(ast::Expr* apItem, ast::Expr* apItems, ast::StmtList* apStmts)
+ForStmt::ForStmt(ast::Expr* apItem, ast::Expr* apItems, ast::StmtList* apStmts, Token* apExEndFo) :
+    m_pExEndFo { apExEndFo }
 {
     m_lChildren.push_back(apItem);
     m_lChildren.push_back(apItems);
@@ -329,6 +350,11 @@ const StmtList* ForStmt::stmts() const
     return static_cast<StmtList*>(m_lChildren[2]);
 }
 
+const Token* ForStmt::ex_endfo() const
+{
+    return m_pExEndFo;
+}
+
 void ForStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
@@ -344,7 +370,7 @@ std::string ForStmt::str_a() const
 //
 
 JumpStmt::JumpStmt(Token* apToken, Expr* apExpr) :
-    m_pToken { apToken }
+    m_pExCmd { apToken }
 {
     m_lChildren.push_back(apExpr);
 }
@@ -353,9 +379,9 @@ JumpStmt::~JumpStmt()
 {
 }
 
-const Token* JumpStmt::token() const
+const Token* JumpStmt::ex_cmd() const
 {
-    return m_pToken;
+    return m_pExCmd;
 }
 
 const Expr* JumpStmt::expr() const
@@ -370,7 +396,7 @@ void JumpStmt::accept(ASTVisitor& acASTVisitor) const
 
 std::string JumpStmt::str_a() const
 {
-    return "JumpStmt " + m_pToken->str();
+    return "JumpStmt " + m_pExCmd->str();
 }
 
 //
@@ -447,13 +473,17 @@ void FnParam::accept(ASTVisitor& acASTVisitor) const
 // FnStmt
 //
 
-FnStmt::FnStmt(Token* apName,
+FnStmt::FnStmt(Token* apExFu,
+               Token* apExEndFu,
+               Token* apName,
                Token* apBang,
                FnParamList* apFnParamList,
                const std::vector<Token*>& alModifiers,
                StmtList* apBody) :
+    m_pExFu { apExFu },
     m_pName { apName },
     m_pBang { apBang },
+    m_pExEndFu { apExEndFu },
     m_lModifiers { alModifiers }
 {
     m_lChildren.push_back(apFnParamList);
@@ -462,6 +492,16 @@ FnStmt::FnStmt(Token* apName,
 
 FnStmt::~FnStmt()
 {
+}
+
+const Token* FnStmt::ex_fu() const
+{
+    return m_pExFu;
+}
+
+const Token* FnStmt::ex_endfu() const
+{
+    return m_pExEndFu;
 }
 
 const Token* FnStmt::name() const
@@ -835,7 +875,7 @@ std::string LiteralStr::toString() const
         lsStr = m_pStr->str();
     }
 
-    return "LiteralStr \'" + lsStr + "\'";
+    return "LiteralStr ;" + m_pLDelim->str() + ";" + lsStr + ";" + m_pRDelim->str() + ";";
 }
 
 void LiteralStr::accept(ASTVisitor& acASTVisitor) const
@@ -860,7 +900,7 @@ std::string StrConst::toString() const
         lsStr = m_pStr->str();
     }
 
-    return "StrConst \"" + lsStr + "\"";
+    return "StrConst ;" + m_pLDelim->str() + ";" + lsStr + ";" + m_pRDelim->str() + ";";
 }
 
 void StrConst::accept(ASTVisitor& acASTVisitor) const

@@ -81,9 +81,9 @@ echo 1 == 2
 echo 1 ==? 2
 echo 1 ==# 2
 echo 1 != 2
-echo 6 >  4
+echo 6 > 4
 echo 1 >= 5
-echo 5 <  3
+echo 5 < 3
 echo 3 <= 2
 echo "foo" is "bar"
 echo "foo" isnot "bar"

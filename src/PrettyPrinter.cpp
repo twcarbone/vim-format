@@ -68,10 +68,23 @@ void PrettyPrinter::visit(const ast::CommentStmt* apCommentStmt)
 
 void PrettyPrinter::visit(const ast::BinaryOp* apBinaryOp)
 {
+    // TODO (gh-129): Add DictAccess AST node
+
+    std::string lsPadding;
+
+    switch (apBinaryOp->op()->type())
+    {
+        case Token::Type::OP_DOT:
+            lsPadding = "";
+            break;
+        default:
+            lsPadding = std::string(Settings::OperatorPadding, ' ');
+    }
+
     apBinaryOp->lexpr()->accept(*this);
-    write(' ', Settings::OperatorPadding);
+    write(lsPadding);
     write(apBinaryOp->op()->str());
-    write(' ', Settings::OperatorPadding);
+    write(lsPadding);
     apBinaryOp->rexpr()->accept(*this);
 }
 
@@ -136,7 +149,7 @@ void PrettyPrinter::visit(const ast::ExprCmd* apExprCmd)
 {
     write_bol();
 
-    write(apExprCmd->cmd()->str());
+    write(apExprCmd->ex_cmd()->str());
     write(' ', Settings::SpaceAfterExprCmd);
     apExprCmd->expr()->accept(*this);
 
@@ -188,7 +201,7 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
 {
     write_bol();
 
-    write("function");
+    write(apFnStmt->ex_fu()->str());
 
     if (apFnStmt->bang() != nullptr)
     {
@@ -220,7 +233,7 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
     m_cIndent--;
 
     write_bol();
-    write("endfunction");
+    write(apFnStmt->ex_endfu()->str());
 
     write_eol();
 }
@@ -244,7 +257,7 @@ void PrettyPrinter::visit(const ast::ForStmt* apForStmt)
     m_cIndent--;
 
     write_bol();
-    write("endfor");
+    write(apForStmt->ex_endfo()->str());
 
     write_eol();
 }
@@ -285,7 +298,7 @@ void PrettyPrinter::visit(const ast::IfStmt* apIfStmt)
     }
 
     write_bol();
-    write("endif");
+    write(apIfStmt->ex_endif()->str());
 
     write_eol();
 }
@@ -330,7 +343,7 @@ void PrettyPrinter::visit(const ast::JumpStmt* apJumpStmt)
 {
     write_bol();
 
-    write(apJumpStmt->token()->str());
+    write(apJumpStmt->ex_cmd()->str());
 
     if (apJumpStmt->expr() != nullptr)
     {
@@ -470,7 +483,7 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
 {
     write_bol();
 
-    write("while");
+    write(apWhileStmt->ex_cmd_while()->str());
     write(' ', Settings::ControlStmtPadding);
     apWhileStmt->condition()->accept(*this);
     write_eol();
@@ -480,7 +493,7 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
     m_cIndent--;
 
     write_bol();
-    write("endwhile");
+    write(apWhileStmt->ex_cmd_endwile()->str());
 
     write_eol();
 }

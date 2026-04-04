@@ -13,7 +13,9 @@ function! Three(isnot)
     return
 endfunction
 
-function! Four(a,)
+" TODO (gh-130): Restore trailing commas to some tests, pending #130
+
+function! Four(a)
     echo 1
 endfunction
 

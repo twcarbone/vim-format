@@ -213,8 +213,8 @@ bool Lexer::match()
                 {
                     if (m_cSource.remaining_text().size() > 1)
                     {
-                        const char c = m_cSource.remaining_text().at(1);
-                        if (c == '"' || c == '\'')
+                        const char c_next = m_cSource.remaining_text().at(1);
+                        if (c_next == '"' || c_next == '\'')
                         {
                             m_eState = State::INTERP_STR;
                             return push_token(Token::Type::STR_INTERP, c);

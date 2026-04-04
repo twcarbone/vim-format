@@ -263,11 +263,10 @@ ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
 // 3767655736
 ast::IfStmt* ASTParser::if_stmt()
 {
-    ast::IfStmt* pIfStmt = new ast::IfStmt();
-    ast::IfBranch* pIfBranch = nullptr;
+    std::vector<ast::IfBranch*> lIfBranches;
+    Token* pExEndIf = nullptr;
 
-    pIfBranch = if_branch(Token::Type::IF);
-    pIfStmt->push(pIfBranch);
+    lIfBranches.push_back(if_branch(Token::Type::IF));
 
     bool bLoop = true;
     while (bLoop)
@@ -276,28 +275,30 @@ ast::IfStmt* ASTParser::if_stmt()
         {
             case Token::Type::ELSEIF:
             case Token::Type::ELSE:
-                pIfBranch = if_branch(curr()->type());
-                pIfStmt->push(pIfBranch);
+                lIfBranches.push_back(if_branch(curr()->type()));
                 break;
             case Token::Type::ENDIF:
+                pExEndIf = curr();
                 consume(Token::Type::ENDIF);
+                // Fall-thru intentional
             default:
                 bLoop = false;
         }
     }
 
-    return pIfStmt;
+    return new ast::IfStmt(lIfBranches, pExEndIf);
 }
 
 // 0743278179
 // 3137047372
 ast::WhileStmt* ASTParser::while_stmt()
 {
-    ast::Expr* pExpr = nullptr;
     ast::StmtList* pBody = new ast::StmtList();
 
+    Token* pExWhile = curr();
     consume(Token::Type::WHILE);
-    pExpr = expr(0);
+
+    ast::Expr* pExpr = expr(0);
 
     if (curr()->type() == Token::Type::COMMENT)
     {
@@ -310,9 +311,10 @@ ast::WhileStmt* ASTParser::while_stmt()
     pBody->take(pBody2);
     delete pBody2;
 
+    Token* pExEndWhile = curr();
     consume(Token::Type::ENDWHILE);
 
-    return new ast::WhileStmt(pExpr, pBody);
+    return new ast::WhileStmt(pExWhile, pExEndWhile, pExpr, pBody);
 }
 
 ast::FnParamList* ASTParser::fn_param_list()
@@ -400,6 +402,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 // 2041554108
 ast::FnStmt* ASTParser::fn_stmt()
 {
+    Token* pExFu = curr();
     consume(Token::Type::FUNCTION);
 
     // Bang (!)
@@ -454,11 +457,12 @@ ast::FnStmt* ASTParser::fn_stmt()
     pBody->take(pBody2);
     delete pBody2;
 
+    Token* pExEndFu = curr();
     consume(Token::Type::ENDFUNCTION);
 
     // TODO (gh-105): endfunction does not support [argument]
 
-    return new ast::FnStmt(pName, pBang, pFnParamList, lModifiers, pBody);
+    return new ast::FnStmt(pExFu, pExEndFu, pName, pBang, pFnParamList, lModifiers, pBody);
 }
 
 // 2662856482
@@ -487,9 +491,10 @@ ast::ForStmt* ASTParser::for_stmt()
     pBody->take(pBody2);
     delete pBody2;
 
+    Token* pExEndFo = curr();
     consume(Token::Type::ENDFOR);
 
-    return new ast::ForStmt(pItem, pItems, pBody);
+    return new ast::ForStmt(pItem, pItems, pBody, pExEndFo);
 }
 
 // 1883144826
@@ -734,30 +739,7 @@ ast::InterpStr* ASTParser::interp_str()
                 {
                     // At closing quote
                     pRDelim = curr();
-                    if (pStr != nullptr)
-                    {
-                        if (leQuoteType == Token::Type::SQUOTE)
-                        {
-                            pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
-                        }
-                        else
-                        {
-                            pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
-                        }
 
-                        pInterpStr->push(pStrExpr);
-                    }
-
-                    bLoop = false;
-                }
-
-                consume(leQuoteType);
-                break;
-            case Token::Type::L_BRACE:
-                pRDelim = curr();
-                consume(Token::Type::L_BRACE);
-                if (pStr != nullptr)
-                {
                     if (leQuoteType == Token::Type::SQUOTE)
                     {
                         pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
@@ -769,8 +751,26 @@ ast::InterpStr* ASTParser::interp_str()
 
                     pInterpStr->push(pStrExpr);
                     pStr = nullptr;
+                    bLoop = false;
                 }
 
+                consume(leQuoteType);
+                break;
+            case Token::Type::L_BRACE:
+                pRDelim = curr();
+                consume(Token::Type::L_BRACE);
+
+                if (leQuoteType == Token::Type::SQUOTE)
+                {
+                    pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
+                }
+                else
+                {
+                    pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
+                }
+
+                pInterpStr->push(pStrExpr);
+                pStr = nullptr;
                 pInterpStr->push(expr(0));
                 break;
             case Token::Type::R_BRACE:
