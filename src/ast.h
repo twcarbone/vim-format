@@ -9,10 +9,6 @@
 namespace ast
 {
 
-//
-// Node
-//
-
 class Node
 {
 public:
@@ -26,10 +22,6 @@ public:
 protected:
     std::vector<Node*> m_lChildren;
 };
-
-//
-// Stmt
-//
 
 class Stmt : public Node
 {
@@ -45,10 +37,6 @@ private:
     virtual std::string str_a() const = 0;
 };
 
-//
-// EmptyStmt
-//
-
 class EmptyStmt : public Stmt
 {
 public:
@@ -60,19 +48,11 @@ private:
     virtual std::string str_a() const;
 };
 
-//
-// Expr
-//
-
 class Expr : public Node
 {
 public:
     virtual ~Expr() = default;
 };
-
-//
-// GroupExpr
-//
 
 class GroupExpr : public Expr
 {
@@ -86,10 +66,6 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
-//
-// ExprList
-//
-
 class ExprList : public Node
 {
 public:
@@ -97,10 +73,6 @@ public:
 
     void push(Expr* expr);
 };
-
-//
-// ExprCmd
-//
 
 class ExprCmd : public Stmt
 {
@@ -119,10 +91,6 @@ private:
     Token* m_pExCmd;
 };
 
-//
-// StmtList
-//
-
 class StmtList : public Node
 {
 public:
@@ -138,10 +106,6 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
-//
-// Program
-//
-
 class Program : public Node
 {
 public:
@@ -151,10 +115,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// IfBranch
-//
 
 class IfBranch : public Node
 {
@@ -173,10 +133,6 @@ private:
     Token* m_pToken;
 };
 
-//
-// IfStmt
-//
-
 class IfStmt : public Stmt
 {
 public:
@@ -193,10 +149,6 @@ private:
 
     Token* m_pExEndIf;
 };
-
-//
-// WhileStmt
-//
 
 class WhileStmt : public Stmt
 {
@@ -218,10 +170,6 @@ private:
     Token* m_pExEndWhile;
 };
 
-//
-// ForStmt
-//
-
 class ForStmt : public Stmt
 {
 public:
@@ -241,10 +189,6 @@ private:
     Token* m_pExEndFo;
 };
 
-//
-// JumpStmt
-//
-
 class JumpStmt : public Stmt
 {
 public:
@@ -262,10 +206,6 @@ private:
     Token* m_pExCmd;
 };
 
-//
-// FnParamList
-//
-
 class FnParamList : public ExprList
 {
 public:
@@ -275,10 +215,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// FnArgList
-//
 
 // TODO (gh-37): Rename xxList to xxSeq to distinguish from a ListExpr
 class FnArgList : public ExprList
@@ -290,10 +226,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// FnParam
-//
 
 class FnParam : public Expr
 {
@@ -307,10 +239,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// FnStmt
-//
 
 class FnStmt : public Stmt
 {
@@ -344,10 +272,6 @@ private:
     std::vector<Token*> m_lModifiers;
 };
 
-//
-// BinaryOp
-//
-
 class BinaryOp : public Expr
 {
 public:
@@ -365,10 +289,6 @@ protected:
     Token* m_pOp;
 };
 
-//
-// CasedBinaryOp
-//
-
 class CasedBinaryOp : public BinaryOp
 {
 public:
@@ -384,10 +304,6 @@ private:
     Token* m_pCaseSensitivity;
 };
 
-//
-// DictEntry
-//
-
 class DictEntry : public Node
 {
 public:
@@ -400,10 +316,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// DictExpr
-//
 
 class DictExpr : public Expr
 {
@@ -419,10 +331,6 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
-//
-// ListExpr
-//
-
 class ListExpr : public Expr
 {
 public:
@@ -437,10 +345,6 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
-//
-// CallExpr
-//
-
 class CallExpr : public Expr
 {
 public:
@@ -453,10 +357,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// MethodCallExpr
-//
 
 class MethodCallExpr : public Expr
 {
@@ -475,10 +375,6 @@ private:
     Token* m_pOp;
 };
 
-//
-// InterpStr
-//
-
 class InterpStr : public Expr
 {
 public:
@@ -490,10 +386,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// StrExpr (virtual)
-//
 
 class StrExpr : public Expr
 {
@@ -511,10 +403,6 @@ protected:
     Token* m_pRDelim;
 };
 
-//
-// LiteralStr
-//
-
 class LiteralStr : public StrExpr
 {
 public:
@@ -525,10 +413,6 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
-//
-// StrConst
-//
-
 class StrConst : public StrExpr
 {
 public:
@@ -538,10 +422,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// Literal
-//
 
 class Literal : public Expr
 {
@@ -558,10 +438,6 @@ private:
     Token* m_pToken;
 };
 
-//
-// SliceExpr
-//
-
 class SliceExpr : public Expr
 {
 public:
@@ -576,10 +452,6 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
-//
-// IndexExpr
-//
-
 class IndexExpr : public Expr
 {
 public:
@@ -592,10 +464,6 @@ public:
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
-
-//
-// TernaryOp
-//
 
 class TernaryOp : public Expr
 {
@@ -617,10 +485,6 @@ private:
     Token* m_pRightOp;
 };
 
-//
-// UnaryOp
-//
-
 class UnaryOp : public Expr
 {
 public:
@@ -637,10 +501,6 @@ private:
     Token* m_pOp;
 };
 
-//
-// ScopeExpr
-//
-
 class ScopeExpr : public Expr
 {
 public:
@@ -655,10 +515,6 @@ public:
 private:
     Token* m_pScope;
 };
-
-//
-// Var
-//
 
 class Var : public Expr
 {
@@ -678,10 +534,6 @@ private:
     Token* m_pName;
 };
 
-//
-// AssignStmt
-//
-
 class AssignStmt : public Stmt
 {
 public:
@@ -699,10 +551,6 @@ private:
 
     Token* m_pOp;
 };
-
-//
-// CommentStmt
-//
 
 class CommentStmt : public Stmt
 {
