@@ -13,7 +13,7 @@ function! Three(isnot)
     return
 endfunction
 
-function! Four(a,)
+function! Four(a)
     echo 1
 endfunction
 

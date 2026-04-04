@@ -48,3 +48,8 @@ TEST_F(PrettyPrinterTest, ast_eval)
 {
     test_file("../../test/ast/eval.vim", "../../test/ast/eval.vim");
 }
+
+TEST_F(PrettyPrinterTest, ast_userfunc)
+{
+    test_file("../../test/ast/userfunc.vim", "../../test/ast/userfunc.vim");
+}
