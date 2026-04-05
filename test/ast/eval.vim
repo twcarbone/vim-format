@@ -10,6 +10,7 @@ let bb %= 2
 let bb .= 2
 let bb ..= 2
 let cc = g:abort
+let [dd, ee, ff] = ['a', 'b', 'c']
 let is = bb
 let $envvar = 'something'
 let @a = 'foo'

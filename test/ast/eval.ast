@@ -62,6 +62,18 @@ Program
       Var abort
         Scope g:
     AssignStmt = <>
+      ListExpr
+        Var dd
+          NULL
+        Var ee
+          NULL
+        Var ff
+          NULL
+      ListExpr
+        LiteralStr ;';a;';
+        LiteralStr ;';b;';
+        LiteralStr ;';c;';
+    AssignStmt = <>
       Var is
         NULL
       Var bb
