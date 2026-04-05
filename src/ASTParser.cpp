@@ -548,6 +548,10 @@ ast::JumpStmt* ASTParser::jump_stmt()
 // 3269168211
 // 0127630265
 // 4211754421
+// 1350391715
+// 0379804504
+// 4035612700
+// 4254392411
 ast::AssignStmt* ASTParser::assign_stmt()
 {
     Token* pOp = nullptr;

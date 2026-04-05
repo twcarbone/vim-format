@@ -28,10 +28,10 @@
   Y  2412689443  2923  :let          :let &g:{option-name} .= {expr1}
   Y  1776776039  2924  :let          :let &g:{option-name} += {expr1}
   Y  1694040864  2925  :let          :let &g:{option-name} -= {expr1}
-     1350391715  2929  :let          :let [{name1}, {name2}, ...] = {expr1}
-     0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
-     4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
-     4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
+  X  1350391715  2929  :let          :let [{name1}, {name2}, ...] = {expr1}
+  X  0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
+  X  4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
+  X  4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
      2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
      3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
      1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
