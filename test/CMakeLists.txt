@@ -9,6 +9,7 @@ add_executable(
     PrettyPrinter_tests.cpp
     Source_tests.cpp
     Unit_tests.cpp
+    Error_tests.cpp
 )
 
 target_link_libraries(
