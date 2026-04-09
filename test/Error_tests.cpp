@@ -25,6 +25,8 @@ protected:
         Context lcContext;
         lcContext.add_path(asPath);
 
+        std::string lsEpilogue = "while testing file: " + asPath;
+
         try
         {
             Lexer lcLexer(lcContext);
@@ -32,19 +34,32 @@ protected:
 
             ASTParser lcParser(lcContext, lcLexer.tokens());
             lcParser.parse();
+
+            FAIL() << "Expected VimError, but did not throw any exception " + lsEpilogue;
         }
         catch (const VimError& err)
         {
-            EXPECT_EQ(err.what(), lsErrText);
+            EXPECT_EQ(err.what(), lsErrText) << lsEpilogue;
         }
         catch (...)
         {
-            FAIL() << "Expected VimError, but a different exception was thrown";
+            FAIL() << "Expected VimError, but threw a different exception " + lsEpilogue;
         }
     }
 };
 
-TEST_F(ErrorTest, E1278_1)
+TEST_F(ErrorTest, test_all)
 {
-    test_file("../../test/error/E1278_1.vim");
+    const std::filesystem::path lcRoot { "../../test/error" };
+    const std::filesystem::directory_iterator lcRootIter { lcRoot };
+
+    for (const std::filesystem::directory_entry& lcDirEntry : lcRootIter)
+    {
+        const std::filesystem::path lcPath { lcDirEntry.path() };
+
+        if (lcPath.extension() == ".vim")
+        {
+            test_file(lcPath.string());
+        }
+    }
 }
