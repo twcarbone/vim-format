@@ -12,6 +12,7 @@ namespace ast
 class Node
 {  // {{{
 public:
+    Node() = default;
     virtual ~Node();
 
     const std::vector<Node*>& children() const;
@@ -20,6 +21,8 @@ public:
     virtual void accept(ASTVisitor& visitor) const = 0;
 
 protected:
+    explicit Node(std::vector<Node*>&& children);
+
     std::vector<Node*> m_lChildren;
 };  // }}}
 
@@ -51,7 +54,16 @@ private:
 class Expr : public Node
 {  // {{{
 public:
+    Expr() = default;
+
+    // Tip 1-6: Virtual Destructor is MANDATORY here. Without it, Tip 1-5 will leak
+    // Expr-specific memory.
     virtual ~Expr() = default;
+
+protected:
+    // Tip 1-7: Protected r-value reference constructors let derived classes pass the
+    // move up the hierarchy.
+    explicit Expr(std::vector<Expr*>&& children);
 };  // }}}
 
 class GroupExpr : public Expr
@@ -334,7 +346,7 @@ public:
 class ListExpr : public Expr
 {  // {{{
 public:
-    ListExpr() = default;
+    ListExpr(std::vector<Expr*>&& exprs);
     virtual ~ListExpr();
 
     void push(Expr* expr);

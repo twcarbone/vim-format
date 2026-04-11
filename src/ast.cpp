@@ -1,7 +1,17 @@
+#include <iterator>
+
 #include "ast.h"
 
 using namespace ast;
 
+// Tip 1-4: The final "Sink". Store the vector as the destination type. The move is
+// completed here into the class member.
+Node::Node(std::vector<Node*>&& alChildren) :
+    m_lChildren { std::move(alChildren) }
+{
+}
+
+// Tip 1-5: delete on Node* relies on Tip 1-6.
 Node::~Node()
 {
     for (ast::Node* pNode : m_lChildren)
@@ -39,6 +49,24 @@ void EmptyStmt::accept(ASTVisitor& acASTVisitor) const
 std::string EmptyStmt::str_a() const
 {
     return "EmptyStmt";
+}
+
+Expr::Expr(std::vector<Expr*>&& alChildren) :
+    //  Tip 1-3: Use a "converting move".
+    //
+    //  1.  Iterator-range construction. Call std::vector constructor that takes 2
+    //      iterators.
+    //
+    //  2.  Move-iterators. Use std::make_move_iterator to return an r-value reference to
+    //      each member. That is, returns Expr*&&.
+    //
+    //  3.  Implicit upcasting. Expr* implicitly converts to Node*
+    //
+    //  Note: "moving" a pointer is the same operation as copying. The purpose of move
+    //  here is semantic - signalling that this vector is empty and Node owns the
+    //  addresses.
+    Node({ std::make_move_iterator(alChildren.begin()), std::make_move_iterator(alChildren.end()) })
+{
 }
 
 GroupExpr::GroupExpr(Expr* apExpr)
@@ -610,6 +638,12 @@ std::string DictExpr::toString() const
 void DictExpr::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+// Tip 1-2: Accept by r-value reference (&&) to enforce the "Move-Only" contract.
+ListExpr::ListExpr(std::vector<Expr*>&& alExprs) :
+    Expr { std::move(alExprs) }
+{
 }
 
 ListExpr::~ListExpr()

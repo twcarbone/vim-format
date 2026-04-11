@@ -620,7 +620,7 @@ ast::ExprCmd* ASTParser::expr_cmd()
 
 ast::ListExpr* ASTParser::list_expr()
 {
-    ast::ListExpr* pListExpr = new ast::ListExpr();
+    std::vector<ast::Expr*> llExprs;
 
     consume(Token::Type::L_BRACKET);
 
@@ -631,7 +631,7 @@ ast::ListExpr* ASTParser::list_expr()
             break;
         }
 
-        pListExpr->push(expr(0));
+        llExprs.push_back(expr(0));
 
         if (curr()->type() != Token::Type::R_BRACKET)
         {
@@ -640,7 +640,10 @@ ast::ListExpr* ASTParser::list_expr()
     }
 
     consume(Token::Type::R_BRACKET);
-    return pListExpr;
+
+    // Tip 1-1: Use std::move to cast to an r-value, forcing a move-only transfer and
+    // preventing accidental expensive copies of the container.
+    return new ast::ListExpr(std::move(llExprs));
 }
 
 ast::DictExpr* ASTParser::dict_expr()
