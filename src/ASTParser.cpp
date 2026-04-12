@@ -631,7 +631,14 @@ ast::ListExpr* ASTParser::list_expr()
             break;
         }
 
-        llExprs.push_back(expr(0));
+        try
+        {
+            llExprs.push_back(expr(0));
+        }
+        catch (const std::runtime_error& err)
+        {
+            throw_vim_error("E15");
+        }
 
         if (curr()->type() != Token::Type::R_BRACKET)
         {
