@@ -25,7 +25,7 @@ private:
 
     ast::Var* var();
     ast::Stmt* stmt();
-    ast::Expr* expr(int min_binding_power);
+    ast::Expr* expr(int min_binding_power = 0);
     ast::IfStmt* if_stmt();
     ast::FnStmt* fn_stmt();
     ast::Program* program();

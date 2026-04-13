@@ -240,7 +240,7 @@ ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
     {
         case Token::Type::IF:
         case Token::Type::ELSEIF:
-            pCondition = expr(0);
+            pCondition = expr();
         case Token::Type::ELSE:
         default:
             break;
@@ -301,7 +301,7 @@ ast::WhileStmt* ASTParser::while_stmt()
     Token* pExWhile = curr();
     consume(Token::Type::WHILE);
 
-    ast::Expr* pExpr = expr(0);
+    ast::Expr* pExpr = expr();
 
     if (curr()->type() == Token::Type::COMMENT)
     {
@@ -333,7 +333,7 @@ ast::UnletStmt* ASTParser::unlet_stmt()
         pBang = prev();
     }
 
-    ast::Expr* pExpr = expr(0);
+    ast::Expr* pExpr = expr();
 
     return new ast::UnletStmt(pExUnlet, pBang, pExpr);
 }
@@ -371,7 +371,7 @@ ast::FnParamList* ASTParser::fn_param_list()
                 if (consume_optional(Token::Type::ASSIGN_EQ))
                 {
                     bGotDefaultParam = true;
-                    pDefaultExpr = expr(0);
+                    pDefaultExpr = expr();
                 }
                 else if (bGotDefaultParam)
                 {
@@ -498,10 +498,10 @@ ast::ForStmt* ASTParser::for_stmt()
     ast::StmtList* pBody = new ast::StmtList();
 
     consume(Token::Type::FOR);
-    pItem = expr(0);
+    pItem = expr();
 
     consume(Token::Type::IN);
-    pItems = expr(0);
+    pItems = expr();
 
     if (curr()->type() == Token::Type::COMMENT)
     {
@@ -532,7 +532,7 @@ ast::JumpStmt* ASTParser::jump_stmt()
 
     if (pCmd->type() == Token::Type::RETURN && curr()->type() != Token::Type::NEWLINE)
     {
-        pExpr = expr(0);
+        pExpr = expr();
     }
 
     return new ast::JumpStmt(pCmd, pExpr);
@@ -560,7 +560,7 @@ ast::AssignStmt* ASTParser::assign_stmt()
 
     consume(Token::Type::EX_LET);
 
-    pLhs = expr(0);
+    pLhs = expr();
 
     switch (curr()->type())
     {
@@ -574,7 +574,7 @@ ast::AssignStmt* ASTParser::assign_stmt()
         case Token::Type::ASSIGN_CAT_OLD:
             pOp = curr();
             consume(curr()->type());
-            pRhs = expr(0);
+            pRhs = expr();
             break;
         default:
             throw_unexpected_token();
@@ -614,7 +614,7 @@ ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = curr();
     consume(curr()->type());
-    ast::Expr* pExpr = expr(0);
+    ast::Expr* pExpr = expr();
     return new ast::ExprCmd(pCmd, pExpr);
 }
 
@@ -659,9 +659,9 @@ ast::DictExpr* ASTParser::dict_expr()
             break;
         }
 
-        ast::Expr* pKey = expr(0);
+        ast::Expr* pKey = expr();
         consume(Token::Type::COLON);
-        ast::Expr* pValue = expr(0);
+        ast::Expr* pValue = expr();
 
         ast::DictEntry* pDictEntry = new ast::DictEntry(pKey, pValue);
         pDictExpr->push(pDictEntry);
@@ -797,7 +797,7 @@ ast::InterpStr* ASTParser::interp_str()
 
                 pInterpStr->push(pStrExpr);
                 pStr = nullptr;
-                pInterpStr->push(expr(0));
+                pInterpStr->push(expr());
                 break;
             case Token::Type::R_BRACE:
                 pLDelim = curr();
@@ -853,7 +853,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             break;
         case Token::Type::L_PAREN:
             consume(Token::Type::L_PAREN);
-            pLhs = new ast::GroupExpr(expr(0));
+            pLhs = new ast::GroupExpr(expr());
             consume(Token::Type::R_PAREN);
             break;
         case Token::Type::L_BRACKET:
@@ -972,7 +972,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
 
                 if (curr()->type() != Token::Type::COLON)
                 {
-                    pStart = expr(0);
+                    pStart = expr();
 
                     if (consume_optional(Token::Type::R_BRACKET))
                     {
@@ -985,7 +985,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
 
                 if (curr()->type() != Token::Type::R_BRACKET)
                 {
-                    pStop = expr(0);
+                    pStop = expr();
                 }
 
                 pLhs = new ast::SliceExpr(pLhs, pStart, pStop);
@@ -996,7 +996,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::OP_TERNARY_IF:
             {
                 Token* pLeftOp = pOp;
-                ast::Expr* pMhs = expr(0);
+                ast::Expr* pMhs = expr();
                 Token* pRightOp = curr();
                 consume(Token::Type::COLON);
                 pRhs = expr(lnRhsOpBindingPower);
@@ -1139,7 +1139,7 @@ ast::Expr* ASTParser::try_expr(const std::string& asVimErrorCode)
 {
     try
     {
-        return expr(0);
+        return expr();
     }
     catch (const std::runtime_error& err)
     {
