@@ -45,6 +45,7 @@ private:
     ast::FnParamList* fn_param_list();
     ast::CommentStmt* comment_stmt();
 
+    void try_consume(const Token::Type type, const std::string& vim_error_code);
     void consume(const Token::Type type);
     bool consume_optional(const Token::Type type);
 
@@ -52,6 +53,7 @@ private:
     Token* prev() const;
     Token* next() const;
 
+    ast::Expr* try_expr(const std::string& vim_error_code);
     [[noreturn]] void throw_unexpected_token();
     [[noreturn]] void throw_vim_error(std::string code);
 };

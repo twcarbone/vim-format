@@ -631,14 +631,7 @@ ast::ListExpr* ASTParser::list_expr()
             break;
         }
 
-        try
-        {
-            llExprs.push_back(expr(0));
-        }
-        catch (const std::runtime_error& err)
-        {
-            throw_vim_error("E15");
-        }
+        llExprs.push_back(try_expr("E15"));
 
         if (curr()->type() != Token::Type::R_BRACKET)
         {
@@ -704,16 +697,7 @@ ast::FnArgList* ASTParser::fn_arg_list()
                 bLoop = false;
                 break;
             default:
-                try
-                {
-                    pFnArgList->push(expr(0));
-                }
-                catch (const std::runtime_error& err)
-                {
-                    // Any invalid expression
-                    throw_vim_error("E116");
-                }
-
+                pFnArgList->push(try_expr("E116"));
                 consume_optional(Token::Type::COMMA);
         }
     }
@@ -1064,6 +1048,18 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
     }
 }
 
+void ASTParser::try_consume(const Token::Type aeType, const std::string& asVimErrorcode)
+{
+    try
+    {
+        consume(aeType);
+    }
+    catch (const std::runtime_error& err)
+    {
+        throw_vim_error(asVimErrorcode);
+    }
+}
+
 void ASTParser::consume(const Token::Type aeType)
 {
     if (curr()->type() != aeType)
@@ -1137,4 +1133,16 @@ void ASTParser::throw_vim_error(std::string asCode)
 {
     m_cSource.seek(curr()->source_pos());
     throw VimError(asCode, m_cSource.context());
+}
+
+ast::Expr* ASTParser::try_expr(const std::string& asVimErrorCode)
+{
+    try
+    {
+        return expr(0);
+    }
+    catch (const std::runtime_error& err)
+    {
+        throw_vim_error(asVimErrorCode);
+    }
 }
