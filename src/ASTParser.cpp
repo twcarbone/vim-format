@@ -5,6 +5,7 @@ ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
     m_pRoot { nullptr },
     m_cSource { acContext.source() },
     m_nPos { 0 },
+    m_bLhs { false },
     m_lTokens { std::move(alTokens) },
     m_mOpBindingPower {
         // expr1
@@ -560,7 +561,9 @@ ast::AssignStmt* ASTParser::assign_stmt()
 
     consume(Token::Type::EX_LET);
 
+    m_bLhs = true;
     pLhs = expr();
+    m_bLhs = false;
 
     switch (curr()->type())
     {
@@ -607,6 +610,48 @@ ast::CommentStmt* ASTParser::comment_stmt()
     consume(Token::Type::COMMENT);
 
     return pCommentStmt;
+}
+
+// 2742485518
+// 3191311960
+// 1478378780
+// 1426077019
+ast::ListAssignExpr* ASTParser::list_assign_expr()
+{
+    std::vector<ast::Expr*> llExprs;
+    Token* pSemicolon = nullptr;
+
+    consume(Token::Type::L_BRACKET);
+
+    if (curr()->type() == Token::Type::R_BRACKET)
+    {
+        throw_vim_error("E475");
+    }
+
+    while (true)
+    {
+        if (curr()->type() == Token::Type::R_BRACKET)
+        {
+            break;
+        }
+
+        llExprs.push_back(try_expr("E475"));
+
+        if (consume_optional(Token::Type::SEMICOLON))
+        {
+            pSemicolon = prev();
+            llExprs.push_back(try_expr("E475"));
+            break;
+        }
+        else if (curr()->type() != Token::Type::R_BRACKET)
+        {
+            try_consume(Token::Type::COMMA, "E475");
+        }
+    }
+
+    try_consume(Token::Type::R_BRACKET, "E475");
+
+    return new ast::ListAssignExpr(std::move(llExprs), pSemicolon);
 }
 
 // 1417249700
@@ -857,7 +902,15 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             consume(Token::Type::R_PAREN);
             break;
         case Token::Type::L_BRACKET:
-            pLhs = list_expr();
+            if (m_bLhs)
+            {
+                pLhs = list_assign_expr();
+            }
+            else
+            {
+                pLhs = list_expr();
+            }
+
             break;
         case Token::Type::L_BRACE:
             pLhs = dict_expr();
@@ -897,6 +950,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::ASSIGN_MODULO:
             case Token::Type::ASSIGN_CAT_NEW:
             case Token::Type::ASSIGN_CAT_OLD:
+            case Token::Type::SEMICOLON:
                 return pLhs;
             // expr1
             case Token::Type::OP_FALSEY:

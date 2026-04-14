@@ -357,6 +357,22 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };  // }}}
 
+class ListAssignExpr : public Expr
+{  // {{{
+public:
+    ListAssignExpr(std::vector<Expr*>&& names, Token* semi);
+    virtual ~ListAssignExpr();
+
+    std::vector<const Expr*> names() const;
+    const Expr* lastname() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pSemi;
+};  // }}}
+
 class CallExpr : public Expr
 {  // {{{
 public:

@@ -11,6 +11,7 @@ let bb .= 2
 let bb ..= 2
 let cc = g:abort
 let [dd, ee, ff] = ['a', 'b', 'c']
+let [a, b; c] = [1, 2, 3, 4]
 let is = bb
 let $envvar = 'something'
 let @a = 'foo'

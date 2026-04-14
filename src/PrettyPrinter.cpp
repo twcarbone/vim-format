@@ -376,6 +376,35 @@ void PrettyPrinter::visit(const ast::ListExpr* apListExpr)
     write(']');
 }
 
+void PrettyPrinter::visit(const ast::ListAssignExpr* apListAssignExpr)
+{
+    const std::vector<const ast::Expr*>& lExpr = apListAssignExpr->names();
+
+    write('[');
+    write(' ', Settings::SquareBracketPadding);
+
+    for (size_t i = 0; i < lExpr.size(); i++)
+    {
+        lExpr.at(i)->accept(*this);
+
+        if (i != lExpr.size() - 1)
+        {
+            write(',');
+            write(' ', Settings::SpaceAfterListSeparator);
+        }
+    }
+
+    if (apListAssignExpr->lastname() != nullptr)
+    {
+        write(';');
+        write(' ');
+        apListAssignExpr->lastname()->accept(*this);
+    }
+
+    write(' ', Settings::SquareBracketPadding);
+    write(']');
+}
+
 void PrettyPrinter::visit(const ast::Literal* apLiteral)
 {
     write(apLiteral->token()->str());

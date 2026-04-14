@@ -677,6 +677,63 @@ void ListExpr::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
+ListAssignExpr::ListAssignExpr(std::vector<Expr*>&& alNames, Token* apSemi) :
+    Expr { std::move(alNames) },
+    m_pSemi { apSemi }
+{
+}
+
+ListAssignExpr::~ListAssignExpr()
+{
+}
+
+std::vector<const Expr*> ListAssignExpr::names() const
+{
+    std::vector<const Expr*> lExprs;
+
+    // If we have a lastname, return all but the last child.
+    const size_t lnCapacity = (m_pSemi == nullptr ? m_lChildren.size() : m_lChildren.size() - 1);
+    lExprs.reserve(lnCapacity);
+
+    // Implementations of the standard may reserve more than the requested capacity. It's
+    // unsafe to use ::capacity() as a loop limit. Use the requested capacity instead.
+    for (size_t i = 0; i < lnCapacity; i++)
+    {
+        lExprs.push_back(static_cast<Expr*>(m_lChildren[i]));
+    }
+
+    return lExprs;
+}
+
+const Expr* ListAssignExpr::lastname() const
+{
+    // If we have a lastname, it will be at the end.
+
+    if (m_pSemi == nullptr)
+    {
+        return nullptr;
+    }
+
+    return static_cast<Expr*>(m_lChildren.back());
+}
+
+std::string ListAssignExpr::toString() const
+{
+    std::string tmp = "ListAssignExpr";
+
+    if (m_pSemi != nullptr)
+    {
+        tmp += " with lastname";
+    }
+
+    return tmp;
+}
+
+void ListAssignExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
 CallExpr::CallExpr(ast::Expr* apCallable, FnArgList* apFnArgList)
 {
     m_lChildren.push_back(apCallable);

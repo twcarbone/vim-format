@@ -32,10 +32,10 @@
   X  0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
   X  4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
   X  4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
-     2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
-     3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
-     1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
-     1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
+  X  2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
+  X  3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
+  X  1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
+  X  1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
      2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
      3932339600  3052  :let          :let {var-name}
      2969427802  3064  :let          :let

@@ -75,6 +75,7 @@
         X(R_BRACE) \
         X(COMMA) \
         X(COLON) \
+        X(SEMICOLON) \
         X(IF) \
         X(ELSEIF) \
         X(ELSE) \

@@ -1,0 +1,5 @@
+E475: Invalid argument
+
+../../test/error/E475_2.vim:1:6
+ 1 | let [;b] = [1, 2, 3, 4]
+   |      ^

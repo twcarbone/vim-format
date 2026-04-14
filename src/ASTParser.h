@@ -20,6 +20,10 @@ private:
     Source m_cSource;
     size_t m_nPos;
 
+    // true if we are parsing an expression on the left-hand side of an assignment
+    // operator, false otherwise.
+    bool m_bLhs;
+
     const std::vector<Token*> m_lTokens;
     const std::unordered_map<Token::Type, std::pair<int, int> > m_mOpBindingPower;
 
@@ -44,6 +48,7 @@ private:
     ast::AssignStmt* assign_stmt();
     ast::FnParamList* fn_param_list();
     ast::CommentStmt* comment_stmt();
+    ast::ListAssignExpr* list_assign_expr();
 
     void try_consume(const Token::Type type, const std::string& vim_error_code);
     void consume(const Token::Type type);
