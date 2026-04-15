@@ -119,6 +119,11 @@ void ASTVisitor::visit(const ast::ListExpr* apListExpr)
     handle_node(apListExpr);
 }
 
+void ASTVisitor::visit(const ast::ListAssignExpr* apListAssignExpr)
+{
+    handle_node(apListAssignExpr);
+}
+
 void ASTVisitor::visit(const ast::Literal* apLiteral)
 {
     handle_node(apLiteral);

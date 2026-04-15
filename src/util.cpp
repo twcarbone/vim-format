@@ -95,6 +95,29 @@ bool vf::startswith_int(std::string_view asStr, std::string_view& asOut)
     return true;
 }
 
+std::vector<std::string> vf::split(const std::string& asStr, char asDelim)
+{
+    std::vector<std::string> llParts;
+    std::string lsPart;
+
+    for (size_t i = 0; i < asStr.size(); i++)
+    {
+        if (asStr[i] == asDelim)
+        {
+            llParts.push_back(lsPart);
+            lsPart = "";
+        }
+        else
+        {
+            lsPart += asStr[i];
+        }
+    }
+
+    llParts.push_back(lsPart);
+
+    return llParts;
+}
+
 bool vf::startswith_float(std::string_view asStr, std::string_view& asOut)
 {
     // 1. The candidate string is everything until the first non-float character

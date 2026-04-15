@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace vf
 {
@@ -25,6 +26,17 @@ bool startswith(std::string_view str, std::string_view prefix, std::string_view 
  *      Return true if `str` starts with a valid int and set `out` to the int.
  */
 bool startswith_int(std::string_view str, std::string_view& out);
+
+/**
+ *  @brief
+ *      Split a string by a delimiter. Empty parts are kept.
+ *
+ *  @example
+ *      split("hello", '.')             => { "hello" }
+ *      split("a + b ", '+')            => { "a ", " b "}
+ *      split("one,,two,three,", ',')   => { "one", "", "two", "three", ""}
+ */
+std::vector<std::string> split(const std::string& str, char delimiter);
 
 /**
  *  @brief

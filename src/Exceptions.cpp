@@ -2,6 +2,8 @@
 
 // Intended to match Vim src/errors.h exactly
 const std::unordered_map<std::string, std::string> VimError::s_mErrors {
+    // clang-format off
+    { "E15", "Invalid expression" },
     { "E116", "Invalid arguments" },
     { "E121", "Undefined variable" },
     { "E125", "Illegal argument" },
@@ -10,6 +12,7 @@ const std::unordered_map<std::string, std::string> VimError::s_mErrors {
     { "E354", "Invalid register name" },
     { "E1278", "Stray '}' without a matching '{'" },
     { "E1279", "Missing '}'" },
+    // clang-format on
 };
 
 VimError::VimError(std::string asCode, std::string asTraceback) :

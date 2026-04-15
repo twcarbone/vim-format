@@ -20,12 +20,16 @@ private:
     Source m_cSource;
     size_t m_nPos;
 
+    // true if we are parsing an expression on the left-hand side of an assignment
+    // operator, false otherwise.
+    bool m_bLhs;
+
     const std::vector<Token*> m_lTokens;
     const std::unordered_map<Token::Type, std::pair<int, int> > m_mOpBindingPower;
 
     ast::Var* var();
     ast::Stmt* stmt();
-    ast::Expr* expr(int min_binding_power);
+    ast::Expr* expr(int min_binding_power = 0);
     ast::IfStmt* if_stmt();
     ast::FnStmt* fn_stmt();
     ast::Program* program();
@@ -44,7 +48,9 @@ private:
     ast::AssignStmt* assign_stmt();
     ast::FnParamList* fn_param_list();
     ast::CommentStmt* comment_stmt();
+    ast::ListAssignExpr* list_assign_expr();
 
+    void try_consume(const Token::Type type, const std::string& vim_error_code);
     void consume(const Token::Type type);
     bool consume_optional(const Token::Type type);
 
@@ -52,6 +58,7 @@ private:
     Token* prev() const;
     Token* next() const;
 
+    ast::Expr* try_expr(const std::string& vim_error_code);
     [[noreturn]] void throw_unexpected_token();
     [[noreturn]] void throw_vim_error(std::string code);
 };

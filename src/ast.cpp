@@ -1,7 +1,17 @@
+#include <iterator>
+
 #include "ast.h"
 
 using namespace ast;
 
+// Tip 1-4: The final "Sink". Store the vector as the destination type. The move is
+// completed here into the class member.
+Node::Node(std::vector<Node*>&& alChildren) :
+    m_lChildren { std::move(alChildren) }
+{
+}
+
+// Tip 1-5: delete on Node* relies on Tip 1-6.
 Node::~Node()
 {
     for (ast::Node* pNode : m_lChildren)
@@ -39,6 +49,11 @@ void EmptyStmt::accept(ASTVisitor& acASTVisitor) const
 std::string EmptyStmt::str_a() const
 {
     return "EmptyStmt";
+}
+
+Expr::Expr(std::vector<Node*>&& alChildren) :
+    Node { std::move(alChildren) }
+{
 }
 
 GroupExpr::GroupExpr(Expr* apExpr)
@@ -581,13 +596,13 @@ void DictEntry::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-DictExpr::~DictExpr()
+DictExpr::DictExpr(std::vector<DictEntry*>&& alEntries) :
+    Expr({ std::make_move_iterator(alEntries.begin()), std::make_move_iterator(alEntries.end()) })
 {
 }
 
-void DictExpr::push(DictEntry* apEntry)
+DictExpr::~DictExpr()
 {
-    m_lChildren.push_back(apEntry);
 }
 
 std::vector<const DictEntry*> DictExpr::entries() const
@@ -610,6 +625,25 @@ std::string DictExpr::toString() const
 void DictExpr::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+// Tip 1-2: Accept by r-value reference (&&) to enforce the "Move-Only" contract.
+ListExpr::ListExpr(std::vector<Expr*>&& alExprs) :
+    //  Tip 1-3: Use a "converting move".
+    //
+    //  1.  Iterator-range construction. Call std::vector constructor that takes 2
+    //      iterators.
+    //
+    //  2.  Move-iterators. Use std::make_move_iterator to return an r-value reference to
+    //      each member. That is, returns Expr*&&.
+    //
+    //  3.  Implicit upcasting. Expr* implicitly converts to Node*
+    //
+    //  Note: "moving" a pointer is the same operation as copying. The purpose of move
+    //  here is semantic - signalling that this vector is empty and Node owns the
+    //  addresses.
+    Expr({ std::make_move_iterator(alExprs.begin()), std::make_move_iterator(alExprs.end()) })
+{
 }
 
 ListExpr::~ListExpr()
@@ -639,6 +673,63 @@ std::string ListExpr::toString() const
 }
 
 void ListExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+ListAssignExpr::ListAssignExpr(std::vector<Expr*>&& alNames, Token* apSemi) :
+    Expr({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) }),
+    m_pSemi { apSemi }
+{
+}
+
+ListAssignExpr::~ListAssignExpr()
+{
+}
+
+std::vector<const Expr*> ListAssignExpr::names() const
+{
+    std::vector<const Expr*> lExprs;
+
+    // If we have a lastname, return all but the last child.
+    const size_t lnCapacity = (m_pSemi == nullptr ? m_lChildren.size() : m_lChildren.size() - 1);
+    lExprs.reserve(lnCapacity);
+
+    // Implementations of the standard may reserve more than the requested capacity. It's
+    // unsafe to use ::capacity() as a loop limit. Use the requested capacity instead.
+    for (size_t i = 0; i < lnCapacity; i++)
+    {
+        lExprs.push_back(static_cast<Expr*>(m_lChildren[i]));
+    }
+
+    return lExprs;
+}
+
+const Expr* ListAssignExpr::lastname() const
+{
+    // If we have a lastname, it will be at the end.
+
+    if (m_pSemi == nullptr)
+    {
+        return nullptr;
+    }
+
+    return static_cast<Expr*>(m_lChildren.back());
+}
+
+std::string ListAssignExpr::toString() const
+{
+    std::string tmp = "ListAssignExpr";
+
+    if (m_pSemi != nullptr)
+    {
+        tmp += " with lastname";
+    }
+
+    return tmp;
+}
+
+void ListAssignExpr::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }

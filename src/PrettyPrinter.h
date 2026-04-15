@@ -43,20 +43,21 @@ public:
     virtual void visit(const ast::IfBranch* ast);
     virtual void visit(const ast::IfStmt* ast);
     virtual void visit(const ast::IndexExpr* ast);
+    virtual void visit(const ast::InterpStr* ast);
     virtual void visit(const ast::JumpStmt* ast);
+    virtual void visit(const ast::ListAssignExpr* ast);
     virtual void visit(const ast::ListExpr* ast);
     virtual void visit(const ast::Literal* ast);
+    virtual void visit(const ast::LiteralStr* ast);
     virtual void visit(const ast::MethodCallExpr* ast);
     virtual void visit(const ast::Program* ast);
     virtual void visit(const ast::ScopeExpr* ast);
     virtual void visit(const ast::SliceExpr* ast);
     virtual void visit(const ast::StmtList* ast);
-    virtual void visit(const ast::InterpStr* ast);
-    virtual void visit(const ast::LiteralStr* ast);
     virtual void visit(const ast::StrConst* ast);
     virtual void visit(const ast::TernaryOp* ast);
-    virtual void visit(const ast::UnletStmt* ast);
     virtual void visit(const ast::UnaryOp* ast);
+    virtual void visit(const ast::UnletStmt* ast);
     virtual void visit(const ast::Var* ast);
     virtual void visit(const ast::WhileStmt* ast);
 

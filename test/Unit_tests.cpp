@@ -15,13 +15,31 @@ protected:
     const std::string m_s8 = "/";
 };
 
-TEST(UtilTest, test_is_one_of)
+class UtilTest : public testing::Test
+{
+protected:
+    void test_split(const std::string& asStr, char asDelim, std::vector<std::string> alParts)
+    {
+        EXPECT_EQ(vf::split(asStr, asDelim), alParts);
+    }
+};
+
+TEST_F(UtilTest, test_is_one_of)
 {
     EXPECT_TRUE(vf::is_one_of("a", "a"));
     EXPECT_TRUE(vf::is_one_of("a", "a"));
 
     EXPECT_FALSE(vf::is_one_of("a", "b"));
     EXPECT_FALSE(vf::is_one_of("ab", "a"));
+}
+
+TEST_F(UtilTest, test_split)
+{
+    test_split("aa,bb,cc", ',', { "aa", "bb", "cc" });
+    test_split("the\n\n\nyellow\nhouse", '\n', { "the", "", "", "yellow", "house" });
+    test_split("1//2//", '/', { "1", "", "2", "", "" });
+    test_split("hello", '.', { "hello" });
+    test_split("a + b ", '+', { "a ", " b " });
 }
 
 TEST_F(FilesystemTest, test_name)
