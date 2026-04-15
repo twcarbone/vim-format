@@ -693,7 +693,7 @@ ast::ListExpr* ASTParser::list_expr()
 
 ast::DictExpr* ASTParser::dict_expr()
 {
-    ast::DictExpr* pDictExpr = new ast::DictExpr();
+    std::vector<ast::DictEntry*> llEntries;
 
     consume(Token::Type::L_BRACE);
 
@@ -708,8 +708,7 @@ ast::DictExpr* ASTParser::dict_expr()
         consume(Token::Type::COLON);
         ast::Expr* pValue = expr();
 
-        ast::DictEntry* pDictEntry = new ast::DictEntry(pKey, pValue);
-        pDictExpr->push(pDictEntry);
+        llEntries.push_back(new ast::DictEntry(pKey, pValue));
 
         if (curr()->type() != Token::Type::R_BRACE)
         {
@@ -718,7 +717,7 @@ ast::DictExpr* ASTParser::dict_expr()
     }
 
     consume(Token::Type::R_BRACE);
-    return pDictExpr;
+    return new ast::DictExpr(std::move(llEntries));
 }
 
 ast::FnArgList* ASTParser::fn_arg_list()

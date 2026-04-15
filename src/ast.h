@@ -63,7 +63,7 @@ public:
 protected:
     // Tip 1-7: Protected r-value reference constructors let derived classes pass the
     // move up the hierarchy.
-    explicit Expr(std::vector<Expr*>&& children);
+    explicit Expr(std::vector<Node*>&& children);
 };
 
 class GroupExpr : public Expr
@@ -332,10 +332,8 @@ public:
 class DictExpr : public Expr
 {
 public:
-    DictExpr() = default;
+    DictExpr(std::vector<DictEntry*>&& entries);
     virtual ~DictExpr();
-
-    void push(DictEntry* entry);
 
     std::vector<const DictEntry*> entries() const;
 

@@ -51,21 +51,8 @@ std::string EmptyStmt::str_a() const
     return "EmptyStmt";
 }
 
-Expr::Expr(std::vector<Expr*>&& alChildren) :
-    //  Tip 1-3: Use a "converting move".
-    //
-    //  1.  Iterator-range construction. Call std::vector constructor that takes 2
-    //      iterators.
-    //
-    //  2.  Move-iterators. Use std::make_move_iterator to return an r-value reference to
-    //      each member. That is, returns Expr*&&.
-    //
-    //  3.  Implicit upcasting. Expr* implicitly converts to Node*
-    //
-    //  Note: "moving" a pointer is the same operation as copying. The purpose of move
-    //  here is semantic - signalling that this vector is empty and Node owns the
-    //  addresses.
-    Node({ std::make_move_iterator(alChildren.begin()), std::make_move_iterator(alChildren.end()) })
+Expr::Expr(std::vector<Node*>&& alChildren) :
+    Node { std::move(alChildren) }
 {
 }
 
@@ -609,13 +596,13 @@ void DictEntry::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-DictExpr::~DictExpr()
+DictExpr::DictExpr(std::vector<DictEntry*>&& alEntries) :
+    Expr({ std::make_move_iterator(alEntries.begin()), std::make_move_iterator(alEntries.end()) })
 {
 }
 
-void DictExpr::push(DictEntry* apEntry)
+DictExpr::~DictExpr()
 {
-    m_lChildren.push_back(apEntry);
 }
 
 std::vector<const DictEntry*> DictExpr::entries() const
@@ -642,7 +629,20 @@ void DictExpr::accept(ASTVisitor& acASTVisitor) const
 
 // Tip 1-2: Accept by r-value reference (&&) to enforce the "Move-Only" contract.
 ListExpr::ListExpr(std::vector<Expr*>&& alExprs) :
-    Expr { std::move(alExprs) }
+    //  Tip 1-3: Use a "converting move".
+    //
+    //  1.  Iterator-range construction. Call std::vector constructor that takes 2
+    //      iterators.
+    //
+    //  2.  Move-iterators. Use std::make_move_iterator to return an r-value reference to
+    //      each member. That is, returns Expr*&&.
+    //
+    //  3.  Implicit upcasting. Expr* implicitly converts to Node*
+    //
+    //  Note: "moving" a pointer is the same operation as copying. The purpose of move
+    //  here is semantic - signalling that this vector is empty and Node owns the
+    //  addresses.
+    Expr({ std::make_move_iterator(alExprs.begin()), std::make_move_iterator(alExprs.end()) })
 {
 }
 
@@ -678,7 +678,7 @@ void ListExpr::accept(ASTVisitor& acASTVisitor) const
 }
 
 ListAssignExpr::ListAssignExpr(std::vector<Expr*>&& alNames, Token* apSemi) :
-    Expr { std::move(alNames) },
+    Expr({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) }),
     m_pSemi { apSemi }
 {
 }
