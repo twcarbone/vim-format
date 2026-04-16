@@ -121,6 +121,21 @@ std::string Source::context() const
     return lsTraceback;
 }
 
+std::string_view Source::word() const
+{
+    int i;
+    for (i = m_nPos; i <= view().size(); i++)
+    {
+        const unsigned char c = view().at(i);
+        if (!std::isalnum(c) && c != '_')
+        {
+            break;
+        }
+    }
+
+    return view().substr(m_nPos, i - m_nPos);
+}
+
 std::string_view Source::text() const
 {
     return m_sText;

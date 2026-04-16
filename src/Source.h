@@ -43,6 +43,9 @@ public:
     // Basic printout of current line context.
     std::string context() const;
 
+    // All [a-zA-Z0-9_] text starting at cursor.
+    std::string_view word() const;
+
     // All text from 0 to EOF minus one.
     std::string_view text() const;
 
