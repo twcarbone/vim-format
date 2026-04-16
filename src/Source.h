@@ -57,9 +57,13 @@ public:
     std::string_view remaining_line() const;
 
     // Move cursor to 0-based `pos`.
+    //
+    // Throws std::runtime_error if `pos` exceeds size.
     void seek(int pos);
 
     // Advance the cursor forward `count` positions.
+    //
+    // Throws std::runtime_error if advancing `count` exceeds size.
     void advance(int count);
 
     void read_text(const std::string& text);

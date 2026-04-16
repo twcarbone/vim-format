@@ -161,12 +161,27 @@ std::string_view Source::remaining_line() const
 
 void Source::seek(int anPos)
 {
+    if (anPos < 0 || anPos > m_sText.size())
+    {
+        throw std::runtime_error("attempted Source::seek(" + std::to_string(anPos) + ") on text of size "
+                                 + std::to_string(m_sText.size()));
+    }
+
     m_nPos = anPos;
 }
 
 void Source::advance(int anCount)
 {
-    m_nPos += anCount;
+    const int lnNewPos = m_nPos + anCount;
+
+    if (lnNewPos < 0 || lnNewPos > m_sText.size())
+    {
+        throw std::runtime_error("attempted Source::advance(" + std::to_string(anCount) + ") from position "
+                                 + std::to_string(m_nPos) + " on text of size "
+                                 + std::to_string(m_sText.size()));
+    }
+
+    m_nPos = lnNewPos;
 }
 
 void Source::read_text(const std::string& asText)

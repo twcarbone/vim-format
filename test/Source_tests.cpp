@@ -2,6 +2,23 @@
 
 #include "Source.h"
 
+// clang-format off
+
+#define EXPECT_THROW_MSG(stmt, etype, msg) \
+    try \
+    { \
+        stmt; \
+        ADD_FAILURE() << "Expected exception " #etype; \
+    } \
+    catch (const etype& ex) \
+    { \
+        EXPECT_EQ(std::string(ex.what()), std::string(msg)); \
+    } catch (...) { \
+        ADD_FAILURE() << "Expected exception " #etype " but caught something else"; \
+    }
+
+// clang-format on
+
 //
 // text_test_01
 //
@@ -171,4 +188,25 @@ TEST(SourceTest, file_test_02)
     lcSource.advance(55);
 
     EXPECT_EQ(lcSource.indent(), 4);
+}
+
+TEST(SourceTest, test_bad_cursor_move)
+{
+
+    Source lcSource;
+
+    lcSource.read_text("please excuse my dear aunt sally");
+    //                  012345678901234567890123456789012
+    //                  0         1         2         3 ^
+    //                                                  EOF here
+
+    EXPECT_THROW_MSG(lcSource.seek(-5), std::runtime_error, "attempted Source::seek(-5) on text of size 32");
+    EXPECT_THROW_MSG(lcSource.seek(33), std::runtime_error, "attempted Source::seek(33) on text of size 32");
+
+    EXPECT_THROW_MSG(lcSource.advance(-5),
+                     std::runtime_error,
+                     "attempted Source::advance(-5) from position 0 on text of size 32");
+    EXPECT_THROW_MSG(lcSource.advance(40),
+                     std::runtime_error,
+                     "attempted Source::advance(40) from position 0 on text of size 32");
 }
