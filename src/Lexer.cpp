@@ -278,8 +278,7 @@ bool Lexer::match()
                     m_eState = State::INTERP_EXP;
                     return push_token(Token::Type::L_BRACE, c);
                 case '}':
-                    // Ex:  $'one two} {three}'
-                    //               ^
+                    // test/error/E1278_1.out
                     throw VimError("E1278", m_cSource.context());
                 case '"':
                     m_eState = State::NONE;
@@ -579,8 +578,7 @@ bool Lexer::push_register()
         case ':':
         case '.':
         case '%':
-            // Ex:  let @: = 'something'
-            //           ^
+            // test/error/E354_1.out
             throw VimError("E354", m_cSource.context());
         default:
             if (std::isalnum(c))
@@ -589,8 +587,7 @@ bool Lexer::push_register()
             }
     }
 
-    // Ex:  let @& = 'something'
-    //           ^
+    // test/error/E354_2.out
     throw VimError("E354", m_cSource.context());
 }
 
