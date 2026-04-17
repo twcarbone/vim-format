@@ -376,8 +376,7 @@ ast::FnParamList* ASTParser::fn_param_list()
                 }
                 else if (bGotDefaultParam)
                 {
-                    // Ex: function Foo(a = 1, b)
-                    //                         ^
+                    // test/error/E989_1.out
                     throw_vim_error("E989");
                 }
 
@@ -393,8 +392,7 @@ ast::FnParamList* ASTParser::fn_param_list()
                 bDoneParsing = true;
                 break;
             case Token::Type::COMMA:
-                // Ex:  function Foo(a,,)
-                //                     ^
+                // test/error/E125_1.out
                 throw_vim_error("E125");
                 break;
             default:
@@ -625,6 +623,7 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
 
     if (curr()->type() == Token::Type::R_BRACKET)
     {
+        // test/error/E475_1.out
         throw_vim_error("E475");
     }
 
@@ -635,6 +634,8 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
             break;
         }
 
+        // test/error/E475_2.out
+        // test/error/E475_3.out
         llExprs.push_back(try_expr("E475"));
 
         if (consume_optional(Token::Type::SEMICOLON))
@@ -731,10 +732,8 @@ ast::FnArgList* ASTParser::fn_arg_list()
         switch (curr()->type())
         {
             case Token::Type::COMMA:
-                // Ex:  call Foo(,a)
-                //               ^
-                //      call Foo(a,,)
-                //                 ^
+                // test/error/E116_1.out
+                // test/error/E116_2.out
                 throw_vim_error("E116");
                 break;
             case Token::Type::R_PAREN:
