@@ -236,7 +236,7 @@ bool Lexer::match()
 
                     return push_token(Token::Type::SIG_ENV, c);
                 case '"':
-                    if (chk_comment())
+                    if (push_comment())
                     {
                         return true;
                     }
@@ -264,8 +264,8 @@ bool Lexer::match()
                     return push_token(Token::Type::SQUOTE, c);
             }
 
-            if (chk_register() || chk_symbol() || chk_float() || chk_integer() || chk_command()
-                || chk_keyword() || chk_regex())
+            if (push_register() || push_symbol() || push_float() || push_integer() || push_command()
+                || push_keyword() || push_regex())
             {
                 return true;
             }
@@ -527,7 +527,7 @@ void Lexer::retype_keyword(Token* apCurrentToken)
     }
 }
 
-bool Lexer::chk_comment()
+bool Lexer::push_comment()
 {
     if (m_cSource.column() == m_cSource.indent())
     {
@@ -554,7 +554,7 @@ bool Lexer::chk_comment()
     return push_token(Token::Type::COMMENT, m_cSource.remaining_line());
 }
 
-bool Lexer::chk_register()
+bool Lexer::push_register()
 {
     if (m_lTokens.empty() || m_lTokens.back()->type() != Token::Type::SIG_REG)
     {
@@ -594,7 +594,7 @@ bool Lexer::chk_register()
     throw VimError("E354", m_cSource.context());
 }
 
-bool Lexer::chk_symbol()
+bool Lexer::push_symbol()
 {
     for (const Symbol& lcSymbol : m_lSymbols)
     {
@@ -607,7 +607,7 @@ bool Lexer::chk_symbol()
     return false;
 }
 
-bool Lexer::chk_float()
+bool Lexer::push_float()
 {
     std::string_view lsLexeme;
     if (vf::startswith_float(m_cSource.remaining_text(), lsLexeme))
@@ -618,7 +618,7 @@ bool Lexer::chk_float()
     return false;
 }
 
-bool Lexer::chk_integer()
+bool Lexer::push_integer()
 {
     std::string_view lsLexeme;
     if (vf::startswith_int(m_cSource.remaining_text(), lsLexeme))
@@ -629,7 +629,7 @@ bool Lexer::chk_integer()
     return false;
 }
 
-bool Lexer::chk_command()
+bool Lexer::push_command()
 {
     if (m_cSource.column() == m_cSource.indent())
     {
@@ -653,7 +653,7 @@ bool Lexer::chk_command()
     return false;
 }
 
-bool Lexer::chk_keyword()
+bool Lexer::push_keyword()
 {
     for (const Keyword& lcKeyword : m_lKeywords)
     {
@@ -674,7 +674,7 @@ bool Lexer::chk_keyword()
     return false;
 }
 
-bool Lexer::chk_regex()
+bool Lexer::push_regex()
 {
     for (auto it = m_lReSpec.cbegin(); it != m_lReSpec.cend(); ++it)
     {
