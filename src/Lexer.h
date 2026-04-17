@@ -84,14 +84,20 @@ private:
     void freeTokens();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
-    void state_toggle_str(State state);
 
     bool push_token(Token::Type type, char lexeme);
     bool push_token(Token::Type type, std::string_view lexeme);
     bool push_token(Token::Type type, const std::string& lexeme);
+    bool push_string(const std::string& right_delimiters);
 
-    bool chk_comment() const;
-    bool chk_register() const;
+    bool chk_comment();
+    bool chk_register();
+    bool chk_symbol();
+    bool chk_float();
+    bool chk_integer();
+    bool chk_command();
+    bool chk_keyword();
+    bool chk_regex();
 };
 
 #endif  // TOKENIZER_H
