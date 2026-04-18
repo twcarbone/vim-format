@@ -15,6 +15,15 @@ Lexer::Lexer(const Context& acContext) :
     m_nBraceLevel { 0 },
     m_cSource { acContext.source() },
     m_lCommands {
+        // Commands may have an abbreviation, and must appear in the first column.
+        //
+        // Example:
+        //
+        //  for item in items
+        //  ^~~
+        //
+        //  let item = 1
+        //  ^~~
         { "break", "brea", Token::Type::BREAK },
         { "continue", "con", Token::Type::CONTINUE },
         { "echo", "ec", Token::Type::EX_ECHO },
@@ -35,6 +44,15 @@ Lexer::Lexer(const Context& acContext) :
         { "unlet", "unl", Token::Type::EX_UNLET },
     },
     m_lKeywords {
+        // Keywords have no abbreviation, and can appear in any position.
+        //
+        // Example:
+        //
+        //  for item in items
+        //           ^~
+        //
+        //  let items =<< trim END
+        //                ^~~~
         { "abort", "", Token::Type::FN_ABORT },
         { "closure", "", Token::Type::FN_CLOSURE },
         { "dict", "", Token::Type::FN_DICT },
@@ -102,6 +120,8 @@ Lexer::Lexer(const Context& acContext) :
         { "{", Token::Type::L_BRACE },
         { "}", Token::Type::R_BRACE },
         { "@", Token::Type::SIG_REG },
+        { "'", Token::Type::SQUOTE },
+        { "\"", Token::Type::DQUOTE },
         // clang-format on
     },
     m_lReSpec {
@@ -235,37 +255,50 @@ bool Lexer::match()
                     }
 
                     return push_token(Token::Type::SIG_ENV, c);
-                case '"':
-                    if (push_comment())
-                    {
-                        return true;
-                    }
-
-                    if (m_lTokens.back()->type() == Token::Type::STR_INTERP)
-                    {
-                        m_eState = State::INTERP_STR;
-                    }
-                    else
-                    {
-                        m_eState = State::STRING_CONSTANT;
-                    }
-
-                    return push_token(Token::Type::DQUOTE, c);
-                case '\'':
-                    if (m_lTokens.back()->type() == Token::Type::STR_INTERP)
-                    {
-                        m_eState = State::INTERP_STR;
-                    }
-                    else
-                    {
-                        m_eState = State::LITERAL_STRING;
-                    }
-
-                    return push_token(Token::Type::SQUOTE, c);
             }
 
-            if (push_register() || push_symbol() || push_float() || push_integer() || push_command()
-                || push_keyword() || push_regex())
+            // These have special logic and need to happen before symbol matching.
+            if (push_register() || push_comment())
+            {
+                return true;
+            }
+
+            // If we match a symbol, it may require a state change.
+            if (push_symbol())
+            {
+                switch (m_pCurrToken->type())
+                {
+                    case Token::Type::DQUOTE:
+                        if (m_lTokens.back()->type() == Token::Type::STR_INTERP)
+                        {
+                            m_eState = State::INTERP_STR;
+                        }
+                        else
+                        {
+                            m_eState = State::STRING_CONSTANT;
+                        }
+
+                        break;
+                    case Token::Type::SQUOTE:
+                        if (m_lTokens.back()->type() == Token::Type::STR_INTERP)
+                        {
+                            m_eState = State::INTERP_STR;
+                        }
+                        else
+                        {
+                            m_eState = State::LITERAL_STRING;
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+
+                return true;
+            }
+
+            // Checking for a RegEx is slow and intentionally a last resort.
+            if (push_number() || push_command() || push_keyword() || push_regex())
             {
                 return true;
             }
@@ -528,6 +561,11 @@ void Lexer::retype_keyword(Token* apCurrentToken)
 
 bool Lexer::push_comment()
 {
+    if (m_cSource.remaining_text().at(0) != '"')
+    {
+        return false;
+    }
+
     if (m_cSource.column() == m_cSource.indent())
     {
         // If " is the first non-whitespace of a line, it's a comment
@@ -604,28 +642,6 @@ bool Lexer::push_symbol()
     return false;
 }
 
-bool Lexer::push_float()
-{
-    std::string_view lsLexeme;
-    if (vf::startswith_float(m_cSource.remaining_text(), lsLexeme))
-    {
-        return push_token(Token::Type::FLOAT, std::string { lsLexeme });
-    }
-
-    return false;
-}
-
-bool Lexer::push_integer()
-{
-    std::string_view lsLexeme;
-    if (vf::startswith_int(m_cSource.remaining_text(), lsLexeme))
-    {
-        return push_token(Token::Type::INTEGER, std::string { lsLexeme });
-    }
-
-    return false;
-}
-
 bool Lexer::push_command()
 {
     if (m_cSource.column() == m_cSource.indent())
@@ -684,6 +700,25 @@ bool Lexer::push_regex()
         {
             return push_token(leTokenType, lcMatch.str());
         }
+    }
+
+    return false;
+}
+
+bool Lexer::push_number()
+{
+    std::string_view lsLexeme;
+
+    // float
+    if (vf::startswith_float(m_cSource.remaining_text(), lsLexeme))
+    {
+        return push_token(Token::Type::FLOAT, std::string { lsLexeme });
+    }
+
+    // integer
+    if (vf::startswith_int(m_cSource.remaining_text(), lsLexeme))
+    {
+        return push_token(Token::Type::INTEGER, std::string { lsLexeme });
     }
 
     return false;

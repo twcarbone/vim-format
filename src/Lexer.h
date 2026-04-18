@@ -88,15 +88,14 @@ private:
     bool push_token(Token::Type type, char lexeme);
     bool push_token(Token::Type type, std::string_view lexeme);
     bool push_token(Token::Type type, const std::string& lexeme);
-    bool push_float();
     bool push_regex();
     bool push_symbol();
     bool push_string(const std::string& right_delimiters);
-    bool push_integer();
     bool push_command();
     bool push_keyword();
     bool push_comment();
     bool push_register();
+    bool push_number();
 };
 
 #endif  // TOKENIZER_H
