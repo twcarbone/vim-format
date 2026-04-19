@@ -272,8 +272,7 @@ ast::IfStmt* ASTParser::if_stmt()
 
     lIfBranches.push_back(if_branch(Token::Type::IF));
 
-    bool bLoop = true;
-    while (bLoop)
+    while (true)
     {
         switch (curr()->type())
         {
@@ -286,10 +285,11 @@ ast::IfStmt* ASTParser::if_stmt()
                 consume(Token::Type::ENDIF);
                 // Fall-thru intentional
             default:
-                bLoop = false;
+                goto ifbranches_end;
         }
     }
 
+ifbranches_end:
     return new ast::IfStmt(lIfBranches, pExEndIf);
 }
 
@@ -448,8 +448,7 @@ ast::FnStmt* ASTParser::fn_stmt()
 
     // Modifiers (range, abort, etc.)
     std::vector<Token*> lModifiers;
-    bool bLoop = true;
-    while (bLoop)
+    while (true)
     {
         switch (curr()->type())
         {
@@ -461,10 +460,11 @@ ast::FnStmt* ASTParser::fn_stmt()
                 consume(curr()->type());
                 break;
             default:
-                bLoop = false;
+                goto modifiers_end;
         }
     }
 
+modifiers_end:
     ast::StmtList* pBody = new ast::StmtList();
 
     if (curr()->type() == Token::Type::COMMENT)
@@ -725,9 +725,7 @@ ast::FnArgList* ASTParser::fn_arg_list()
 {
     ast::FnArgList* pFnArgList = new ast::FnArgList();
 
-    bool bLoop = true;
-
-    while (bLoop)
+    while (true)
     {
         switch (curr()->type())
         {
@@ -737,14 +735,14 @@ ast::FnArgList* ASTParser::fn_arg_list()
                 throw_vim_error("E116");
                 break;
             case Token::Type::R_PAREN:
-                bLoop = false;
-                break;
+                goto args_end;
             default:
                 pFnArgList->push(try_expr("E116"));
                 consume_optional(Token::Type::COMMA);
         }
     }
 
+args_end:
     consume(Token::Type::R_PAREN);
     return pFnArgList;
 }
