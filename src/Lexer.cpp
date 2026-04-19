@@ -221,8 +221,7 @@ bool Lexer::match()
     {
         case State::HEREDOC:
             // FIXME (gh-100): Empty string lines are ignored
-            // FIXME (gh-100): Using just line_text() here seg faults?
-            if (m_cSource.column() == 0 && m_cSource.line_text() == m_pEndMarker->str())
+            if (m_cSource.line_text() == m_pEndMarker->str())
             {
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
                 m_eState = State::NONE;
