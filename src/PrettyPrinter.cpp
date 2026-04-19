@@ -412,26 +412,16 @@ void PrettyPrinter::visit(const ast::Literal* apLiteral)
 
 void PrettyPrinter::visit(const ast::LiteralStr* apLiteralStr)
 {
-    write(apLiteralStr->ldelim()->str());
-
-    if (apLiteralStr->str() != nullptr)
-    {
-        write(apLiteralStr->str()->str());
-    }
-
-    write(apLiteralStr->rdelim()->str());
+    write(apLiteralStr->ldelim() == nullptr ? "" : apLiteralStr->ldelim()->str());
+    write(apLiteralStr->str() == nullptr ? "" : apLiteralStr->str()->str());
+    write(apLiteralStr->rdelim() == nullptr ? "" : apLiteralStr->rdelim()->str());
 }
 
 void PrettyPrinter::visit(const ast::StrConst* apStrConst)
 {
-    write(apStrConst->ldelim()->str());
-
-    if (apStrConst->str() != nullptr)
-    {
-        write(apStrConst->str()->str());
-    }
-
-    write(apStrConst->rdelim()->str());
+    write(apStrConst->ldelim() == nullptr ? "" : apStrConst->ldelim()->str());
+    write(apStrConst->str() == nullptr ? "" : apStrConst->str()->str());
+    write(apStrConst->rdelim() == nullptr ? "" : apStrConst->rdelim()->str());
 }
 
 void PrettyPrinter::visit(const ast::InterpStr* apInterpStr)

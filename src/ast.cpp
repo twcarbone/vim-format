@@ -841,14 +841,11 @@ LiteralStr::~LiteralStr()
 
 std::string LiteralStr::toString() const
 {
-    std::string lsStr = "";
-
-    if (m_pStr != nullptr)
-    {
-        lsStr = m_pStr->str();
-    }
-
-    return "LiteralStr ;" + m_pLDelim->str() + ";" + lsStr + ";" + m_pRDelim->str() + ";";
+    std::string tmp = "LiteralStr ";
+    tmp += ";" + (m_pLDelim == nullptr ? "" : m_pLDelim->str()) + ";";
+    tmp += m_pStr == nullptr ? "" : m_pStr->str();
+    tmp += ";" + (m_pRDelim == nullptr ? "" : m_pRDelim->str()) + ";";
+    return tmp;
 }
 
 void LiteralStr::accept(ASTVisitor& acASTVisitor) const
@@ -862,14 +859,11 @@ StrConst::~StrConst()
 
 std::string StrConst::toString() const
 {
-    std::string lsStr = "";
-
-    if (m_pStr != nullptr)
-    {
-        lsStr = m_pStr->str();
-    }
-
-    return "StrConst ;" + m_pLDelim->str() + ";" + lsStr + ";" + m_pRDelim->str() + ";";
+    std::string tmp = "StrConst ";
+    tmp += ";" + (m_pLDelim == nullptr ? "" : m_pLDelim->str()) + ";";
+    tmp += m_pStr == nullptr ? "" : m_pStr->str();
+    tmp += ";" + (m_pRDelim == nullptr ? "" : m_pRDelim->str()) + ";";
+    return tmp;
 }
 
 void StrConst::accept(ASTVisitor& acASTVisitor) const
