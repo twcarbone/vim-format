@@ -22,6 +22,14 @@ let &l:tpm = 10
 unlet cc
 unlet! cc
 unl! g:does_not_exist
+let heredoc_items =<< trim END
+
+    one
+        END
+
+        {a + b}
+
+END
 
 " for
 

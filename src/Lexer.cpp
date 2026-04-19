@@ -220,7 +220,6 @@ bool Lexer::match()
     switch (m_eState)
     {
         case State::HEREDOC:
-            // FIXME (gh-100): Empty string lines are ignored
             if (m_cSource.line_text() == m_pEndMarker->str())
             {
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
@@ -230,6 +229,11 @@ bool Lexer::match()
             }
             else if (c == '\n')
             {
+                if (m_lTokens.back()->type() == Token::Type::NEWLINE)
+                {
+                    return push_token(Token::Type::STRING, std::string { "" });
+                }
+
                 return push_token(Token::Type::NEWLINE, '\n');
             }
             else

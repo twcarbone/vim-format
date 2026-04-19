@@ -124,6 +124,16 @@ Program
     UnletStmt ! <>
       Var does_not_exist
         Scope g:
+    AssignStmt =<< <>
+      Var heredoc_items
+        NULL
+      HereDocExpr trim END
+        LiteralStr ;;;;
+        LiteralStr ;;    one;;
+        LiteralStr ;;        END;;
+        LiteralStr ;;;;
+        LiteralStr ;;        {a + b};;
+        LiteralStr ;;;;
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
