@@ -221,7 +221,7 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
     {
         if (pModifier != nullptr)
         {
-            write(' ', Settings::FnModifierPadding);
+            write(' ', Settings::ExCmdModifierPadding);
             write(pModifier->str());
         }
     }
@@ -273,11 +273,10 @@ void PrettyPrinter::visit(const ast::GroupExpr* apGroupExpr)
 
 void PrettyPrinter::visit(const ast::HereDocExpr* apHereDocExpr)
 {
-    for (const Token* pArg : apHereDocExpr->args())
+    for (const Token* pModifier : apHereDocExpr->modifiers())
     {
-        // FIXME (gh-100): Rename FnModifierPadding to ArgPadding
-        write(pArg->str());
-        write(' ', Settings::FnModifierPadding);
+        write(pModifier->str());
+        write(' ', Settings::ExCmdModifierPadding);
     }
 
     write(apHereDocExpr->endmarker()->str());

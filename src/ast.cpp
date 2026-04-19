@@ -1148,10 +1148,12 @@ std::string AssignStmt::str_a() const
     return "AssignStmt " + m_pOp->str();
 }
 
-HereDocExpr::HereDocExpr(std::vector<Expr*>&& alLines, std::vector<Token*>&& alArgs, Token* apEndMarker) :
+HereDocExpr::HereDocExpr(std::vector<Expr*>&& alLines,
+                         std::vector<Token*>&& alModifiers,
+                         Token* apEndMarker) :
     Expr({ std::make_move_iterator(alLines.begin()), std::make_move_iterator(alLines.end()) }),
     m_pEndMarker { apEndMarker },
-    m_lArgs { alArgs }
+    m_lModifiers { alModifiers }
 {
 }
 
@@ -1159,9 +1161,9 @@ HereDocExpr::~HereDocExpr()
 {
 }
 
-const std::vector<Token*>& HereDocExpr::args() const
+const std::vector<Token*>& HereDocExpr::modifiers() const
 {
-    return m_lArgs;
+    return m_lModifiers;
 }
 
 const Token* HereDocExpr::endmarker() const
@@ -1178,9 +1180,9 @@ std::string HereDocExpr::toString() const
 {
     std::string tmp = "HereDocExpr";
 
-    for (const Token* pArg : m_lArgs)
+    for (const Token* pModifier : m_lModifiers)
     {
-        tmp += " " + pArg->str();
+        tmp += " " + pModifier->str();
     }
 
     tmp += " " + m_pEndMarker->str();

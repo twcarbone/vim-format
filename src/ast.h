@@ -581,10 +581,10 @@ private:
 class HereDocExpr : public Expr
 {
 public:
-    HereDocExpr(std::vector<Expr*>&& lines, std::vector<Token*>&& args, Token* endmarker);
+    HereDocExpr(std::vector<Expr*>&& lines, std::vector<Token*>&& modifiers, Token* endmarker);
     virtual ~HereDocExpr();
 
-    const std::vector<Token*>& args() const;
+    const std::vector<Token*>& modifiers() const;
     const Token* endmarker() const;
     std::vector<const Expr*> lines() const;
 
@@ -593,7 +593,7 @@ public:
 
 private:
     Token* m_pEndMarker;
-    std::vector<Token*> m_lArgs;
+    std::vector<Token*> m_lModifiers;
 };
 
 class UnletStmt : public Stmt

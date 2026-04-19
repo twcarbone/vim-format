@@ -593,7 +593,7 @@ ast::AssignStmt* ASTParser::assign_stmt()
 ast::HereDocExpr* ASTParser::heredoc_expr()
 {
     std::vector<ast::Expr*> llLines;
-    std::vector<Token*> llArgs;
+    std::vector<Token*> lModifiers;
     Token* pEndMarker = nullptr;
 
     while (true)
@@ -602,7 +602,7 @@ ast::HereDocExpr* ASTParser::heredoc_expr()
         {
             case Token::Type::HD_TRIM:
             case Token::Type::HD_EVAL:
-                llArgs.push_back(curr());
+                lModifiers.push_back(curr());
                 break;
             default:
                 pEndMarker = curr();
@@ -641,7 +641,7 @@ args_end:
 
 lines_end:
 
-    return new ast::HereDocExpr(std::move(llLines), std::move(llArgs), pEndMarker);
+    return new ast::HereDocExpr(std::move(llLines), std::move(lModifiers), pEndMarker);
 }
 
 ast::CommentStmt* ASTParser::comment_stmt()
