@@ -47,6 +47,7 @@
         X(OP_LOGICAL_NOT) \
         X(OP_BANG) \
         X(OP_METHOD) \
+        X(OP_HEREDOC) \
         X(SIG_ENV) \
         X(SIG_REG) \
         X(SIG_OPT) \
@@ -95,10 +96,13 @@
         X(FN_DICT) \
         X(FN_CLOSURE) \
         X(FN_ELLIPSES) \
+        X(HD_TRIM) \
+        X(HD_EVAL) \
         X(END) \
         X(TAB) \
         X(NEWLINE) \
         X(SPACE) \
+        X(ENDMARKER) \
         X(OPTION) \
         X(IDENTIFIER) \
         X(STRING) \

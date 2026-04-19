@@ -1148,6 +1148,50 @@ std::string AssignStmt::str_a() const
     return "AssignStmt " + m_pOp->str();
 }
 
+HereDocExpr::HereDocExpr(std::vector<Expr*>&& alLines, std::vector<Token*>&& alArgs, Token* apEndMarker) :
+    Expr({ std::make_move_iterator(alLines.begin()), std::make_move_iterator(alLines.end()) }),
+    m_pEndMarker { apEndMarker },
+    m_lArgs { alArgs }
+{
+}
+
+HereDocExpr::~HereDocExpr()
+{
+}
+
+const std::vector<Token*>& HereDocExpr::args() const
+{
+    return m_lArgs;
+}
+
+const Token* HereDocExpr::endmarker() const
+{
+    return m_pEndMarker;
+};
+
+std::vector<const Expr*> HereDocExpr::lines() const
+{
+    RETURN_CHILDREN_AS(const Expr*);
+}
+
+std::string HereDocExpr::toString() const
+{
+    std::string tmp = "HereDocExpr";
+
+    for (const Token* pArg : m_lArgs)
+    {
+        tmp += " " + pArg->str();
+    }
+
+    tmp += " " + m_pEndMarker->str();
+    return tmp;
+}
+
+void HereDocExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
 UnletStmt::UnletStmt(Token* apExUnlet, Token* apBang, Expr* apExpr) :
     m_pExUnlet { apExUnlet },
     m_pBang { apBang }

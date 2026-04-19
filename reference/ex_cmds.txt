@@ -36,7 +36,7 @@
   X  3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
   X  1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
   X  1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
-     2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
+  X  2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
      3932339600  3052  :let          :let {var-name}
      2969427802  3064  :let          :let
   X  3280446171  3071  :unlet        :unl[et][!] {name} ...

@@ -271,6 +271,30 @@ void PrettyPrinter::visit(const ast::GroupExpr* apGroupExpr)
     write(')');
 }
 
+void PrettyPrinter::visit(const ast::HereDocExpr* apHereDocExpr)
+{
+    for (const Token* pArg : apHereDocExpr->args())
+    {
+        // FIXME (gh-100): Rename FnModifierPadding to ArgPadding
+        write(pArg->str());
+        write(' ', Settings::FnModifierPadding);
+    }
+
+    write(apHereDocExpr->endmarker()->str());
+    write_eol();
+
+    for (const ast::Expr* pExpr : apHereDocExpr->lines())
+    {
+        write_bol();
+        pExpr->accept(*this);
+        write_eol();
+    }
+
+    write_bol();
+    write(apHereDocExpr->endmarker()->str());
+    write_eol();
+}
+
 void PrettyPrinter::visit(const ast::IfBranch* apIfBranch)
 {
     write_bol();

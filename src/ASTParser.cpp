@@ -551,6 +551,7 @@ ast::JumpStmt* ASTParser::jump_stmt()
 // 0379804504
 // 4035612700
 // 4254392411
+// 2818147631
 ast::AssignStmt* ASTParser::assign_stmt()
 {
     Token* pOp = nullptr;
@@ -577,11 +578,71 @@ ast::AssignStmt* ASTParser::assign_stmt()
             consume(curr()->type());
             pRhs = expr();
             break;
+        case Token::Type::OP_HEREDOC:
+            // FIXME (gh-100): Rename OP_HEREDOC to ASSIGN_HEREDOC
+            pOp = curr();
+            consume(curr()->type());
+            pRhs = heredoc_expr();
+            break;
         default:
             throw_unexpected_token();
     }
 
     return new ast::AssignStmt(pOp, pLhs, pRhs);
+}
+
+ast::HereDocExpr* ASTParser::heredoc_expr()
+{
+    std::vector<ast::Expr*> llLines;
+    std::vector<Token*> llArgs;
+    Token* pEndMarker = nullptr;
+
+    while (true)
+    {
+        switch (curr()->type())
+        {
+            case Token::Type::HD_TRIM:
+            case Token::Type::HD_EVAL:
+                llArgs.push_back(curr());
+                break;
+            default:
+                pEndMarker = curr();
+                consume(Token::Type::ENDMARKER);
+                goto args_end;
+        }
+
+        consume(curr()->type());
+    }
+
+args_end:
+
+    while (true)
+    {
+        switch (curr()->type())
+        {
+            case Token::Type::NEWLINE:
+                break;
+            case Token::Type::STRING:
+            {
+                Token* pLDelim = nullptr;
+                Token* pRDelim = nullptr;
+                ast::LiteralStr* pStr = new ast::LiteralStr(curr(), pLDelim, pRDelim);
+                llLines.push_back(pStr);
+                break;
+            }
+            case Token::Type::ENDMARKER:
+                consume(Token::Type::ENDMARKER);
+                goto lines_end;
+            default:
+                break;
+        }
+
+        consume(curr()->type());
+    }
+
+lines_end:
+
+    return new ast::HereDocExpr(std::move(llLines), std::move(llArgs), pEndMarker);
 }
 
 ast::CommentStmt* ASTParser::comment_stmt()
@@ -946,6 +1007,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::ASSIGN_MODULO:
             case Token::Type::ASSIGN_CAT_NEW:
             case Token::Type::ASSIGN_CAT_OLD:
+            case Token::Type::OP_HEREDOC:
             case Token::Type::SEMICOLON:
                 return pLhs;
             // expr1

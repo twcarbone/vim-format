@@ -578,6 +578,24 @@ private:
     Token* m_pOp;
 };
 
+class HereDocExpr : public Expr
+{
+public:
+    HereDocExpr(std::vector<Expr*>&& lines, std::vector<Token*>&& args, Token* endmarker);
+    virtual ~HereDocExpr();
+
+    const std::vector<Token*>& args() const;
+    const Token* endmarker() const;
+    std::vector<const Expr*> lines() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pEndMarker;
+    std::vector<Token*> m_lArgs;
+};
+
 class UnletStmt : public Stmt
 {
 public:

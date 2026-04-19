@@ -63,6 +63,10 @@ private:
     enum class State
     {
         NONE,
+        HEREDOC_START,  // Got a =<<, but not the first {endmarker}.
+        HEREDOC,        // Got a =<< and the first {endmarker}. If [eval] was specified,
+                        // and we are not inside of an {expr}, or if no [eval] was specified.
+        HEREDOC_EXP,    // Got a =<<, [eval], and inside a heredoc {expr}.
         INTERP_STR,
         INTERP_EXP,
         STRING_CONSTANT,
@@ -71,6 +75,7 @@ private:
 
     State m_eState;
     Token* m_pCurrToken;
+    Token* m_pEndMarker;
     size_t m_nBraceLevel;
     Source m_cSource;
     std::vector<Token*> m_lTokens;

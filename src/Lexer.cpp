@@ -12,6 +12,7 @@ Lexer::Lexer(const Context& acContext) :
     // clang-format off
     m_eState { State::NONE },
     m_pCurrToken { nullptr },
+    m_pEndMarker { nullptr },
     m_nBraceLevel { 0 },
     m_cSource { acContext.source() },
     m_lCommands {
@@ -60,6 +61,8 @@ Lexer::Lexer(const Context& acContext) :
         { "is", "", Token::Type::OP_IS },
         { "isnot", "", Token::Type::OP_ISNOT },
         { "range", "", Token::Type::FN_RANGE },
+        { "trim", "", Token::Type::HD_TRIM },
+        { "eval", "", Token::Type::HD_EVAL },
     },
     m_lSymbols {
         // These symbols should appear most often. Put them first.
@@ -70,6 +73,7 @@ Lexer::Lexer(const Context& acContext) :
         // is matched, not multiple narrower symbols (eg, == comes before =).
         { "...", Token::Type::FN_ELLIPSES },
         { "..=", Token::Type::ASSIGN_CAT_NEW },
+        { "=<<", Token::Type::OP_HEREDOC },
         { "!=", Token::Type::OP_NEQUAL },
         { "!~", Token::Type::OP_NMATCH },
         { "%=", Token::Type::ASSIGN_MODULO },
@@ -215,6 +219,36 @@ bool Lexer::match()
 
     switch (m_eState)
     {
+        case State::HEREDOC:
+            // FIXME (gh-100): Empty string lines are ignored
+            // FIXME (gh-100): Using just line_text() here seg faults?
+            if (m_cSource.column() == 0 && m_cSource.line_text() == m_pEndMarker->str())
+            {
+                push_token(Token::Type::ENDMARKER, m_cSource.word());
+                m_eState = State::NONE;
+                m_pEndMarker = nullptr;
+                return true;
+            }
+            else if (c == '\n')
+            {
+                return push_token(Token::Type::NEWLINE, '\n');
+            }
+            else
+            {
+                // FIXME (gh-100): Verify this makes a valid string
+                return push_token(Token::Type::STRING, m_cSource.remaining_line());
+            }
+
+        case State::HEREDOC_START:
+            if (std::isupper(c))
+            {
+                push_token(Token::Type::ENDMARKER, m_cSource.word());
+                m_eState = State::HEREDOC;
+                m_pEndMarker = m_pCurrToken;
+                return true;
+            }
+
+            // fall-thru intentional
         case State::INTERP_EXP:
             switch (c)
             {
@@ -289,6 +323,9 @@ bool Lexer::match()
                             m_eState = State::LITERAL_STRING;
                         }
 
+                        break;
+                    case Token::Type::OP_HEREDOC:
+                        m_eState = State::HEREDOC_START;
                         break;
                     default:
                         break;
