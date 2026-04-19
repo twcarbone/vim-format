@@ -73,7 +73,7 @@ Lexer::Lexer(const Context& acContext) :
         // is matched, not multiple narrower symbols (eg, == comes before =).
         { "...", Token::Type::FN_ELLIPSES },
         { "..=", Token::Type::ASSIGN_CAT_NEW },
-        { "=<<", Token::Type::OP_HEREDOC },
+        { "=<<", Token::Type::ASSIGN_HEREDOC },
         { "!=", Token::Type::OP_NEQUAL },
         { "!~", Token::Type::OP_NMATCH },
         { "%=", Token::Type::ASSIGN_MODULO },
@@ -324,7 +324,7 @@ bool Lexer::match()
                         }
 
                         break;
-                    case Token::Type::OP_HEREDOC:
+                    case Token::Type::ASSIGN_HEREDOC:
                         m_eState = State::HEREDOC_START;
                         break;
                     default:

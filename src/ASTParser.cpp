@@ -578,8 +578,7 @@ ast::AssignStmt* ASTParser::assign_stmt()
             consume(curr()->type());
             pRhs = expr();
             break;
-        case Token::Type::OP_HEREDOC:
-            // FIXME (gh-100): Rename OP_HEREDOC to ASSIGN_HEREDOC
+        case Token::Type::ASSIGN_HEREDOC:
             pOp = curr();
             consume(curr()->type());
             pRhs = heredoc_expr();
@@ -1007,7 +1006,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::ASSIGN_MODULO:
             case Token::Type::ASSIGN_CAT_NEW:
             case Token::Type::ASSIGN_CAT_OLD:
-            case Token::Type::OP_HEREDOC:
+            case Token::Type::ASSIGN_HEREDOC:
             case Token::Type::SEMICOLON:
                 return pLhs;
             // expr1

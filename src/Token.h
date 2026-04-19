@@ -47,7 +47,6 @@
         X(OP_LOGICAL_NOT) \
         X(OP_BANG) \
         X(OP_METHOD) \
-        X(OP_HEREDOC) \
         X(SIG_ENV) \
         X(SIG_REG) \
         X(SIG_OPT) \
@@ -68,6 +67,7 @@
         X(ASSIGN_MODULO) \
         X(ASSIGN_CAT_OLD) \
         X(ASSIGN_CAT_NEW) \
+        X(ASSIGN_HEREDOC) \
         X(L_PAREN) \
         X(R_PAREN) \
         X(L_BRACKET) \
