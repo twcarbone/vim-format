@@ -2,6 +2,17 @@
 
 #include "ast.h"
 
+// clang-format off
+#define RETURN_CHILDREN_AS(type)                        \
+    std::vector<type> casted;                           \
+    casted.reserve(m_lChildren.size());                 \
+    for (Node* pnode : m_lChildren)                     \
+    {                                                   \
+        casted.push_back(static_cast<type>(pnode));     \
+    }                                                   \
+    return casted
+// clang-format on
+
 using namespace ast;
 
 // Tip 1-4: The final "Sink". Store the vector as the destination type. The move is
@@ -220,14 +231,7 @@ IfStmt::~IfStmt()
 
 std::vector<const IfBranch*> IfStmt::branches() const
 {
-    std::vector<const IfBranch*> lBranches;
-
-    for (Node* pNode : m_lChildren)
-    {
-        lBranches.push_back(static_cast<IfBranch*>(pNode));
-    }
-
-    return lBranches;
+    RETURN_CHILDREN_AS(const IfBranch*);
 }
 
 const Token* IfStmt::ex_endif() const
@@ -607,14 +611,7 @@ DictExpr::~DictExpr()
 
 std::vector<const DictEntry*> DictExpr::entries() const
 {
-    std::vector<const DictEntry*> lEntries;
-
-    for (Node* pNode : m_lChildren)
-    {
-        lEntries.push_back(static_cast<DictEntry*>(pNode));
-    }
-
-    return lEntries;
+    RETURN_CHILDREN_AS(const DictEntry*);
 }
 
 std::string DictExpr::toString() const
@@ -657,14 +654,7 @@ void ListExpr::push(Expr* apExpr)
 
 std::vector<const Expr*> ListExpr::exprs() const
 {
-    std::vector<const Expr*> lExprs;
-
-    for (Node* pNode : m_lChildren)
-    {
-        lExprs.push_back(static_cast<Expr*>(pNode));
-    }
-
-    return lExprs;
+    RETURN_CHILDREN_AS(const Expr*);
 }
 
 std::string ListExpr::toString() const
