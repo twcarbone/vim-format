@@ -126,11 +126,23 @@ Lexer::Lexer(const Context& acContext) :
         { "@", Token::Type::SIG_REG },
         { "'", Token::Type::SQUOTE },
         { "\"", Token::Type::DQUOTE },
-        // clang-format on
     },
     m_lReSpec {
         { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::IDENTIFIER },
-    }
+    },
+    m_gStateTransitions { {
+        { State::NONE,                  State::NONE },
+        { State::HEREDOC_START,         State::HEREDOC },
+        { State::HEREDOC,               State::NONE },
+        { State::HEREDOC_EVAL_START,    State::HEREDOC_EVAL_STR },
+        { State::HEREDOC_EVAL_STR,      State::HEREDOC_EVAL_EXP },
+        { State::HEREDOC_EVAL_EXP,      State::HEREDOC_EVAL_STR },
+        { State::INTERP_STR,            State::INTERP_EXP },
+        { State::INTERP_EXP,            State::INTERP_STR },
+        { State::STRING_CONSTANT,       State::NONE },
+        { State::LITERAL_STRING,        State::NONE },
+    } }
+// clang-format on
 {
 }
 
@@ -219,40 +231,30 @@ bool Lexer::match()
 
     switch (m_eState)
     {
-        case State::HEREDOC:
-            if (m_cSource.line_text() == m_pEndMarker->str())
-            {
-                push_token(Token::Type::ENDMARKER, m_cSource.word());
-                m_eState = State::NONE;
-                m_pEndMarker = nullptr;
-                return true;
-            }
-            else if (c == '\n')
-            {
-                if (m_lTokens.back()->type() == Token::Type::NEWLINE)
-                {
-                    return push_token(Token::Type::STRING, std::string { "" });
-                }
-
-                return push_token(Token::Type::NEWLINE, '\n');
-            }
-            else
-            {
-                // FIXME (gh-100): Verify this makes a valid string
-                return push_token(Token::Type::STRING, m_cSource.remaining_line());
-            }
-
+        case State::HEREDOC_EVAL_START:
         case State::HEREDOC_START:
             if (std::isupper(c))
             {
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
-                m_eState = State::HEREDOC;
                 m_pEndMarker = m_pCurrToken;
+                next_state();
                 return true;
             }
 
             // fall-thru intentional
         case State::INTERP_EXP:
+            switch (c)
+            {
+                case '"':
+                    m_eState = State::NONE;
+                    return push_token(Token::Type::DQUOTE, c);
+                case '\'':
+                    m_eState = State::NONE;
+                    return push_token(Token::Type::SQUOTE, c);
+            }
+
+            // fall-thru intentional
+        case State::HEREDOC_EVAL_EXP:
             switch (c)
             {
                 case '{':
@@ -261,7 +263,7 @@ bool Lexer::match()
                 case '}':
                     if (m_nBraceLevel == 0)
                     {
-                        m_eState = State::INTERP_STR;
+                        next_state();
                     }
                     else
                     {
@@ -269,12 +271,6 @@ bool Lexer::match()
                     }
 
                     return push_token(Token::Type::R_BRACE, c);
-                case '"':
-                    m_eState = State::NONE;
-                    return push_token(Token::Type::DQUOTE, c);
-                case '\'':
-                    m_eState = State::NONE;
-                    return push_token(Token::Type::SQUOTE, c);
             }
 
             // fall-thru intentional
@@ -294,13 +290,11 @@ bool Lexer::match()
                     return push_token(Token::Type::SIG_ENV, c);
             }
 
-            // These have special logic and need to happen before symbol matching.
             if (push_register() || push_comment())
             {
                 return true;
             }
 
-            // If we match a symbol, it may require a state change.
             if (push_symbol())
             {
                 switch (m_pCurrToken->type())
@@ -337,7 +331,18 @@ bool Lexer::match()
                 return true;
             }
 
-            // Checking for a RegEx is slow and intentionally a last resort.
+            if (push_keyword())
+            {
+                switch (m_pCurrToken->type())
+                {
+                    case Token::Type::HD_EVAL:
+                        m_eState = State::HEREDOC_EVAL_START;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             if (push_number() || push_command() || push_keyword() || push_regex())
             {
                 return true;
@@ -347,12 +352,6 @@ bool Lexer::match()
         case State::INTERP_STR:
             switch (c)
             {
-                case '{':
-                    m_eState = State::INTERP_EXP;
-                    return push_token(Token::Type::L_BRACE, c);
-                case '}':
-                    // test/error/E1278_1.out
-                    throw VimError("E1278", m_cSource.context());
                 case '"':
                     m_eState = State::NONE;
                     return push_token(Token::Type::DQUOTE, c);
@@ -361,29 +360,64 @@ bool Lexer::match()
                     return push_token(Token::Type::SQUOTE, c);
             }
 
-            return push_string("{}\"'");
+            // fall-thru intentional
+        case State::HEREDOC_EVAL_STR:
+            switch (c)
+            {
+                case '{':
+                    next_state();
+                    return push_token(Token::Type::L_BRACE, c);
+                case '}':
+                    throw VimError("E1278", m_cSource.context());
+            }
+
+            // fall-thru intentional
+        case State::HEREDOC:
+            if (m_pEndMarker != nullptr && (m_cSource.line_text() == m_pEndMarker->str()))
+            {
+                push_token(Token::Type::ENDMARKER, m_cSource.word());
+                m_pEndMarker = nullptr;
+                next_state();
+                return true;
+            }
+            else if (c == '\n')
+            {
+                if (m_lTokens.back()->type() == Token::Type::NEWLINE)
+                {
+                    return push_token(Token::Type::STRING, std::string { "" });
+                }
+
+                return push_token(Token::Type::NEWLINE, '\n');
+            }
+
+            return push_string();
         case State::LITERAL_STRING:
             if (c == '\'')
             {
-                m_eState = State::NONE;
+                next_state();
                 return push_token(Token::Type::SQUOTE, c);
             }
 
-            return push_string("'");
+            return push_string();
         case State::STRING_CONSTANT:
             if (c == '"')
             {
-                m_eState = State::NONE;
+                next_state();
                 return push_token(Token::Type::DQUOTE, c);
             }
 
             // TODO (gh-4): Add support for escaped quotes within a string token
-            return push_string("\"");
+            return push_string();
         default:
             throw std::runtime_error("Lexer::match(): fall-thru to unknown state");
     }
 
     return false;
+}
+
+void Lexer::next_state()
+{
+    m_eState = m_gStateTransitions[static_cast<int>(m_eState)][1];
 }
 
 void Lexer::freeTokens()
@@ -780,9 +814,31 @@ bool Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
     return true;
 }
 
-bool Lexer::push_string(const std::string& asRightDelimiters)
+bool Lexer::push_string()
 {
-    size_t lnSize = m_cSource.remaining_text().find_first_of(asRightDelimiters, 1);
+    std::string lsRightDelimiters;
+    switch (m_eState)
+    {
+        case State::HEREDOC:
+            lsRightDelimiters = "\n";
+            break;
+        case State::HEREDOC_EVAL_STR:
+            lsRightDelimiters = "{}\n";
+            break;
+        case State::INTERP_STR:
+            lsRightDelimiters = "{}\"'";
+            break;
+        case State::LITERAL_STRING:
+            lsRightDelimiters = "'";
+            break;
+        case State::STRING_CONSTANT:
+            lsRightDelimiters = "\"";
+            break;
+        default:
+            throw std::runtime_error("attempted call to Lexer::push_string when not in string state");
+    }
+
+    size_t lnSize = m_cSource.remaining_text().find_first_of(lsRightDelimiters, 1);
     std::string_view lsStr = m_cSource.remaining_text().substr(0, lnSize);
     return push_token(Token::Type::STRING, lsStr);
 }

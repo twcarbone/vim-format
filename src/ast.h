@@ -424,6 +424,9 @@ public:
     const Token* rdelim() const;
 
 protected:
+    std::string toString(const std::string& name) const;
+    std::string str_repr(Token* str) const;
+
     Token* m_pStr;
     Token* m_pLDelim;
     Token* m_pRDelim;

@@ -280,16 +280,13 @@ void PrettyPrinter::visit(const ast::HereDocExpr* apHereDocExpr)
     }
 
     write(apHereDocExpr->endmarker()->str());
-    write_eol();
+    write('\n');
 
     for (const ast::Expr* pExpr : apHereDocExpr->lines())
     {
-        write_bol();
         pExpr->accept(*this);
-        write_eol();
     }
 
-    write_bol();
     write(apHereDocExpr->endmarker()->str());
     write_eol();
 }

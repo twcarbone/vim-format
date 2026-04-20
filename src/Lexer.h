@@ -60,17 +60,23 @@ public:
     const Source& source() const;
 
 private:
-    enum class State
+    enum class State : int
     {
-        NONE,
-        HEREDOC_START,  // Got a =<<, but not the first {endmarker}.
-        HEREDOC,        // Got a =<< and the first {endmarker}. If [eval] was specified,
-                        // and we are not inside of an {expr}, or if no [eval] was specified.
-        HEREDOC_EXP,    // Got a =<<, [eval], and inside a heredoc {expr}.
-        INTERP_STR,
-        INTERP_EXP,
-        STRING_CONSTANT,
-        LITERAL_STRING,
+        NONE = 0,
+        HEREDOC_START = 1,
+        HEREDOC = 2,
+        HEREDOC_EVAL_START = 3,
+        HEREDOC_EVAL_STR = 4,
+        HEREDOC_EVAL_EXP = 5,
+        INTERP_STR = 6,
+        INTERP_EXP = 7,
+        STRING_CONSTANT = 8,
+        LITERAL_STRING = 9,
+    };
+
+    enum class Event : int
+    {
+        ENDMARKER = 0,
     };
 
     State m_eState;
@@ -84,6 +90,9 @@ private:
     const std::vector<Keyword> m_lKeywords;
     const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
+    const std::array<const std::array<State, 2>, 10> m_gStateTransitions;
+
+    void next_state();
 
     bool match();
     void freeTokens();
@@ -95,7 +104,7 @@ private:
     bool push_token(Token::Type type, const std::string& lexeme);
     bool push_regex();
     bool push_symbol();
-    bool push_string(const std::string& right_delimiters);
+    bool push_string();
     bool push_command();
     bool push_keyword();
     bool push_comment();

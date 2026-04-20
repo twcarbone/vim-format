@@ -607,6 +607,7 @@ ast::HereDocExpr* ASTParser::heredoc_expr()
             default:
                 pEndMarker = curr();
                 consume(Token::Type::ENDMARKER);
+                consume(Token::Type::NEWLINE);
                 goto args_end;
         }
 
@@ -615,28 +616,41 @@ ast::HereDocExpr* ASTParser::heredoc_expr()
 
 args_end:
 
+    Token* pLDelim = nullptr;
+    Token* pRDelim = nullptr;
+    Token* pStr = nullptr;
+
     while (true)
     {
         switch (curr()->type())
         {
+            case Token::Type::L_BRACE:
+                pRDelim = curr();
+                consume(Token::Type::L_BRACE);
+                llLines.push_back(new ast::LiteralStr(pStr, pLDelim, pRDelim));
+                pLDelim = nullptr;
+                llLines.push_back(expr());
+                break;
             case Token::Type::NEWLINE:
+                pRDelim = curr();
+                consume(Token::Type::NEWLINE);
+                llLines.push_back(new ast::LiteralStr(pStr, pLDelim, pRDelim));
+                pLDelim = nullptr;
+                break;
+            case Token::Type::R_BRACE:
+                pLDelim = curr();
+                consume(Token::Type::R_BRACE);
                 break;
             case Token::Type::STRING:
-            {
-                Token* pLDelim = nullptr;
-                Token* pRDelim = nullptr;
-                ast::LiteralStr* pStr = new ast::LiteralStr(curr(), pLDelim, pRDelim);
-                llLines.push_back(pStr);
+                pStr = curr();
+                consume(Token::Type::STRING);
                 break;
-            }
             case Token::Type::ENDMARKER:
                 consume(Token::Type::ENDMARKER);
                 goto lines_end;
             default:
                 break;
         }
-
-        consume(curr()->type());
     }
 
 lines_end:
