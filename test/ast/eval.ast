@@ -140,6 +140,27 @@ Program
           LiteralStr ;;        {a + b};\n;
         InterpStr
           LiteralStr ;;;\n;
+    AssignStmt =<< <>
+      Var heredoc_eval_items
+        NULL
+      HereDocExpr eval END
+        InterpStr
+          LiteralStr ;;;{;
+          BinaryOp +
+            Var &tpm
+              NULL
+            Literal 2
+          LiteralStr ;}; is 12;\n;
+        InterpStr
+          LiteralStr ;;    END ;{;
+          Var c
+            NULL
+          LiteralStr ;}; is a list;\n;
+        InterpStr
+          LiteralStr ;;    echo ;{;
+          Var @@
+            NULL
+          LiteralStr ;};;\n;
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>

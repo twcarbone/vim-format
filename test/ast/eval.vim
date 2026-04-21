@@ -30,6 +30,11 @@ let heredoc_items =<< trim END
         {a + b}
 
 END
+let heredoc_eval_items =<< eval END
+{&tpm + 2} is 12
+    END {c} is a list
+    echo {@@}
+END
 
 " for
 
