@@ -592,7 +592,6 @@ ast::AssignStmt* ASTParser::assign_stmt()
 
 ast::HereDocExpr* ASTParser::heredoc_expr()
 {
-    std::vector<ast::Expr*> llLines;
     std::vector<Token*> lModifiers;
     Token* pEndMarker = nullptr;
 
@@ -603,6 +602,7 @@ ast::HereDocExpr* ASTParser::heredoc_expr()
             case Token::Type::HD_TRIM:
             case Token::Type::HD_EVAL:
                 lModifiers.push_back(curr());
+                consume(curr()->type());
                 break;
             default:
                 pEndMarker = curr();
@@ -610,12 +610,13 @@ ast::HereDocExpr* ASTParser::heredoc_expr()
                 consume(Token::Type::NEWLINE);
                 goto args_end;
         }
-
-        consume(curr()->type());
     }
 
 args_end:
 
+    std::vector<ast::Expr*> llLines;
+    ast::LiteralStr* pLiteralStr = nullptr;
+    ast::InterpStr* pInterpStr = new ast::InterpStr();
     Token* pLDelim = nullptr;
     Token* pRDelim = nullptr;
     Token* pStr = nullptr;
@@ -627,15 +628,25 @@ args_end:
             case Token::Type::L_BRACE:
                 pRDelim = curr();
                 consume(Token::Type::L_BRACE);
-                llLines.push_back(new ast::LiteralStr(pStr, pLDelim, pRDelim));
-                pLDelim = nullptr;
-                llLines.push_back(expr());
+
+                pInterpStr->push(new ast::LiteralStr(pStr, pLDelim, pRDelim));
+
+                pLDelim = pRDelim = pStr = nullptr;
+
+                pInterpStr->push(expr());
+
                 break;
             case Token::Type::NEWLINE:
                 pRDelim = curr();
                 consume(Token::Type::NEWLINE);
-                llLines.push_back(new ast::LiteralStr(pStr, pLDelim, pRDelim));
-                pLDelim = nullptr;
+
+                pInterpStr->push(new ast::LiteralStr(pStr, pLDelim, pRDelim));
+
+                pLDelim = pRDelim = pStr = nullptr;
+
+                llLines.push_back(pInterpStr);
+                pInterpStr = new ast::InterpStr();
+
                 break;
             case Token::Type::R_BRACE:
                 pLDelim = curr();

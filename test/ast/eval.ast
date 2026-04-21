@@ -128,12 +128,18 @@ Program
       Var heredoc_items
         NULL
       HereDocExpr trim END
-        LiteralStr ;;;\n;
-        LiteralStr ;;    one;\n;
-        LiteralStr ;;        END;\n;
-        LiteralStr ;;;\n;
-        LiteralStr ;;        {a + b};\n;
-        LiteralStr ;;;\n;
+        InterpStr
+          LiteralStr ;;;\n;
+        InterpStr
+          LiteralStr ;;    one;\n;
+        InterpStr
+          LiteralStr ;;        END;\n;
+        InterpStr
+          LiteralStr ;;;\n;
+        InterpStr
+          LiteralStr ;;        {a + b};\n;
+        InterpStr
+          LiteralStr ;;;\n;
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
