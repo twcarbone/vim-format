@@ -101,6 +101,9 @@ Lexer::Lexer(const Context& acContext) :
         { "s:", Token::Type::SCOPE_S },
         { "a:", Token::Type::SCOPE_A },
         { "v:", Token::Type::SCOPE_V },
+        { "$'", Token::Type::STR_INTERP_SQUOTE },
+        { "$\"", Token::Type::STR_INTERP_DQUOTE },
+        { "$", Token::Type::SIG_ENV },
         { "!", Token::Type::GEN_EXCLAMATION },
         { "#", Token::Type::OP_MATCH_CASE },
         { "%", Token::Type::OP_MODULO },
@@ -275,21 +278,6 @@ bool Lexer::match()
 
             // fall-thru intentional
         case State::NONE:
-            switch (c)
-            {
-                case '$':
-                    if (m_cSource.remaining_text().size() > 1)
-                    {
-                        const char c_next = m_cSource.remaining_text().at(1);
-                        if (c_next == '"' || c_next == '\'')
-                        {
-                            return push_token(Token::Type::STR_INTERP, c);
-                        }
-                    }
-
-                    return push_token(Token::Type::SIG_ENV, c);
-            }
-
             if (push_register() || push_comment())
             {
                 return true;
@@ -300,29 +288,17 @@ bool Lexer::match()
                 switch (m_pCurrToken->type())
                 {
                     case Token::Type::DQUOTE:
-                        if (m_lTokens.back()->type() == Token::Type::STR_INTERP)
-                        {
-                            m_eState = State::INTERP_STR;
-                        }
-                        else
-                        {
-                            m_eState = State::STRING_CONSTANT;
-                        }
-
+                        m_eState = State::STRING_CONSTANT;
                         break;
                     case Token::Type::SQUOTE:
-                        if (m_lTokens.back()->type() == Token::Type::STR_INTERP)
-                        {
-                            m_eState = State::INTERP_STR;
-                        }
-                        else
-                        {
-                            m_eState = State::LITERAL_STRING;
-                        }
-
+                        m_eState = State::LITERAL_STRING;
                         break;
                     case Token::Type::ASSIGN_HEREDOC:
                         m_eState = State::HEREDOC_START;
+                        break;
+                    case Token::Type::STR_INTERP_DQUOTE:
+                    case Token::Type::STR_INTERP_SQUOTE:
+                        m_eState = State::INTERP_STR;
                         break;
                     default:
                         break;

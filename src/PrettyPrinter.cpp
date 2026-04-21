@@ -446,8 +446,6 @@ void PrettyPrinter::visit(const ast::StrConst* apStrConst)
 
 void PrettyPrinter::visit(const ast::InterpStr* apInterpStr)
 {
-    write('$');
-
     for (ast::Node* pNode : apInterpStr->children())
     {
         pNode->accept(*this);

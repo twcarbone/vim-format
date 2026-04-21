@@ -541,19 +541,19 @@ Program
       LiteralStr ;';string with "embedded" double quote;';
     ExprCmd echo <>
       InterpStr
-        LiteralStr ;';Before ;{;
+        LiteralStr ;$';Before ;{;
         Var bb
           NULL
         LiteralStr ;}; after;';
     ExprCmd echo <>
       InterpStr
-        LiteralStr ;';;{;
+        LiteralStr ;$';;{;
         Var bb
           NULL
         LiteralStr ;}; after;';
     ExprCmd echo <>
       InterpStr
-        LiteralStr ;';Before ;{;
+        LiteralStr ;$';Before ;{;
         Var bb
           NULL
         LiteralStr ;};;';
@@ -569,19 +569,19 @@ Program
       StrConst ;";;";
     ExprCmd echo <>
       InterpStr
-        StrConst ;";Before ;{;
+        StrConst ;$";Before ;{;
         Var bb
           NULL
         StrConst ;}; after;";
     ExprCmd echo <>
       InterpStr
-        StrConst ;";;{;
+        StrConst ;$";;{;
         Var bb
           NULL
         StrConst ;}; after;";
     ExprCmd echo <>
       InterpStr
-        StrConst ;";Before ;{;
+        StrConst ;$";Before ;{;
         Var bb
           NULL
         StrConst ;};;";

@@ -861,47 +861,49 @@ ast::InterpStr* ASTParser::interp_str()
     Token* pRDelim = nullptr;
     Token* pStr = nullptr;
 
-    consume(Token::Type::STR_INTERP);
-    Token::Type leQuoteType = curr()->type();
+    Token::Type eStrEndQuoteType;
+    switch (curr()->type())
+    {
+        case Token::Type::STR_INTERP_SQUOTE:
+            eStrEndQuoteType = Token::Type::SQUOTE;
+            break;
+        case Token::Type::STR_INTERP_DQUOTE:
+            eStrEndQuoteType = Token::Type::DQUOTE;
+            break;
+        default:
+            break;
+    }
 
-    bool bLoop = true;
-    while (bLoop)
+    pLDelim = curr();
+    consume(curr()->type());
+
+    while (true)
     {
         switch (curr()->type())
         {
             case Token::Type::SQUOTE:
             case Token::Type::DQUOTE:
-                if (prev()->type() == Token::Type::STR_INTERP)
+                pRDelim = curr();
+                consume(eStrEndQuoteType);
+
+                if (eStrEndQuoteType == Token::Type::SQUOTE)
                 {
-                    // At opening quote
-                    pLDelim = curr();
+                    pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
                 }
                 else
                 {
-                    // At closing quote
-                    pRDelim = curr();
-
-                    if (leQuoteType == Token::Type::SQUOTE)
-                    {
-                        pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
-                    }
-                    else
-                    {
-                        pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
-                    }
-
-                    pInterpStr->push(pStrExpr);
-                    pStr = nullptr;
-                    bLoop = false;
+                    pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
                 }
 
-                consume(leQuoteType);
-                break;
+                pInterpStr->push(pStrExpr);
+                pStr = nullptr;
+
+                goto string_end;
             case Token::Type::L_BRACE:
                 pRDelim = curr();
                 consume(Token::Type::L_BRACE);
 
-                if (leQuoteType == Token::Type::SQUOTE)
+                if (eStrEndQuoteType == Token::Type::SQUOTE)
                 {
                     pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
                 }
@@ -925,6 +927,7 @@ ast::InterpStr* ASTParser::interp_str()
         }
     }
 
+string_end:
     return pInterpStr;
 }
 
@@ -949,7 +952,8 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
         case Token::Type::DQUOTE:
             pLhs = str_expr();
             break;
-        case Token::Type::STR_INTERP:
+        case Token::Type::STR_INTERP_SQUOTE:
+        case Token::Type::STR_INTERP_DQUOTE:
             pLhs = interp_str();
             break;
         case Token::Type::SIG_ENV:
