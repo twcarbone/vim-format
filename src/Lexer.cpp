@@ -244,7 +244,7 @@ bool Lexer::match()
                 return true;
             }
 
-            // fall-thru intentional
+            [[fallthrough]];
         case State::INTERP_EXP:
             switch (c)
             {
@@ -256,7 +256,7 @@ bool Lexer::match()
                     return push_token(Token::Type::SQUOTE, c);
             }
 
-            // fall-thru intentional
+            [[fallthrough]];
         case State::HEREDOC_EVAL_EXP:
             switch (c)
             {
@@ -276,7 +276,7 @@ bool Lexer::match()
                     return push_token(Token::Type::R_BRACE, c);
             }
 
-            // fall-thru intentional
+            [[fallthrough]];
         case State::NONE:
             if (push_register() || push_comment())
             {
@@ -336,7 +336,7 @@ bool Lexer::match()
                     return push_token(Token::Type::SQUOTE, c);
             }
 
-            // fall-thru intentional
+            [[fallthrough]];
         case State::HEREDOC_EVAL_STR:
             switch (c)
             {
@@ -347,7 +347,7 @@ bool Lexer::match()
                     throw VimError("E1278", m_cSource.context());
             }
 
-            // fall-thru intentional
+            [[fallthrough]];
         case State::HEREDOC:
             if (m_pEndMarker != nullptr && (m_cSource.line_text() == m_pEndMarker->str()))
             {
@@ -562,6 +562,8 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                         return;
                 }
             }
+
+            [[fallthrough]];
         case Token::Type::IN:
             for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
             {
@@ -580,6 +582,8 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                         return;
                 }
             }
+
+            [[fallthrough]];
         case Token::Type::OP_IS:
         case Token::Type::OP_ISNOT:
             for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
@@ -604,6 +608,8 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                         return;
                 }
             }
+
+            [[fallthrough]];
         default:
             throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
     }

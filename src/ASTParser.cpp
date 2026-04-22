@@ -120,7 +120,7 @@ ast::Var* ASTParser::var()
                 case Token::Type::SCOPE_L:
                     pScope = new ast::ScopeExpr(curr());
                     consume(curr()->type());
-                    // Fall-thru intentional
+                    [[fallthrough]];
                 case Token::Type::IDENTIFIER:
                     pName = curr();
                     consume(Token::Type::IDENTIFIER);
@@ -140,7 +140,7 @@ ast::Var* ASTParser::var()
         case Token::Type::SCOPE_L:
             pScope = new ast::ScopeExpr(curr());
             consume(curr()->type());
-            // Fall-thru intentional
+            [[fallthrough]];
         case Token::Type::IDENTIFIER:
             pName = curr();
             consume(Token::Type::IDENTIFIER);
@@ -283,7 +283,7 @@ ast::IfStmt* ASTParser::if_stmt()
             case Token::Type::ENDIF:
                 pExEndIf = curr();
                 consume(Token::Type::ENDIF);
-                // Fall-thru intentional
+                [[fallthrough]];
             default:
                 goto ifbranches_end;
         }
