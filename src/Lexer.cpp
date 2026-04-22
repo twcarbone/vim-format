@@ -6,7 +6,12 @@
 #include "Token.h"
 #include "util.h"
 
+// Tip 2-1: const and constexpr variables declared at global scope have internal linkage
+// by default. They do not need to be marked static or wrapped in an anonymous namespace
+// to hide from then linker.
 const std::string g_sKeyWordDelimiters = "! \n\t";
+const char DQUOTE = '"';
+const char SQUOTE = '\'';
 
 Lexer::Lexer(const Context& acContext) :
     // clang-format off
@@ -140,8 +145,10 @@ Lexer::Lexer(const Context& acContext) :
         { State::HEREDOC_EVAL_START,    State::HEREDOC_EVAL_STR },
         { State::HEREDOC_EVAL_STR,      State::HEREDOC_EVAL_EXP },
         { State::HEREDOC_EVAL_EXP,      State::HEREDOC_EVAL_STR },
-        { State::INTERP_STR,            State::INTERP_EXP },
-        { State::INTERP_EXP,            State::INTERP_STR },
+        { State::INTERP_STR_SQUOTE,     State::INTERP_EXP_SQUOTE },
+        { State::INTERP_STR_DQUOTE,     State::INTERP_EXP_DQUOTE },
+        { State::INTERP_EXP_SQUOTE,     State::INTERP_STR_SQUOTE },
+        { State::INTERP_EXP_DQUOTE,     State::INTERP_STR_DQUOTE },
         { State::STRING_CONSTANT,       State::NONE },
         { State::LITERAL_STRING,        State::NONE },
     } }
@@ -245,15 +252,19 @@ bool Lexer::match()
             }
 
             [[fallthrough]];
-        case State::INTERP_EXP:
-            switch (c)
+        case State::INTERP_EXP_SQUOTE:
+            if (c == SQUOTE)
             {
-                case '"':
-                    m_eState = State::NONE;
-                    return push_token(Token::Type::DQUOTE, c);
-                case '\'':
-                    m_eState = State::NONE;
-                    return push_token(Token::Type::SQUOTE, c);
+                m_eState = State::NONE;
+                return push_token(Token::Type::SQUOTE, c);
+            }
+
+            [[fallthrough]];
+        case State::INTERP_EXP_DQUOTE:
+            if (c == DQUOTE)
+            {
+                m_eState = State::NONE;
+                return push_token(Token::Type::DQUOTE, c);
             }
 
             [[fallthrough]];
@@ -287,18 +298,20 @@ bool Lexer::match()
             {
                 switch (m_pCurrToken->type())
                 {
+                    case Token::Type::ASSIGN_HEREDOC:
+                        m_eState = State::HEREDOC_START;
+                        break;
                     case Token::Type::DQUOTE:
                         m_eState = State::STRING_CONSTANT;
                         break;
                     case Token::Type::SQUOTE:
                         m_eState = State::LITERAL_STRING;
                         break;
-                    case Token::Type::ASSIGN_HEREDOC:
-                        m_eState = State::HEREDOC_START;
-                        break;
                     case Token::Type::STR_INTERP_DQUOTE:
+                        m_eState = State::INTERP_STR_DQUOTE;
+                        break;
                     case Token::Type::STR_INTERP_SQUOTE:
-                        m_eState = State::INTERP_STR;
+                        m_eState = State::INTERP_STR_SQUOTE;
                         break;
                     default:
                         break;
@@ -325,15 +338,19 @@ bool Lexer::match()
             }
 
             break;
-        case State::INTERP_STR:
-            switch (c)
+        case State::INTERP_STR_SQUOTE:
+            if (c == SQUOTE)
             {
-                case '"':
-                    m_eState = State::NONE;
-                    return push_token(Token::Type::DQUOTE, c);
-                case '\'':
-                    m_eState = State::NONE;
-                    return push_token(Token::Type::SQUOTE, c);
+                m_eState = State::NONE;
+                return push_token(Token::Type::SQUOTE, c);
+            }
+
+            [[fallthrough]];
+        case State::INTERP_STR_DQUOTE:
+            if (c == DQUOTE)
+            {
+                m_eState = State::NONE;
+                return push_token(Token::Type::DQUOTE, c);
             }
 
             [[fallthrough]];
@@ -368,7 +385,7 @@ bool Lexer::match()
 
             return push_string();
         case State::LITERAL_STRING:
-            if (c == '\'')
+            if (c == SQUOTE)
             {
                 next_state();
                 return push_token(Token::Type::SQUOTE, c);
@@ -376,7 +393,7 @@ bool Lexer::match()
 
             return push_string();
         case State::STRING_CONSTANT:
-            if (c == '"')
+            if (c == DQUOTE)
             {
                 next_state();
                 return push_token(Token::Type::DQUOTE, c);
@@ -807,8 +824,11 @@ bool Lexer::push_string()
         case State::HEREDOC_EVAL_STR:
             lsRightDelimiters = "{}\n";
             break;
-        case State::INTERP_STR:
-            lsRightDelimiters = "{}\"'";
+        case State::INTERP_STR_SQUOTE:
+            lsRightDelimiters = "{}'";
+            break;
+        case State::INTERP_STR_DQUOTE:
+            lsRightDelimiters = "{}\"";
             break;
         case State::LITERAL_STRING:
             lsRightDelimiters = "'";

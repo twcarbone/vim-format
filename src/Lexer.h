@@ -68,10 +68,12 @@ private:
         HEREDOC_EVAL_START = 3,
         HEREDOC_EVAL_STR = 4,
         HEREDOC_EVAL_EXP = 5,
-        INTERP_STR = 6,
-        INTERP_EXP = 7,
-        STRING_CONSTANT = 8,
-        LITERAL_STRING = 9,
+        INTERP_STR_SQUOTE = 6,
+        INTERP_STR_DQUOTE = 7,
+        INTERP_EXP_SQUOTE = 8,
+        INTERP_EXP_DQUOTE = 9,
+        STRING_CONSTANT = 10,
+        LITERAL_STRING = 11,
     };
 
     enum class Event : int
@@ -90,7 +92,7 @@ private:
     const std::vector<Keyword> m_lKeywords;
     const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
-    const std::array<const std::array<State, 2>, 10> m_gStateTransitions;
+    const std::array<const std::array<State, 2>, 20> m_gStateTransitions;
 
     void next_state();
 
