@@ -589,6 +589,12 @@ Program
     ExprCmd echo <>
       LiteralStr ;';{bb} after;';
     ExprCmd echo <>
+      InterpStr
+        LiteralStr ;$';;{;
+        Var bb
+          NULL
+        LiteralStr ;}; "after";';
+    ExprCmd echo <>
       LiteralStr ;';Before {bb};';
     ExprCmd echo <>
       LiteralStr ;';$var;';
@@ -616,6 +622,12 @@ Program
       StrConst ;";Before {bb} after;";
     ExprCmd echo <>
       StrConst ;";{bb} after;";
+    ExprCmd echo <>
+      InterpStr
+        StrConst ;$";;{;
+        Var bb
+          NULL
+        StrConst ;}; 'after';";
     ExprCmd echo <>
       StrConst ;";Before {bb};";
     ExprCmd echo <>
