@@ -1153,30 +1153,6 @@
      4106807293  151   :lmap          :lm[ap] {lhs}
      2254207116  152   :cmap          :cm[ap] {lhs}
      0974267458  153   :tmap          :tma[p] {lhs}
-     3310683684  433   :map           :map   :noremap  :unmap     Normal, Visual, Select, Operator-pending
-     1557153038  434   :nmap          :nmap  :nnoremap :nunmap    Normal
-     0888672642  435   :vmap          :vmap  :vnoremap :vunmap    Visual and Select
-     3006180404  436   :smap          :smap  :snoremap :sunmap    Select
-     3644986846  437   :xmap          :xmap  :xnoremap :xunmap    Visual
-     1369179339  438   :omap          :omap  :onoremap :ounmap    Operator-pending
-     2255882549  439   :map!          :map!  :noremap! :unmap!    Insert and Command-line
-     0494846613  440   :imap          :imap  :inoremap :iunmap    Insert
-     3878092769  441   :lmap          :lmap  :lnoremap :lunmap    Insert, Command-line, Lang-Arg
-     4199674053  442   :cmap          :cmap  :cnoremap :cunmap    Command-line
-     2787540446  443   :tmap          :tmap  :tnoremap :tunmap    Terminal-Job
-     2198665174  464   :map           :map   :noremap   :unmap   :mapclear
-     4265675475  465   :nmap          :nmap  :nnoremap  :nunmap  :nmapclear
-     1767801723  466   :vmap          :vmap  :vnoremap  :vunmap  :vmapclear
-     4028605888  467   :omap          :omap  :onoremap  :ounmap  :omapclear
-     2875993722  469   :nunmap        :nunmap can also be used outside of a monastery.
-     1808476213  476   :sunmap        :sunmap after defining the mapping.
-     1767801723  480   :vmap          :vmap  :vnoremap  :vunmap  :vmapclear
-     1047271817  481   :xmap          :xmap  :xnoremap  :xunmap  :xmapclear
-     1585090596  482   :smap          :smap  :snoremap  :sunmap  :smapclear
-     0219457907  489   :map!          :map!  :noremap!  :unmap!  :mapclear!
-     3587721130  490   :imap          :imap  :inoremap  :iunmap  :imapclear
-     3146801428  491   :cmap          :cmap  :cnoremap  :cunmap  :cmapclear
-     3808187637  492   :lmap          :lmap  :lnoremap  :lunmap  :lmapclear
      0434961030  1304  :abbreviate    :ab[breviate]
      1624070554  1320  :abbreviate    :ab[breviate] {lhs}
      0297968621  1325  :abbreviate    :ab[breviate] [<expr>] [<buffer>] {lhs} {rhs}
