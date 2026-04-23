@@ -76,11 +76,6 @@ private:
         LITERAL_STRING = 11,
     };
 
-    enum class Event : int
-    {
-        ENDMARKER = 0,
-    };
-
     State m_eState;
     Token* m_pCurrToken;
     Token* m_pEndMarker;
