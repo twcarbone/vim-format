@@ -90,6 +90,14 @@ TEST_F(SingleTokenTest, single_integer)
     do_test("0B1101", Token::Type::INTEGER);
 }
 
+TEST_F(SingleTokenTest, single_blob)
+{
+    do_test("0z", Token::Type::BLOB);
+    do_test("0Z", Token::Type::BLOB);
+    do_test("0Zaabb", Token::Type::BLOB);
+    do_test("0Z1234", Token::Type::BLOB);
+}
+
 //
 // single_float
 //

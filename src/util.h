@@ -8,6 +8,9 @@
 namespace vf
 {
 
+const std::string DIGITS_BASE_10 = "0123456789";
+const std::string DIGITS_BASE_16 = "0123456789abcdefABCDEF";
+
 std::string read_file(const std::filesystem::path& path);
 
 /**

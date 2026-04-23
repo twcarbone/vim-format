@@ -1,0 +1,5 @@
+E973: Blob literal should have an even number of hex characters
+
+../../test/error/E973_1.vim:1:12
+ 1 | let blob = 0z3fb
+   |            ^
