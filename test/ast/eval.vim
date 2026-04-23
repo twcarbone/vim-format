@@ -22,6 +22,19 @@ let &l:tpm = 10
 unlet cc
 unlet! cc
 unl! g:does_not_exist
+let heredoc_items =<< trim END
+
+    one
+        END
+
+        {a + b}
+
+END
+let heredoc_eval_items =<< eval END
+{&tpm + 2} is 12
+    END {c} is a list
+    echo {@@}
+END
 
 " for
 
@@ -145,6 +158,7 @@ echo $'{bb} after'
 echo $'Before {bb}'
 echo 'Before bb} after'
 echo '{bb} after'
+echo $'{bb} "after"'
 echo 'Before {bb}'
 echo '$var'
 echo ""
@@ -153,5 +167,6 @@ echo $"{bb} after"
 echo $"Before {bb}"
 echo "Before {bb} after"
 echo "{bb} after"
+echo $"{bb} 'after'"
 echo "Before {bb}"
 echo "$var"

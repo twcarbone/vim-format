@@ -2,6 +2,17 @@
 
 #include "ast.h"
 
+// clang-format off
+#define RETURN_CHILDREN_AS(type)                        \
+    std::vector<type> casted;                           \
+    casted.reserve(m_lChildren.size());                 \
+    for (Node* pnode : m_lChildren)                     \
+    {                                                   \
+        casted.push_back(static_cast<type>(pnode));     \
+    }                                                   \
+    return casted
+// clang-format on
+
 using namespace ast;
 
 // Tip 1-4: The final "Sink". Store the vector as the destination type. The move is
@@ -220,14 +231,7 @@ IfStmt::~IfStmt()
 
 std::vector<const IfBranch*> IfStmt::branches() const
 {
-    std::vector<const IfBranch*> lBranches;
-
-    for (Node* pNode : m_lChildren)
-    {
-        lBranches.push_back(static_cast<IfBranch*>(pNode));
-    }
-
-    return lBranches;
+    RETURN_CHILDREN_AS(const IfBranch*);
 }
 
 const Token* IfStmt::ex_endif() const
@@ -607,14 +611,7 @@ DictExpr::~DictExpr()
 
 std::vector<const DictEntry*> DictExpr::entries() const
 {
-    std::vector<const DictEntry*> lEntries;
-
-    for (Node* pNode : m_lChildren)
-    {
-        lEntries.push_back(static_cast<DictEntry*>(pNode));
-    }
-
-    return lEntries;
+    RETURN_CHILDREN_AS(const DictEntry*);
 }
 
 std::string DictExpr::toString() const
@@ -657,14 +654,7 @@ void ListExpr::push(Expr* apExpr)
 
 std::vector<const Expr*> ListExpr::exprs() const
 {
-    std::vector<const Expr*> lExprs;
-
-    for (Node* pNode : m_lChildren)
-    {
-        lExprs.push_back(static_cast<Expr*>(pNode));
-    }
-
-    return lExprs;
+    RETURN_CHILDREN_AS(const Expr*);
 }
 
 std::string ListExpr::toString() const
@@ -845,20 +835,37 @@ const Token* StrExpr::rdelim() const
     return m_pRDelim;
 }
 
+std::string StrExpr::toString(const std::string& asName) const
+{
+    std::string tmp = asName + " ";
+    tmp += ";" + str_repr(m_pLDelim) + ";";
+    tmp += str_repr(m_pStr);
+    tmp += ";" + str_repr(m_pRDelim) + ";";
+    return tmp;
+}
+
+std::string StrExpr::str_repr(Token* apStr) const
+{
+    if (apStr == nullptr)
+    {
+        return "";
+    }
+
+    if (apStr->str() == "\n")
+    {
+        return "\\n";
+    }
+
+    return apStr->str();
+}
+
 LiteralStr::~LiteralStr()
 {
 }
 
 std::string LiteralStr::toString() const
 {
-    std::string lsStr = "";
-
-    if (m_pStr != nullptr)
-    {
-        lsStr = m_pStr->str();
-    }
-
-    return "LiteralStr ;" + m_pLDelim->str() + ";" + lsStr + ";" + m_pRDelim->str() + ";";
+    return StrExpr::toString("LiteralStr");
 }
 
 void LiteralStr::accept(ASTVisitor& acASTVisitor) const
@@ -872,14 +879,7 @@ StrConst::~StrConst()
 
 std::string StrConst::toString() const
 {
-    std::string lsStr = "";
-
-    if (m_pStr != nullptr)
-    {
-        lsStr = m_pStr->str();
-    }
-
-    return "StrConst ;" + m_pLDelim->str() + ";" + lsStr + ";" + m_pRDelim->str() + ";";
+    return StrExpr::toString("StrConst");
 }
 
 void StrConst::accept(ASTVisitor& acASTVisitor) const
@@ -1162,6 +1162,52 @@ void AssignStmt::accept(ASTVisitor& acASTVisitor) const
 std::string AssignStmt::str_a() const
 {
     return "AssignStmt " + m_pOp->str();
+}
+
+HereDocExpr::HereDocExpr(std::vector<Expr*>&& alLines,
+                         std::vector<Token*>&& alModifiers,
+                         Token* apEndMarker) :
+    Expr({ std::make_move_iterator(alLines.begin()), std::make_move_iterator(alLines.end()) }),
+    m_pEndMarker { apEndMarker },
+    m_lModifiers { alModifiers }
+{
+}
+
+HereDocExpr::~HereDocExpr()
+{
+}
+
+const std::vector<Token*>& HereDocExpr::modifiers() const
+{
+    return m_lModifiers;
+}
+
+const Token* HereDocExpr::endmarker() const
+{
+    return m_pEndMarker;
+};
+
+std::vector<const Expr*> HereDocExpr::lines() const
+{
+    RETURN_CHILDREN_AS(const Expr*);
+}
+
+std::string HereDocExpr::toString() const
+{
+    std::string tmp = "HereDocExpr";
+
+    for (const Token* pModifier : m_lModifiers)
+    {
+        tmp += " " + pModifier->str();
+    }
+
+    tmp += " " + m_pEndMarker->str();
+    return tmp;
+}
+
+void HereDocExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
 }
 
 UnletStmt::UnletStmt(Token* apExUnlet, Token* apBang, Expr* apExpr) :

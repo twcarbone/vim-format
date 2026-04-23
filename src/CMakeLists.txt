@@ -1,3 +1,5 @@
+add_compile_options(-Wimplicit-fallthrough)
+
 add_library(
     vimformat
     STATIC

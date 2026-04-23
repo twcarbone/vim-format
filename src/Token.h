@@ -67,6 +67,7 @@
         X(ASSIGN_MODULO) \
         X(ASSIGN_CAT_OLD) \
         X(ASSIGN_CAT_NEW) \
+        X(ASSIGN_HEREDOC) \
         X(L_PAREN) \
         X(R_PAREN) \
         X(L_BRACKET) \
@@ -95,14 +96,18 @@
         X(FN_DICT) \
         X(FN_CLOSURE) \
         X(FN_ELLIPSES) \
+        X(HD_TRIM) \
+        X(HD_EVAL) \
         X(END) \
         X(TAB) \
         X(NEWLINE) \
         X(SPACE) \
+        X(ENDMARKER) \
         X(OPTION) \
         X(IDENTIFIER) \
         X(STRING) \
-        X(STR_INTERP) \
+        X(STR_INTERP_DQUOTE) \
+        X(STR_INTERP_SQUOTE) \
         X(DQUOTE) \
         X(SQUOTE) \
         X(INTEGER) \

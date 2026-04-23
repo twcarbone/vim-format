@@ -120,7 +120,7 @@ ast::Var* ASTParser::var()
                 case Token::Type::SCOPE_L:
                     pScope = new ast::ScopeExpr(curr());
                     consume(curr()->type());
-                    // Fall-thru intentional
+                    [[fallthrough]];
                 case Token::Type::IDENTIFIER:
                     pName = curr();
                     consume(Token::Type::IDENTIFIER);
@@ -140,7 +140,7 @@ ast::Var* ASTParser::var()
         case Token::Type::SCOPE_L:
             pScope = new ast::ScopeExpr(curr());
             consume(curr()->type());
-            // Fall-thru intentional
+            [[fallthrough]];
         case Token::Type::IDENTIFIER:
             pName = curr();
             consume(Token::Type::IDENTIFIER);
@@ -272,8 +272,7 @@ ast::IfStmt* ASTParser::if_stmt()
 
     lIfBranches.push_back(if_branch(Token::Type::IF));
 
-    bool bLoop = true;
-    while (bLoop)
+    while (true)
     {
         switch (curr()->type())
         {
@@ -284,12 +283,13 @@ ast::IfStmt* ASTParser::if_stmt()
             case Token::Type::ENDIF:
                 pExEndIf = curr();
                 consume(Token::Type::ENDIF);
-                // Fall-thru intentional
+                [[fallthrough]];
             default:
-                bLoop = false;
+                goto ifbranches_end;
         }
     }
 
+ifbranches_end:
     return new ast::IfStmt(lIfBranches, pExEndIf);
 }
 
@@ -376,8 +376,7 @@ ast::FnParamList* ASTParser::fn_param_list()
                 }
                 else if (bGotDefaultParam)
                 {
-                    // Ex: function Foo(a = 1, b)
-                    //                         ^
+                    // test/error/E989_1.out
                     throw_vim_error("E989");
                 }
 
@@ -393,8 +392,7 @@ ast::FnParamList* ASTParser::fn_param_list()
                 bDoneParsing = true;
                 break;
             case Token::Type::COMMA:
-                // Ex:  function Foo(a,,)
-                //                     ^
+                // test/error/E125_1.out
                 throw_vim_error("E125");
                 break;
             default:
@@ -450,8 +448,7 @@ ast::FnStmt* ASTParser::fn_stmt()
 
     // Modifiers (range, abort, etc.)
     std::vector<Token*> lModifiers;
-    bool bLoop = true;
-    while (bLoop)
+    while (true)
     {
         switch (curr()->type())
         {
@@ -463,10 +460,11 @@ ast::FnStmt* ASTParser::fn_stmt()
                 consume(curr()->type());
                 break;
             default:
-                bLoop = false;
+                goto modifiers_end;
         }
     }
 
+modifiers_end:
     ast::StmtList* pBody = new ast::StmtList();
 
     if (curr()->type() == Token::Type::COMMENT)
@@ -553,6 +551,7 @@ ast::JumpStmt* ASTParser::jump_stmt()
 // 0379804504
 // 4035612700
 // 4254392411
+// 2818147631
 ast::AssignStmt* ASTParser::assign_stmt()
 {
     Token* pOp = nullptr;
@@ -579,11 +578,95 @@ ast::AssignStmt* ASTParser::assign_stmt()
             consume(curr()->type());
             pRhs = expr();
             break;
+        case Token::Type::ASSIGN_HEREDOC:
+            pOp = curr();
+            consume(curr()->type());
+            pRhs = heredoc_expr();
+            break;
         default:
             throw_unexpected_token();
     }
 
     return new ast::AssignStmt(pOp, pLhs, pRhs);
+}
+
+ast::HereDocExpr* ASTParser::heredoc_expr()
+{
+    std::vector<Token*> lModifiers;
+    Token* pEndMarker = nullptr;
+
+    while (true)
+    {
+        switch (curr()->type())
+        {
+            case Token::Type::HD_TRIM:
+            case Token::Type::HD_EVAL:
+                lModifiers.push_back(curr());
+                consume(curr()->type());
+                break;
+            default:
+                pEndMarker = curr();
+                consume(Token::Type::ENDMARKER);
+                consume(Token::Type::NEWLINE);
+                goto args_end;
+        }
+    }
+
+args_end:
+
+    std::vector<ast::Expr*> llLines;
+    ast::LiteralStr* pLiteralStr = nullptr;
+    ast::InterpStr* pInterpStr = new ast::InterpStr();
+    Token* pLDelim = nullptr;
+    Token* pRDelim = nullptr;
+    Token* pStr = nullptr;
+
+    while (true)
+    {
+        switch (curr()->type())
+        {
+            case Token::Type::L_BRACE:
+                pRDelim = curr();
+                consume(Token::Type::L_BRACE);
+
+                pInterpStr->push(new ast::LiteralStr(pStr, pLDelim, pRDelim));
+
+                pLDelim = pRDelim = pStr = nullptr;
+
+                pInterpStr->push(expr());
+
+                break;
+            case Token::Type::NEWLINE:
+                pRDelim = curr();
+                consume(Token::Type::NEWLINE);
+
+                pInterpStr->push(new ast::LiteralStr(pStr, pLDelim, pRDelim));
+
+                pLDelim = pRDelim = pStr = nullptr;
+
+                llLines.push_back(pInterpStr);
+                pInterpStr = new ast::InterpStr();
+
+                break;
+            case Token::Type::R_BRACE:
+                pLDelim = curr();
+                consume(Token::Type::R_BRACE);
+                break;
+            case Token::Type::STRING:
+                pStr = curr();
+                consume(Token::Type::STRING);
+                break;
+            case Token::Type::ENDMARKER:
+                consume(Token::Type::ENDMARKER);
+                goto lines_end;
+            default:
+                break;
+        }
+    }
+
+lines_end:
+
+    return new ast::HereDocExpr(std::move(llLines), std::move(lModifiers), pEndMarker);
 }
 
 ast::CommentStmt* ASTParser::comment_stmt()
@@ -625,6 +708,7 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
 
     if (curr()->type() == Token::Type::R_BRACKET)
     {
+        // test/error/E475_1.out
         throw_vim_error("E475");
     }
 
@@ -635,6 +719,8 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
             break;
         }
 
+        // test/error/E475_2.out
+        // test/error/E475_3.out
         llExprs.push_back(try_expr("E475"));
 
         if (consume_optional(Token::Type::SEMICOLON))
@@ -724,28 +810,24 @@ ast::FnArgList* ASTParser::fn_arg_list()
 {
     ast::FnArgList* pFnArgList = new ast::FnArgList();
 
-    bool bLoop = true;
-
-    while (bLoop)
+    while (true)
     {
         switch (curr()->type())
         {
             case Token::Type::COMMA:
-                // Ex:  call Foo(,a)
-                //               ^
-                //      call Foo(a,,)
-                //                 ^
+                // test/error/E116_1.out
+                // test/error/E116_2.out
                 throw_vim_error("E116");
                 break;
             case Token::Type::R_PAREN:
-                bLoop = false;
-                break;
+                goto args_end;
             default:
                 pFnArgList->push(try_expr("E116"));
                 consume_optional(Token::Type::COMMA);
         }
     }
 
+args_end:
     consume(Token::Type::R_PAREN);
     return pFnArgList;
 }
@@ -790,47 +872,49 @@ ast::InterpStr* ASTParser::interp_str()
     Token* pRDelim = nullptr;
     Token* pStr = nullptr;
 
-    consume(Token::Type::STR_INTERP);
-    Token::Type leQuoteType = curr()->type();
+    Token::Type eStrEndQuoteType;
+    switch (curr()->type())
+    {
+        case Token::Type::STR_INTERP_SQUOTE:
+            eStrEndQuoteType = Token::Type::SQUOTE;
+            break;
+        case Token::Type::STR_INTERP_DQUOTE:
+            eStrEndQuoteType = Token::Type::DQUOTE;
+            break;
+        default:
+            break;
+    }
 
-    bool bLoop = true;
-    while (bLoop)
+    pLDelim = curr();
+    consume(curr()->type());
+
+    while (true)
     {
         switch (curr()->type())
         {
             case Token::Type::SQUOTE:
             case Token::Type::DQUOTE:
-                if (prev()->type() == Token::Type::STR_INTERP)
+                pRDelim = curr();
+                consume(eStrEndQuoteType);
+
+                if (eStrEndQuoteType == Token::Type::SQUOTE)
                 {
-                    // At opening quote
-                    pLDelim = curr();
+                    pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
                 }
                 else
                 {
-                    // At closing quote
-                    pRDelim = curr();
-
-                    if (leQuoteType == Token::Type::SQUOTE)
-                    {
-                        pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
-                    }
-                    else
-                    {
-                        pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
-                    }
-
-                    pInterpStr->push(pStrExpr);
-                    pStr = nullptr;
-                    bLoop = false;
+                    pStrExpr = new ast::StrConst(pStr, pLDelim, pRDelim);
                 }
 
-                consume(leQuoteType);
-                break;
+                pInterpStr->push(pStrExpr);
+                pStr = nullptr;
+
+                goto string_end;
             case Token::Type::L_BRACE:
                 pRDelim = curr();
                 consume(Token::Type::L_BRACE);
 
-                if (leQuoteType == Token::Type::SQUOTE)
+                if (eStrEndQuoteType == Token::Type::SQUOTE)
                 {
                     pStrExpr = new ast::LiteralStr(pStr, pLDelim, pRDelim);
                 }
@@ -854,6 +938,7 @@ ast::InterpStr* ASTParser::interp_str()
         }
     }
 
+string_end:
     return pInterpStr;
 }
 
@@ -878,7 +963,8 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
         case Token::Type::DQUOTE:
             pLhs = str_expr();
             break;
-        case Token::Type::STR_INTERP:
+        case Token::Type::STR_INTERP_SQUOTE:
+        case Token::Type::STR_INTERP_DQUOTE:
             pLhs = interp_str();
             break;
         case Token::Type::SIG_ENV:
@@ -949,6 +1035,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
             case Token::Type::ASSIGN_MODULO:
             case Token::Type::ASSIGN_CAT_NEW:
             case Token::Type::ASSIGN_CAT_OLD:
+            case Token::Type::ASSIGN_HEREDOC:
             case Token::Type::SEMICOLON:
                 return pLhs;
             // expr1

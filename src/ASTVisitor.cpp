@@ -84,6 +84,11 @@ void ASTVisitor::visit(const ast::GroupExpr* apGroupExpr)
     handle_node(apGroupExpr);
 }
 
+void ASTVisitor::visit(const ast::HereDocExpr* apHereDocExpr)
+{
+    handle_node(apHereDocExpr);
+}
+
 void ASTVisitor::visit(const ast::IfBranch* apIfBranch)
 {
     handle_node(apIfBranch);

@@ -60,17 +60,30 @@ public:
     const Source& source() const;
 
 private:
-    enum class State
+    enum class State : int
     {
-        NONE,
-        INTERP_STR,
-        INTERP_EXP,
-        STRING_CONSTANT,
-        LITERAL_STRING,
+        NONE = 0,
+        HEREDOC_START = 1,
+        HEREDOC = 2,
+        HEREDOC_EVAL_START = 3,
+        HEREDOC_EVAL_STR = 4,
+        HEREDOC_EVAL_EXP = 5,
+        INTERP_STR_SQUOTE = 6,
+        INTERP_STR_DQUOTE = 7,
+        INTERP_EXP_SQUOTE = 8,
+        INTERP_EXP_DQUOTE = 9,
+        STRING_CONSTANT = 10,
+        LITERAL_STRING = 11,
+    };
+
+    enum class Event : int
+    {
+        ENDMARKER = 0,
     };
 
     State m_eState;
     Token* m_pCurrToken;
+    Token* m_pEndMarker;
     size_t m_nBraceLevel;
     Source m_cSource;
     std::vector<Token*> m_lTokens;
@@ -79,19 +92,26 @@ private:
     const std::vector<Keyword> m_lKeywords;
     const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
+    const std::array<const std::array<State, 2>, 20> m_gStateTransitions;
+
+    void next_state();
 
     bool match();
     void freeTokens();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
-    void state_toggle_str(State state);
 
     bool push_token(Token::Type type, char lexeme);
     bool push_token(Token::Type type, std::string_view lexeme);
     bool push_token(Token::Type type, const std::string& lexeme);
-
-    bool chk_comment() const;
-    bool chk_register() const;
+    bool push_regex();
+    bool push_symbol();
+    bool push_string();
+    bool push_command();
+    bool push_keyword();
+    bool push_comment();
+    bool push_register();
+    bool push_number();
 };
 
 #endif  // TOKENIZER_H

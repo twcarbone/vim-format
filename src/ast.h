@@ -424,6 +424,9 @@ public:
     const Token* rdelim() const;
 
 protected:
+    std::string toString(const std::string& name) const;
+    std::string str_repr(Token* str) const;
+
     Token* m_pStr;
     Token* m_pLDelim;
     Token* m_pRDelim;
@@ -576,6 +579,24 @@ private:
     virtual std::string str_a() const;
 
     Token* m_pOp;
+};
+
+class HereDocExpr : public Expr
+{
+public:
+    HereDocExpr(std::vector<Expr*>&& lines, std::vector<Token*>&& modifiers, Token* endmarker);
+    virtual ~HereDocExpr();
+
+    const std::vector<Token*>& modifiers() const;
+    const Token* endmarker() const;
+    std::vector<const Expr*> lines() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pEndMarker;
+    std::vector<Token*> m_lModifiers;
 };
 
 class UnletStmt : public Stmt

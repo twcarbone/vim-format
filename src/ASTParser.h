@@ -47,6 +47,7 @@ private:
     ast::UnletStmt* unlet_stmt();
     ast::AssignStmt* assign_stmt();
     ast::FnParamList* fn_param_list();
+    ast::HereDocExpr* heredoc_expr();
     ast::CommentStmt* comment_stmt();
     ast::ListAssignExpr* list_assign_expr();
 

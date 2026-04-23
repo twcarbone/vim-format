@@ -221,7 +221,7 @@ void PrettyPrinter::visit(const ast::FnStmt* apFnStmt)
     {
         if (pModifier != nullptr)
         {
-            write(' ', Settings::FnModifierPadding);
+            write(' ', Settings::ExCmdModifierPadding);
             write(pModifier->str());
         }
     }
@@ -269,6 +269,26 @@ void PrettyPrinter::visit(const ast::GroupExpr* apGroupExpr)
     apGroupExpr->expr()->accept(*this);
     write(' ', Settings::ParenPadding);
     write(')');
+}
+
+void PrettyPrinter::visit(const ast::HereDocExpr* apHereDocExpr)
+{
+    for (const Token* pModifier : apHereDocExpr->modifiers())
+    {
+        write(pModifier->str());
+        write(' ', Settings::ExCmdModifierPadding);
+    }
+
+    write(apHereDocExpr->endmarker()->str());
+    write('\n');
+
+    for (const ast::Expr* pExpr : apHereDocExpr->lines())
+    {
+        pExpr->accept(*this);
+    }
+
+    write(apHereDocExpr->endmarker()->str());
+    write_eol();
 }
 
 void PrettyPrinter::visit(const ast::IfBranch* apIfBranch)
@@ -412,32 +432,20 @@ void PrettyPrinter::visit(const ast::Literal* apLiteral)
 
 void PrettyPrinter::visit(const ast::LiteralStr* apLiteralStr)
 {
-    write(apLiteralStr->ldelim()->str());
-
-    if (apLiteralStr->str() != nullptr)
-    {
-        write(apLiteralStr->str()->str());
-    }
-
-    write(apLiteralStr->rdelim()->str());
+    write(apLiteralStr->ldelim() == nullptr ? "" : apLiteralStr->ldelim()->str());
+    write(apLiteralStr->str() == nullptr ? "" : apLiteralStr->str()->str());
+    write(apLiteralStr->rdelim() == nullptr ? "" : apLiteralStr->rdelim()->str());
 }
 
 void PrettyPrinter::visit(const ast::StrConst* apStrConst)
 {
-    write(apStrConst->ldelim()->str());
-
-    if (apStrConst->str() != nullptr)
-    {
-        write(apStrConst->str()->str());
-    }
-
-    write(apStrConst->rdelim()->str());
+    write(apStrConst->ldelim() == nullptr ? "" : apStrConst->ldelim()->str());
+    write(apStrConst->str() == nullptr ? "" : apStrConst->str()->str());
+    write(apStrConst->rdelim() == nullptr ? "" : apStrConst->rdelim()->str());
 }
 
 void PrettyPrinter::visit(const ast::InterpStr* apInterpStr)
 {
-    write('$');
-
     for (ast::Node* pNode : apInterpStr->children())
     {
         pNode->accept(*this);

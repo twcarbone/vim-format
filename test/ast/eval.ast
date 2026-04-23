@@ -124,6 +124,43 @@ Program
     UnletStmt ! <>
       Var does_not_exist
         Scope g:
+    AssignStmt =<< <>
+      Var heredoc_items
+        NULL
+      HereDocExpr trim END
+        InterpStr
+          LiteralStr ;;;\n;
+        InterpStr
+          LiteralStr ;;    one;\n;
+        InterpStr
+          LiteralStr ;;        END;\n;
+        InterpStr
+          LiteralStr ;;;\n;
+        InterpStr
+          LiteralStr ;;        {a + b};\n;
+        InterpStr
+          LiteralStr ;;;\n;
+    AssignStmt =<< <>
+      Var heredoc_eval_items
+        NULL
+      HereDocExpr eval END
+        InterpStr
+          LiteralStr ;;;{;
+          BinaryOp +
+            Var &tpm
+              NULL
+            Literal 2
+          LiteralStr ;}; is 12;\n;
+        InterpStr
+          LiteralStr ;;    END ;{;
+          Var c
+            NULL
+          LiteralStr ;}; is a list;\n;
+        InterpStr
+          LiteralStr ;;    echo ;{;
+          Var @@
+            NULL
+          LiteralStr ;};;\n;
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
@@ -531,19 +568,19 @@ Program
       LiteralStr ;';string with "embedded" double quote;';
     ExprCmd echo <>
       InterpStr
-        LiteralStr ;';Before ;{;
+        LiteralStr ;$';Before ;{;
         Var bb
           NULL
         LiteralStr ;}; after;';
     ExprCmd echo <>
       InterpStr
-        LiteralStr ;';;{;
+        LiteralStr ;$';;{;
         Var bb
           NULL
         LiteralStr ;}; after;';
     ExprCmd echo <>
       InterpStr
-        LiteralStr ;';Before ;{;
+        LiteralStr ;$';Before ;{;
         Var bb
           NULL
         LiteralStr ;};;';
@@ -552,6 +589,12 @@ Program
     ExprCmd echo <>
       LiteralStr ;';{bb} after;';
     ExprCmd echo <>
+      InterpStr
+        LiteralStr ;$';;{;
+        Var bb
+          NULL
+        LiteralStr ;}; "after";';
+    ExprCmd echo <>
       LiteralStr ;';Before {bb};';
     ExprCmd echo <>
       LiteralStr ;';$var;';
@@ -559,19 +602,19 @@ Program
       StrConst ;";;";
     ExprCmd echo <>
       InterpStr
-        StrConst ;";Before ;{;
+        StrConst ;$";Before ;{;
         Var bb
           NULL
         StrConst ;}; after;";
     ExprCmd echo <>
       InterpStr
-        StrConst ;";;{;
+        StrConst ;$";;{;
         Var bb
           NULL
         StrConst ;}; after;";
     ExprCmd echo <>
       InterpStr
-        StrConst ;";Before ;{;
+        StrConst ;$";Before ;{;
         Var bb
           NULL
         StrConst ;};;";
@@ -579,6 +622,12 @@ Program
       StrConst ;";Before {bb} after;";
     ExprCmd echo <>
       StrConst ;";{bb} after;";
+    ExprCmd echo <>
+      InterpStr
+        StrConst ;$";;{;
+        Var bb
+          NULL
+        StrConst ;}; 'after';";
     ExprCmd echo <>
       StrConst ;";Before {bb};";
     ExprCmd echo <>
