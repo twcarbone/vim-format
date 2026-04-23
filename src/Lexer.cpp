@@ -332,7 +332,7 @@ bool Lexer::match()
                 }
             }
 
-            if (push_number() || push_command() || push_keyword() || push_regex())
+            if (push_blob() || push_number() || push_command() || push_keyword() || push_regex())
             {
                 return true;
             }
@@ -795,6 +795,29 @@ bool Lexer::push_number()
     }
 
     return false;
+}
+
+bool Lexer::push_blob()
+{
+    if (!vf::startswith(m_cSource.remaining_text(), "0z")
+        && !(vf::startswith(m_cSource.remaining_text(), "0Z")))
+    {
+        return false;
+    }
+
+    size_t lnEnd = m_cSource.remaining_text().find_first_not_of(vf::DIGITS_BASE_16, 2);
+
+    if (lnEnd == std::string_view::npos)
+    {
+        // 0[zZ] by itself is a valid blob-literal
+    }
+    else if (lnEnd % 2 != 0)
+    {
+        // test/error/E973_1.out
+        throw VimError("E973", m_cSource.context());
+    }
+
+    return push_token(Token::Type::BLOB, m_cSource.remaining_text().substr(0, lnEnd));
 }
 
 bool Lexer::push_token(Token::Type aeTokenType, char asLexeme)

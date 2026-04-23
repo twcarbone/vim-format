@@ -46,7 +46,7 @@ bool vf::startswith(std::string_view asStr, std::string_view asPrefix, std::stri
 bool vf::startswith_int(std::string_view asStr, std::string_view& asOut)
 {
     // 1. Start by finding the end any leading digits. Save it for back-tracking.
-    const size_t lnDigitsEnd = asStr.find_first_not_of("0123456789");
+    const size_t lnDigitsEnd = asStr.find_first_not_of(DIGITS_BASE_10);
     asOut = asStr.substr(0, lnDigitsEnd);
 
     // 2. Zero digits means this is not an integer. More than one digit means this is a
@@ -78,7 +78,7 @@ bool vf::startswith_int(std::string_view asStr, std::string_view& asOut)
     }
 
     // 4. Convert the "value" portion (example: 1234 from 0x1234).
-    const size_t lnCandidateEnd = asStr.find_first_not_of("0123456789abcdefABCDEF", 2);
+    const size_t lnCandidateEnd = asStr.find_first_not_of(DIGITS_BASE_16, 2);
     const std::string_view lsValue = asStr.substr(2, lnCandidateEnd - 2);
     const char* pStart = lsValue.data();
     char* pEnd = nullptr;

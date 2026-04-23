@@ -35,6 +35,7 @@ let heredoc_eval_items =<< eval END
     END {c} is a list
     echo {@@}
 END
+let gg = [0zaabb, 0Z, 0ZFFFF]
 
 " for
 
