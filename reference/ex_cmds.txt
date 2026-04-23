@@ -1087,92 +1087,81 @@
      0497841186  638  :	            :	
 
 /usr/local/share/vim/vim91/doc/map.txt:
-     3527324784  52    :map           :map
-     2917107135  53    :nmap          :nm[ap]
-     1113195849  54    :vmap          :vm[ap]
-     2018534457  55    :xmap          :xm[ap]
-     0953494497  56    :smap          :smap
-     1719883290  57    :omap          :om[ap]
-     3468472411  58    :map!          :map!
-     2967123207  59    :imap          :im[ap]
-     3759613108  60    :lmap          :lm[ap]
-     0289511009  61    :cmap          :cm[ap]
-     3120094401  62    :tmap          :tma[p]
-     1663674164  72    :noremap       :no[remap]  {lhs} {rhs}
-     0754586987  73    :nnoremap      :nn[oremap] {lhs} {rhs}
-     1011775786  74    :vnoremap      :vn[oremap] {lhs} {rhs}
-     4160488874  75    :xnoremap      :xn[oremap] {lhs} {rhs}
-     1111266677  76    :snoremap      :snor[emap] {lhs} {rhs}
-     1403724064  77    :onoremap      :ono[remap] {lhs} {rhs}
-     3200220849  78    :noremap       :no[remap]! {lhs} {rhs}
-     0559578016  79    :inoremap      :ino[remap] {lhs} {rhs}
-     0044752107  80    :lnoremap      :ln[oremap] {lhs} {rhs}
-     3058275360  81    :cnoremap      :cno[remap] {lhs} {rhs}
-     2053627937  82    :tnoremap      :tno[remap] {lhs} {rhs}
-     1357164815  91    :unmap         :unm[ap]  {lhs}
-     0326438359  92    :nunmap        :nun[map] {lhs}
-     2468972999  93    :vunmap        :vu[nmap] {lhs}
-     1488116807  94    :xunmap        :xu[nmap] {lhs}
-     1729049280  95    :sunmap        :sunm[ap] {lhs}
-     1540180715  96    :ounmap        :ou[nmap] {lhs}
-     4136876731  97    :unmap         :unm[ap]! {lhs}
-     2735669597  98    :iunmap        :iu[nmap] {lhs}
-     0665612080  99    :lunmap        :lu[nmap] {lhs}
-     1899551686  100   :cunmap        :cu[nmap] {lhs}
-     3322724541  101   :tunmap        :tunma[p] {lhs}
-     2952302040  110   :mapclear      :mapc[lear]
-     2312342168  111   :nmapclear     :nmapc[lear]
-     2649141014  112   :vmapclear     :vmapc[lear]
-     3482354704  113   :xmapclear     :xmapc[lear]
-     3971023700  114   :smapclear     :smapc[lear]
-     1214076248  115   :omapclear     :omapc[lear]
-     0382492088  116   :mapclear      :mapc[lear]!
-     2699599643  117   :imapclear     :imapc[lear]
-     3518968665  118   :lmapclear     :lmapc[lear]
-     1112000415  119   :cmapclear     :cmapc[lear]
-     3314161367  120   :tmapclear     :tmapc[lear]
-     3527324784  128   :map           :map
-     2917107135  129   :nmap          :nm[ap]
-     1113195849  130   :vmap          :vm[ap]
-     2018534457  131   :xmap          :xm[ap]
-     0311923962  132   :smap          :sm[ap]
-     1719883290  133   :omap          :om[ap]
-     3468472411  134   :map!          :map!
-     2967123207  135   :imap          :im[ap]
-     3759613108  136   :lmap          :lm[ap]
-     0289511009  137   :cmap          :cm[ap]
-     3120094401  138   :tmap          :tma[p]
-     3283784731  143   :map           :map    {lhs}
-     0418609506  144   :nmap          :nm[ap] {lhs}
-     0317186656  145   :vmap          :vm[ap] {lhs}
-     4225118590  146   :xmap          :xm[ap] {lhs}
-     2319750512  147   :smap          :sm[ap] {lhs}
-     2203464973  148   :omap          :om[ap] {lhs}
-     3569451096  149   :map!          :map!   {lhs}
-     1818988781  150   :imap          :im[ap] {lhs}
-     4106807293  151   :lmap          :lm[ap] {lhs}
-     2254207116  152   :cmap          :cm[ap] {lhs}
-     0974267458  153   :tmap          :tma[p] {lhs}
      0434961030  1304  :abbreviate    :ab[breviate]
-     1624070554  1320  :abbreviate    :ab[breviate] {lhs}
      0297968621  1325  :abbreviate    :ab[breviate] [<expr>] [<buffer>] {lhs} {rhs}
-     3443630116  1333  :unabbreviate  :una[bbreviate] [<buffer>] {lhs}
-     2593287657  1341  :noreabbrev    :norea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-     2192627465  1345  :cabbrev       :ca[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-     2588490878  1349  :cunabbrev     :cuna[bbrev] [<buffer>] {lhs}
-     3779699738  1353  :cnoreabbrev   :cnorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-     2761321478  1358  :iabbrev       :ia[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
-     2492280492  1362  :iunabbrev     :iuna[bbrev] [<buffer>] {lhs}
-     1643291492  1366  :inoreabbrev   :inorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     1624070554  1320  :abbreviate    :ab[breviate] {lhs}
      2573169571  1371  :abclear       :abc[lear] [<buffer>]
-     0034794804  1374  :iabclear      :iabc[lear] [<buffer>]
+     2192627465  1345  :cabbrev       :ca[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
      3273975103  1377  :cabclear      :cabc[lear] [<buffer>]
+     0289511009  137   :cmap          :cm[ap]
+     2254207116  152   :cmap          :cm[ap] {lhs}
+     1112000415  119   :cmapclear     :cmapc[lear]
+     3779699738  1353  :cnoreabbrev   :cnorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     3058275360  81    :cnoremap      :cno[remap] {lhs} {rhs}
+     2655863299  1566  :comclear      :comc[lear]
      3362580154  1519  :command       :com[mand]
      2354863064  1532  :command       :com[mand] {cmd}
      3748452287  1546  :command       :com[mand][!] [{attr}...] {cmd} {repl}
-     0737044444  1557  :delcommand    :delc[ommand] {cmd}
+     2588490878  1349  :cunabbrev     :cuna[bbrev] [<buffer>] {lhs}
+     1899551686  100   :cunmap        :cu[nmap] {lhs}
      3232382947  1562  :delcommand    :delc[ommand] -buffer {cmd}
-     2655863299  1566  :comclear      :comc[lear]
+     0737044444  1557  :delcommand    :delc[ommand] {cmd}
+     2761321478  1358  :iabbrev       :ia[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     0034794804  1374  :iabclear      :iabc[lear] [<buffer>]
+     2967123207  135   :imap          :im[ap]
+     1818988781  150   :imap          :im[ap] {lhs}
+     2699599643  117   :imapclear     :imapc[lear]
+     1643291492  1366  :inoreabbrev   :inorea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     0559578016  79    :inoremap      :ino[remap] {lhs} {rhs}
+     2492280492  1362  :iunabbrev     :iuna[bbrev] [<buffer>] {lhs}
+     2735669597  98    :iunmap        :iu[nmap] {lhs}
+     3759613108  136   :lmap          :lm[ap]
+     4106807293  151   :lmap          :lm[ap] {lhs}
+     3518968665  118   :lmapclear     :lmapc[lear]
+     0044752107  80    :lnoremap      :ln[oremap] {lhs} {rhs}
+     0665612080  99    :lunmap        :lu[nmap] {lhs}
+     3527324784  128   :map           :map
+     3283784731  143   :map           :map    {lhs}
+     3468472411  134   :map!          :map!
+     3569451096  149   :map!          :map!   {lhs}
+     2952302040  110   :mapclear      :mapc[lear]
+     0382492088  116   :mapclear      :mapc[lear]!
+     2917107135  129   :nmap          :nm[ap]
+     0418609506  144   :nmap          :nm[ap] {lhs}
+     2312342168  111   :nmapclear     :nmapc[lear]
+     0754586987  73    :nnoremap      :nn[oremap] {lhs} {rhs}
+     2593287657  1341  :noreabbrev    :norea[bbrev] [<expr>] [<buffer>] [lhs] [rhs]
+     1663674164  72    :noremap       :no[remap]  {lhs} {rhs}
+     3200220849  78    :noremap       :no[remap]! {lhs} {rhs}
+     0326438359  92    :nunmap        :nun[map] {lhs}
+     1719883290  133   :omap          :om[ap]
+     2203464973  148   :omap          :om[ap] {lhs}
+     1214076248  115   :omapclear     :omapc[lear]
+     1403724064  77    :onoremap      :ono[remap] {lhs} {rhs}
+     1540180715  96    :ounmap        :ou[nmap] {lhs}
+     0311923962  132   :smap          :sm[ap]
+     2319750512  147   :smap          :sm[ap] {lhs}
+     3971023700  114   :smapclear     :smapc[lear]
+     1111266677  76    :snoremap      :snor[emap] {lhs} {rhs}
+     1729049280  95    :sunmap        :sunm[ap] {lhs}
+     3120094401  138   :tmap          :tma[p]
+     0974267458  153   :tmap          :tma[p] {lhs}
+     3314161367  120   :tmapclear     :tmapc[lear]
+     2053627937  82    :tnoremap      :tno[remap] {lhs} {rhs}
+     3322724541  101   :tunmap        :tunma[p] {lhs}
+     3443630116  1333  :unabbreviate  :una[bbreviate] [<buffer>] {lhs}
+     1357164815  91    :unmap         :unm[ap]  {lhs}
+     4136876731  97    :unmap         :unm[ap]! {lhs}
+     1113195849  130   :vmap          :vm[ap]
+     0317186656  145   :vmap          :vm[ap] {lhs}
+     2649141014  112   :vmapclear     :vmapc[lear]
+     1011775786  74    :vnoremap      :vn[oremap] {lhs} {rhs}
+     2468972999  93    :vunmap        :vu[nmap] {lhs}
+     2018534457  131   :xmap          :xm[ap]
+     4225118590  146   :xmap          :xm[ap] {lhs}
+     3482354704  113   :xmapclear     :xmapc[lear]
+     4160488874  75    :xnoremap      :xn[oremap] {lhs} {rhs}
+     1488116807  94    :xunmap        :xu[nmap] {lhs}
 
 /usr/local/share/vim/vim91/doc/pattern.txt:
      2547836306  146   :nohlsearch  :noh[lsearch]
