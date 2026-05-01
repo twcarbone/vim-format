@@ -60,6 +60,7 @@ public:
     virtual void visit(const ast::UnaryOp* ast);
     virtual void visit(const ast::UnletStmt* ast);
     virtual void visit(const ast::Var* ast);
+    virtual void visit(const ast::VarQueryStmt* ast);
     virtual void visit(const ast::WhileStmt* ast);
 
 private:

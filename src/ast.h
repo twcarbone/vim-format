@@ -584,6 +584,20 @@ private:
     Token* m_pOp;
 };
 
+class VarQueryStmt : public Stmt
+{
+public:
+    VarQueryStmt(std::vector<Expr*>&& names);
+    virtual ~VarQueryStmt();
+
+    std::vector<const Expr*> names() const;
+
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
+};
+
 class HereDocExpr : public Expr
 {
 public:

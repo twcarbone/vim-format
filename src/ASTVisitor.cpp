@@ -184,6 +184,11 @@ void ASTVisitor::visit(const ast::Var* apVar)
     handle_node(apVar);
 }
 
+void ASTVisitor::visit(const ast::VarQueryStmt* apVarQueryStmt)
+{
+    handle_node(apVarQueryStmt);
+}
+
 void ASTVisitor::visit(const ast::WhileStmt* apWhileStmt)
 {
     handle_node(apWhileStmt);
