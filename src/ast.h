@@ -29,11 +29,14 @@ protected:
 class Stmt : public Node
 {
 public:
+    Stmt() = default;
     virtual ~Stmt() = default;
 
     virtual std::string toString() const;
 
 protected:
+    explicit Stmt(std::vector<Node*>&& children);
+
     virtual std::string str_b() const;
 
 private:

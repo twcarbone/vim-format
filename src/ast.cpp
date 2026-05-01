@@ -38,6 +38,11 @@ const std::vector<Node*>& Node::children() const
     return m_lChildren;
 }
 
+Stmt::Stmt(std::vector<Node*>&& alChildren) :
+    Node { std::move(alChildren) }
+{
+}
+
 std::string Stmt::toString() const
 {
     return str_a() + " <" + str_b() + ">";
