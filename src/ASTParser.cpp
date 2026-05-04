@@ -221,6 +221,7 @@ ast::Stmt* ASTParser::stmt()
             break;
         case Token::Type::NEWLINE:
             pStmt = new ast::EmptyStmt();
+            break;
         default:
             break;
     }
@@ -242,6 +243,7 @@ ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
         case Token::Type::IF:
         case Token::Type::ELSEIF:
             pCondition = expr();
+            break;
         case Token::Type::ELSE:
         default:
             break;
@@ -844,6 +846,7 @@ ast::StrExpr* ASTParser::str_expr()
         case Token::Type::DQUOTE:
             pLDelim = curr();
             consume(curr()->type());
+            break;
         default:
             break;
     }
