@@ -33,12 +33,20 @@ public:
     //
     //  Rule of 5: C++11 added move semantics. Add custom versions of 4 and 5 to be fast.
 
-    Tokens() = default;                               // 1
-    Tokens(const Tokens& other) = delete;             // 2 (redundant; implicitly deleted)
-    Tokens& operator=(const Tokens& other) = delete;  // 3 (redundant; implicitly deleted)
-    Tokens(Tokens&& other) noexcept = default;        // 4
-    Tokens& operator=(Tokens&& other) = default;      // 5
-    ~Tokens();                                        // 6
+    // Tip 4-1: noexcept move operations
+    //
+    //  Always specify noexcept for move operations. If it isn't, or can't be deduced as
+    //  noexcept, the C++ STL will fall back to copying. The compiler can deduce if a
+    //  function throws, making a 'noexcept' redundant for a default or trivial move
+    //  operation. But this leaves the door open for future (accidental) throwing calls
+    //  in a move operation, resulting in a non-noexcept deduction.
+
+    Tokens() = default;                                    // 1
+    Tokens(const Tokens& other) = delete;                  // 2 (redundant; implicitly deleted)
+    Tokens& operator=(const Tokens& other) = delete;       // 3 (redundant; implicitly deleted)
+    Tokens(Tokens&& other) noexcept = default;             // 4
+    Tokens& operator=(Tokens&& other) noexcept = default;  // 5
+    ~Tokens();                                             // 6
 
     // Access
     Token* at(size_t pos) const;
