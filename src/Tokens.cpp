@@ -1,10 +1,5 @@
 #include "Tokens.h"
 
-Tokens::Tokens() :
-    m_nPos { 0 }
-{
-}
-
 Tokens::~Tokens()
 {
     clear();

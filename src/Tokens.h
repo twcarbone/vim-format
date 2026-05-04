@@ -19,9 +19,26 @@ public:
     using reverse_iterator = std::vector<Token*>::reverse_iterator;
     using const_reverse_iterator = std::vector<Token*>::const_reverse_iterator;
 
-    Tokens();
-    Tokens(Tokens&& other) noexcept = default;
-    ~Tokens();
+    // Tip 3-1: Six special member functions
+    //
+    //  1. Default constructor      Created only if there are no other ctors defined.
+    //  2. Copy constructor         Created only if no move ctors/assignments are defined.
+    //  3. Copy assignment          Same as 2.
+    //  4. Move constructor         Created only if none of 2-6 are defined.
+    //  5. Move assignment          Same as 4.
+    //  6. Destructor               Created always (but can be overridden).
+    //
+    //  Rule of 3: custom-defined versions of 2, 3, and 6 are usually needed if the class
+    //  manages raw resources (pointers, files, sockets, etc).
+    //
+    //  Rule of 5: C++11 added move semantics. Add custom versions of 4 and 5 to be fast.
+
+    Tokens() = default;                               // 1
+    Tokens(const Tokens& other) = delete;             // 2 (redundant; implicitly deleted)
+    Tokens& operator=(const Tokens& other) = delete;  // 3 (redundant; implicitly deleted)
+    Tokens(Tokens&& other) noexcept = default;        // 4
+    Tokens& operator=(Tokens&& other) = default;      // 5
+    ~Tokens();                                        // 6
 
     // Access
     Token* at(size_t pos) const;
@@ -53,7 +70,7 @@ public:
 private:
     int move(int count, int flags) const;
 
-    size_t m_nPos;
+    size_t m_nPos = 0;
     std::vector<Token*> m_lData;
 };
 
