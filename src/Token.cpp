@@ -97,14 +97,23 @@ std::string Token::str() const
 
 std::string Token::toString() const
 {
-    std::string lsTmp = "[Token] " + TypeToStr(m_eType);
+    std::string tmp = "<Token";
+    tmp += " type=" + TypeToStr(m_eType);
+    tmp += " lexeme=";
 
-    if (!is_horizontal_wp() && !is_vertical_wp())
+    switch (m_eType)
     {
-        lsTmp += " " + m_sStr;
+        case Type::SPACE:
+        case Type::TAB:
+        case Type::NEWLINE:
+            break;
+        default:
+            tmp += m_sStr;
     }
 
-    return lsTmp;
+    tmp += " pos=" + std::to_string(m_nSourcePos);
+    tmp += ">";
+    return tmp;
 }
 
 std::string Token::TypeToStr(Type aeType)
