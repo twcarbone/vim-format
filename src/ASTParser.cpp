@@ -1,10 +1,9 @@
 #include "ASTParser.h"
 #include "Exceptions.h"
 
-ASTParser::ASTParser(const Context& acContext, std::vector<Token*> alTokens) :
+ASTParser::ASTParser(const Context& acContext, Tokens&& alTokens) :
     m_pRoot { nullptr },
     m_cSource { acContext.source() },
-    m_nPos { 0 },
     m_bLhs { false },
     m_lTokens { std::move(alTokens) },
     m_mOpBindingPower {
@@ -333,7 +332,7 @@ ast::UnletStmt* ASTParser::unlet_stmt()
     Token* pBang = nullptr;
     if (consume_optional(Token::Type::OP_BANG))
     {
-        pBang = prev();
+        pBang = m_lTokens.peek(-1, Flags::skipws);
     }
 
     ast::Expr* pExpr = expr();
@@ -673,15 +672,15 @@ lines_end:
 
 ast::CommentStmt* ASTParser::comment_stmt()
 {
-    Token* pPrevToken = prev();
     ast::CommentStmt* pCommentStmt = nullptr;
 
-    if (pPrevToken == nullptr)
+    if (m_lTokens.pos() == 0)
     {
         pCommentStmt = new ast::CommentStmt(curr());
     }
     else
     {
+        Token* pPrevToken = m_lTokens.peek(-1, Flags::skipws);
         switch (pPrevToken->type())
         {
             case Token::Type::NEWLINE:
@@ -727,7 +726,7 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
 
         if (consume_optional(Token::Type::SEMICOLON))
         {
-            pSemicolon = prev();
+            pSemicolon = m_lTokens.peek(-1, Flags::skipws);
             llExprs.push_back(try_expr("E475"));
             break;
         }
@@ -853,7 +852,7 @@ ast::StrExpr* ASTParser::str_expr()
 
     if (consume_optional(Token::Type::STRING))
     {
-        pStr = prev();
+        pStr = m_lTokens.peek(-1, Flags::skipws);
     }
 
     pRDelim = curr();
@@ -1216,19 +1215,7 @@ void ASTParser::consume(const Token::Type aeType)
         return;
     }
 
-    while (true)
-    {
-        m_nPos++;
-
-        switch (curr()->type())
-        {
-            case Token::Type::TAB:
-            case Token::Type::SPACE:
-                break;
-            default:
-                return;
-        }
-    }
+    m_lTokens.advance(1, Flags::skipws);
 }
 
 bool ASTParser::consume_optional(const Token::Type aeType)
@@ -1244,27 +1231,7 @@ bool ASTParser::consume_optional(const Token::Type aeType)
 
 Token* ASTParser::curr() const
 {
-    return m_lTokens[m_nPos];
-}
-
-Token* ASTParser::prev() const
-{
-    if (m_nPos > 0)
-    {
-        return m_lTokens[m_nPos - 1];
-    }
-
-    return nullptr;
-}
-
-Token* ASTParser::next() const
-{
-    if (m_nPos < m_lTokens.size() - 1)
-    {
-        return m_lTokens[m_nPos + 1];
-    }
-
-    return nullptr;
+    return m_lTokens.head();
 }
 
 void ASTParser::throw_unexpected_token()

@@ -4,12 +4,13 @@
 
 #include "Context.h"
 #include "Token.h"
+#include "Tokens.h"
 #include "ast.h"
 
 class ASTParser
 {
 public:
-    ASTParser(const Context& context, std::vector<Token*> tokens);
+    ASTParser(const Context& context, Tokens&& tokens);
     ~ASTParser();
 
     void parse();
@@ -18,13 +19,12 @@ public:
 private:
     ast::Program* m_pRoot;
     Source m_cSource;
-    size_t m_nPos;
 
     // true if we are parsing an expression on the left-hand side of an assignment
     // operator, false otherwise.
     bool m_bLhs;
 
-    const std::vector<Token*> m_lTokens;
+    Tokens m_lTokens;
     const std::unordered_map<Token::Type, std::pair<int, int> > m_mOpBindingPower;
 
     ast::Var* var();
@@ -56,8 +56,6 @@ private:
     bool consume_optional(const Token::Type type);
 
     Token* curr() const;
-    Token* prev() const;
-    Token* next() const;
 
     ast::Expr* try_expr(const std::string& vim_error_code);
     [[noreturn]] void throw_unexpected_token();

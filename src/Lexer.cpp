@@ -158,12 +158,11 @@ Lexer::Lexer(const Context& acContext) :
 
 Lexer::~Lexer()
 {
-    freeTokens();
 }
 
 void Lexer::tokenize()
 {
-    freeTokens();
+    m_lTokens.clear();
 
     while (true)
     {
@@ -176,22 +175,14 @@ void Lexer::tokenize()
     }
 }
 
-std::vector<Token*> Lexer::tokens() const
+Tokens Lexer::take_tokens()
 {
-    // Filter out delimiting whitespace tokens before returning.
+    return std::move(m_lTokens);
+}
 
-    std::vector<Token*> llTokens;
-    llTokens.reserve(m_lTokens.size());
-
-    for (Token* pToken : m_lTokens)
-    {
-        if (!pToken->is_horizontal_wp())
-        {
-            llTokens.push_back(pToken);
-        }
-    }
-
-    return llTokens;
+const Tokens& Lexer::tokens() const
+{
+    return m_lTokens;
 }
 
 const Source& Lexer::source() const
@@ -199,10 +190,10 @@ const Source& Lexer::source() const
     return m_cSource;
 }
 
-const Token& Lexer::token(size_t anIdx) const
+Token Lexer::token(size_t anIdx) const
 {
     // TODO (gh-7): throw IndexError
-    return *tokens().at(anIdx);
+    return *m_lTokens.at(anIdx);
 }
 
 void Lexer::next()
@@ -411,16 +402,6 @@ bool Lexer::match()
 void Lexer::next_state()
 {
     m_eState = m_gStateTransitions[static_cast<int>(m_eState)][1];
-}
-
-void Lexer::freeTokens()
-{
-    for (const Token* pToken : m_lTokens)
-    {
-        delete pToken;
-    }
-
-    m_lTokens.clear();
 }
 
 bool Lexer::disambiguate(Token* apCurrentToken)

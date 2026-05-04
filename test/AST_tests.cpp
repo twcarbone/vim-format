@@ -21,7 +21,7 @@ protected:
         Lexer lcLexer(lcContext);
         lcLexer.tokenize();
 
-        ASTParser lcParser(lcContext, lcLexer.tokens());
+        ASTParser lcParser(lcContext, lcLexer.take_tokens());
         lcParser.parse();
 
         std::stringstream lcAstStrStream;
