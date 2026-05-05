@@ -42,6 +42,7 @@ class TernaryOp;
 class UnaryOp;
 class UnletStmt;
 class Var;
+class VarQueryStmt;
 class WhileStmt;
 };
 
@@ -92,6 +93,7 @@ public:
     virtual void visit(const ast::UnaryOp* ast);
     virtual void visit(const ast::UnletStmt* ast);
     virtual void visit(const ast::Var* ast);
+    virtual void visit(const ast::VarQueryStmt* ast);
     virtual void visit(const ast::WhileStmt* ast);
 
     const std::vector<VisitedNode>& nodes() const;

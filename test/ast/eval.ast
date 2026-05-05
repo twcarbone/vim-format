@@ -168,6 +168,34 @@ Program
         Literal 0zaabb
         Literal 0Z
         Literal 0ZFFFF
+    VarQueryStmt <>
+    VarQueryStmt <>
+      Var bb
+        NULL
+    VarQueryStmt <>
+      Var bb
+        NULL
+      Var dd
+        NULL
+      Var ee
+        NULL
+      Var ff
+        NULL
+    VarQueryStmt <>
+      Scope g:
+      Var bb
+        NULL
+    VarQueryStmt <>
+      Scope g:
+      Scope b:
+      Scope w:
+    VarQueryStmt <>
+      Var abort
+        Scope g:
+    VarQueryStmt <>
+      Var bb
+        NULL
+      Scope w:
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>

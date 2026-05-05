@@ -4,12 +4,13 @@
 
 #include "Context.h"
 #include "Token.h"
+#include "Tokens.h"
 #include "ast.h"
 
 class ASTParser
 {
 public:
-    ASTParser(const Context& context, std::vector<Token*> tokens);
+    ASTParser(const Context& context, Tokens&& tokens);
     ~ASTParser();
 
     void parse();
@@ -18,17 +19,17 @@ public:
 private:
     ast::Program* m_pRoot;
     Source m_cSource;
-    size_t m_nPos;
 
     // true if we are parsing an expression on the left-hand side of an assignment
     // operator, false otherwise.
     bool m_bLhs;
 
-    const std::vector<Token*> m_lTokens;
+    Tokens m_lTokens;
     const std::unordered_map<Token::Type, std::pair<int, int> > m_mOpBindingPower;
 
     ast::Var* var();
     ast::Stmt* stmt();
+    ast::Stmt* let_stmt();
     ast::Expr* expr(int min_binding_power = 0);
     ast::IfStmt* if_stmt();
     ast::FnStmt* fn_stmt();
@@ -46,6 +47,7 @@ private:
     ast::WhileStmt* while_stmt();
     ast::UnletStmt* unlet_stmt();
     ast::AssignStmt* assign_stmt();
+    ast::VarQueryStmt* var_query_stmt();
     ast::FnParamList* fn_param_list();
     ast::HereDocExpr* heredoc_expr();
     ast::CommentStmt* comment_stmt();
@@ -55,9 +57,9 @@ private:
     void consume(const Token::Type type);
     bool consume_optional(const Token::Type type);
 
+    bool chk_let_query();
+
     Token* curr() const;
-    Token* prev() const;
-    Token* next() const;
 
     ast::Expr* try_expr(const std::string& vim_error_code);
     [[noreturn]] void throw_unexpected_token();

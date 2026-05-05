@@ -10,6 +10,7 @@ add_executable(
     Source_tests.cpp
     Unit_tests.cpp
     Error_tests.cpp
+    Tokens_tests.cpp
 )
 
 target_link_libraries(

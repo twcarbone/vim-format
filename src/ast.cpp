@@ -38,6 +38,11 @@ const std::vector<Node*>& Node::children() const
     return m_lChildren;
 }
 
+Stmt::Stmt(std::vector<Node*>&& alChildren) :
+    Node { std::move(alChildren) }
+{
+}
+
 std::string Stmt::toString() const
 {
     return str_a() + " <" + str_b() + ">";
@@ -1162,6 +1167,30 @@ void AssignStmt::accept(ASTVisitor& acASTVisitor) const
 std::string AssignStmt::str_a() const
 {
     return "AssignStmt " + m_pOp->str();
+}
+
+VarQueryStmt::VarQueryStmt(std::vector<Expr*>&& alNames) :
+    Stmt({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) })
+{
+}
+
+VarQueryStmt::~VarQueryStmt()
+{
+}
+
+std::vector<const Expr*> VarQueryStmt::names() const
+{
+    RETURN_CHILDREN_AS(const Expr*);
+}
+
+void VarQueryStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string VarQueryStmt::str_a() const
+{
+    return "VarQueryStmt";
 }
 
 HereDocExpr::HereDocExpr(std::vector<Expr*>&& alLines,

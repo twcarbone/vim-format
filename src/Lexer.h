@@ -9,6 +9,7 @@
 
 #include "Context.h"
 #include "Token.h"
+#include "Tokens.h"
 
 class Lexer
 {
@@ -54,8 +55,10 @@ public:
      */
     void tokenize();
 
-    const Token& token(size_t i) const;
-    std::vector<Token*> tokens() const;
+    Token token(size_t i) const;
+
+    Tokens take_tokens();
+    const Tokens& tokens() const;
 
     const Source& source() const;
 
@@ -81,7 +84,7 @@ private:
     Token* m_pEndMarker;
     size_t m_nBraceLevel;
     Source m_cSource;
-    std::vector<Token*> m_lTokens;
+    Tokens m_lTokens;
 
     const std::vector<Command> m_lCommands;
     const std::vector<Keyword> m_lKeywords;
@@ -92,7 +95,6 @@ private:
     void next_state();
 
     bool match();
-    void freeTokens();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
 

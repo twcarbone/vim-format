@@ -533,6 +533,21 @@ void PrettyPrinter::visit(const ast::Var* apVar)
     write(apVar->name()->str());
 }
 
+void PrettyPrinter::visit(const ast::VarQueryStmt* apVarQueryStmt)
+{
+    write_bol();
+
+    write("let");
+
+    for (ast::Node* pNode : apVarQueryStmt->children())
+    {
+        write(' ', Settings::SpaceAfterExprCmd);
+        pNode->accept(*this);
+    }
+
+    write_eol();
+}
+
 void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
 {
     write_bol();

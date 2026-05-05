@@ -29,11 +29,14 @@ protected:
 class Stmt : public Node
 {
 public:
+    Stmt() = default;
     virtual ~Stmt() = default;
 
     virtual std::string toString() const;
 
 protected:
+    explicit Stmt(std::vector<Node*>&& children);
+
     virtual std::string str_b() const;
 
 private:
@@ -579,6 +582,20 @@ private:
     virtual std::string str_a() const;
 
     Token* m_pOp;
+};
+
+class VarQueryStmt : public Stmt
+{
+public:
+    VarQueryStmt(std::vector<Expr*>&& names);
+    virtual ~VarQueryStmt();
+
+    std::vector<const Expr*> names() const;
+
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
 };
 
 class HereDocExpr : public Expr

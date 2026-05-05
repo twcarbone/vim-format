@@ -18,6 +18,7 @@ add_library(
     Source.cpp
     Symbol.cpp
     Token.cpp
+    Tokens.cpp
     ast.cpp
     util.cpp
 )

@@ -36,6 +36,13 @@ let heredoc_eval_items =<< eval END
     echo {@@}
 END
 let gg = [0zaabb, 0Z, 0ZFFFF]
+let
+let bb
+let bb dd ee ff
+let g: bb
+let g: b: w:
+let g:abort
+let bb w:
 
 " for
 

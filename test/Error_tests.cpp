@@ -32,7 +32,7 @@ protected:
             Lexer lcLexer(lcContext);
             lcLexer.tokenize();
 
-            ASTParser lcParser(lcContext, lcLexer.tokens());
+            ASTParser lcParser(lcContext, lcLexer.take_tokens());
             lcParser.parse();
 
             FAIL() << "Expected VimError, but did not throw any exception " + lsEpilogue;
