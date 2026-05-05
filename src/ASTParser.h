@@ -29,6 +29,7 @@ private:
 
     ast::Var* var();
     ast::Stmt* stmt();
+    ast::Stmt* let_stmt();
     ast::Expr* expr(int min_binding_power = 0);
     ast::IfStmt* if_stmt();
     ast::FnStmt* fn_stmt();
@@ -46,6 +47,7 @@ private:
     ast::WhileStmt* while_stmt();
     ast::UnletStmt* unlet_stmt();
     ast::AssignStmt* assign_stmt();
+    ast::VarQueryStmt* var_query_stmt();
     ast::FnParamList* fn_param_list();
     ast::HereDocExpr* heredoc_expr();
     ast::CommentStmt* comment_stmt();
@@ -54,6 +56,8 @@ private:
     void try_consume(const Token::Type type, const std::string& vim_error_code);
     void consume(const Token::Type type);
     bool consume_optional(const Token::Type type);
+
+    bool chk_let_query();
 
     Token* curr() const;
 

@@ -213,7 +213,7 @@ ast::Stmt* ASTParser::stmt()
             pStmt = expr_cmd();
             break;
         case Token::Type::EX_LET:
-            pStmt = assign_stmt();
+            pStmt = let_stmt();
             break;
         case Token::Type::EX_UNLET:
             pStmt = unlet_stmt();
@@ -536,6 +536,68 @@ ast::JumpStmt* ASTParser::jump_stmt()
     }
 
     return new ast::JumpStmt(pCmd, pExpr);
+}
+
+ast::Stmt* ASTParser::let_stmt()
+{
+    if (chk_let_query())
+    {
+        return var_query_stmt();
+    }
+
+    return assign_stmt();
+}
+
+// 3932339600
+// 2969427802
+ast::VarQueryStmt* ASTParser::var_query_stmt()
+{
+    consume(Token::Type::EX_LET);
+
+    std::vector<ast::Expr*> llNames;
+
+    while (true)
+    {
+        ast::ScopeExpr* pScope = nullptr;
+        ast::Var* pVar = nullptr;
+
+        switch (curr()->type())
+        {
+            case Token::Type::SCOPE_B:
+            case Token::Type::SCOPE_W:
+            case Token::Type::SCOPE_T:
+            case Token::Type::SCOPE_G:
+            case Token::Type::SCOPE_L:
+            case Token::Type::SCOPE_S:
+            case Token::Type::SCOPE_A:
+            case Token::Type::SCOPE_V:
+                pScope = new ast::ScopeExpr(curr());
+                consume(curr()->type());
+
+                // We just consumed a scope. The scope is a name on its own for cases 1 and 3.
+                //  1) let b:
+                //  2) let b:foo
+                //  3) let b: foo
+
+                if (curr()->type() != Token::Type::IDENTIFIER || m_lTokens.peek(-1)->is_horizontal_wp())
+                {
+                    llNames.push_back(pScope);
+                    break;
+                }
+
+                [[fallthrough]];
+            case Token::Type::IDENTIFIER:
+                pVar = new ast::Var(nullptr, pScope, curr());
+                llNames.push_back(pVar);
+                consume(Token::Type::IDENTIFIER);
+                break;
+            default:
+                goto loop_end;
+        }
+    }
+
+loop_end:
+    return new ast::VarQueryStmt(std::move(llNames));
 }
 
 // 1813411950
@@ -1227,6 +1289,50 @@ bool ASTParser::consume_optional(const Token::Type aeType)
     }
 
     return false;
+}
+
+bool ASTParser::chk_let_query()
+{
+    bool bIsLetQuery = true;
+    size_t lnInitialPosition = m_lTokens.pos();
+
+    for (size_t offset = 1; offset < 4; offset++)
+    {
+        switch (m_lTokens.advance(1, Flags::skipws)->type())
+        {
+            case Token::Type::COMMENT:
+            case Token::Type::NEWLINE:
+                goto loop_end;
+            case Token::Type::SCOPE_B:
+            case Token::Type::SCOPE_G:
+            case Token::Type::SCOPE_L:
+            // SCOPE_A intentionally omitted. See ':h E738'.
+            case Token::Type::SCOPE_S:
+            case Token::Type::SCOPE_T:
+            case Token::Type::SCOPE_V:
+            case Token::Type::SCOPE_W:
+                if (offset > 1)
+                {
+                    goto loop_end;
+                }
+
+                break;
+            case Token::Type::IDENTIFIER:
+                if (offset > 1 && m_lTokens.peek(-1)->is_horizontal_wp())
+                {
+                    goto loop_end;
+                }
+
+                break;
+            default:
+                bIsLetQuery = false;
+                goto loop_end;
+        }
+    }
+
+loop_end:
+    m_lTokens.seek(lnInitialPosition);
+    return bIsLetQuery;
 }
 
 Token* ASTParser::curr() const
