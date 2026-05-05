@@ -85,6 +85,17 @@ void Tokens::clear()
     m_lData.clear();
 }
 
+void Tokens::seek(size_t anPos)
+{
+    if (anPos < 0 || anPos > m_lData.size())
+    {
+        throw std::runtime_error("Tokens::seek: attempt to access index " + std::to_string(anPos)
+                                 + " (size = " + std::to_string(m_lData.size()) + ")");
+    }
+
+    m_nPos = anPos;
+}
+
 Token* Tokens::peek(int anCount, int anFlags) const
 {
     return m_lData[m_nPos + move(anCount, anFlags)];

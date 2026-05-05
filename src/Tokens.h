@@ -72,6 +72,16 @@ public:
     void clear();
 
     // Movement
+    void seek(size_t pos);
+
+    // Tip 5-1: Sign-conversion black hole
+    //
+    //  To prevent anything but an exact 'size_t' from being passed, provide a "black
+    //  hole" to catch other types. This can fix -Wsign-conversion being ignored by a
+    //  silly human.
+    template <typename T>
+    void seek(T) = delete;
+
     Token* peek(int count, int flags = 0) const;
     Token* advance(int count, int flags = 0);
 
