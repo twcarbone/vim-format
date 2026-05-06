@@ -138,7 +138,15 @@ ast::Var* ASTParser::var()
         case Token::Type::SCOPE_G:
         case Token::Type::SCOPE_L:
             pScope = curr();
+
+            if (m_lTokens.peek(1)->type() != Token::Type::IDENTIFIER)
+            {
+                consume(curr()->type());
+                break;
+            }
+
             consume(curr()->type());
+
             [[fallthrough]];
         case Token::Type::IDENTIFIER:
             pName = curr();
