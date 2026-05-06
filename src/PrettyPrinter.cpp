@@ -527,10 +527,13 @@ void PrettyPrinter::visit(const ast::Var* apVar)
 
     if (apVar->scope() != nullptr)
     {
-        apVar->scope()->accept(*this);
+        write(apVar->scope()->str());
     }
 
-    write(apVar->name()->str());
+    if (apVar->name() != nullptr)
+    {
+        write(apVar->name()->str());
+    }
 }
 
 void PrettyPrinter::visit(const ast::VarQueryStmt* apVarQueryStmt)

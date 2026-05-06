@@ -15,7 +15,6 @@ Program
       FnParamList
         FnParam
           Var ...
-            NULL
           NULL
       StmtList
         JumpStmt return <>
@@ -25,7 +24,6 @@ Program
       FnParamList
         FnParam
           Var isnot
-            NULL
           NULL
       StmtList
         JumpStmt return <>
@@ -37,7 +35,6 @@ Program
       FnParamList
         FnParam
           Var a
-            NULL
           NULL
       StmtList
         ExprCmd echo <>
@@ -47,11 +44,9 @@ Program
       FnParamList
         FnParam
           Var a
-            NULL
           NULL
         FnParam
           Var ...
-            NULL
           NULL
       StmtList
         ExprCmd echo <>
@@ -59,20 +54,16 @@ Program
     EmptyStmt <>
     AssignStmt = <>
       Var is
-        NULL
       Literal 5
     EmptyStmt <>
     FnStmt Six ! <>
       FnParamList
         FnParam
           Var a
-            NULL
           NULL
         FnParam
           Var b
-            NULL
           Var is
-            NULL
       StmtList
         ExprCmd echo <>
           Literal 1

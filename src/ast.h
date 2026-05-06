@@ -551,11 +551,11 @@ private:
 class Var : public Expr
 {
 public:
-    Var(Token* sigil, ScopeExpr* scope, Token* name);
+    Var(Token* sigil, Token* scope, Token* name);
     virtual ~Var() = default;
 
     const Token* sigil() const;
-    const ScopeExpr* scope() const;
+    const Token* scope() const;
     const Token* name() const;
 
     virtual std::string toString() const;
@@ -563,6 +563,7 @@ public:
 
 private:
     Token* m_pSigil;
+    Token* m_pScope;
     Token* m_pName;
 };
 

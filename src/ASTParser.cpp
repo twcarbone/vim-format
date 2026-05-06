@@ -92,7 +92,7 @@ ast::Program* ASTParser::program()
 ast::Var* ASTParser::var()
 {
     Token* pSigil = nullptr;
-    ast::ScopeExpr* pScope = nullptr;
+    Token* pScope = nullptr;
     Token* pName = nullptr;
 
     switch (curr()->type())
@@ -117,7 +117,7 @@ ast::Var* ASTParser::var()
             {
                 case Token::Type::SCOPE_G:
                 case Token::Type::SCOPE_L:
-                    pScope = new ast::ScopeExpr(curr());
+                    pScope = curr();
                     consume(curr()->type());
                     [[fallthrough]];
                 case Token::Type::IDENTIFIER:
@@ -137,7 +137,7 @@ ast::Var* ASTParser::var()
         case Token::Type::SCOPE_V:
         case Token::Type::SCOPE_G:
         case Token::Type::SCOPE_L:
-            pScope = new ast::ScopeExpr(curr());
+            pScope = curr();
             consume(curr()->type());
             [[fallthrough]];
         case Token::Type::IDENTIFIER:
@@ -558,7 +558,7 @@ ast::VarQueryStmt* ASTParser::var_query_stmt()
 
     while (true)
     {
-        ast::ScopeExpr* pScope = nullptr;
+        Token* pScope = nullptr;
         ast::Var* pVar = nullptr;
 
         switch (curr()->type())
@@ -571,7 +571,7 @@ ast::VarQueryStmt* ASTParser::var_query_stmt()
             case Token::Type::SCOPE_S:
             case Token::Type::SCOPE_A:
             case Token::Type::SCOPE_V:
-                pScope = new ast::ScopeExpr(curr());
+                pScope = curr();
                 consume(curr()->type());
 
                 // We just consumed a scope. The scope is a name on its own for cases 1 and 3.
@@ -581,7 +581,7 @@ ast::VarQueryStmt* ASTParser::var_query_stmt()
 
                 if (curr()->type() != Token::Type::IDENTIFIER || m_lTokens.peek(-1)->is_horizontal_wp())
                 {
-                    llNames.push_back(pScope);
+                    llNames.push_back(new ast::Var(nullptr, pScope, nullptr));
                     break;
                 }
 
