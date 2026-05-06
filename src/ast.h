@@ -533,21 +533,6 @@ private:
     Token* m_pOp;
 };
 
-class ScopeExpr : public Expr
-{
-public:
-    ScopeExpr(Token* scope);
-    virtual ~ScopeExpr() = default;
-
-    const Token* scope() const;
-
-    virtual std::string toString() const;
-    virtual void accept(ASTVisitor& visitor) const;
-
-private:
-    Token* m_pScope;
-};
-
 class Var : public Expr
 {
 public:

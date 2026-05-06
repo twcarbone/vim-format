@@ -513,11 +513,6 @@ void PrettyPrinter::visit(const ast::UnaryOp* apUnaryOp)
     apUnaryOp->rexpr()->accept(*this);
 }
 
-void PrettyPrinter::visit(const ast::ScopeExpr* apScopeExpr)
-{
-    write(apScopeExpr->scope()->str());
-}
-
 void PrettyPrinter::visit(const ast::Var* apVar)
 {
     if (apVar->sigil() != nullptr)

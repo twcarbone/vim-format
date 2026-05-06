@@ -940,26 +940,6 @@ void UnaryOp::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-ScopeExpr::ScopeExpr(Token* apScope) :
-    m_pScope { apScope }
-{
-}
-
-const Token* ScopeExpr::scope() const
-{
-    return m_pScope;
-}
-
-std::string ScopeExpr::toString() const
-{
-    return "Scope " + m_pScope->str();
-}
-
-void ScopeExpr::accept(ASTVisitor& acASTVisitor) const
-{
-    acASTVisitor.visit(this);
-}
-
 Var::Var(Token* apSigil, Token* apScope, Token* apName) :
     m_pSigil { apSigil },
     m_pScope { apScope },

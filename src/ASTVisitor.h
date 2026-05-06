@@ -34,7 +34,6 @@ class LiteralStr;
 class MethodCallExpr;
 class Node;
 class Program;
-class ScopeExpr;
 class SliceExpr;
 class StmtList;
 class StrConst;
@@ -85,7 +84,6 @@ public:
     virtual void visit(const ast::LiteralStr* ast);
     virtual void visit(const ast::MethodCallExpr* ast);
     virtual void visit(const ast::Program* ast);
-    virtual void visit(const ast::ScopeExpr* ast);
     virtual void visit(const ast::SliceExpr* ast);
     virtual void visit(const ast::StmtList* ast);
     virtual void visit(const ast::StrConst* ast);
