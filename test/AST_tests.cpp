@@ -44,6 +44,11 @@ TEST_F(ASTTest, eval)
     test_file("../../test/ast/eval.vim");
 }
 
+TEST_F(ASTTest, lockvar)
+{
+    test_file("../../test/ast/lockvar.vim");
+}
+
 TEST_F(ASTTest, cmdline)
 {
     test_file("../../test/ast/cmdline.vim");

@@ -154,6 +154,11 @@ void ASTVisitor::visit(const ast::LiteralStr* apLiteralStr)
     handle_node(apLiteralStr);
 }
 
+void ASTVisitor::visit(const ast::LockVarStmt* apLockVarStmt)
+{
+    handle_node(apLockVarStmt);
+}
+
 void ASTVisitor::visit(const ast::StrConst* apStrConst)
 {
     handle_node(apStrConst);

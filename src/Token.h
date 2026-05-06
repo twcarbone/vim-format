@@ -11,6 +11,7 @@
         X(EX_UNLET)                                                                             \
         X(EX_ECHO)                                                                              \
         X(EX_SET)                                                                               \
+        X(EX_LOCKVAR)                                                                           \
         X(GEN_PLUS)                                                                             \
         X(GEN_MINUS)                                                                            \
         X(GEN_QUESTION)                                                                         \

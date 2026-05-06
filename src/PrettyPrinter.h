@@ -50,6 +50,7 @@ public:
     virtual void visit(const ast::ListExpr* ast);
     virtual void visit(const ast::Literal* ast);
     virtual void visit(const ast::LiteralStr* ast);
+    virtual void visit(const ast::LockVarStmt* ast);
     virtual void visit(const ast::MethodCallExpr* ast);
     virtual void visit(const ast::Program* ast);
     virtual void visit(const ast::SliceExpr* ast);

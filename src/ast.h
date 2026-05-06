@@ -641,4 +641,25 @@ private:
     Token* m_pComment;
 };
 
+class LockVarStmt : public Stmt
+{
+public:
+    LockVarStmt(Token* ex_cmd, Token* bang, Token* depth, std::vector<Expr*>&& names);
+    virtual ~LockVarStmt() = default;
+
+    const Token* ex_cmd() const;
+    const Token* bang() const;
+    const Token* depth() const;
+    std::vector<const Expr*> names() const;
+
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
+
+    Token* m_pExCmd;
+    Token* m_pBang;
+    Token* m_pDepth;
+};
+
 };

@@ -1150,3 +1150,48 @@ void CommentStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }
+
+LockVarStmt::LockVarStmt(Token* apExCmd, Token* apBang, Token* apDepth, std::vector<Expr*>&& alNames) :
+    Stmt({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) }),
+    m_pExCmd { apExCmd },
+    m_pBang { apBang },
+    m_pDepth { apDepth }
+{
+}
+
+const Token* LockVarStmt::ex_cmd() const
+{
+    return m_pExCmd;
+}
+
+const Token* LockVarStmt::bang() const
+{
+    return m_pBang;
+}
+
+const Token* LockVarStmt::depth() const
+{
+    return m_pDepth;
+}
+
+std::vector<const Expr*> LockVarStmt::names() const
+{
+    RETURN_CHILDREN_AS(const Expr*);
+}
+
+void LockVarStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string LockVarStmt::str_a() const
+{
+    std::string tmp = "LockVarStmt";
+    tmp += " ";
+    tmp += m_pExCmd->str();
+    tmp += " ";
+    tmp += m_pBang == nullptr ? "-bang" : "+bang";
+    tmp += " ";
+    tmp += m_pDepth == nullptr ? "-depth" : "+depth:" + m_pDepth->str();
+    return tmp;
+}
