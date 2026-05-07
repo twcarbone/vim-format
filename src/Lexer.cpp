@@ -49,6 +49,7 @@ Lexer::Lexer(const Context& acContext) :
         { "let", "", Token::Type::EX_LET },
         { "unlet", "unl", Token::Type::EX_UNLET },
         { "lockvar", "lockv", Token::Type::EX_LOCKVAR },
+        { "unlockvar", "unlo", Token::Type::EX_UNLOCKVAR },
     },
     m_lKeywords {
         // Keywords have no abbreviation, and can appear in any position.
@@ -483,6 +484,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     case Token::Type::FUNCTION:
                     case Token::Type::EX_UNLET:
                     case Token::Type::EX_LOCKVAR:
+                    case Token::Type::EX_UNLOCKVAR:
                         apCurrentToken->setType(Token::Type::OP_BANG);
                         break;
                     default:

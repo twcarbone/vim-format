@@ -227,6 +227,7 @@ ast::Stmt* ASTParser::stmt()
             pStmt = unlet_stmt();
             break;
         case Token::Type::EX_LOCKVAR:
+        case Token::Type::EX_UNLOCKVAR:
             pStmt = lockvar_stmt();
             break;
         case Token::Type::NEWLINE:
@@ -583,7 +584,7 @@ ast::VarQueryStmt* ASTParser::var_query_stmt()
 ast::LockVarStmt* ASTParser::lockvar_stmt()
 {
     Token* pExCmd = curr();
-    consume(Token::Type::EX_LOCKVAR);
+    consume(curr()->type());
 
     Token* pBang = nullptr;
     if (consume_optional(Token::Type::OP_BANG))

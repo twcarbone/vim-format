@@ -55,3 +55,9 @@ Program
           StrConst ;";e;";
       Var bar
       Var baz
+    EmptyStmt <>
+    LockVarStmt unlockvar +bang -depth <>
+      Var bar
+      Var baz
+    LockVarStmt unlo -bang +depth:2 <>
+      Var foo
