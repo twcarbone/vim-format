@@ -567,47 +567,15 @@ ast::VarQueryStmt* ASTParser::var_query_stmt()
 
     std::vector<ast::Expr*> llNames;
 
-    while (true)
+    switch (curr()->type())
     {
-        Token* pScope = nullptr;
-        ast::Var* pVar = nullptr;
-
-        switch (curr()->type())
-        {
-            case Token::Type::SCOPE_B:
-            case Token::Type::SCOPE_W:
-            case Token::Type::SCOPE_T:
-            case Token::Type::SCOPE_G:
-            case Token::Type::SCOPE_L:
-            case Token::Type::SCOPE_S:
-            case Token::Type::SCOPE_A:
-            case Token::Type::SCOPE_V:
-                pScope = curr();
-                consume(curr()->type());
-
-                // We just consumed a scope. The scope is a name on its own for cases 1 and 3.
-                //  1) let b:
-                //  2) let b:foo
-                //  3) let b: foo
-
-                if (curr()->type() != Token::Type::IDENTIFIER || m_lTokens.peek(-1)->is_horizontal_wp())
-                {
-                    llNames.push_back(new ast::Var(nullptr, pScope, nullptr));
-                    break;
-                }
-
-                [[fallthrough]];
-            case Token::Type::IDENTIFIER:
-                pVar = new ast::Var(nullptr, pScope, curr());
-                llNames.push_back(pVar);
-                consume(Token::Type::IDENTIFIER);
-                break;
-            default:
-                goto loop_end;
-        }
+        case Token::Type::COMMENT:
+        case Token::Type::NEWLINE:
+            break;
+        default:
+            llNames = names();
     }
 
-loop_end:
     return new ast::VarQueryStmt(std::move(llNames));
 }
 
