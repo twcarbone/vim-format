@@ -77,6 +77,7 @@ private:
         INTERP_EXP_DQUOTE = 9,
         STRING_CONSTANT = 10,
         LITERAL_STRING = 11,
+        PATTERN = 12,
     };
 
     State m_eState;

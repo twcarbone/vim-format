@@ -126,7 +126,7 @@ Lexer::Lexer(const Context& acContext) :
         { ",", Token::Type::COMMA },
         { "-", Token::Type::GEN_MINUS },
         { ".", Token::Type::GEN_DOT },
-        { "/", Token::Type::OP_DIV },
+        { "/", Token::Type::GEN_SLASH },
         { ";", Token::Type::SEMICOLON },
         { ":", Token::Type::COLON },
         { "<", Token::Type::OP_LT },
@@ -157,6 +157,7 @@ Lexer::Lexer(const Context& acContext) :
         { State::INTERP_EXP_DQUOTE,     State::INTERP_STR_DQUOTE },
         { State::STRING_CONSTANT,       State::NONE },
         { State::LITERAL_STRING,        State::NONE },
+        { State::PATTERN,               State::NONE },
     } }
 // clang-format on
 {
@@ -214,16 +215,6 @@ void Lexer::next()
         if (!match())
         {
             throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.context());
-        }
-
-        if (m_pCurrToken->is_ambiguous() && !disambiguate(m_pCurrToken))
-        {
-            throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
-        }
-
-        if (m_pCurrToken->is_keyword())
-        {
-            retype_keyword(m_pCurrToken);
         }
 
         m_cSource.advance(m_pCurrToken->str().size());
@@ -309,6 +300,9 @@ bool Lexer::match()
                         break;
                     case Token::Type::STR_INTERP_SQUOTE:
                         m_eState = State::INTERP_STR_SQUOTE;
+                        break;
+                    case Token::Type::SLASH:
+                        m_eState = State::PATTERN;
                         break;
                     default:
                         break;
@@ -397,6 +391,15 @@ bool Lexer::match()
             }
 
             // TODO (gh-4): Add support for escaped quotes within a string token
+            return push_string();
+        case State::PATTERN:
+            if (c == '/')
+            {
+                next_state();
+                return push_token(Token::Type::SLASH, c);
+            }
+
+            // TODO (gh-141): Add support for escaped forward slash in patterns
             return push_string();
         default:
             throw std::runtime_error("Lexer::match(): fall-thru to unknown state");
@@ -504,6 +507,20 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                         break;
                     default:
                         apCurrentToken->setType(Token::Type::OP_CAT_OLD);
+                }
+
+                break;
+            case Token::Type::GEN_SLASH:
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                        continue;
+                    case Token::Type::EX_CATCH:
+                        apCurrentToken->setType(Token::Type::SLASH);
+                        break;
+                    default:
+                        apCurrentToken->setType(Token::Type::OP_DIV);
                 }
 
                 break;
@@ -822,6 +839,17 @@ bool Lexer::push_token(Token::Type aeTokenType, std::string_view asLexeme)
 bool Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
 {
     m_pCurrToken = new Token(aeTokenType, asLexeme, m_cSource.pos());
+
+    if (m_pCurrToken->is_ambiguous() && !disambiguate(m_pCurrToken))
+    {
+        throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
+    }
+
+    if (m_pCurrToken->is_keyword())
+    {
+        retype_keyword(m_pCurrToken);
+    }
+
     return true;
 }
 
@@ -847,6 +875,9 @@ bool Lexer::push_string()
             break;
         case State::STRING_CONSTANT:
             lsRightDelimiters = "\"";
+            break;
+        case State::PATTERN:
+            lsRightDelimiters = "/";
             break;
         default:
             throw std::runtime_error("attempted call to Lexer::push_string when not in string state");

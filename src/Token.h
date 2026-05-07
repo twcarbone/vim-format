@@ -35,6 +35,7 @@
         X(GEN_QUESTION)                                                                         \
         X(GEN_EXCLAMATION)                                                                      \
         X(GEN_DOT)                                                                              \
+        X(GEN_SLASH)                                                                            \
         X(OP_ADD)                                                                               \
         X(OP_SUB)                                                                               \
         X(OP_UNARY_PLUS)                                                                        \
@@ -87,6 +88,7 @@
         X(ASSIGN_CAT_OLD)                                                                       \
         X(ASSIGN_CAT_NEW)                                                                       \
         X(ASSIGN_HEREDOC)                                                                       \
+        X(SLASH)                    /* delimits a /{pattern}/ */                                \
         X(L_PAREN)                                                                              \
         X(R_PAREN)                                                                              \
         X(L_BRACKET)                                                                            \
