@@ -290,13 +290,15 @@ ast::IfStmt* ASTParser::if_stmt()
         switch (curr()->type())
         {
             case Token::Type::EX_ELSEIF:
-            case Token::Type::EX_ELSE:
                 lIfBranches.push_back(if_branch());
                 break;
+            case Token::Type::EX_ELSE:
+                lIfBranches.push_back(if_branch());
+                [[fallthrough]];
             case Token::Type::EX_ENDIF:
                 pExEndIf = curr();
                 consume(Token::Type::EX_ENDIF);
-                [[fallthrough]];
+                break;
             default:
                 goto ifbranches_end;
         }
