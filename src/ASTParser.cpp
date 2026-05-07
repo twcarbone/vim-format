@@ -240,16 +240,16 @@ ast::Stmt* ASTParser::stmt()
     return pStmt;
 }
 
-ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
+ast::IfBranch* ASTParser::if_branch()
 {
     Token* pToken = nullptr;
     ast::Expr* pCondition = nullptr;
     ast::StmtList* pBody = new ast::StmtList();
 
     pToken = curr();
-    consume(aeType);
+    consume(curr()->type());
 
-    switch (aeType)
+    switch (pToken->type())
     {
         case Token::Type::EX_IF:
         case Token::Type::EX_ELSEIF:
@@ -283,7 +283,7 @@ ast::IfStmt* ASTParser::if_stmt()
     std::vector<ast::IfBranch*> lIfBranches;
     Token* pExEndIf = nullptr;
 
-    lIfBranches.push_back(if_branch(Token::Type::EX_IF));
+    lIfBranches.push_back(if_branch());
 
     while (true)
     {
@@ -291,7 +291,7 @@ ast::IfStmt* ASTParser::if_stmt()
         {
             case Token::Type::EX_ELSEIF:
             case Token::Type::EX_ELSE:
-                lIfBranches.push_back(if_branch(curr()->type()));
+                lIfBranches.push_back(if_branch());
                 break;
             case Token::Type::EX_ENDIF:
                 pExEndIf = curr();
