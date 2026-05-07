@@ -50,6 +50,10 @@ Lexer::Lexer(const Context& acContext) :
         { "unlet", "unl", Token::Type::EX_UNLET },
         { "lockvar", "lockv", Token::Type::EX_LOCKVAR },
         { "unlockvar", "unlo", Token::Type::EX_UNLOCKVAR },
+        { "try", "", Token::Type::EX_TRY },
+        { "endtry", "endt", Token::Type::EX_ENDTRY },
+        { "catch", "cat", Token::Type::EX_CATCH },
+        { "finally", "fina", Token::Type::EX_FINALLY },
     },
     m_lKeywords {
         // Keywords have no abbreviation, and can appear in any position.

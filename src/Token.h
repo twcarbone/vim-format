@@ -8,6 +8,7 @@
 #define TOKEN_TYPE_LIST \
         X(NONE)                                                                                 \
         X(EX_BREAK)                                                                             \
+        X(EX_CATCH)                                                                             \
         X(EX_CONTINUE)                                                                          \
         X(EX_ECHO)                                                                              \
         X(EX_ELSE)                                                                              \
@@ -15,7 +16,9 @@
         X(EX_ENDFOR)                                                                            \
         X(EX_ENDFUNCTION)                                                                       \
         X(EX_ENDIF)                                                                             \
+        X(EX_ENDTRY)                                                                            \
         X(EX_ENDWHILE)                                                                          \
+        X(EX_FINALLY)                                                                           \
         X(EX_FOR)                                                                               \
         X(EX_FUNCTION)                                                                          \
         X(EX_IF)                                                                                \
@@ -23,6 +26,7 @@
         X(EX_LOCKVAR)                                                                           \
         X(EX_RETURN)                                                                            \
         X(EX_SET)                                                                               \
+        X(EX_TRY)                                                                               \
         X(EX_UNLET)                                                                             \
         X(EX_UNLOCKVAR)                                                                         \
         X(EX_WHILE)                                                                             \
