@@ -30,21 +30,21 @@ Lexer::Lexer(const Context& acContext) :
         //
         //  let item = 1
         //  ^~~
-        { "break", "brea", Token::Type::BREAK },
-        { "continue", "con", Token::Type::CONTINUE },
+        { "break", "brea", Token::Type::EX_BREAK },
+        { "continue", "con", Token::Type::EX_CONTINUE },
         { "echo", "ec", Token::Type::EX_ECHO },
-        { "else", "el", Token::Type::ELSE },
-        { "elseif", "elsei", Token::Type::ELSEIF },
-        { "endfor", "endfo", Token::Type::ENDFOR },
-        { "endfunction", "endf", Token::Type::ENDFUNCTION },
-        { "endif", "en", Token::Type::ENDIF },
-        { "endwhile", "endwh", Token::Type::ENDWHILE },
-        { "function", "fu", Token::Type::FUNCTION },
-        { "return", "retu", Token::Type::RETURN },
+        { "else", "el", Token::Type::EX_ELSE },
+        { "elseif", "elsei", Token::Type::EX_ELSEIF },
+        { "endfor", "endfo", Token::Type::EX_ENDFOR },
+        { "endfunction", "endf", Token::Type::EX_ENDFUNCTION },
+        { "endif", "en", Token::Type::EX_ENDIF },
+        { "endwhile", "endwh", Token::Type::EX_ENDWHILE },
+        { "function", "fu", Token::Type::EX_FUNCTION },
+        { "return", "retu", Token::Type::EX_RETURN },
         { "set", "se", Token::Type::EX_SET },
-        { "while", "wh", Token::Type::WHILE },
-        { "for", "", Token::Type::FOR },
-        { "if", "", Token::Type::IF },
+        { "while", "wh", Token::Type::EX_WHILE },
+        { "for", "", Token::Type::EX_FOR },
+        { "if", "", Token::Type::EX_IF },
         { "in", "", Token::Type::IN },
         { "let", "", Token::Type::EX_LET },
         { "unlet", "unl", Token::Type::EX_UNLET },
@@ -481,7 +481,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     case Token::Type::SPACE:
                         apCurrentToken->setType(Token::Type::OP_LOGICAL_NOT);
                         break;
-                    case Token::Type::FUNCTION:
+                    case Token::Type::EX_FUNCTION:
                     case Token::Type::EX_UNLET:
                     case Token::Type::EX_LOCKVAR:
                     case Token::Type::EX_UNLOCKVAR:

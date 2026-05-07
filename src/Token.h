@@ -7,12 +7,25 @@
 // clang-format off
 #define TOKEN_TYPE_LIST \
         X(NONE)                                                                                 \
-        X(EX_LET)                                                                               \
-        X(EX_UNLET)                                                                             \
+        X(EX_BREAK)                                                                             \
+        X(EX_CONTINUE)                                                                          \
         X(EX_ECHO)                                                                              \
-        X(EX_SET)                                                                               \
+        X(EX_ELSE)                                                                              \
+        X(EX_ELSEIF)                                                                            \
+        X(EX_ENDFOR)                                                                            \
+        X(EX_ENDFUNCTION)                                                                       \
+        X(EX_ENDIF)                                                                             \
+        X(EX_ENDWHILE)                                                                          \
+        X(EX_FOR)                                                                               \
+        X(EX_FUNCTION)                                                                          \
+        X(EX_IF)                                                                                \
+        X(EX_LET)                                                                               \
         X(EX_LOCKVAR)                                                                           \
+        X(EX_RETURN)                                                                            \
+        X(EX_SET)                                                                               \
+        X(EX_UNLET)                                                                             \
         X(EX_UNLOCKVAR)                                                                         \
+        X(EX_WHILE)                                                                             \
         X(GEN_PLUS)                                                                             \
         X(GEN_MINUS)                                                                            \
         X(GEN_QUESTION)                                                                         \
@@ -79,20 +92,6 @@
         X(COMMA)                                                                                \
         X(COLON)                                                                                \
         X(SEMICOLON)                                                                            \
-        X(IF)                                                                                   \
-        X(ELSEIF)                                                                               \
-        X(ELSE)                                                                                 \
-        X(ENDIF)                                                                                \
-        X(WHILE)                                                                                \
-        X(ENDWHILE)                                                                             \
-        X(FOR)                                                                                  \
-        X(IN)                                                                                   \
-        X(ENDFOR)                                                                               \
-        X(BREAK)                                                                                \
-        X(CONTINUE)                                                                             \
-        X(RETURN)                                                                               \
-        X(FUNCTION)                                                                             \
-        X(ENDFUNCTION)                                                                          \
         X(FN_RANGE)                                                                             \
         X(FN_ABORT)                                                                             \
         X(FN_DICT)                                                                              \
@@ -100,6 +99,7 @@
         X(FN_ELLIPSES)                                                                          \
         X(HD_TRIM)                                                                              \
         X(HD_EVAL)                                                                              \
+        X(IN)                                                                                   \
         X(END)                                                                                  \
         X(TAB)                                                                                  \
         X(NEWLINE)                                                                              \
