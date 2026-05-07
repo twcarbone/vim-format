@@ -104,11 +104,6 @@ void ASTVisitor::visit(const ast::IndexExpr* apIndexExpr)
     handle_node(apIndexExpr);
 }
 
-void ASTVisitor::visit(const ast::ScopeExpr* apScopeExpr)
-{
-    handle_node(apScopeExpr);
-}
-
 void ASTVisitor::visit(const ast::SliceExpr* apSliceExpr)
 {
     handle_node(apSliceExpr);
@@ -157,6 +152,11 @@ void ASTVisitor::visit(const ast::InterpStr* apInterpStr)
 void ASTVisitor::visit(const ast::LiteralStr* apLiteralStr)
 {
     handle_node(apLiteralStr);
+}
+
+void ASTVisitor::visit(const ast::LockVarStmt* apLockVarStmt)
+{
+    handle_node(apLockVarStmt);
 }
 
 void ASTVisitor::visit(const ast::StrConst* apStrConst)

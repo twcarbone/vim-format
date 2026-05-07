@@ -1,24 +1,21 @@
 Program
   StmtList
     AssignStmt = <>
-      Var abort
-        Scope g:
+      Var g:abort
       ListExpr
         Literal 1
         Literal 2
         Literal 3
     AssignStmt = <>
       IndexExpr
-        Var abort
-          Scope g:
+        Var g:abort
         Literal 0
       BinaryOp +
         Literal 3
         Literal 2
     AssignStmt = <>
       SliceExpr
-        Var abort
-          Scope g:
+        Var g:abort
         Literal 1
         Literal 2
       ListExpr
@@ -26,49 +23,36 @@ Program
         Literal 6
     AssignStmt = <>
       Var bb
-        NULL
       Literal 10
     AssignStmt += <>
       Var bb
-        NULL
       Literal 2
     AssignStmt -= <>
       Var bb
-        NULL
       Literal 2
     AssignStmt *= <>
       Var bb
-        NULL
       Literal 2
     AssignStmt /= <>
       Var bb
-        NULL
       Literal 2
     AssignStmt %= <>
       Var bb
-        NULL
       Literal 2
     AssignStmt .= <>
       Var bb
-        NULL
       Literal 2
     AssignStmt ..= <>
       Var bb
-        NULL
       Literal 2
     AssignStmt = <>
       Var cc
-        NULL
-      Var abort
-        Scope g:
+      Var g:abort
     AssignStmt = <>
       ListAssignExpr
         Var dd
-          NULL
         Var ee
-          NULL
         Var ff
-          NULL
       ListExpr
         LiteralStr ;';a;';
         LiteralStr ;';b;';
@@ -76,11 +60,8 @@ Program
     AssignStmt = <>
       ListAssignExpr with lastname
         Var a
-          NULL
         Var b
-          NULL
         Var c
-          NULL
       ListExpr
         Literal 1
         Literal 2
@@ -88,45 +69,33 @@ Program
         Literal 4
     AssignStmt = <>
       Var is
-        NULL
       Var bb
-        NULL
     AssignStmt = <>
       Var $envvar
-        NULL
       LiteralStr ;';something;';
     AssignStmt = <>
       Var @a
-        NULL
       LiteralStr ;';foo;';
     AssignStmt = <>
       Var @@
-        NULL
       LiteralStr ;';bar;';
     AssignStmt = <>
       Var &tpm
-        NULL
       Literal 10
     AssignStmt = <>
-      Var &tpm
-        Scope g:
+      Var &g:tpm
       Literal 10
     AssignStmt = <>
-      Var &tpm
-        Scope l:
+      Var &l:tpm
       Literal 10
     UnletStmt <>
       Var cc
-        NULL
     UnletStmt ! <>
       Var cc
-        NULL
     UnletStmt ! <>
-      Var does_not_exist
-        Scope g:
+      Var g:does_not_exist
     AssignStmt =<< <>
       Var heredoc_items
-        NULL
       HereDocExpr trim END
         InterpStr
           LiteralStr ;;;\n;
@@ -142,28 +111,23 @@ Program
           LiteralStr ;;;\n;
     AssignStmt =<< <>
       Var heredoc_eval_items
-        NULL
       HereDocExpr eval END
         InterpStr
           LiteralStr ;;;{;
           BinaryOp +
             Var &tpm
-              NULL
             Literal 2
           LiteralStr ;}; is 12;\n;
         InterpStr
           LiteralStr ;;    END ;{;
           Var c
-            NULL
           LiteralStr ;}; is a list;\n;
         InterpStr
           LiteralStr ;;    echo ;{;
           Var @@
-            NULL
           LiteralStr ;};;\n;
     AssignStmt = <>
       Var gg
-        NULL
       ListExpr
         Literal 0zaabb
         Literal 0Z
@@ -171,39 +135,29 @@ Program
     VarQueryStmt <>
     VarQueryStmt <>
       Var bb
-        NULL
     VarQueryStmt <>
       Var bb
-        NULL
       Var dd
-        NULL
       Var ee
-        NULL
       Var ff
-        NULL
     VarQueryStmt <>
-      Scope g:
+      Var g:
       Var bb
-        NULL
     VarQueryStmt <>
-      Scope g:
-      Scope b:
-      Scope w:
+      Var g:
+      Var b:
+      Var w:
     VarQueryStmt <>
-      Var abort
-        Scope g:
+      Var g:abort
     VarQueryStmt <>
       Var bb
-        NULL
-      Scope w:
+      Var w:
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
     ForStmt <>
       Var fu
-        NULL
-      Var abort
-        Scope g:
+      Var g:abort
       StmtList
         JumpStmt continue <>
           NULL
@@ -213,9 +167,7 @@ Program
     ForStmt <>
       ListExpr
         Var a
-          NULL
         Var isnot
-          NULL
       ListExpr
         ListExpr
           Literal 4
@@ -226,7 +178,6 @@ Program
       StmtList
         ExprCmd echo <>
           Var isnot
-            NULL
         JumpStmt con <>
           NULL
         JumpStmt brea <>
@@ -299,7 +250,6 @@ Program
         Literal 1
         StrConst ;";this;";
         Var is
-          NULL
     ExprCmd echo <>
       BinaryOp ??
         StrConst ;";us;";
@@ -360,7 +310,6 @@ Program
         StrConst ;";bar;";
     ExprCmd echo <>
       Var $HOME
-        NULL
     EmptyStmt <>
     CommentStmt " expr5 <trailing = no>
     ExprCmd echo <>
@@ -443,8 +392,7 @@ Program
         NULL
         Literal 2
     AssignStmt = <>
-      Var items
-        Scope b:
+      Var b:items
       ListExpr
         Literal 10
         Literal 20
@@ -458,20 +406,17 @@ Program
         Literal 100
     ExprCmd echo <>
       SliceExpr
-        Var items
-          Scope b:
+        Var b:items
         Literal 2
         NULL
     ExprCmd echo <>
       SliceExpr
-        Var items
-          Scope b:
+        Var b:items
         Literal 1
         Literal 3
     ExprCmd echo <>
       SliceExpr
-        Var items
-          Scope b:
+        Var b:items
         BinaryOp +
           Literal 1
           Literal 1
@@ -479,41 +424,33 @@ Program
           Literal 6
           Literal 2
     AssignStmt = <>
-      Var dict
-        Scope g:
+      Var g:dict
       DictExpr
         DictEntry
           LiteralStr ;';closure;';
           LiteralStr ;';banana;';
     ExprCmd echo <>
       BinaryOp .
-        Var dict
-          Scope g:
+        Var g:dict
         Var closure
-          NULL
     FnStmt Add <>
       FnParamList
         FnParam
           Var a
-            NULL
           NULL
         FnParam
           Var b
-            NULL
           NULL
       StmtList
         JumpStmt return <>
           BinaryOp +
-            Var a
-              Scope a:
-            Var b
-              Scope a:
+            Var a:a
+            Var a:b
     ExprCmd echo <>
       MethodCallExpr ->
         Literal 2
         CallExpr
           Var Add
-            NULL
           FnArgList
             Literal 3
     ExprCmd echo <>
@@ -522,23 +459,19 @@ Program
           Literal 3
           CallExpr
             Var Add
-              NULL
             FnArgList
               Literal 4
         CallExpr
           Var Add
-            NULL
           FnArgList
             Literal 5
     EmptyStmt <>
     CommentStmt " expr11 <trailing = no>
     AssignStmt = <>
-      Var m_bar
-        Scope g:
+      Var g:m_bar
       Literal 42
     AssignStmt = <>
-      Var in
-        Scope b:
+      Var b:in
       ListExpr
         Literal 0
         Literal 1
@@ -546,7 +479,6 @@ Program
         Literal 3
     AssignStmt = <>
       Var dict_a
-        NULL
       DictExpr
         DictEntry
           StrConst ;";apple;";
@@ -563,24 +495,19 @@ Program
           StrConst ;";pie;";
     AssignStmt = <>
       Var dict_b
-        NULL
       DictExpr
         DictEntry
           StrConst ;";test;";
-          Var m_bar
-            Scope g:
+          Var g:m_bar
     AssignStmt = <>
       Var dict_c
-        NULL
       DictExpr
         DictEntry
-          Var m_bar
-            Scope g:
+          Var g:m_bar
           Literal 43
     ExprCmd echo <>
       CallExpr
         Var Add
-          NULL
         FnArgList
           Literal 1
           Literal 2
@@ -605,19 +532,16 @@ Program
       InterpStr
         LiteralStr ;$';Before ;{;
         Var bb
-          NULL
         LiteralStr ;}; after;';
     ExprCmd echo <>
       InterpStr
         LiteralStr ;$';;{;
         Var bb
-          NULL
         LiteralStr ;}; after;';
     ExprCmd echo <>
       InterpStr
         LiteralStr ;$';Before ;{;
         Var bb
-          NULL
         LiteralStr ;};;';
     ExprCmd echo <>
       LiteralStr ;';Before bb} after;';
@@ -627,7 +551,6 @@ Program
       InterpStr
         LiteralStr ;$';;{;
         Var bb
-          NULL
         LiteralStr ;}; "after";';
     ExprCmd echo <>
       LiteralStr ;';Before {bb};';
@@ -639,19 +562,16 @@ Program
       InterpStr
         StrConst ;$";Before ;{;
         Var bb
-          NULL
         StrConst ;}; after;";
     ExprCmd echo <>
       InterpStr
         StrConst ;$";;{;
         Var bb
-          NULL
         StrConst ;}; after;";
     ExprCmd echo <>
       InterpStr
         StrConst ;$";Before ;{;
         Var bb
-          NULL
         StrConst ;};;";
     ExprCmd echo <>
       StrConst ;";Before {bb} after;";
@@ -661,7 +581,6 @@ Program
       InterpStr
         StrConst ;$";;{;
         Var bb
-          NULL
         StrConst ;}; 'after';";
     ExprCmd echo <>
       StrConst ;";Before {bb};";

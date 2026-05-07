@@ -92,7 +92,7 @@ ast::Program* ASTParser::program()
 ast::Var* ASTParser::var()
 {
     Token* pSigil = nullptr;
-    ast::ScopeExpr* pScope = nullptr;
+    Token* pScope = nullptr;
     Token* pName = nullptr;
 
     switch (curr()->type())
@@ -117,7 +117,7 @@ ast::Var* ASTParser::var()
             {
                 case Token::Type::SCOPE_G:
                 case Token::Type::SCOPE_L:
-                    pScope = new ast::ScopeExpr(curr());
+                    pScope = curr();
                     consume(curr()->type());
                     [[fallthrough]];
                 case Token::Type::IDENTIFIER:
@@ -137,8 +137,16 @@ ast::Var* ASTParser::var()
         case Token::Type::SCOPE_V:
         case Token::Type::SCOPE_G:
         case Token::Type::SCOPE_L:
-            pScope = new ast::ScopeExpr(curr());
+            pScope = curr();
+
+            if (m_lTokens.peek(1)->type() != Token::Type::IDENTIFIER)
+            {
+                consume(curr()->type());
+                break;
+            }
+
             consume(curr()->type());
+
             [[fallthrough]];
         case Token::Type::IDENTIFIER:
             pName = curr();
@@ -217,6 +225,10 @@ ast::Stmt* ASTParser::stmt()
             break;
         case Token::Type::EX_UNLET:
             pStmt = unlet_stmt();
+            break;
+        case Token::Type::EX_LOCKVAR:
+        case Token::Type::EX_UNLOCKVAR:
+            pStmt = lockvar_stmt();
             break;
         case Token::Type::NEWLINE:
             pStmt = new ast::EmptyStmt();
@@ -556,48 +568,37 @@ ast::VarQueryStmt* ASTParser::var_query_stmt()
 
     std::vector<ast::Expr*> llNames;
 
-    while (true)
+    switch (curr()->type())
     {
-        ast::ScopeExpr* pScope = nullptr;
-        ast::Var* pVar = nullptr;
-
-        switch (curr()->type())
-        {
-            case Token::Type::SCOPE_B:
-            case Token::Type::SCOPE_W:
-            case Token::Type::SCOPE_T:
-            case Token::Type::SCOPE_G:
-            case Token::Type::SCOPE_L:
-            case Token::Type::SCOPE_S:
-            case Token::Type::SCOPE_A:
-            case Token::Type::SCOPE_V:
-                pScope = new ast::ScopeExpr(curr());
-                consume(curr()->type());
-
-                // We just consumed a scope. The scope is a name on its own for cases 1 and 3.
-                //  1) let b:
-                //  2) let b:foo
-                //  3) let b: foo
-
-                if (curr()->type() != Token::Type::IDENTIFIER || m_lTokens.peek(-1)->is_horizontal_wp())
-                {
-                    llNames.push_back(pScope);
-                    break;
-                }
-
-                [[fallthrough]];
-            case Token::Type::IDENTIFIER:
-                pVar = new ast::Var(nullptr, pScope, curr());
-                llNames.push_back(pVar);
-                consume(Token::Type::IDENTIFIER);
-                break;
-            default:
-                goto loop_end;
-        }
+        case Token::Type::COMMENT:
+        case Token::Type::NEWLINE:
+            break;
+        default:
+            llNames = names();
     }
 
-loop_end:
     return new ast::VarQueryStmt(std::move(llNames));
+}
+
+// 2415878059
+ast::LockVarStmt* ASTParser::lockvar_stmt()
+{
+    Token* pExCmd = curr();
+    consume(curr()->type());
+
+    Token* pBang = nullptr;
+    if (consume_optional(Token::Type::OP_BANG))
+    {
+        pBang = m_lTokens.peek(-1, Flags::skipws);
+    }
+
+    Token* pDepth = nullptr;
+    if (consume_optional(Token::Type::INTEGER))
+    {
+        pDepth = m_lTokens.peek(-1, Flags::skipws);
+    }
+
+    return new ast::LockVarStmt(pExCmd, pBang, pDepth, names());
 }
 
 // 1813411950
@@ -1006,6 +1007,28 @@ string_end:
     return pInterpStr;
 }
 
+std::vector<ast::Expr*> ASTParser::names()
+{
+    std::vector<ast::Expr*> llNames;
+
+    while (true)
+    {
+        llNames.push_back(expr());
+
+        switch (curr()->type())
+        {
+            case Token::Type::COMMENT:
+            case Token::Type::NEWLINE:
+                goto loop_end;
+            default:
+                break;
+        }
+    }
+
+loop_end:
+    return llNames;
+}
+
 ast::Expr* ASTParser::expr(int anMinBindingPower)
 {
     ast::Expr* pLhs = nullptr;
@@ -1083,26 +1106,6 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
         // 2. Parse operator
         switch (curr()->type())
         {
-            case Token::Type::COMMENT:
-            case Token::Type::COMMA:
-            case Token::Type::COLON:
-            case Token::Type::END:
-            case Token::Type::IN:
-            case Token::Type::NEWLINE:
-            case Token::Type::R_BRACKET:
-            case Token::Type::R_BRACE:
-            case Token::Type::R_PAREN:
-            case Token::Type::ASSIGN_ADD:
-            case Token::Type::ASSIGN_MINUS:
-            case Token::Type::ASSIGN_MUL:
-            case Token::Type::ASSIGN_DIV:
-            case Token::Type::ASSIGN_EQ:
-            case Token::Type::ASSIGN_MODULO:
-            case Token::Type::ASSIGN_CAT_NEW:
-            case Token::Type::ASSIGN_CAT_OLD:
-            case Token::Type::ASSIGN_HEREDOC:
-            case Token::Type::SEMICOLON:
-                return pLhs;
             // expr1
             case Token::Type::OP_FALSEY:
             case Token::Type::OP_TERNARY_IF:
@@ -1147,7 +1150,7 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 pOp = curr();
                 break;
             default:
-                throw_unexpected_token();
+                return pLhs;
         }
 
         // 3. Parse right-hand side

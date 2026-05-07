@@ -35,7 +35,11 @@ tags:
 	./scripts/cmds.py > ./reference/ex_cmds.txt
 
 .PHONY: ast
-ast:
-	./build/src/vim-format -p test/ast/eval.vim > test/ast/eval.ast
-	./build/src/vim-format -p test/ast/cmdline.vim > test/ast/cmdline.ast
-	./build/src/vim-format -p test/ast/userfunc.vim > test/ast/userfunc.ast
+
+VIM_FILES := $(wildcard test/ast/*.vim)
+AST_FILES := $(VIM_FILES:.vim=.ast)
+
+ast: $(AST_FILES)
+
+test/ast/%.ast: test/ast/%.vim
+	./build/src/vim-format -p $< > $@

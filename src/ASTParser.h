@@ -47,11 +47,14 @@ private:
     ast::WhileStmt* while_stmt();
     ast::UnletStmt* unlet_stmt();
     ast::AssignStmt* assign_stmt();
-    ast::VarQueryStmt* var_query_stmt();
     ast::FnParamList* fn_param_list();
     ast::HereDocExpr* heredoc_expr();
     ast::CommentStmt* comment_stmt();
+    ast::LockVarStmt* lockvar_stmt();
+    ast::VarQueryStmt* var_query_stmt();
     ast::ListAssignExpr* list_assign_expr();
+
+    std::vector<ast::Expr*> names();
 
     void try_consume(const Token::Type type, const std::string& vim_error_code);
     void consume(const Token::Type type);

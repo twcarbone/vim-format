@@ -46,7 +46,7 @@ private:
 class EmptyStmt : public Stmt
 {
 public:
-    virtual ~EmptyStmt();
+    virtual ~EmptyStmt() = default;
 
     virtual void accept(ASTVisitor& visitor) const;
 
@@ -73,7 +73,7 @@ class GroupExpr : public Expr
 {
 public:
     GroupExpr(Expr* expr);
-    virtual ~GroupExpr();
+    virtual ~GroupExpr() = default;
 
     const Expr* expr() const;
 
@@ -93,7 +93,7 @@ class ExprCmd : public Stmt
 {
 public:
     ExprCmd(Token* cmd, Expr* expr);
-    virtual ~ExprCmd();
+    virtual ~ExprCmd() = default;
 
     const Token* ex_cmd() const;
     const Expr* expr() const;
@@ -110,7 +110,7 @@ class StmtList : public Node
 {
 public:
     StmtList() = default;
-    virtual ~StmtList();
+    virtual ~StmtList() = default;
 
     void push(Stmt* stmt);
     void take(StmtList* stmts);
@@ -125,7 +125,7 @@ class Program : public Node
 {
 public:
     Program(ast::StmtList* stmts);
-    virtual ~Program();
+    virtual ~Program() = default;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -135,7 +135,7 @@ class IfBranch : public Node
 {
 public:
     IfBranch(Token* token, Expr* expr, StmtList* body);
-    virtual ~IfBranch();
+    virtual ~IfBranch() = default;
 
     const Token* token() const;
     const Expr* condition() const;
@@ -152,7 +152,7 @@ class IfStmt : public Stmt
 {
 public:
     IfStmt(const std::vector<IfBranch*>& ifbranches, Token* ex_endif);
-    virtual ~IfStmt();
+    virtual ~IfStmt() = default;
 
     std::vector<const IfBranch*> branches() const;
     const Token* ex_endif() const;
@@ -169,7 +169,7 @@ class WhileStmt : public Stmt
 {
 public:
     WhileStmt(Token* ex_while, Token* ex_endwhile, Expr* condition, StmtList* stmts);
-    virtual ~WhileStmt();
+    virtual ~WhileStmt() = default;
 
     const Expr* condition() const;
     const Token* ex_cmd_while() const;
@@ -189,7 +189,7 @@ class ForStmt : public Stmt
 {
 public:
     ForStmt(Expr* item, Expr* items, StmtList* stmts, Token* ex_endfo);
-    virtual ~ForStmt();
+    virtual ~ForStmt() = default;
 
     const Expr* item() const;
     const Expr* items() const;
@@ -208,7 +208,7 @@ class JumpStmt : public Stmt
 {
 public:
     JumpStmt(Token* token, Expr* expr);
-    virtual ~JumpStmt();
+    virtual ~JumpStmt() = default;
 
     const Token* ex_cmd() const;
     const Expr* expr() const;
@@ -225,7 +225,7 @@ class FnParamList : public ExprList
 {
 public:
     FnParamList() = default;
-    virtual ~FnParamList();
+    virtual ~FnParamList() = default;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -236,7 +236,7 @@ class FnArgList : public ExprList
 {
 public:
     FnArgList() = default;
-    virtual ~FnArgList();
+    virtual ~FnArgList() = default;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -246,7 +246,7 @@ class FnParam : public Expr
 {
 public:
     FnParam(Var* name, Expr* default_value);
-    virtual ~FnParam();
+    virtual ~FnParam() = default;
 
     const Var* name() const;
     const Expr* default_value() const;
@@ -265,7 +265,7 @@ public:
            FnParamList* params,
            const std::vector<Token*>& modifiers,
            StmtList* body);
-    virtual ~FnStmt();
+    virtual ~FnStmt() = default;
 
     const Token* ex_fu() const;
     const Token* ex_endfu() const;
@@ -291,7 +291,7 @@ class BinaryOp : public Expr
 {
 public:
     BinaryOp(Token* op, Expr* left, Expr* right);
-    virtual ~BinaryOp();
+    virtual ~BinaryOp() = default;
 
     const Token* op() const;
     const Expr* lexpr() const;
@@ -308,7 +308,7 @@ class CasedBinaryOp : public BinaryOp
 {
 public:
     CasedBinaryOp(Token* op, Expr* left, Expr* right, Token* case_sensitivity);
-    virtual ~CasedBinaryOp();
+    virtual ~CasedBinaryOp() = default;
 
     const Token* case_sensitivity() const;
 
@@ -323,7 +323,7 @@ class DictEntry : public Node
 {
 public:
     DictEntry(Expr* key, Expr* value);
-    virtual ~DictEntry();
+    virtual ~DictEntry() = default;
 
     const Expr* key() const;
     const Expr* value() const;
@@ -336,7 +336,7 @@ class DictExpr : public Expr
 {
 public:
     DictExpr(std::vector<DictEntry*>&& entries);
-    virtual ~DictExpr();
+    virtual ~DictExpr() = default;
 
     std::vector<const DictEntry*> entries() const;
 
@@ -348,7 +348,7 @@ class ListExpr : public Expr
 {
 public:
     ListExpr(std::vector<Expr*>&& exprs);
-    virtual ~ListExpr();
+    virtual ~ListExpr() = default;
 
     void push(Expr* expr);
 
@@ -362,7 +362,7 @@ class ListAssignExpr : public Expr
 {
 public:
     ListAssignExpr(std::vector<Expr*>&& names, Token* semi);
-    virtual ~ListAssignExpr();
+    virtual ~ListAssignExpr() = default;
 
     std::vector<const Expr*> names() const;
     const Expr* lastname() const;
@@ -378,7 +378,7 @@ class CallExpr : public Expr
 {
 public:
     CallExpr(Expr* callable, FnArgList* args);
-    virtual ~CallExpr();
+    virtual ~CallExpr() = default;
 
     const Expr* callable() const;
     const FnArgList* args() const;
@@ -391,7 +391,7 @@ class MethodCallExpr : public Expr
 {
 public:
     MethodCallExpr(Token* op, Expr* receiver, Expr* call);
-    virtual ~MethodCallExpr();
+    virtual ~MethodCallExpr() = default;
 
     const Token* op() const;
     const Expr* receiver() const;
@@ -408,7 +408,7 @@ class InterpStr : public Expr
 {
 public:
     InterpStr() = default;
-    virtual ~InterpStr();
+    virtual ~InterpStr() = default;
 
     void push(Expr* expr);
 
@@ -420,7 +420,7 @@ class StrExpr : public Expr
 {
 public:
     StrExpr(Token* str, Token* ldelim, Token* rdelim);
-    virtual ~StrExpr();
+    virtual ~StrExpr() = default;
 
     const Token* str() const;
     const Token* ldelim() const;
@@ -439,7 +439,7 @@ class LiteralStr : public StrExpr
 {
 public:
     using StrExpr::StrExpr;
-    virtual ~LiteralStr();
+    virtual ~LiteralStr() = default;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -449,7 +449,7 @@ class StrConst : public StrExpr
 {
 public:
     using StrExpr::StrExpr;
-    virtual ~StrConst();
+    virtual ~StrConst() = default;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -459,7 +459,7 @@ class Literal : public Expr
 {
 public:
     Literal(Token* token);
-    virtual ~Literal();
+    virtual ~Literal() = default;
 
     const Token* token() const;
 
@@ -474,7 +474,7 @@ class SliceExpr : public Expr
 {
 public:
     SliceExpr(Expr* sliceable, Expr* start, Expr* stop);
-    virtual ~SliceExpr();
+    virtual ~SliceExpr() = default;
 
     const Expr* sliceable() const;
     const Expr* start() const;
@@ -488,7 +488,7 @@ class IndexExpr : public Expr
 {
 public:
     IndexExpr(Expr* indexable, Expr* index);
-    virtual ~IndexExpr();
+    virtual ~IndexExpr() = default;
 
     const Expr* indexable() const;
     const Expr* index() const;
@@ -501,7 +501,7 @@ class TernaryOp : public Expr
 {
 public:
     TernaryOp(Token* left_op, Token* right_op, Expr* left, Expr* middle, Expr* right);
-    virtual ~TernaryOp();
+    virtual ~TernaryOp() = default;
 
     const Token* lop() const;
     const Token* rop() const;
@@ -521,7 +521,7 @@ class UnaryOp : public Expr
 {
 public:
     UnaryOp(Token* op, Expr* right);
-    virtual ~UnaryOp();
+    virtual ~UnaryOp() = default;
 
     const Token* op() const;
     const Expr* rexpr() const;
@@ -533,29 +533,14 @@ private:
     Token* m_pOp;
 };
 
-class ScopeExpr : public Expr
-{
-public:
-    ScopeExpr(Token* scope);
-    virtual ~ScopeExpr();
-
-    const Token* scope() const;
-
-    virtual std::string toString() const;
-    virtual void accept(ASTVisitor& visitor) const;
-
-private:
-    Token* m_pScope;
-};
-
 class Var : public Expr
 {
 public:
-    Var(Token* sigil, ScopeExpr* scope, Token* name);
-    virtual ~Var();
+    Var(Token* sigil, Token* scope, Token* name);
+    virtual ~Var() = default;
 
     const Token* sigil() const;
-    const ScopeExpr* scope() const;
+    const Token* scope() const;
     const Token* name() const;
 
     virtual std::string toString() const;
@@ -563,6 +548,7 @@ public:
 
 private:
     Token* m_pSigil;
+    Token* m_pScope;
     Token* m_pName;
 };
 
@@ -570,7 +556,7 @@ class AssignStmt : public Stmt
 {
 public:
     AssignStmt(Token* op, Expr* left, Expr* right);
-    virtual ~AssignStmt();
+    virtual ~AssignStmt() = default;
 
     const Token* op() const;
     const Expr* lexpr() const;
@@ -588,7 +574,7 @@ class VarQueryStmt : public Stmt
 {
 public:
     VarQueryStmt(std::vector<Expr*>&& names);
-    virtual ~VarQueryStmt();
+    virtual ~VarQueryStmt() = default;
 
     std::vector<const Expr*> names() const;
 
@@ -602,7 +588,7 @@ class HereDocExpr : public Expr
 {
 public:
     HereDocExpr(std::vector<Expr*>&& lines, std::vector<Token*>&& modifiers, Token* endmarker);
-    virtual ~HereDocExpr();
+    virtual ~HereDocExpr() = default;
 
     const std::vector<Token*>& modifiers() const;
     const Token* endmarker() const;
@@ -620,7 +606,7 @@ class UnletStmt : public Stmt
 {
 public:
     UnletStmt(Token* ex_unlet, Token* bang, Expr* expr);
-    virtual ~UnletStmt();
+    virtual ~UnletStmt() = default;
 
     const Token* ex_unlet() const;
     const Token* bang() const;
@@ -639,7 +625,7 @@ class CommentStmt : public Stmt
 {
 public:
     CommentStmt(Token* comment, bool trailing = false);
-    virtual ~CommentStmt();
+    virtual ~CommentStmt() = default;
 
     const Token* comment() const;
 
@@ -653,6 +639,27 @@ private:
 
     bool m_bTrailing;
     Token* m_pComment;
+};
+
+class LockVarStmt : public Stmt
+{
+public:
+    LockVarStmt(Token* ex_cmd, Token* bang, Token* depth, std::vector<Expr*>&& names);
+    virtual ~LockVarStmt() = default;
+
+    const Token* ex_cmd() const;
+    const Token* bang() const;
+    const Token* depth() const;
+    std::vector<const Expr*> names() const;
+
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
+
+    Token* m_pExCmd;
+    Token* m_pBang;
+    Token* m_pDepth;
 };
 
 };

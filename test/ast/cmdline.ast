@@ -10,13 +10,11 @@ Program
     EmptyStmt <>
     AssignStmt = <>
       Var a
-        NULL
       ListExpr
         StrConst ;";a;";
         StrConst ;";b;";
     CommentStmt "inline comment <trailing = yes>
     AssignStmt = <>
       Var a
-        NULL
       Literal 2
     CommentStmt "inline comment with no leading whitespace <trailing = yes>

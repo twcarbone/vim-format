@@ -437,6 +437,34 @@ void PrettyPrinter::visit(const ast::LiteralStr* apLiteralStr)
     write(apLiteralStr->rdelim() == nullptr ? "" : apLiteralStr->rdelim()->str());
 }
 
+void PrettyPrinter::visit(const ast::LockVarStmt* apLockVarStmt)
+{
+    write_bol();
+
+    write(apLockVarStmt->ex_cmd()->str());
+
+    if (apLockVarStmt->bang() != nullptr)
+    {
+        write(apLockVarStmt->bang()->str());
+    }
+
+    if (apLockVarStmt->depth() != nullptr)
+    {
+        write(' ', Settings::SpaceAfterExprCmd);
+        write(apLockVarStmt->depth()->str());
+    }
+
+    write(' ', Settings::SpaceAfterExprCmd);
+
+    for (const ast::Expr* pExpr : apLockVarStmt->names())
+    {
+        pExpr->accept(*this);
+        write(' ', Settings::SpaceAfterListSeparator);
+    }
+
+    write_eol();
+}
+
 void PrettyPrinter::visit(const ast::StrConst* apStrConst)
 {
     write(apStrConst->ldelim() == nullptr ? "" : apStrConst->ldelim()->str());
@@ -513,11 +541,6 @@ void PrettyPrinter::visit(const ast::UnaryOp* apUnaryOp)
     apUnaryOp->rexpr()->accept(*this);
 }
 
-void PrettyPrinter::visit(const ast::ScopeExpr* apScopeExpr)
-{
-    write(apScopeExpr->scope()->str());
-}
-
 void PrettyPrinter::visit(const ast::Var* apVar)
 {
     if (apVar->sigil() != nullptr)
@@ -527,10 +550,13 @@ void PrettyPrinter::visit(const ast::Var* apVar)
 
     if (apVar->scope() != nullptr)
     {
-        apVar->scope()->accept(*this);
+        write(apVar->scope()->str());
     }
 
-    write(apVar->name()->str());
+    if (apVar->name() != nullptr)
+    {
+        write(apVar->name()->str());
+    }
 }
 
 void PrettyPrinter::visit(const ast::VarQueryStmt* apVarQueryStmt)

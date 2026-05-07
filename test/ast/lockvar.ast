@@ -1,0 +1,63 @@
+Program
+  StmtList
+    LockVarStmt lockvar -bang +depth:2 <>
+      Var foo
+    LockVarStmt lockv +bang -depth <>
+      Var bar
+      Var baz
+    EmptyStmt <>
+    AssignStmt = <>
+      Var List
+      ListExpr
+        Literal 1
+        Literal 2
+        Literal 3
+    AssignStmt = <>
+      Var Dict
+      DictExpr
+        DictEntry
+          StrConst ;";one;";
+          Literal 1
+        DictEntry
+          StrConst ;";two;";
+          Literal 2
+    FnStmt Add <>
+      FnParamList
+        FnParam
+          Var a
+          NULL
+        FnParam
+          Var b
+          NULL
+      StmtList
+        JumpStmt return <>
+          BinaryOp +
+            Var a:a
+            Var a:b
+    EmptyStmt <>
+    LockVarStmt lockvar -bang +depth:1 <>
+      SliceExpr
+        Var List
+        BinaryOp .
+          Var Dict
+          Var one
+        CallExpr
+          Var Add
+          FnArgList
+            Literal 1
+            Literal 1
+      Var w:
+      Var g:
+      IndexExpr
+        Var Dict
+        BinaryOp ..
+          StrConst ;";on;";
+          StrConst ;";e;";
+      Var bar
+      Var baz
+    EmptyStmt <>
+    LockVarStmt unlockvar +bang -depth <>
+      Var bar
+      Var baz
+    LockVarStmt unlo -bang +depth:2 <>
+      Var foo
