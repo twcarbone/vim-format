@@ -1,12 +1,9 @@
 .PHONY: first
 first: build
 
-.PHONY: configure
-configure:
-	cmake -B build/
-
 .PHONY: build
-build: configure
+build:
+	cmake -B build/ -DCMAKE_BUILD_TYPE=Release
 	cmake --build build/
 
 .PHONY: build/debug
