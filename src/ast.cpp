@@ -2,17 +2,6 @@
 
 #include "ast.h"
 
-// clang-format off
-#define RETURN_CHILDREN_AS(type)                        \
-    std::vector<type> casted;                           \
-    casted.reserve(m_lChildren.size());                 \
-    for (Node* pnode : m_lChildren)                     \
-    {                                                   \
-        casted.push_back(static_cast<type>(pnode));     \
-    }                                                   \
-    return casted
-// clang-format on
-
 using namespace ast;
 
 // Tip 1-4: The final "Sink". Store the vector as the destination type. The move is
@@ -204,11 +193,6 @@ IfStmt::IfStmt(const std::vector<IfBranch*>& alIfBranches, Token* apExEndIf) :
     {
         m_lChildren.push_back(pIfBranch);
     }
-}
-
-std::vector<const IfBranch*> IfStmt::branches() const
-{
-    RETURN_CHILDREN_AS(const IfBranch*);
 }
 
 const Token* IfStmt::ex_endif() const
@@ -542,11 +526,6 @@ DictExpr::DictExpr(std::vector<DictEntry*>&& alEntries) :
 {
 }
 
-std::vector<const DictEntry*> DictExpr::entries() const
-{
-    RETURN_CHILDREN_AS(const DictEntry*);
-}
-
 std::string DictExpr::toString() const
 {
     return "DictExpr";
@@ -581,11 +560,6 @@ void ListExpr::push(Expr* apExpr)
     m_lChildren.push_back(apExpr);
 }
 
-std::vector<const Expr*> ListExpr::exprs() const
-{
-    RETURN_CHILDREN_AS(const Expr*);
-}
-
 std::string ListExpr::toString() const
 {
     return "ListExpr";
@@ -602,34 +576,9 @@ ListAssignExpr::ListAssignExpr(std::vector<Expr*>&& alNames, Token* apSemi) :
 {
 }
 
-std::vector<const Expr*> ListAssignExpr::names() const
+const Token* ListAssignExpr::semi() const
 {
-    std::vector<const Expr*> lExprs;
-
-    // If we have a lastname, return all but the last child.
-    const size_t lnCapacity = (m_pSemi == nullptr ? m_lChildren.size() : m_lChildren.size() - 1);
-    lExprs.reserve(lnCapacity);
-
-    // Implementations of the standard may reserve more than the requested capacity. It's
-    // unsafe to use ::capacity() as a loop limit. Use the requested capacity instead.
-    for (size_t i = 0; i < lnCapacity; i++)
-    {
-        lExprs.push_back(static_cast<Expr*>(m_lChildren[i]));
-    }
-
-    return lExprs;
-}
-
-const Expr* ListAssignExpr::lastname() const
-{
-    // If we have a lastname, it will be at the end.
-
-    if (m_pSemi == nullptr)
-    {
-        return nullptr;
-    }
-
-    return static_cast<Expr*>(m_lChildren.back());
+    return m_pSemi;
 }
 
 std::string ListAssignExpr::toString() const
@@ -1024,11 +973,6 @@ VarQueryStmt::VarQueryStmt(std::vector<Expr*>&& alNames) :
 {
 }
 
-std::vector<const Expr*> VarQueryStmt::names() const
-{
-    RETURN_CHILDREN_AS(const Expr*);
-}
-
 void VarQueryStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
@@ -1057,11 +1001,6 @@ const Token* HereDocExpr::endmarker() const
 {
     return m_pEndMarker;
 };
-
-std::vector<const Expr*> HereDocExpr::lines() const
-{
-    RETURN_CHILDREN_AS(const Expr*);
-}
 
 std::string HereDocExpr::toString() const
 {
@@ -1184,11 +1123,6 @@ const Token* LockVarStmt::depth() const
     return m_pDepth;
 }
 
-std::vector<const Expr*> LockVarStmt::names() const
-{
-    RETURN_CHILDREN_AS(const Expr*);
-}
-
 void LockVarStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
@@ -1244,11 +1178,6 @@ TryStmt::TryStmt(std::vector<TryBranch*>&& alTryBranches, Token* apExEndTry) :
     Stmt({ std::make_move_iterator(alTryBranches.begin()), std::make_move_iterator(alTryBranches.end()) }),
     m_pExEndTry { apExEndTry }
 {
-}
-
-std::vector<const TryBranch*> TryStmt::branches() const
-{
-    RETURN_CHILDREN_AS(const TryBranch*);
 }
 
 const Token* TryStmt::ex_endtry() const

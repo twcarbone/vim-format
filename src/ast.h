@@ -154,7 +154,6 @@ public:
     IfStmt(const std::vector<IfBranch*>& ifbranches, Token* ex_endif);
     virtual ~IfStmt() = default;
 
-    std::vector<const IfBranch*> branches() const;
     const Token* ex_endif() const;
 
     virtual void accept(ASTVisitor& visitor) const;
@@ -338,8 +337,6 @@ public:
     DictExpr(std::vector<DictEntry*>&& entries);
     virtual ~DictExpr() = default;
 
-    std::vector<const DictEntry*> entries() const;
-
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
@@ -352,8 +349,6 @@ public:
 
     void push(Expr* expr);
 
-    std::vector<const Expr*> exprs() const;
-
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 };
@@ -364,8 +359,7 @@ public:
     ListAssignExpr(std::vector<Expr*>&& names, Token* semi);
     virtual ~ListAssignExpr() = default;
 
-    std::vector<const Expr*> names() const;
-    const Expr* lastname() const;
+    const Token* semi() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -586,8 +580,6 @@ public:
     VarQueryStmt(std::vector<Expr*>&& names);
     virtual ~VarQueryStmt() = default;
 
-    std::vector<const Expr*> names() const;
-
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
@@ -602,7 +594,6 @@ public:
 
     const std::vector<Token*>& modifiers() const;
     const Token* endmarker() const;
-    std::vector<const Expr*> lines() const;
 
     virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
@@ -660,7 +651,6 @@ public:
     const Token* ex_cmd() const;
     const Token* bang() const;
     const Token* depth() const;
-    std::vector<const Expr*> names() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
@@ -695,7 +685,6 @@ public:
     TryStmt(std::vector<TryBranch*>&& try_branches, Token* ex_endtry);
     virtual ~TryStmt() = default;
 
-    std::vector<const TryBranch*> branches() const;
     const Token* ex_endtry() const;
 
     virtual void accept(ASTVisitor& visitor) const;
