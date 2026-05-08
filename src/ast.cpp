@@ -788,6 +788,16 @@ void StrConst::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
+std::string Pattern::toString() const
+{
+    return StrExpr::toString("Pattern");
+}
+
+void Pattern::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
 Literal::Literal(Token* apToken) :
     m_pToken { apToken }
 {
@@ -1194,4 +1204,64 @@ std::string LockVarStmt::str_a() const
     tmp += " ";
     tmp += m_pDepth == nullptr ? "-depth" : "+depth:" + m_pDepth->str();
     return tmp;
+}
+
+TryBranch::TryBranch(Token* apExCmd, Pattern* apPattern, StmtList* apBody) :
+    m_pExCmd { apExCmd }
+{
+    m_lChildren.push_back(apPattern);
+    m_lChildren.push_back(apBody);
+}
+
+const Token* TryBranch::ex_cmd() const
+{
+    return m_pExCmd;
+}
+
+const Pattern* TryBranch::pattern() const
+{
+    return static_cast<Pattern*>(m_lChildren[0]);
+};
+
+const StmtList* TryBranch::body() const
+{
+    return static_cast<StmtList*>(m_lChildren[1]);
+};
+
+std::string TryBranch::toString() const
+{
+    std::string tmp = "TryBranch";
+    tmp += m_pExCmd == nullptr ? "" : " " + m_pExCmd->str();
+    return tmp;
+}
+
+void TryBranch::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+TryStmt::TryStmt(std::vector<TryBranch*>&& alTryBranches, Token* apExEndTry) :
+    Stmt({ std::make_move_iterator(alTryBranches.begin()), std::make_move_iterator(alTryBranches.end()) }),
+    m_pExEndTry { apExEndTry }
+{
+}
+
+std::vector<const TryBranch*> TryStmt::branches() const
+{
+    RETURN_CHILDREN_AS(const TryBranch*);
+}
+
+const Token* TryStmt::ex_endtry() const
+{
+    return m_pExEndTry;
+}
+
+void TryStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string TryStmt::str_a() const
+{
+    return "TryStmt";
 }

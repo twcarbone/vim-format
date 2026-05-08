@@ -90,6 +90,18 @@ elsei 2
 el
 en
 
+try
+    echo doesnotexist
+catch
+catch //
+    try
+        echo 1
+    fina
+        echo 2
+    endt
+cat /^Vim(write):/
+endtry
+
 " expression-syntax
 
 " expr1

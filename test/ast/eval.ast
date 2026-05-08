@@ -242,6 +242,33 @@ Program
         NULL
         StmtList
     EmptyStmt <>
+    TryStmt <>
+      TryBranch try
+        NULL
+        StmtList
+          ExprCmd echo <>
+            Var doesnotexist
+      TryBranch catch
+        NULL
+        StmtList
+      TryBranch catch
+        Pattern ;/;;/;
+        StmtList
+          TryStmt <>
+            TryBranch try
+              NULL
+              StmtList
+                ExprCmd echo <>
+                  Literal 1
+            TryBranch fina
+              NULL
+              StmtList
+                ExprCmd echo <>
+                  Literal 2
+      TryBranch cat
+        Pattern ;/;^Vim(write):;/;
+        StmtList
+    EmptyStmt <>
     CommentStmt " expression-syntax <trailing = no>
     EmptyStmt <>
     CommentStmt " expr1 <trailing = no>

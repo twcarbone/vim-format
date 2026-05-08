@@ -167,13 +167,16 @@ ast::StmtList* ASTParser::stmt_list()
     {
         switch (curr()->type())
         {
-            case Token::Type::ELSE:
-            case Token::Type::ELSEIF:
             case Token::Type::END:
-            case Token::Type::ENDFOR:
-            case Token::Type::ENDIF:
-            case Token::Type::ENDWHILE:
-            case Token::Type::ENDFUNCTION:
+            case Token::Type::EX_CATCH:
+            case Token::Type::EX_FINALLY:
+            case Token::Type::EX_ENDTRY:
+            case Token::Type::EX_ELSEIF:
+            case Token::Type::EX_ELSE:
+            case Token::Type::EX_ENDIF:
+            case Token::Type::EX_ENDFOR:
+            case Token::Type::EX_ENDWHILE:
+            case Token::Type::EX_ENDFUNCTION:
                 return pStmtList;
             default:
                 pStmtList->push(stmt());
@@ -200,21 +203,24 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::COMMENT:
             pStmt = comment_stmt();
             break;
-        case Token::Type::IF:
+        case Token::Type::EX_IF:
             pStmt = if_stmt();
             break;
-        case Token::Type::WHILE:
+        case Token::Type::EX_TRY:
+            pStmt = try_stmt();
+            break;
+        case Token::Type::EX_WHILE:
             pStmt = while_stmt();
             break;
-        case Token::Type::BREAK:
-        case Token::Type::CONTINUE:
-        case Token::Type::RETURN:
+        case Token::Type::EX_BREAK:
+        case Token::Type::EX_CONTINUE:
+        case Token::Type::EX_RETURN:
             pStmt = jump_stmt();
             break;
-        case Token::Type::FUNCTION:
+        case Token::Type::EX_FUNCTION:
             pStmt = fn_stmt();
             break;
-        case Token::Type::FOR:
+        case Token::Type::EX_FOR:
             pStmt = for_stmt();
             break;
         case Token::Type::EX_ECHO:
@@ -240,22 +246,92 @@ ast::Stmt* ASTParser::stmt()
     return pStmt;
 }
 
-ast::IfBranch* ASTParser::if_branch(Token::Type aeType)
+ast::TryBranch* ASTParser::try_branch()
+{
+    Token* pExCmd = nullptr;
+    ast::Pattern* pPattern = nullptr;
+    ast::StmtList* pBody = new ast::StmtList();
+
+    pExCmd = curr();
+    consume(pExCmd->type());
+
+    switch (pExCmd->type())
+    {
+        case Token::Type::EX_CATCH:
+            if (curr()->type() == Token::Type::SLASH)
+            {
+                pPattern = pattern();
+            }
+
+            break;
+        default:
+            break;
+    }
+
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
+    }
+
+    consume(Token::Type::NEWLINE);
+
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
+
+    return new ast::TryBranch(pExCmd, pPattern, pBody);
+}
+
+// 3657094585
+// 0570234797
+// 3246459693
+// 4034836909
+ast::TryStmt* ASTParser::try_stmt()
+{
+    std::vector<ast::TryBranch*> llTryBranches;
+    Token* pExEndTry = nullptr;
+
+    llTryBranches.push_back(try_branch());
+
+    while (true)
+    {
+        switch (curr()->type())
+        {
+            case Token::Type::EX_CATCH:
+                llTryBranches.push_back(try_branch());
+                break;
+            case Token::Type::EX_FINALLY:
+                llTryBranches.push_back(try_branch());
+                [[fallthrough]];
+            case Token::Type::EX_ENDTRY:
+                pExEndTry = curr();
+                consume(Token::Type::EX_ENDTRY);
+                break;
+            default:
+                goto trybranches_end;
+        }
+    }
+
+trybranches_end:
+    return new ast::TryStmt(std::move(llTryBranches), pExEndTry);
+}
+
+ast::IfBranch* ASTParser::if_branch()
 {
     Token* pToken = nullptr;
     ast::Expr* pCondition = nullptr;
     ast::StmtList* pBody = new ast::StmtList();
 
     pToken = curr();
-    consume(aeType);
+    consume(curr()->type());
 
-    switch (aeType)
+    switch (pToken->type())
     {
-        case Token::Type::IF:
-        case Token::Type::ELSEIF:
+        case Token::Type::EX_IF:
+        case Token::Type::EX_ELSEIF:
             pCondition = expr();
             break;
-        case Token::Type::ELSE:
+        case Token::Type::EX_ELSE:
         default:
             break;
     }
@@ -283,20 +359,22 @@ ast::IfStmt* ASTParser::if_stmt()
     std::vector<ast::IfBranch*> lIfBranches;
     Token* pExEndIf = nullptr;
 
-    lIfBranches.push_back(if_branch(Token::Type::IF));
+    lIfBranches.push_back(if_branch());
 
     while (true)
     {
         switch (curr()->type())
         {
-            case Token::Type::ELSEIF:
-            case Token::Type::ELSE:
-                lIfBranches.push_back(if_branch(curr()->type()));
+            case Token::Type::EX_ELSEIF:
+                lIfBranches.push_back(if_branch());
                 break;
-            case Token::Type::ENDIF:
-                pExEndIf = curr();
-                consume(Token::Type::ENDIF);
+            case Token::Type::EX_ELSE:
+                lIfBranches.push_back(if_branch());
                 [[fallthrough]];
+            case Token::Type::EX_ENDIF:
+                pExEndIf = curr();
+                consume(Token::Type::EX_ENDIF);
+                break;
             default:
                 goto ifbranches_end;
         }
@@ -313,7 +391,7 @@ ast::WhileStmt* ASTParser::while_stmt()
     ast::StmtList* pBody = new ast::StmtList();
 
     Token* pExWhile = curr();
-    consume(Token::Type::WHILE);
+    consume(Token::Type::EX_WHILE);
 
     ast::Expr* pExpr = expr();
 
@@ -329,7 +407,7 @@ ast::WhileStmt* ASTParser::while_stmt()
     delete pBody2;
 
     Token* pExEndWhile = curr();
-    consume(Token::Type::ENDWHILE);
+    consume(Token::Type::EX_ENDWHILE);
 
     return new ast::WhileStmt(pExWhile, pExEndWhile, pExpr, pBody);
 }
@@ -438,7 +516,7 @@ ast::FnParamList* ASTParser::fn_param_list()
 ast::FnStmt* ASTParser::fn_stmt()
 {
     Token* pExFu = curr();
-    consume(Token::Type::FUNCTION);
+    consume(Token::Type::EX_FUNCTION);
 
     // Bang (!)
     Token* pBang = nullptr;
@@ -493,7 +571,7 @@ modifiers_end:
     delete pBody2;
 
     Token* pExEndFu = curr();
-    consume(Token::Type::ENDFUNCTION);
+    consume(Token::Type::EX_ENDFUNCTION);
 
     // TODO (gh-105): endfunction does not support [argument]
 
@@ -509,7 +587,7 @@ ast::ForStmt* ASTParser::for_stmt()
     ast::Expr* pItems = nullptr;
     ast::StmtList* pBody = new ast::StmtList();
 
-    consume(Token::Type::FOR);
+    consume(Token::Type::EX_FOR);
     pItem = expr();
 
     consume(Token::Type::IN);
@@ -527,7 +605,7 @@ ast::ForStmt* ASTParser::for_stmt()
     delete pBody2;
 
     Token* pExEndFo = curr();
-    consume(Token::Type::ENDFOR);
+    consume(Token::Type::EX_ENDFOR);
 
     return new ast::ForStmt(pItem, pItems, pBody, pExEndFo);
 }
@@ -542,7 +620,7 @@ ast::JumpStmt* ASTParser::jump_stmt()
 
     ast::Expr* pExpr = nullptr;
 
-    if (pCmd->type() == Token::Type::RETURN && curr()->type() != Token::Type::NEWLINE)
+    if (pCmd->type() == Token::Type::EX_RETURN && curr()->type() != Token::Type::NEWLINE)
     {
         pExpr = expr();
     }
@@ -1254,6 +1332,23 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
         }
     }
+}
+
+ast::Pattern* ASTParser::pattern()
+{
+    Token* pLDelim = curr();
+    consume(Token::Type::SLASH);
+
+    Token* pStr = nullptr;
+    if (consume_optional(Token::Type::STRING))
+    {
+        pStr = m_lTokens.peek(-1, Flags::skipws);
+    }
+
+    Token* pRDelim = curr();
+    consume(Token::Type::SLASH);
+
+    return new ast::Pattern(pStr, pLDelim, pRDelim);
 }
 
 void ASTParser::try_consume(const Token::Type aeType, const std::string& asVimErrorcode)

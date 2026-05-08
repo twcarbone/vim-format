@@ -487,6 +487,13 @@ void PrettyPrinter::visit(const ast::MethodCallExpr* apMethodCallExpr)
     apMethodCallExpr->call()->accept(*this);
 }
 
+void PrettyPrinter::visit(const ast::Pattern* apPattern)
+{
+    write(apPattern->ldelim() == nullptr ? "" : apPattern->ldelim()->str());
+    write(apPattern->str() == nullptr ? "" : apPattern->str()->str());
+    write(apPattern->rdelim() == nullptr ? "" : apPattern->rdelim()->str());
+}
+
 void PrettyPrinter::visit(const ast::Program* apProgram)
 {
     for (ast::Node* pNode : apProgram->children())
@@ -516,6 +523,38 @@ void PrettyPrinter::visit(const ast::TernaryOp* apTernaryOp)
     write(apTernaryOp->rop()->str());
     write(' ', Settings::OperatorPadding);
     apTernaryOp->rexpr()->accept(*this);
+}
+
+void PrettyPrinter::visit(const ast::TryBranch* apTryBranch)
+{
+    write_bol();
+
+    write(apTryBranch->ex_cmd()->str());
+
+    if (apTryBranch->pattern() != nullptr)
+    {
+        write(' ', Settings::ControlStmtPadding);
+        apTryBranch->pattern()->accept(*this);
+    }
+
+    write_eol();
+
+    m_cIndent++;
+    apTryBranch->body()->accept(*this);
+    m_cIndent--;
+}
+
+void PrettyPrinter::visit(const ast::TryStmt* apTryStmt)
+{
+    for (const ast::TryBranch* pTryBranch : apTryStmt->branches())
+    {
+        pTryBranch->accept(*this);
+    }
+
+    write_bol();
+    write(apTryStmt->ex_endtry()->str());
+
+    write_eol();
 }
 
 void PrettyPrinter::visit(const ast::UnletStmt* apUnletStmt)

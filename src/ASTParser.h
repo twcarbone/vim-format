@@ -37,12 +37,15 @@ private:
     ast::ForStmt* for_stmt();
     ast::ExprCmd* expr_cmd();
     ast::StrExpr* str_expr();
+    ast::TryStmt* try_stmt();
+    ast::Pattern* pattern();
     ast::StmtList* stmt_list();
     ast::JumpStmt* jump_stmt();
     ast::ListExpr* list_expr();
     ast::DictExpr* dict_expr();
-    ast::IfBranch* if_branch(Token::Type type);
+    ast::IfBranch* if_branch();
     ast::FnArgList* fn_arg_list();
+    ast::TryBranch* try_branch();
     ast::InterpStr* interp_str();
     ast::WhileStmt* while_stmt();
     ast::UnletStmt* unlet_stmt();

@@ -455,6 +455,16 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
+class Pattern : public StrExpr
+{
+public:
+    using StrExpr::StrExpr;
+    virtual ~Pattern() = default;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
 class Literal : public Expr
 {
 public:
@@ -660,6 +670,40 @@ private:
     Token* m_pExCmd;
     Token* m_pBang;
     Token* m_pDepth;
+};
+
+class TryBranch : public Node
+{
+public:
+    TryBranch(Token* ex_cmd, Pattern* expr, StmtList* body);
+    virtual ~TryBranch() = default;
+
+    const Token* ex_cmd() const;
+    const Pattern* pattern() const;
+    const StmtList* body() const;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    Token* m_pExCmd;
+};
+
+class TryStmt : public Stmt
+{
+public:
+    TryStmt(std::vector<TryBranch*>&& try_branches, Token* ex_endtry);
+    virtual ~TryStmt() = default;
+
+    std::vector<const TryBranch*> branches() const;
+    const Token* ex_endtry() const;
+
+    virtual void accept(ASTVisitor& visitor) const;
+
+private:
+    virtual std::string str_a() const;
+
+    Token* m_pExEndTry;
 };
 
 };
