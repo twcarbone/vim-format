@@ -889,8 +889,16 @@ ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = curr();
     consume(curr()->type());
-    ast::Expr* pExpr = expr();
-    return new ast::ExprCmd(pCmd, pExpr);
+
+    switch (pCmd->type())
+    {
+        case Token::Type::EX_ECHO:
+            return new ast::ExprCmd(pCmd, names());
+        case Token::Type::EX_THROW:
+            return new ast::ExprCmd(pCmd, expr());
+        default:
+            throw_unexpected_token();
+    }
 }
 
 ast::ListExpr* ASTParser::list_expr()

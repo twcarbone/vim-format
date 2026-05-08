@@ -132,6 +132,10 @@ Program
         Literal 0zaabb
         Literal 0Z
         Literal 0ZFFFF
+    ExprCmd echo <>
+      Var bb
+      Var dd
+      Var ee
     VarQueryStmt <>
     VarQueryStmt <>
       Var bb

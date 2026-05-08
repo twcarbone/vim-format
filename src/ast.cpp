@@ -119,14 +119,15 @@ ExprCmd::ExprCmd(Token* apCmd, Expr* apExpr) :
     m_lChildren.push_back(apExpr);
 }
 
+ExprCmd::ExprCmd(Token* apCmd, std::vector<Expr*>&& alExprs) :
+    Stmt({ std::make_move_iterator(alExprs.begin()), std::make_move_iterator(alExprs.end()) }),
+    m_pExCmd { apCmd }
+{
+}
+
 const Token* ExprCmd::ex_cmd() const
 {
     return m_pExCmd;
-}
-
-const Expr* ExprCmd::expr() const
-{
-    return static_cast<Expr*>(m_lChildren[0]);
 }
 
 void ExprCmd::accept(ASTVisitor& acASTVisitor) const
