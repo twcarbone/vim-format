@@ -11,6 +11,11 @@
         X(EX_CATCH)                                                                             \
         X(EX_CONTINUE)                                                                          \
         X(EX_ECHO)                                                                              \
+        X(EX_ECHOCONSOLE)                                                                       \
+        X(EX_ECHOERR)                                                                           \
+        X(EX_ECHOHL)                                                                            \
+        X(EX_ECHOMSG)                                                                           \
+        X(EX_ECHON)                                                                             \
         X(EX_ELSE)                                                                              \
         X(EX_ELSEIF)                                                                            \
         X(EX_ENDFOR)                                                                            \

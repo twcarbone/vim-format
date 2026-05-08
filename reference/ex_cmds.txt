@@ -67,12 +67,12 @@
   Y  4034836909  3422  :finally      :fina[lly]
   Y  4194538044  3434  :throw        :th[row] {expr1}
   Y  1417249700  3459  :echo         :ec[ho] {expr1} ..
-     0611365865  3479  :echon        :echon {expr1} ..
-     3292911339  3502  :echohl       :echoh[l] {name}
-     1408577583  3510  :echomsg      :echom[sg] {expr1} ..
+  Y  0611365865  3479  :echon        :echon {expr1} ..
+  Y  3292911339  3502  :echohl       :echoh[l] {name}
+  Y  1408577583  3510  :echomsg      :echom[sg] {expr1} ..
      3317283107  3527  :echowindow   :[N]echow[indow] {expr1} ..
-     0348216287  3542  :echoerr      :echoe[rr] {expr1} ..
-     0703956562  3555  :echoconsole  :echoc[onsole] {expr1} ..
+  Y  0348216287  3542  :echoerr      :echoe[rr] {expr1} ..
+  Y  0703956562  3555  :echoconsole  :echoc[onsole] {expr1} ..
      2769173961  3561  :eval         :eval {expr}
      0330570849  3582  :execute      :exe[cute] {expr1} ..
      0310003832  4835  :sandbox      :san[dbox] {cmd}

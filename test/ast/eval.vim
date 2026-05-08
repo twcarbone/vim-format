@@ -37,6 +37,11 @@ let heredoc_eval_items =<< eval END
 END
 let gg = [0zaabb, 0Z, 0ZFFFF]
 echo bb dd ee
+echon bb dd ee
+echomsg bb dd ee
+echoconsole "console"
+echoerr "fail!"
+echohl Number
 
 " for
 

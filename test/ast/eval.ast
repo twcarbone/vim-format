@@ -136,6 +136,20 @@ Program
       Var bb
       Var dd
       Var ee
+    ExprCmd echon <>
+      Var bb
+      Var dd
+      Var ee
+    ExprCmd echomsg <>
+      Var bb
+      Var dd
+      Var ee
+    ExprCmd echoconsole <>
+      StrConst ;";console;";
+    ExprCmd echoerr <>
+      StrConst ;";fail!;";
+    ExprCmd echohl <>
+      Var Number
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>

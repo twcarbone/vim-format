@@ -225,6 +225,11 @@ ast::Stmt* ASTParser::stmt()
             pStmt = for_stmt();
             break;
         case Token::Type::EX_ECHO:
+        case Token::Type::EX_ECHON:
+        case Token::Type::EX_ECHOHL:
+        case Token::Type::EX_ECHOERR:
+        case Token::Type::EX_ECHOMSG:
+        case Token::Type::EX_ECHOCONSOLE:
         case Token::Type::EX_THROW:
             pStmt = expr_cmd();
             break;
@@ -887,6 +892,11 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
 
 // 1417249700
 // 4194538044
+// 0611365865
+// 3292911339
+// 1408577583
+// 0348216287
+// 0703956562
 ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = curr();
@@ -895,8 +905,13 @@ ast::ExprCmd* ASTParser::expr_cmd()
     switch (pCmd->type())
     {
         case Token::Type::EX_ECHO:
+        case Token::Type::EX_ECHON:
+        case Token::Type::EX_ECHOERR:
+        case Token::Type::EX_ECHOMSG:
+        case Token::Type::EX_ECHOCONSOLE:
             return new ast::ExprCmd(pCmd, names());
         case Token::Type::EX_THROW:
+        case Token::Type::EX_ECHOHL:
             return new ast::ExprCmd(pCmd, expr());
         default:
             throw_unexpected_token();
