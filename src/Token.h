@@ -19,6 +19,7 @@
         X(EX_ENDTRY)                                                                            \
         X(EX_ENDWHILE)                                                                          \
         X(EX_FINALLY)                                                                           \
+        X(EX_FINISH)                                                                            \
         X(EX_FOR)                                                                               \
         X(EX_FUNCTION)                                                                          \
         X(EX_IF)                                                                                \

@@ -37,13 +37,6 @@ let heredoc_eval_items =<< eval END
 END
 let gg = [0zaabb, 0Z, 0ZFFFF]
 echo bb dd ee
-let
-let bb
-let bb dd ee ff
-let g: bb
-let g: b: w:
-let g:abort
-let bb w:
 
 " for
 
@@ -193,3 +186,13 @@ echo "{bb} after"
 echo $"{bb} 'after'"
 echo "Before {bb}"
 echo "$var"
+
+finish
+fini
+let
+let bb
+let bb dd ee ff
+let g: bb
+let g: b: w:
+let g:abort
+let bb w:

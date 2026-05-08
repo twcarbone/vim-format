@@ -32,6 +32,7 @@ Lexer::Lexer(const Context& acContext) :
         //  ^~~
         { "break", "brea", Token::Type::EX_BREAK },
         { "continue", "con", Token::Type::EX_CONTINUE },
+        { "finish", "fini", Token::Type::EX_FINISH },
         { "echo", "ec", Token::Type::EX_ECHO },
         { "else", "el", Token::Type::EX_ELSE },
         { "elseif", "elsei", Token::Type::EX_ELSEIF },

@@ -757,7 +757,7 @@
      1484696513  405   :vim9script      :vim9s[cript] [noclear]
      1402051646  416   :scriptnames     :scr[iptnames]
      2342185592  430   :scriptnames     :scr[iptnames][!] {scriptId}
-     0019208114  437   :finish          :fini[sh]
+  Y  0019208114  437   :finish          :fini[sh]
      1806939981  1263  :breakadd        :breaka[dd] func [lnum] {name}
      1285601264  1269  :breakadd        :breaka[dd] file [lnum] {name}
      3749934509  1273  :breakadd        :breaka[dd] here

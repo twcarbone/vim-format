@@ -136,26 +136,6 @@ Program
       Var bb
       Var dd
       Var ee
-    VarQueryStmt <>
-    VarQueryStmt <>
-      Var bb
-    VarQueryStmt <>
-      Var bb
-      Var dd
-      Var ee
-      Var ff
-    VarQueryStmt <>
-      Var g:
-      Var bb
-    VarQueryStmt <>
-      Var g:
-      Var b:
-      Var w:
-    VarQueryStmt <>
-      Var g:abort
-    VarQueryStmt <>
-      Var bb
-      Var w:
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
@@ -621,3 +601,28 @@ Program
       StrConst ;";Before {bb};";
     ExprCmd echo <>
       StrConst ;";$var;";
+    EmptyStmt <>
+    JumpStmt finish <>
+      NULL
+    JumpStmt fini <>
+      NULL
+    VarQueryStmt <>
+    VarQueryStmt <>
+      Var bb
+    VarQueryStmt <>
+      Var bb
+      Var dd
+      Var ee
+      Var ff
+    VarQueryStmt <>
+      Var g:
+      Var bb
+    VarQueryStmt <>
+      Var g:
+      Var b:
+      Var w:
+    VarQueryStmt <>
+      Var g:abort
+    VarQueryStmt <>
+      Var bb
+      Var w:

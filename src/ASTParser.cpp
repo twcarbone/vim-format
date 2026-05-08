@@ -215,6 +215,7 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::EX_BREAK:
         case Token::Type::EX_CONTINUE:
         case Token::Type::EX_RETURN:
+        case Token::Type::EX_FINISH:
             pStmt = jump_stmt();
             break;
         case Token::Type::EX_FUNCTION:
@@ -614,6 +615,7 @@ ast::ForStmt* ASTParser::for_stmt()
 // 1883144826
 // 2096733821
 // 0178149365
+// 0019208114
 ast::JumpStmt* ASTParser::jump_stmt()
 {
     Token* pCmd = curr();
