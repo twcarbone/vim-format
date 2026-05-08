@@ -28,19 +28,19 @@
   Y  2412689443  2923  :let          :let &g:{option-name} .= {expr1}
   Y  1776776039  2924  :let          :let &g:{option-name} += {expr1}
   Y  1694040864  2925  :let          :let &g:{option-name} -= {expr1}
-  X  1350391715  2929  :let          :let [{name1}, {name2}, ...] = {expr1}
-  X  0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
-  X  4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
-  X  4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
-  X  2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
-  X  3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
-  X  1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
-  X  1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
-  X  2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
-  X  3932339600  3052  :let          :let {var-name} ..
-  X  2969427802  3064  :let          :let
-  X  3280446171  3071  :unlet        :unl[et][!] {name} ...
-  X  4056585016  3091  :unlet        :unl[et] ${env-name} ...
+  Y  1350391715  2929  :let          :let [{name1}, {name2}, ...] = {expr1}
+  Y  0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
+  Y  4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
+  Y  4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
+  Y  2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
+  Y  3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
+  Y  1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
+  Y  1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
+  Y  2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
+  Y  3932339600  3052  :let          :let {var-name} ..
+  Y  2969427802  3064  :let          :let
+  Y  3280446171  3071  :unlet        :unl[et][!] {name} ...
+  Y  4056585016  3091  :unlet        :unl[et] ${env-name} ...
      4268781155  3100  :const        :cons[t] {var-name} = {expr1}
      2303425390  3101  :const        :cons[t] [{name1}, {name2}, ...] = {expr1}
      1611952212  3102  :const        :cons[t] [{name}, ..., ; {lastname}] = {expr1}
