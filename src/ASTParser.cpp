@@ -168,10 +168,13 @@ ast::StmtList* ASTParser::stmt_list()
         switch (curr()->type())
         {
             case Token::Type::END:
-            case Token::Type::EX_ELSE:
+            case Token::Type::EX_CATCH:
+            case Token::Type::EX_FINALLY:
+            case Token::Type::EX_ENDTRY:
             case Token::Type::EX_ELSEIF:
-            case Token::Type::EX_ENDFOR:
+            case Token::Type::EX_ELSE:
             case Token::Type::EX_ENDIF:
+            case Token::Type::EX_ENDFOR:
             case Token::Type::EX_ENDWHILE:
             case Token::Type::EX_ENDFUNCTION:
                 return pStmtList;
@@ -202,6 +205,9 @@ ast::Stmt* ASTParser::stmt()
             break;
         case Token::Type::EX_IF:
             pStmt = if_stmt();
+            break;
+        case Token::Type::EX_TRY:
+            pStmt = try_stmt();
             break;
         case Token::Type::EX_WHILE:
             pStmt = while_stmt();
@@ -238,6 +244,76 @@ ast::Stmt* ASTParser::stmt()
     }
 
     return pStmt;
+}
+
+ast::TryBranch* ASTParser::try_branch()
+{
+    Token* pExCmd = nullptr;
+    ast::Pattern* pPattern = nullptr;
+    ast::StmtList* pBody = new ast::StmtList();
+
+    pExCmd = curr();
+    consume(pExCmd->type());
+
+    switch (pExCmd->type())
+    {
+        case Token::Type::EX_CATCH:
+            if (curr()->type() == Token::Type::SLASH)
+            {
+                pPattern = pattern();
+            }
+
+            break;
+        default:
+            break;
+    }
+
+    if (curr()->type() == Token::Type::COMMENT)
+    {
+        pBody->push(comment_stmt());
+    }
+
+    consume(Token::Type::NEWLINE);
+
+    ast::StmtList* pBody2 = stmt_list();
+    pBody->take(pBody2);
+    delete pBody2;
+
+    return new ast::TryBranch(pExCmd, pPattern, pBody);
+}
+
+// 3657094585
+// 0570234797
+// 3246459693
+// 4034836909
+ast::TryStmt* ASTParser::try_stmt()
+{
+    std::vector<ast::TryBranch*> llTryBranches;
+    Token* pExEndTry = nullptr;
+
+    llTryBranches.push_back(try_branch());
+
+    while (true)
+    {
+        switch (curr()->type())
+        {
+            case Token::Type::EX_CATCH:
+                llTryBranches.push_back(try_branch());
+                break;
+            case Token::Type::EX_FINALLY:
+                llTryBranches.push_back(try_branch());
+                [[fallthrough]];
+            case Token::Type::EX_ENDTRY:
+                pExEndTry = curr();
+                consume(Token::Type::EX_ENDTRY);
+                break;
+            default:
+                goto trybranches_end;
+        }
+    }
+
+trybranches_end:
+    return new ast::TryStmt(std::move(llTryBranches), pExEndTry);
 }
 
 ast::IfBranch* ASTParser::if_branch()
@@ -1256,6 +1332,23 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
                 pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
         }
     }
+}
+
+ast::Pattern* ASTParser::pattern()
+{
+    Token* pLDelim = curr();
+    consume(Token::Type::SLASH);
+
+    Token* pStr = nullptr;
+    if (consume_optional(Token::Type::STRING))
+    {
+        pStr = m_lTokens.peek(-1, Flags::skipws);
+    }
+
+    Token* pRDelim = curr();
+    consume(Token::Type::SLASH);
+
+    return new ast::Pattern(pStr, pLDelim, pRDelim);
 }
 
 void ASTParser::try_consume(const Token::Type aeType, const std::string& asVimErrorcode)

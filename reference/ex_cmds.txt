@@ -61,10 +61,10 @@
   Y  2432440349  3316  :endfor       :endfo[r]
   Y  2096733821  3325  :continue     :con[tinue]
   Y  0178149365  3337  :break        :brea[k]
-     3657094585  3350  :try          :try
-     0570234797  3352  :endtry       :endt[ry]
-     3246459693  3392  :catch        :cat[ch] /{pattern}/
-     4034836909  3422  :finally      :fina[lly]
+  Y  3657094585  3350  :try          :try
+  Y  0570234797  3352  :endtry       :endt[ry]
+  Y  3246459693  3392  :catch        :cat[ch] /{pattern}/
+  Y  4034836909  3422  :finally      :fina[lly]
      4194538044  3434  :throw        :th[row] {expr1}
   Y  1417249700  3459  :echo         :ec[ho] {expr1} ..
      0611365865  3479  :echon        :echon {expr1} ..

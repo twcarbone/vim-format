@@ -33,11 +33,14 @@
     X(LiteralStr)           \
     X(LockVarStmt)          \
     X(MethodCallExpr)       \
+    X(Pattern)              \
     X(Program)              \
     X(SliceExpr)            \
     X(StmtList)             \
     X(StrConst)             \
     X(TernaryOp)            \
+    X(TryBranch)            \
+    X(TryStmt)              \
     X(UnaryOp)              \
     X(UnletStmt)            \
     X(Var)                  \
