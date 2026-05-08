@@ -65,7 +65,7 @@
   Y  0570234797  3352  :endtry       :endt[ry]
   Y  3246459693  3392  :catch        :cat[ch] /{pattern}/
   Y  4034836909  3422  :finally      :fina[lly]
-     4194538044  3434  :throw        :th[row] {expr1}
+  Y  4194538044  3434  :throw        :th[row] {expr1}
   Y  1417249700  3459  :echo         :ec[ho] {expr1} ..
      0611365865  3479  :echon        :echon {expr1} ..
      3292911339  3502  :echohl       :echoh[l] {name}

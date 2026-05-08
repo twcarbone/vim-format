@@ -54,6 +54,7 @@ Lexer::Lexer(const Context& acContext) :
         { "endtry", "endt", Token::Type::EX_ENDTRY },
         { "catch", "cat", Token::Type::EX_CATCH },
         { "finally", "fina", Token::Type::EX_FINALLY },
+        { "throw", "th", Token::Type::EX_THROW },
     },
     m_lKeywords {
         // Keywords have no abbreviation, and can appear in any position.

@@ -248,6 +248,10 @@ Program
         StmtList
           ExprCmd echo <>
             Var doesnotexist
+          ExprCmd throw <>
+            StrConst ;";foo;";
+          ExprCmd th <>
+            Var ff
       TryBranch catch
         NULL
         StmtList

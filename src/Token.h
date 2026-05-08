@@ -26,6 +26,7 @@
         X(EX_LOCKVAR)                                                                           \
         X(EX_RETURN)                                                                            \
         X(EX_SET)                                                                               \
+        X(EX_THROW)                                                                             \
         X(EX_TRY)                                                                               \
         X(EX_UNLET)                                                                             \
         X(EX_UNLOCKVAR)                                                                         \
