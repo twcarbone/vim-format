@@ -92,6 +92,8 @@ en
 
 try
     echo doesnotexist
+    throw "foo"
+    th ff
 catch
 catch //
     try

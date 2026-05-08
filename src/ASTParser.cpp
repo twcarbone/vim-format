@@ -224,6 +224,7 @@ ast::Stmt* ASTParser::stmt()
             pStmt = for_stmt();
             break;
         case Token::Type::EX_ECHO:
+        case Token::Type::EX_THROW:
             pStmt = expr_cmd();
             break;
         case Token::Type::EX_LET:
@@ -883,6 +884,7 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
 }
 
 // 1417249700
+// 4194538044
 ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = curr();
