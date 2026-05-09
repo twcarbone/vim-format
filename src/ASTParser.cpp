@@ -211,24 +211,30 @@ ast::Stmt* ASTParser::stmt()
             pStmt = comment_stmt();
             break;
         case Token::Type::EX_IF:
+            ensure_no_range();
             pStmt = if_stmt();
             break;
         case Token::Type::EX_TRY:
+            ensure_no_range();
             pStmt = try_stmt();
             break;
         case Token::Type::EX_WHILE:
+            ensure_no_range();
             pStmt = while_stmt();
             break;
         case Token::Type::EX_BREAK:
         case Token::Type::EX_CONTINUE:
         case Token::Type::EX_RETURN:
         case Token::Type::EX_FINISH:
+            ensure_no_range();
             pStmt = jump_stmt();
             break;
         case Token::Type::EX_FUNCTION:
+            ensure_no_range();
             pStmt = fn_stmt();
             break;
         case Token::Type::EX_FOR:
+            ensure_no_range();
             pStmt = for_stmt();
             break;
         case Token::Type::EX_ECHO:
@@ -238,17 +244,23 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::EX_ECHOMSG:
         case Token::Type::EX_ECHOCONSOLE:
         case Token::Type::EX_THROW:
+            ensure_no_range();
+            pStmt = expr_cmd();
+            break;
         case Token::Type::EX_ECHOWINDOW:
             pStmt = expr_cmd();
             break;
         case Token::Type::EX_LET:
+            ensure_no_range();
             pStmt = let_stmt();
             break;
         case Token::Type::EX_UNLET:
+            ensure_no_range();
             pStmt = unlet_stmt();
             break;
         case Token::Type::EX_LOCKVAR:
         case Token::Type::EX_UNLOCKVAR:
+            ensure_no_range();
             pStmt = lockvar_stmt();
             break;
         case Token::Type::NEWLINE:
@@ -1472,6 +1484,14 @@ loop_end:
 Token* ASTParser::curr() const
 {
     return m_lTokens.head();
+}
+
+void ASTParser::ensure_no_range()
+{
+    if (m_pCount != nullptr)
+    {
+        throw_vim_error("E481");
+    }
 }
 
 void ASTParser::throw_unexpected_token()

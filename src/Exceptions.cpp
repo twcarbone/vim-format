@@ -8,6 +8,7 @@ const std::unordered_map<std::string, std::string> VimError::s_mErrors {
     { "E121", "Undefined variable" },
     { "E125", "Illegal argument" },
     { "E475", "Invalid argument" },
+    { "E481", "No range allowed" },
     { "E973", "Blob literal should have an even number of hex characters" },
     { "E989", "Non-default argument follows default argument" },
     { "E354", "Invalid register name" },

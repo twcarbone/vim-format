@@ -69,6 +69,7 @@ private:
 
     Token* curr() const;
 
+    void ensure_no_range();
     ast::Expr* try_expr(const std::string& vim_error_code);
     [[noreturn]] void throw_unexpected_token();
     [[noreturn]] void throw_vim_error(std::string code);
