@@ -150,6 +150,14 @@ Program
       StrConst ;";fail!;";
     ExprCmd echohl -count <>
       Var Number
+    ExprCmd echowindow +count:1 <>
+      LiteralStr ;';foo;';
+    ExprCmd echow +count:1 <>
+      IndexExpr
+        Var c
+        Literal 1
+    ExprCmd echowindow -count <>
+      LiteralStr ;';bar;';
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>

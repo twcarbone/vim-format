@@ -42,6 +42,9 @@ echomsg bb dd ee
 echoconsole "console"
 echoerr "fail!"
 echohl Number
+1echowindow 'foo'
+1echow c[1]
+echowindow 'bar'
 
 " for
 
