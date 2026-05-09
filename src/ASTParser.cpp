@@ -244,6 +244,7 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::EX_ECHOMSG:
         case Token::Type::EX_ECHOCONSOLE:
         case Token::Type::EX_THROW:
+            // test/error/E481_1.out
             ensure_no_range();
             pStmt = expr_cmd();
             break;
