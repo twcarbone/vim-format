@@ -83,6 +83,7 @@ private:
     State m_eState;
     Token* m_pCurrToken;
     Token* m_pEndMarker;
+    Token* m_pCount;
     size_t m_nBraceLevel;
     Source m_cSource;
     Tokens m_lTokens;
