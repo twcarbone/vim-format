@@ -1,37 +1,46 @@
 VIMFORMAT_BIN = ./build/src/vim-format
 
+
 .PHONY: first
 first: build
+
 
 .PHONY: build
 build:
 	cmake -B build/ -DCMAKE_BUILD_TYPE=Release
 	cmake --build build/
 
+
 .PHONY: build/debug
 build/debug:
 	cmake -B build/ -DCMAKE_BUILD_TYPE=Debug
 	cmake --build build/
 
+
 .PHONY: test
 test: build
 	cd build/test && ./unittests
+
 
 .PHONY: clean
 clean:
 	rm -rf build/
 
+
 .PHONY: format
 format:
 	find src/ test/ -type f \( -name '*.h' -or -name '*.cpp' \) -exec clang-format -i {} +
+
 
 .PHONY: format/check
 format/check:
 	find src/ test/ -type f \( -name '*.h' -or -name '*.cpp' \) -exec clang-format --dry-run -Werror {} +
 
+
 .PHONY: tags
 tags:
 	./scripts/cmds.py > ./reference/ex_cmds.txt
+
 
 .PHONY: ast
 
@@ -42,6 +51,7 @@ ast: $(AST_FILES)
 
 test/ast/%.ast: test/ast/%.vim
 	$(VIMFORMAT_BIN) -p $< > $@
+
 
 .PHONY: errors
 
