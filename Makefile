@@ -1,4 +1,5 @@
 VIMFORMAT_BIN = ./build/src/vim-format
+GTEST_BIN     = ./build/test/unittests
 
 
 .PHONY: first
@@ -19,7 +20,7 @@ build/debug:
 
 .PHONY: test
 test: build
-	cd build/test && ./unittests
+	$(GTEST_BIN)
 
 
 .PHONY: clean

@@ -7,7 +7,7 @@
 TEST(TokensTest, test_01)
 {
     Context lcContext;
-    lcContext.add_path("../../test/ast/userfunc.vim");
+    lcContext.add_path("test/ast/userfunc.vim");
 
     Lexer lcLexer(lcContext);
     lcLexer.tokenize();

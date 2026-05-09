@@ -36,20 +36,20 @@ protected:
 
 TEST_F(PrettyPrinterTest, expr)
 {
-    test_file("../../test/pretty/expr.vim", "../../test/pretty/expr.pretty.vim");
+    test_file("test/pretty/expr.vim", "test/pretty/expr.pretty.vim");
 }
 
 TEST_F(PrettyPrinterTest, expr_pretty)
 {
-    test_file("../../test/pretty/expr.pretty.vim", "../../test/pretty/expr.pretty.vim");
+    test_file("test/pretty/expr.pretty.vim", "test/pretty/expr.pretty.vim");
 }
 
 TEST_F(PrettyPrinterTest, ast_eval)
 {
-    test_file("../../test/ast/eval.vim", "../../test/ast/eval.vim");
+    test_file("test/ast/eval.vim", "test/ast/eval.vim");
 }
 
 TEST_F(PrettyPrinterTest, ast_userfunc)
 {
-    test_file("../../test/ast/userfunc.vim", "../../test/ast/userfunc.vim");
+    test_file("test/ast/userfunc.vim", "test/ast/userfunc.vim");
 }
