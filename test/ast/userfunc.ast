@@ -3,7 +3,7 @@ Program
     FnStmt One ! range abort dict <>
       FnParamList
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Literal 1
         FnStmt Inner ! closure <>
           FnParamList
@@ -37,7 +37,7 @@ Program
           Var a
           NULL
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Literal 1
     EmptyStmt <>
     FnStmt Five ! <>
@@ -49,7 +49,7 @@ Program
           Var ...
           NULL
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Literal 1
     EmptyStmt <>
     AssignStmt = <>
@@ -65,5 +65,5 @@ Program
           Var b
           Var is
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Literal 1

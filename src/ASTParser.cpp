@@ -198,6 +198,13 @@ ast::Stmt* ASTParser::stmt()
 
     ast::Stmt* pStmt;
 
+    m_pCount = nullptr;
+
+    if (consume_optional(Token::Type::INTEGER))
+    {
+        m_pCount = m_lTokens.peek(-1, Flags::skipws);
+    }
+
     switch (curr()->type())
     {
         case Token::Type::COMMENT:
@@ -909,10 +916,10 @@ ast::ExprCmd* ASTParser::expr_cmd()
         case Token::Type::EX_ECHOERR:
         case Token::Type::EX_ECHOMSG:
         case Token::Type::EX_ECHOCONSOLE:
-            return new ast::ExprCmd(pCmd, names());
+            return new ast::ExprCmd(m_pCount, pCmd, names());
         case Token::Type::EX_THROW:
         case Token::Type::EX_ECHOHL:
-            return new ast::ExprCmd(pCmd, expr());
+            return new ast::ExprCmd(m_pCount, pCmd, expr());
         default:
             throw_unexpected_token();
     }

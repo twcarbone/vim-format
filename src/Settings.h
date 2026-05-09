@@ -27,6 +27,7 @@ public:
     static size_t SpaceBeforeFunctionName;
     static size_t SpaceBeforeTrailingComment;
     static size_t SquareBracketPadding;
+    static size_t SpaceAfterRange;
 };
 
 #endif  // SETTINGS_H

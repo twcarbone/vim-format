@@ -57,6 +57,8 @@ private:
     ast::VarQueryStmt* var_query_stmt();
     ast::ListAssignExpr* list_assign_expr();
 
+    Token* m_pCount;
+
     std::vector<ast::Expr*> names();
 
     void try_consume(const Token::Type type, const std::string& vim_error_code);

@@ -113,16 +113,23 @@ void StmtList::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-ExprCmd::ExprCmd(Token* apCmd, Expr* apExpr) :
+ExprCmd::ExprCmd(Token* apCount, Token* apCmd, Expr* apExpr) :
+    m_pCount { apCount },
     m_pExCmd { apCmd }
 {
     m_lChildren.push_back(apExpr);
 }
 
-ExprCmd::ExprCmd(Token* apCmd, std::vector<Expr*>&& alExprs) :
+ExprCmd::ExprCmd(Token* apCount, Token* apCmd, std::vector<Expr*>&& alExprs) :
     Stmt({ std::make_move_iterator(alExprs.begin()), std::make_move_iterator(alExprs.end()) }),
+    m_pCount { apCount },
     m_pExCmd { apCmd }
 {
+}
+
+const Token* ExprCmd::count() const
+{
+    return m_pCount;
 }
 
 const Token* ExprCmd::ex_cmd() const
@@ -137,7 +144,12 @@ void ExprCmd::accept(ASTVisitor& acASTVisitor) const
 
 std::string ExprCmd::str_a() const
 {
-    return "ExprCmd " + m_pExCmd->str();
+    std::string tmp = "ExprCmd";
+    tmp += " ";
+    tmp += m_pExCmd->str();
+    tmp += " ";
+    tmp += m_pCount == nullptr ? "-count" : "+count:" + m_pCount->str();
+    return tmp;
 }
 
 Program::Program(ast::StmtList* apStmtList)

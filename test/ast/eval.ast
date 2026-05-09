@@ -132,23 +132,23 @@ Program
         Literal 0zaabb
         Literal 0Z
         Literal 0ZFFFF
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       Var bb
       Var dd
       Var ee
-    ExprCmd echon <>
+    ExprCmd echon -count <>
       Var bb
       Var dd
       Var ee
-    ExprCmd echomsg <>
+    ExprCmd echomsg -count <>
       Var bb
       Var dd
       Var ee
-    ExprCmd echoconsole <>
+    ExprCmd echoconsole -count <>
       StrConst ;";console;";
-    ExprCmd echoerr <>
+    ExprCmd echoerr -count <>
       StrConst ;";fail!;";
-    ExprCmd echohl <>
+    ExprCmd echohl -count <>
       Var Number
     EmptyStmt <>
     CommentStmt " for <trailing = no>
@@ -174,7 +174,7 @@ Program
           Literal 6
           Literal 7
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Var isnot
         JumpStmt con <>
           NULL
@@ -186,13 +186,13 @@ Program
     WhileStmt <>
       Literal 0
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           StrConst ;";string;";
     EmptyStmt <>
     WhileStmt <>
       Literal 0
       StmtList
-        ExprCmd ec <>
+        ExprCmd ec -count <>
           StrConst ;";string;";
     EmptyStmt <>
     CommentStmt " if <trailing = no>
@@ -244,11 +244,11 @@ Program
       TryBranch try
         NULL
         StmtList
-          ExprCmd echo <>
+          ExprCmd echo -count <>
             Var doesnotexist
-          ExprCmd throw <>
+          ExprCmd throw -count <>
             StrConst ;";foo;";
-          ExprCmd th <>
+          ExprCmd th -count <>
             Var ff
       TryBranch catch
         NULL
@@ -260,12 +260,12 @@ Program
             TryBranch try
               NULL
               StmtList
-                ExprCmd echo <>
+                ExprCmd echo -count <>
                   Literal 1
             TryBranch fina
               NULL
               StmtList
-                ExprCmd echo <>
+                ExprCmd echo -count <>
                   Literal 2
       TryBranch cat
         Pattern ;/;^Vim(write):;/;
@@ -274,127 +274,127 @@ Program
     CommentStmt " expression-syntax <trailing = no>
     EmptyStmt <>
     CommentStmt " expr1 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       TernaryOp ? :
         Literal 1
         StrConst ;";this;";
         Var is
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp ??
         StrConst ;";us;";
         StrConst ;";them;";
     EmptyStmt <>
     CommentStmt " expr2 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp ||
         Literal 1
         Literal 0
     EmptyStmt <>
     CommentStmt " expr3 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp &&
         Literal 1
         Literal 0
     EmptyStmt <>
     CommentStmt " expr4 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp ==
         Literal 1
         Literal 2
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       CasedBinaryOp ==?
         Literal 1
         Literal 2
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       CasedBinaryOp ==#
         Literal 1
         Literal 2
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp !=
         Literal 1
         Literal 2
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp >
         Literal 6
         Literal 4
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp >=
         Literal 1
         Literal 5
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp <
         Literal 5
         Literal 3
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp <=
         Literal 3
         Literal 2
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp is
         StrConst ;";foo;";
         StrConst ;";bar;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp isnot
         StrConst ;";foo;";
         StrConst ;";bar;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       Var $HOME
     EmptyStmt <>
     CommentStmt " expr5 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp <<
         Literal 1
         Literal 1
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp >>
         Literal 2
         Literal 1
     EmptyStmt <>
     CommentStmt " expr6 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp +
         Literal 1
         Literal 2
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp -
         Literal 2
         Literal 1
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp ..
         StrConst ;";sp;";
         StrConst ;";am;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp .
         StrConst ;";sp;";
         StrConst ;";am;";
     EmptyStmt <>
     CommentStmt " expr7 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp *
         Literal 2
         Literal 1
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp /
         Literal 6
         Literal 2
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp %
         Literal 6
         Literal 4
     EmptyStmt <>
     CommentStmt " expr9 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       UnaryOp !
         Literal 1
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       UnaryOp -
         Literal 1
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       UnaryOp +
         Literal 1
     EmptyStmt <>
     CommentStmt " expr10 <trailing = no>
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       IndexExpr
         ListExpr
           Literal 0
@@ -402,7 +402,7 @@ Program
           Literal 2
           Literal 3
         Literal 0
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       SliceExpr
         ListExpr
           Literal 0
@@ -411,7 +411,7 @@ Program
           Literal 3
         NULL
         NULL
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       SliceExpr
         ListExpr
           Literal 0
@@ -433,17 +433,17 @@ Program
         Literal 80
         Literal 90
         Literal 100
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       SliceExpr
         Var b:items
         Literal 2
         NULL
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       SliceExpr
         Var b:items
         Literal 1
         Literal 3
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       SliceExpr
         Var b:items
         BinaryOp +
@@ -458,7 +458,7 @@ Program
         DictEntry
           LiteralStr ;';closure;';
           LiteralStr ;';banana;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp .
         Var g:dict
         Var closure
@@ -475,14 +475,14 @@ Program
           BinaryOp +
             Var a:a
             Var a:b
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       MethodCallExpr ->
         Literal 2
         CallExpr
           Var Add
           FnArgList
             Literal 3
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       MethodCallExpr ->
         MethodCallExpr ->
           Literal 3
@@ -534,13 +534,13 @@ Program
         DictEntry
           Var g:m_bar
           Literal 43
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       CallExpr
         Var Add
         FnArgList
           Literal 1
           Literal 2
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       BinaryOp -
         BinaryOp *
           GroupExpr
@@ -553,67 +553,67 @@ Program
           Literal 2
         GroupExpr
           Literal 10
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       LiteralStr ;';;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       LiteralStr ;';string with "embedded" double quote;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       InterpStr
         LiteralStr ;$';Before ;{;
         Var bb
         LiteralStr ;}; after;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       InterpStr
         LiteralStr ;$';;{;
         Var bb
         LiteralStr ;}; after;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       InterpStr
         LiteralStr ;$';Before ;{;
         Var bb
         LiteralStr ;};;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       LiteralStr ;';Before bb} after;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       LiteralStr ;';{bb} after;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       InterpStr
         LiteralStr ;$';;{;
         Var bb
         LiteralStr ;}; "after";';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       LiteralStr ;';Before {bb};';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       LiteralStr ;';$var;';
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       StrConst ;";;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       InterpStr
         StrConst ;$";Before ;{;
         Var bb
         StrConst ;}; after;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       InterpStr
         StrConst ;$";;{;
         Var bb
         StrConst ;}; after;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       InterpStr
         StrConst ;$";Before ;{;
         Var bb
         StrConst ;};;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       StrConst ;";Before {bb} after;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       StrConst ;";{bb} after;";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       InterpStr
         StrConst ;$";;{;
         Var bb
         StrConst ;}; 'after';";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       StrConst ;";Before {bb};";
-    ExprCmd echo <>
+    ExprCmd echo -count <>
       StrConst ;";$var;";
     EmptyStmt <>
     JumpStmt finish <>

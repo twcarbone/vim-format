@@ -92,10 +92,11 @@ public:
 class ExprCmd : public Stmt
 {
 public:
-    ExprCmd(Token* cmd, Expr* expr);
-    ExprCmd(Token* cmd, std::vector<Expr*>&& exprs);
+    ExprCmd(Token* count, Token* cmd, Expr* expr);
+    ExprCmd(Token* count, Token* cmd, std::vector<Expr*>&& exprs);
     virtual ~ExprCmd() = default;
 
+    const Token* count() const;
     const Token* ex_cmd() const;
 
     virtual void accept(ASTVisitor& visitor) const;
@@ -103,6 +104,7 @@ public:
 private:
     virtual std::string str_a() const;
 
+    Token* m_pCount;
     Token* m_pExCmd;
 };
 
