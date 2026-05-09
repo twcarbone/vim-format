@@ -153,9 +153,9 @@ TEST(SourceTest, text_test_02)
 TEST(SourceTest, file_test_01)
 {
     Source lcSource;
-    lcSource.read_file("../../test/sample/05.vim");
+    lcSource.read_file("test/sample/05.vim");
 
-    EXPECT_EQ(lcSource.path(), "../../test/sample/05.vim");
+    EXPECT_EQ(lcSource.path(), "test/sample/05.vim");
 
     lcSource.advance(2);
 
@@ -167,7 +167,7 @@ TEST(SourceTest, file_test_01)
     EXPECT_EQ(lcSource.line_text(), "echo 1");
     EXPECT_EQ(lcSource.text(), "echo 1\n");
     EXPECT_EQ(lcSource.context(),
-              "../../test/sample/05.vim:1:3\n"
+              "test/sample/05.vim:1:3\n"
               " 1 | echo 1\n"
               "   |   ^");
     EXPECT_EQ(lcSource.indent(), 0);
@@ -183,7 +183,7 @@ TEST(SourceTest, file_test_01)
 TEST(SourceTest, file_test_02)
 {
     Source lcSource;
-    lcSource.read_file("../../test/ast/userfunc.vim");
+    lcSource.read_file("test/ast/userfunc.vim");
 
     lcSource.advance(55);
 

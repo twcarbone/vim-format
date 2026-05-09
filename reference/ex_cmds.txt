@@ -28,19 +28,19 @@
   Y  2412689443  2923  :let          :let &g:{option-name} .= {expr1}
   Y  1776776039  2924  :let          :let &g:{option-name} += {expr1}
   Y  1694040864  2925  :let          :let &g:{option-name} -= {expr1}
-  X  1350391715  2929  :let          :let [{name1}, {name2}, ...] = {expr1}
-  X  0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
-  X  4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
-  X  4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
-  X  2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
-  X  3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
-  X  1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
-  X  1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
-  X  2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
-  X  3932339600  3052  :let          :let {var-name} ..
-  X  2969427802  3064  :let          :let
-  X  3280446171  3071  :unlet        :unl[et][!] {name} ...
-  X  4056585016  3091  :unlet        :unl[et] ${env-name} ...
+  Y  1350391715  2929  :let          :let [{name1}, {name2}, ...] = {expr1}
+  Y  0379804504  2948  :let          :let [{name1}, {name2}, ...] .= {expr1}
+  Y  4035612700  2949  :let          :let [{name1}, {name2}, ...] += {expr1}
+  Y  4254392411  2950  :let          :let [{name1}, {name2}, ...] -= {expr1}
+  Y  2742485518  2954  :let          :let [{name}, ..., ; {lastname}] = {expr1}
+  Y  3191311960  2962  :let          :let [{name}, ..., ; {lastname}] .= {expr1}
+  Y  1478378780  2963  :let          :let [{name}, ..., ; {lastname}] += {expr1}
+  Y  1426077019  2964  :let          :let [{name}, ..., ; {lastname}] -= {expr1}
+  Y  2818147631  2970  :let          :let {var-name} =<< [trim] [eval] {endmarker}
+  Y  3932339600  3052  :let          :let {var-name} ..
+  Y  2969427802  3064  :let          :let
+  Y  3280446171  3071  :unlet        :unl[et][!] {name} ...
+  Y  4056585016  3091  :unlet        :unl[et] ${env-name} ...
      4268781155  3100  :const        :cons[t] {var-name} = {expr1}
      2303425390  3101  :const        :cons[t] [{name1}, {name2}, ...] = {expr1}
      1611952212  3102  :const        :cons[t] [{name}, ..., ; {lastname}] = {expr1}
@@ -67,12 +67,12 @@
   Y  4034836909  3422  :finally      :fina[lly]
   Y  4194538044  3434  :throw        :th[row] {expr1}
   Y  1417249700  3459  :echo         :ec[ho] {expr1} ..
-     0611365865  3479  :echon        :echon {expr1} ..
-     3292911339  3502  :echohl       :echoh[l] {name}
-     1408577583  3510  :echomsg      :echom[sg] {expr1} ..
-     3317283107  3527  :echowindow   :[N]echow[indow] {expr1} ..
-     0348216287  3542  :echoerr      :echoe[rr] {expr1} ..
-     0703956562  3555  :echoconsole  :echoc[onsole] {expr1} ..
+  Y  0611365865  3479  :echon        :echon {expr1} ..
+  Y  3292911339  3502  :echohl       :echoh[l] {name}
+  Y  1408577583  3510  :echomsg      :echom[sg] {expr1} ..
+  Y  3317283107  3527  :echowindow   :[N]echow[indow] {expr1} ..
+  Y  0348216287  3542  :echoerr      :echoe[rr] {expr1} ..
+  Y  0703956562  3555  :echoconsole  :echoc[onsole] {expr1} ..
      2769173961  3561  :eval         :eval {expr}
      0330570849  3582  :execute      :exe[cute] {expr1} ..
      0310003832  4835  :sandbox      :san[dbox] {cmd}
@@ -757,7 +757,7 @@
      1484696513  405   :vim9script      :vim9s[cript] [noclear]
      1402051646  416   :scriptnames     :scr[iptnames]
      2342185592  430   :scriptnames     :scr[iptnames][!] {scriptId}
-     0019208114  437   :finish          :fini[sh]
+  Y  0019208114  437   :finish          :fini[sh]
      1806939981  1263  :breakadd        :breaka[dd] func [lnum] {name}
      1285601264  1269  :breakadd        :breaka[dd] file [lnum] {name}
      3749934509  1273  :breakadd        :breaka[dd] here

@@ -57,6 +57,8 @@ private:
     ast::VarQueryStmt* var_query_stmt();
     ast::ListAssignExpr* list_assign_expr();
 
+    Token* m_pCount;
+
     std::vector<ast::Expr*> names();
 
     void try_consume(const Token::Type type, const std::string& vim_error_code);
@@ -67,6 +69,7 @@ private:
 
     Token* curr() const;
 
+    void ensure_no_range();
     ast::Expr* try_expr(const std::string& vim_error_code);
     [[noreturn]] void throw_unexpected_token();
     [[noreturn]] void throw_vim_error(std::string code);

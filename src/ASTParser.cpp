@@ -198,43 +198,70 @@ ast::Stmt* ASTParser::stmt()
 
     ast::Stmt* pStmt;
 
+    m_pCount = nullptr;
+
+    if (consume_optional(Token::Type::INTEGER))
+    {
+        m_pCount = m_lTokens.peek(-1, Flags::skipws);
+    }
+
     switch (curr()->type())
     {
         case Token::Type::COMMENT:
             pStmt = comment_stmt();
             break;
         case Token::Type::EX_IF:
+            ensure_no_range();
             pStmt = if_stmt();
             break;
         case Token::Type::EX_TRY:
+            ensure_no_range();
             pStmt = try_stmt();
             break;
         case Token::Type::EX_WHILE:
+            ensure_no_range();
             pStmt = while_stmt();
             break;
         case Token::Type::EX_BREAK:
         case Token::Type::EX_CONTINUE:
         case Token::Type::EX_RETURN:
+        case Token::Type::EX_FINISH:
+            ensure_no_range();
             pStmt = jump_stmt();
             break;
         case Token::Type::EX_FUNCTION:
+            ensure_no_range();
             pStmt = fn_stmt();
             break;
         case Token::Type::EX_FOR:
+            ensure_no_range();
             pStmt = for_stmt();
             break;
         case Token::Type::EX_ECHO:
+        case Token::Type::EX_ECHON:
+        case Token::Type::EX_ECHOHL:
+        case Token::Type::EX_ECHOERR:
+        case Token::Type::EX_ECHOMSG:
+        case Token::Type::EX_ECHOCONSOLE:
         case Token::Type::EX_THROW:
+            // test/error/E481_1.out
+            ensure_no_range();
+            pStmt = expr_cmd();
+            break;
+        case Token::Type::EX_ECHOWINDOW:
             pStmt = expr_cmd();
             break;
         case Token::Type::EX_LET:
+            ensure_no_range();
             pStmt = let_stmt();
             break;
         case Token::Type::EX_UNLET:
+            ensure_no_range();
             pStmt = unlet_stmt();
             break;
         case Token::Type::EX_LOCKVAR:
         case Token::Type::EX_UNLOCKVAR:
+            ensure_no_range();
             pStmt = lockvar_stmt();
             break;
         case Token::Type::NEWLINE:
@@ -614,6 +641,7 @@ ast::ForStmt* ASTParser::for_stmt()
 // 1883144826
 // 2096733821
 // 0178149365
+// 0019208114
 ast::JumpStmt* ASTParser::jump_stmt()
 {
     Token* pCmd = curr();
@@ -885,12 +913,31 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
 
 // 1417249700
 // 4194538044
+// 0611365865
+// 3292911339
+// 1408577583
+// 0348216287
+// 0703956562
 ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = curr();
     consume(curr()->type());
-    ast::Expr* pExpr = expr();
-    return new ast::ExprCmd(pCmd, pExpr);
+
+    switch (pCmd->type())
+    {
+        case Token::Type::EX_ECHO:
+        case Token::Type::EX_ECHON:
+        case Token::Type::EX_ECHOERR:
+        case Token::Type::EX_ECHOMSG:
+        case Token::Type::EX_ECHOWINDOW:
+        case Token::Type::EX_ECHOCONSOLE:
+            return new ast::ExprCmd(m_pCount, pCmd, names());
+        case Token::Type::EX_THROW:
+        case Token::Type::EX_ECHOHL:
+            return new ast::ExprCmd(m_pCount, pCmd, expr());
+        default:
+            throw_unexpected_token();
+    }
 }
 
 ast::ListExpr* ASTParser::list_expr()
@@ -1438,6 +1485,14 @@ loop_end:
 Token* ASTParser::curr() const
 {
     return m_lTokens.head();
+}
+
+void ASTParser::ensure_no_range()
+{
+    if (m_pCount != nullptr)
+    {
+        throw_vim_error("E481");
+    }
 }
 
 void ASTParser::throw_unexpected_token()

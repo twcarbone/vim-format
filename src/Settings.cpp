@@ -21,3 +21,4 @@ size_t Settings::SpaceBeforeDictValue = 1;
 size_t Settings::SpaceBeforeFunctionName = 1;
 size_t Settings::SpaceBeforeTrailingComment = 2;
 size_t Settings::SquareBracketPadding = 0;
+size_t Settings::SpaceAfterRange = 0;

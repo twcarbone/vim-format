@@ -1,5 +1,5 @@
 E125: Illegal argument
 
-../../test/error/E125_1.vim:1:16
+test/error/E125_1.vim:1:16
  1 | function Foo(a,,)
    |                ^

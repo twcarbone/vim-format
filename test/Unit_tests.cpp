@@ -22,6 +22,24 @@ protected:
     {
         EXPECT_EQ(vf::split(asStr, asDelim), alParts);
     }
+
+    void test_startswithint(std::string_view asStr, std::string_view expected_out, int expected_base)
+    {
+        std::string_view actual_out;
+        int actual_base;
+
+        EXPECT_TRUE(vf::startswith_int(asStr, actual_out, &actual_base));
+        EXPECT_EQ(expected_out, actual_out);
+        EXPECT_EQ(expected_base, actual_base);
+    }
+
+    void test_startswithfloat(std::string_view asStr, std::string_view expected_out)
+    {
+        std::string_view actual_out;
+
+        EXPECT_TRUE(vf::startswith_float(asStr, actual_out));
+        EXPECT_EQ(expected_out, actual_out);
+    }
 };
 
 TEST_F(UtilTest, test_is_one_of)
@@ -40,6 +58,34 @@ TEST_F(UtilTest, test_split)
     test_split("1//2//", '/', { "1", "", "2", "", "" });
     test_split("hello", '.', { "hello" });
     test_split("a + b ", '+', { "a ", " b " });
+}
+
+TEST_F(UtilTest, test_startswithint)
+{
+    test_startswithint("42_", "42", 10);
+    test_startswithint("423_", "423", 10);
+    test_startswithint("004_", "004", 10);
+    test_startswithint("0x42_", "0x42", 16);
+    test_startswithint("0X42_", "0X42", 16);
+    test_startswithint("0x42ff_", "0x42ff", 16);
+    test_startswithint("0Xa42f_", "0Xa42f", 16);
+    test_startswithint("0o42_", "0o42", 8);
+    test_startswithint("0O42_", "0O42", 8);
+    test_startswithint("0b1101_", "0b1101", 2);
+    test_startswithint("0B1101_", "0B1101", 2);
+}
+
+TEST_F(UtilTest, test_startswithflost)
+{
+    test_startswithfloat("1.0_", "1.0");
+    test_startswithfloat("55.0_", "55.0");
+    test_startswithfloat("123.456_", "123.456");
+    test_startswithfloat("1.234e03_", "1.234e03");
+    test_startswithfloat("1.234e-03_", "1.234e-03");
+    test_startswithfloat("1.234e+03_", "1.234e+03");
+    test_startswithfloat("1.234E03_", "1.234E03");
+    test_startswithfloat("1.234E-03_", "1.234E-03");
+    test_startswithfloat("1.234E+03_", "1.234E+03");
 }
 
 TEST_F(FilesystemTest, test_name)

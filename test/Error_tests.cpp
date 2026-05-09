@@ -50,7 +50,7 @@ protected:
 
 TEST_F(ErrorTest, test_all)
 {
-    const std::filesystem::path lcRoot { "../../test/error" };
+    const std::filesystem::path lcRoot { "test/error" };
     const std::filesystem::directory_iterator lcRootIter { lcRoot };
 
     for (const std::filesystem::directory_entry& lcDirEntry : lcRootIter)

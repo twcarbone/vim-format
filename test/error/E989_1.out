@@ -1,5 +1,5 @@
 E989: Non-default argument follows default argument
 
-../../test/error/E989_1.vim:1:22
+test/error/E989_1.vim:1:22
  1 | function Foo(a = 1, b)
    |                      ^

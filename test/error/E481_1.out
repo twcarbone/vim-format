@@ -1,0 +1,5 @@
+E481: No range allowed
+
+test/error/E481_1.vim:1:2
+ 1 | 4echo 'foo'
+   |  ^

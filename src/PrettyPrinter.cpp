@@ -147,9 +147,19 @@ void PrettyPrinter::visit(const ast::ExprCmd* apExprCmd)
 {
     write_bol();
 
+    if (apExprCmd->count() != nullptr)
+    {
+        write(apExprCmd->count()->str());
+        write(' ', Settings::SpaceAfterRange);
+    }
+
     write(apExprCmd->ex_cmd()->str());
-    write(' ', Settings::SpaceAfterExprCmd);
-    apExprCmd->expr()->accept(*this);
+
+    for (const ast::Node* pChildNode : apExprCmd->children())
+    {
+        write(' ', Settings::SpaceAfterExprCmd);
+        pChildNode->accept(*this);
+    }
 
     write_eol();
 }

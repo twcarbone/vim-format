@@ -18,6 +18,7 @@ Lexer::Lexer(const Context& acContext) :
     m_eState { State::NONE },
     m_pCurrToken { nullptr },
     m_pEndMarker { nullptr },
+    m_pCount { nullptr },
     m_nBraceLevel { 0 },
     m_cSource { acContext.source() },
     m_lCommands {
@@ -32,6 +33,7 @@ Lexer::Lexer(const Context& acContext) :
         //  ^~~
         { "break", "brea", Token::Type::EX_BREAK },
         { "continue", "con", Token::Type::EX_CONTINUE },
+        { "finish", "fini", Token::Type::EX_FINISH },
         { "echo", "ec", Token::Type::EX_ECHO },
         { "else", "el", Token::Type::EX_ELSE },
         { "elseif", "elsei", Token::Type::EX_ELSEIF },
@@ -55,6 +57,12 @@ Lexer::Lexer(const Context& acContext) :
         { "catch", "cat", Token::Type::EX_CATCH },
         { "finally", "fina", Token::Type::EX_FINALLY },
         { "throw", "th", Token::Type::EX_THROW },
+        { "echon", "", Token::Type::EX_ECHON },
+        { "echohl", "echoh", Token::Type::EX_ECHOHL },
+        { "echomsg", "echom", Token::Type::EX_ECHOMSG },
+        { "echoerr", "echoe", Token::Type::EX_ECHOERR },
+        { "echoconsole", "echoc", Token::Type::EX_ECHOCONSOLE },
+        { "echowindow", "echow", Token::Type::EX_ECHOWINDOW },
     },
     m_lKeywords {
         // Keywords have no abbreviation, and can appear in any position.
@@ -726,20 +734,29 @@ bool Lexer::push_command()
 {
     if (m_cSource.column() == m_cSource.indent())
     {
-        for (const Command& lcCommand : m_lCommands)
+    }
+    else if (m_pCount != nullptr)
+    {
+        m_pCount = nullptr;
+    }
+    else
+    {
+        return false;
+    }
+
+    for (const Command& lcCommand : m_lCommands)
+    {
+        if (vf::startswith(m_cSource.remaining_text(), lcCommand.sFull, g_sKeyWordDelimiters))
         {
-            if (vf::startswith(m_cSource.remaining_text(), lcCommand.sFull, g_sKeyWordDelimiters))
-            {
-                return push_token(lcCommand.eTokenType, lcCommand.sFull);
-            }
-            else if (lcCommand.sAbrv.empty())
-            {
-                continue;
-            }
-            else if (vf::startswith(m_cSource.remaining_text(), lcCommand.sAbrv, g_sKeyWordDelimiters))
-            {
-                return push_token(lcCommand.eTokenType, lcCommand.sAbrv);
-            }
+            return push_token(lcCommand.eTokenType, lcCommand.sFull);
+        }
+        else if (lcCommand.sAbrv.empty())
+        {
+            continue;
+        }
+        else if (vf::startswith(m_cSource.remaining_text(), lcCommand.sAbrv, g_sKeyWordDelimiters))
+        {
+            return push_token(lcCommand.eTokenType, lcCommand.sAbrv);
         }
     }
 
@@ -796,9 +813,18 @@ bool Lexer::push_number()
     }
 
     // integer
-    if (vf::startswith_int(m_cSource.remaining_text(), lsLexeme))
+    int lnBase;
+    if (vf::startswith_int(m_cSource.remaining_text(), lsLexeme, &lnBase))
     {
-        return push_token(Token::Type::INTEGER, std::string { lsLexeme });
+        push_token(Token::Type::INTEGER, std::string { lsLexeme });
+
+        if (m_cSource.column() == m_cSource.indent() && lnBase == 10)
+        {
+            // This integer may be a [count] preceding an ex command (eg :4echow 'foo').
+            m_pCount = m_pCurrToken;
+        }
+
+        return true;
     }
 
     return false;
