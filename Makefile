@@ -40,3 +40,16 @@ ast: $(AST_FILES)
 
 test/ast/%.ast: test/ast/%.vim
 	./build/src/vim-format -p $< > $@
+
+.PHONY: errors
+
+TEST_ERR_INFILES := $(wildcard test/error/*.vim)
+TEST_ERR_OUTFILES := $(TEST_ERR_INFILES:.vim=.out)
+
+errors: $(TEST_ERR_OUTFILES)
+
+
+# Append '|| true' to ensure the line evaluates to a zero exit status and doesn't crash
+# the Makefile.
+test/error/%.out: test/error/%.vim
+	./build/src/vim-format $< 2> $@ || true
