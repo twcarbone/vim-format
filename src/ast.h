@@ -561,9 +561,10 @@ private:
 class AssignStmt : public Stmt
 {
 public:
-    AssignStmt(Token* op, Expr* left, Expr* right);
+    AssignStmt(Token* ex_cmd, Token* op, Expr* left, Expr* right);
     virtual ~AssignStmt() = default;
 
+    const Token* ex_cmd() const;
     const Token* op() const;
     const Expr* lexpr() const;
     const Expr* rexpr() const;
@@ -573,19 +574,24 @@ public:
 private:
     virtual std::string str_a() const;
 
+    Token* m_pExCmd;
     Token* m_pOp;
 };
 
 class VarQueryStmt : public Stmt
 {
 public:
-    VarQueryStmt(std::vector<Expr*>&& names);
+    VarQueryStmt(Token* ex_cmd, std::vector<Expr*>&& names);
     virtual ~VarQueryStmt() = default;
+
+    const Token* ex_cmd() const;
 
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
     virtual std::string str_a() const;
+
+    Token* m_pExCmd;
 };
 
 class HereDocExpr : public Expr

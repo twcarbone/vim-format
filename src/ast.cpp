@@ -949,11 +949,17 @@ void Var::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-AssignStmt::AssignStmt(Token* apOp, Expr* apLeft, Expr* apRight) :
+AssignStmt::AssignStmt(Token* apExCmd, Token* apOp, Expr* apLeft, Expr* apRight) :
+    m_pExCmd { apExCmd },
     m_pOp { apOp }
 {
     m_lChildren.push_back(apLeft);
     m_lChildren.push_back(apRight);
+}
+
+const Token* AssignStmt::ex_cmd() const
+{
+    return m_pExCmd;
 }
 
 const Token* AssignStmt::op() const
@@ -978,12 +984,18 @@ void AssignStmt::accept(ASTVisitor& acASTVisitor) const
 
 std::string AssignStmt::str_a() const
 {
-    return "AssignStmt " + m_pOp->str();
+    return "AssignStmt " + m_pExCmd->str() + " " + m_pOp->str();
 }
 
-VarQueryStmt::VarQueryStmt(std::vector<Expr*>&& alNames) :
-    Stmt({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) })
+VarQueryStmt::VarQueryStmt(Token* apExCmd, std::vector<Expr*>&& alNames) :
+    Stmt({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) }),
+    m_pExCmd { apExCmd }
 {
+}
+
+const Token* VarQueryStmt::ex_cmd() const
+{
+    return m_pExCmd;
 }
 
 void VarQueryStmt::accept(ASTVisitor& acASTVisitor) const
@@ -993,7 +1005,7 @@ void VarQueryStmt::accept(ASTVisitor& acASTVisitor) const
 
 std::string VarQueryStmt::str_a() const
 {
-    return "VarQueryStmt";
+    return "VarQueryStmt " + m_pExCmd->str();
 }
 
 HereDocExpr::HereDocExpr(std::vector<Expr*>&& alLines,

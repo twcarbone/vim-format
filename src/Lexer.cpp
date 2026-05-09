@@ -65,6 +65,7 @@ Lexer::Lexer(const Context& acContext) :
         { "echowindow", "echow", Token::Type::EX_ECHOWINDOW },
         { "eval", "", Token::Type::EX_EVAL },
         { "execute", "exe", Token::Type::EX_EXECUTE },
+        { "const", "cons", Token::Type::EX_CONST },
     },
     m_lKeywords {
         // Keywords have no abbreviation, and can appear in any position.

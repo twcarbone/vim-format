@@ -9,6 +9,7 @@
         X(NONE)                                                                                 \
         X(EX_BREAK)                                                                             \
         X(EX_CATCH)                                                                             \
+        X(EX_CONST)                                                                             \
         X(EX_CONTINUE)                                                                          \
         X(EX_ECHO)                                                                              \
         X(EX_ECHOCONSOLE)                                                                       \

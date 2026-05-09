@@ -47,6 +47,7 @@ echohl Number
 echowindow 'bar'
 execute 'echo gg[2]'
 exe 'echo 100'
+const zz_const = 101
 
 " for
 
@@ -206,3 +207,10 @@ let g: bb
 let g: b: w:
 let g:abort
 let bb w:
+const
+const bb
+const bb dd ee ff
+const g: bb
+const g: b: w:
+const g:abort
+const bb w:

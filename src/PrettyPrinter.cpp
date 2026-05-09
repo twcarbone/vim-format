@@ -39,7 +39,7 @@ void PrettyPrinter::visit(const ast::AssignStmt* apAssignStmt)
 {
     write_bol();
 
-    write("let");
+    write(apAssignStmt->ex_cmd()->str());
     write(' ', Settings::SpaceAfterExprCmd);
     apAssignStmt->lexpr()->accept(*this);
     write(' ', Settings::OperatorPadding);
@@ -615,7 +615,7 @@ void PrettyPrinter::visit(const ast::VarQueryStmt* apVarQueryStmt)
 {
     write_bol();
 
-    write("let");
+    write(apVarQueryStmt->ex_cmd()->str());
 
     for (ast::Node* pChildNode : apVarQueryStmt->children())
     {
