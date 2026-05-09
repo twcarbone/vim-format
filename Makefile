@@ -7,14 +7,11 @@ first: build
 
 
 .PHONY: build
+
+BUILD_TYPE := Release	# Release, Debug
+
 build:
-	cmake -B build/ -DCMAKE_BUILD_TYPE=Release
-	cmake --build build/
-
-
-.PHONY: build/debug
-build/debug:
-	cmake -B build/ -DCMAKE_BUILD_TYPE=Debug
+	cmake -B build/ -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
 	cmake --build build/
 
 
