@@ -63,6 +63,8 @@ Lexer::Lexer(const Context& acContext) :
         { "echoerr", "echoe", Token::Type::EX_ECHOERR },
         { "echoconsole", "echoc", Token::Type::EX_ECHOCONSOLE },
         { "echowindow", "echow", Token::Type::EX_ECHOWINDOW },
+        { "eval", "", Token::Type::EX_EVAL },
+        { "execute", "exe", Token::Type::EX_EXECUTE },
     },
     m_lKeywords {
         // Keywords have no abbreviation, and can appear in any position.
@@ -765,6 +767,11 @@ bool Lexer::push_command()
 
 bool Lexer::push_keyword()
 {
+    if (m_cSource.column() == m_cSource.indent())
+    {
+        return false;
+    }
+
     for (const Keyword& lcKeyword : m_lKeywords)
     {
         if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))

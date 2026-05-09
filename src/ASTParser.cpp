@@ -244,6 +244,8 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::EX_ECHOMSG:
         case Token::Type::EX_ECHOCONSOLE:
         case Token::Type::EX_THROW:
+        case Token::Type::EX_EVAL:
+        case Token::Type::EX_EXECUTE:
             // test/error/E481_1.out
             ensure_no_range();
             pStmt = expr_cmd();
@@ -931,9 +933,11 @@ ast::ExprCmd* ASTParser::expr_cmd()
         case Token::Type::EX_ECHOMSG:
         case Token::Type::EX_ECHOWINDOW:
         case Token::Type::EX_ECHOCONSOLE:
+        case Token::Type::EX_EXECUTE:
             return new ast::ExprCmd(m_pCount, pCmd, names());
         case Token::Type::EX_THROW:
         case Token::Type::EX_ECHOHL:
+        case Token::Type::EX_EVAL:
             return new ast::ExprCmd(m_pCount, pCmd, expr());
         default:
             throw_unexpected_token();

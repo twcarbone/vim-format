@@ -73,8 +73,8 @@
   Y  3317283107  3527  :echowindow   :[N]echow[indow] {expr1} ..
   Y  0348216287  3542  :echoerr      :echoe[rr] {expr1} ..
   Y  0703956562  3555  :echoconsole  :echoc[onsole] {expr1} ..
-     2769173961  3561  :eval         :eval {expr}
-     0330570849  3582  :execute      :exe[cute] {expr1} ..
+  Y  2769173961  3561  :eval         :eval {expr}
+  Y  0330570849  3582  :execute      :exe[cute] {expr1} ..
      0310003832  4835  :sandbox      :san[dbox] {cmd}
 
 /usr/local/share/vim/vim91/doc/if_lua.txt:

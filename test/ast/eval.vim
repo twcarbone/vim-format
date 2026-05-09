@@ -45,6 +45,8 @@ echohl Number
 1echowindow 'foo'
 1echow c[1]
 echowindow 'bar'
+execute 'echo gg[2]'
+exe 'echo 100'
 
 " for
 

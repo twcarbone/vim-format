@@ -24,6 +24,8 @@
         X(EX_ENDIF)                                                                             \
         X(EX_ENDTRY)                                                                            \
         X(EX_ENDWHILE)                                                                          \
+        X(EX_EVAL)                                                                              \
+        X(EX_EXECUTE)                                                                           \
         X(EX_FINALLY)                                                                           \
         X(EX_FINISH)                                                                            \
         X(EX_FOR)                                                                               \

@@ -23,6 +23,8 @@ function! Five(a, ...)
     echo 1
 endfunction
 
+eval Five(3)
+
 let is = 5
 
 function! Six(a, b = is)
