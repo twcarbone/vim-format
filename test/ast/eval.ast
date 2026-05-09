@@ -158,6 +158,10 @@ Program
         Literal 1
     ExprCmd echowindow -count <>
       LiteralStr ;';bar;';
+    ExprCmd execute -count <>
+      LiteralStr ;';echo gg[2];';
+    ExprCmd exe -count <>
+      LiteralStr ;';echo 100;';
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>

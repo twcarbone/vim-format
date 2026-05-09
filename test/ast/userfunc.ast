@@ -52,6 +52,12 @@ Program
         ExprCmd echo -count <>
           Literal 1
     EmptyStmt <>
+    ExprCmd eval -count <>
+      CallExpr
+        Var Five
+        FnArgList
+          Literal 3
+    EmptyStmt <>
     AssignStmt = <>
       Var is
       Literal 5
