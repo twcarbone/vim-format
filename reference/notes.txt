@@ -1,0 +1,48 @@
+VARIABLES
+
+    internal                foo
+    internal-scoped         b:foo
+    environ                 $FOO
+    register                @a
+    option                  &tabstop
+    option-scoped           &l:tabstop
+
+CONTAINERS
+
+    list                    [1, 2, 3]
+    dictionary              {"a": 1, "b": 2}
+
+L VALUE
+
+    todo
+
+R VALUE
+
+    number
+    string-constant
+    string-literal
+
+Names that are allowed for [un]lockvar:
+ 
+    expr10
+        index-expr
+        slice-expr
+        dict-access-expr
+ X      call-expr                   FuncRef function call
+ X      method-call-expr
+    expr11
+ X      number
+ X      string-constant
+ X      string-literal
+ X      list
+ X      dictionary
+ X      option-variable
+ X      scoped-option-variable
+        nested-expr
+        internal-variable
+            scope
+        scoped-internal-variable
+ X      environ-variable
+ X      register-variable
+        call-expr                   function call
+ X      lambda-expr

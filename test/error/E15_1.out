@@ -1,0 +1,5 @@
+E15: Invalid expression
+
+test/error/E15_1.vim:1:15
+ 1 | let list = [1,,]
+   |               ^

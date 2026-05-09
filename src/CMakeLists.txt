@@ -1,3 +1,5 @@
+add_compile_options(-Wimplicit-fallthrough)
+
 add_library(
     vimformat
     STATIC
@@ -10,14 +12,13 @@ add_library(
     Lexer.cpp
     Node.cpp
     NodeVisitor.cpp
-    Parser.cpp
     PrettyPrinter.cpp
     Scope.cpp
     Settings.cpp
     Source.cpp
     Symbol.cpp
     Token.cpp
-    TokenSpec.cpp
+    Tokens.cpp
     ast.cpp
     util.cpp
 )

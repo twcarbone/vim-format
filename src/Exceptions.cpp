@@ -2,11 +2,19 @@
 
 // Intended to match Vim src/errors.h exactly
 const std::unordered_map<std::string, std::string> VimError::s_mErrors {
+    // clang-format off
+    { "E15", "Invalid expression" },
     { "E116", "Invalid arguments" },
     { "E121", "Undefined variable" },
     { "E125", "Illegal argument" },
     { "E475", "Invalid argument" },
+    { "E481", "No range allowed" },
+    { "E973", "Blob literal should have an even number of hex characters" },
     { "E989", "Non-default argument follows default argument" },
+    { "E354", "Invalid register name" },
+    { "E1278", "Stray '}' without a matching '{'" },
+    { "E1279", "Missing '}'" },
+    // clang-format on
 };
 
 VimError::VimError(std::string asCode, std::string asTraceback) :

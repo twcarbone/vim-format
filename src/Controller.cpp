@@ -38,7 +38,7 @@ void Controller::compile()
     // Parsing
     //
 
-    ASTParser lcParser(m_cContext, lcLexer.tokens());
+    ASTParser lcParser(m_cContext, lcLexer.take_tokens());
     lcParser.parse();
 
     if (m_cContext.settings().StopAfterParsing)

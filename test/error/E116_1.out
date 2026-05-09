@@ -1,0 +1,5 @@
+E116: Invalid arguments
+
+test/error/E116_1.vim:1:10
+ 1 | echo Add(,2)
+   |          ^

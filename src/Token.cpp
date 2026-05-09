@@ -18,33 +18,6 @@ Token::~Token()
 {
 }
 
-bool Token::is_command() const
-{
-    switch (m_eType)
-    {
-        case Token::Type::IF:
-        case Token::Type::ELSEIF:
-        case Token::Type::ELSE:
-        case Token::Type::ENDIF:
-        case Token::Type::FOR:
-        case Token::Type::IN:
-        case Token::Type::ENDFOR:
-        case Token::Type::WHILE:
-        case Token::Type::ENDWHILE:
-        case Token::Type::BREAK:
-        case Token::Type::CONTINUE:
-        case Token::Type::FUNCTION:
-        case Token::Type::RETURN:
-        case Token::Type::ENDFUNCTION:
-        case Token::Type::CMD_LET:
-        case Token::Type::CMD_SET:
-        case Token::Type::CMD_ECHO:
-            return true;
-        default:
-            return false;
-    }
-}
-
 bool Token::is_keyword() const
 {
     switch (m_eType)
@@ -124,14 +97,23 @@ std::string Token::str() const
 
 std::string Token::toString() const
 {
-    std::string lsTmp = "[Token] " + TypeToStr(m_eType);
+    std::string tmp = "<Token";
+    tmp += " type=" + TypeToStr(m_eType);
+    tmp += " lexeme=";
 
-    if (!is_horizontal_wp() && !is_vertical_wp())
+    switch (m_eType)
     {
-        lsTmp += " " + m_sStr;
+        case Type::SPACE:
+        case Type::TAB:
+        case Type::NEWLINE:
+            break;
+        default:
+            tmp += m_sStr;
     }
 
-    return lsTmp;
+    tmp += " pos=" + std::to_string(m_nSourcePos);
+    tmp += ">";
+    return tmp;
 }
 
 std::string Token::TypeToStr(Type aeType)

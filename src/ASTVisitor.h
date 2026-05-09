@@ -4,38 +4,57 @@
 #include <string_view>
 #include <vector>
 
+// clang-format off
+#define VISITED_AST_NODES   \
+    X(AssignStmt)           \
+    X(BinaryOp)             \
+    X(CallExpr)             \
+    X(CasedBinaryOp)        \
+    X(CommentStmt)          \
+    X(DictEntry)            \
+    X(DictExpr)             \
+    X(EmptyStmt)            \
+    X(ExprCmd)              \
+    X(FnArgList)            \
+    X(FnParam)              \
+    X(FnParamList)          \
+    X(FnStmt)               \
+    X(ForStmt)              \
+    X(GroupExpr)            \
+    X(HereDocExpr)          \
+    X(IfBranch)             \
+    X(IfStmt)               \
+    X(IndexExpr)            \
+    X(InterpStr)            \
+    X(JumpStmt)             \
+    X(ListAssignExpr)       \
+    X(ListExpr)             \
+    X(Literal)              \
+    X(LiteralStr)           \
+    X(LockVarStmt)          \
+    X(MethodCallExpr)       \
+    X(Pattern)              \
+    X(Program)              \
+    X(SliceExpr)            \
+    X(StmtList)             \
+    X(StrConst)             \
+    X(TernaryOp)            \
+    X(TryBranch)            \
+    X(TryStmt)              \
+    X(UnaryOp)              \
+    X(UnletStmt)            \
+    X(Var)                  \
+    X(VarQueryStmt)         \
+    X(WhileStmt)
+
+// clang-format on
+
 namespace ast
 {
-class AssignStmt;
-class BinaryOp;
-class CallExpr;
-class CasedBinaryOp;
-class CommentStmt;
-class DictEntry;
-class DictExpr;
-class EmptyStmt;
-class ExprCmd;
-class FnArgList;
-class FnParam;
-class FnParamList;
-class FnStmt;
-class ForStmt;
-class GroupExpr;
-class IfBranch;
-class IfStmt;
-class IndexExpr;
-class JumpStmt;
-class ListExpr;
-class Literal;
-class MethodCallExpr;
+#define X(name) class name;
+VISITED_AST_NODES
+#undef X
 class Node;
-class Program;
-class SliceExpr;
-class StmtList;
-class TernaryOp;
-class UnaryOp;
-class Var;
-class WhileStmt;
 };
 
 struct VisitedNode
@@ -50,35 +69,9 @@ public:
     ASTVisitor(std::ostream& os = std::cout);
     ~ASTVisitor() = default;
 
-    virtual void visit(const ast::AssignStmt* ast);
-    virtual void visit(const ast::BinaryOp* ast);
-    virtual void visit(const ast::CallExpr* ast);
-    virtual void visit(const ast::CasedBinaryOp* ast);
-    virtual void visit(const ast::CommentStmt* ast);
-    virtual void visit(const ast::DictEntry* ast);
-    virtual void visit(const ast::DictExpr* ast);
-    virtual void visit(const ast::EmptyStmt* ast);
-    virtual void visit(const ast::ExprCmd* ast);
-    virtual void visit(const ast::FnArgList* ast);
-    virtual void visit(const ast::FnParam* ast);
-    virtual void visit(const ast::FnParamList* ast);
-    virtual void visit(const ast::FnStmt* ast);
-    virtual void visit(const ast::ForStmt* ast);
-    virtual void visit(const ast::GroupExpr* ast);
-    virtual void visit(const ast::IfBranch* ast);
-    virtual void visit(const ast::IfStmt* ast);
-    virtual void visit(const ast::IndexExpr* ast);
-    virtual void visit(const ast::SliceExpr* ast);
-    virtual void visit(const ast::JumpStmt* ast);
-    virtual void visit(const ast::ListExpr* ast);
-    virtual void visit(const ast::Literal* ast);
-    virtual void visit(const ast::MethodCallExpr* ast);
-    virtual void visit(const ast::Program* ast);
-    virtual void visit(const ast::StmtList* ast);
-    virtual void visit(const ast::TernaryOp* ast);
-    virtual void visit(const ast::UnaryOp* ast);
-    virtual void visit(const ast::Var* ast);
-    virtual void visit(const ast::WhileStmt* ast);
+#define X(name) virtual void visit(const ast::name* ast);
+    VISITED_AST_NODES
+#undef X
 
     const std::vector<VisitedNode>& nodes() const;
 

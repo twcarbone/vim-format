@@ -3,7 +3,7 @@ Program
     FnStmt One ! range abort dict <>
       FnParamList
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Literal 1
         FnStmt Inner ! closure <>
           FnParamList
@@ -29,13 +29,15 @@ Program
         JumpStmt return <>
           NULL
     EmptyStmt <>
+    CommentStmt " TODO (gh-130): Restore trailing commas to some tests, pending #130 <trailing = no>
+    EmptyStmt <>
     FnStmt Four ! <>
       FnParamList
         FnParam
           Var a
           NULL
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Literal 1
     EmptyStmt <>
     FnStmt Five ! <>
@@ -47,10 +49,16 @@ Program
           Var ...
           NULL
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Literal 1
     EmptyStmt <>
-    AssignStmt = <>
+    ExprCmd eval -count <>
+      CallExpr
+        Var Five
+        FnArgList
+          Literal 3
+    EmptyStmt <>
+    AssignStmt let = <>
       Var is
       Literal 5
     EmptyStmt <>
@@ -63,5 +71,5 @@ Program
           Var b
           Var is
       StmtList
-        ExprCmd echo <>
+        ExprCmd echo -count <>
           Literal 1

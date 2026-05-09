@@ -43,6 +43,9 @@ public:
     // Basic printout of current line context.
     std::string context() const;
 
+    // All [a-zA-Z0-9_] text starting at cursor.
+    std::string_view word() const;
+
     // All text from 0 to EOF minus one.
     std::string_view text() const;
 
@@ -57,9 +60,13 @@ public:
     std::string_view remaining_line() const;
 
     // Move cursor to 0-based `pos`.
+    //
+    // Throws std::runtime_error if `pos` exceeds size.
     void seek(int pos);
 
     // Advance the cursor forward `count` positions.
+    //
+    // Throws std::runtime_error if advancing `count` exceeds size.
     void advance(int count);
 
     void read_text(const std::string& text);

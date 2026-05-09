@@ -21,7 +21,7 @@ protected:
         Lexer lcLexer(lcContext);
         lcLexer.tokenize();
 
-        ASTParser lcParser(lcContext, lcLexer.tokens());
+        ASTParser lcParser(lcContext, lcLexer.take_tokens());
         lcParser.parse();
 
         std::stringstream lcAstStrStream;
@@ -36,15 +36,20 @@ protected:
 
 TEST_F(ASTTest, userfunc)
 {
-    test_file("../../test/ast/userfunc.vim");
+    test_file("test/ast/userfunc.vim");
 }
 
 TEST_F(ASTTest, eval)
 {
-    test_file("../../test/ast/eval.vim");
+    test_file("test/ast/eval.vim");
+}
+
+TEST_F(ASTTest, lockvar)
+{
+    test_file("test/ast/lockvar.vim");
 }
 
 TEST_F(ASTTest, cmdline)
 {
-    test_file("../../test/ast/cmdline.vim");
+    test_file("test/ast/cmdline.vim");
 }

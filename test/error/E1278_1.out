@@ -1,0 +1,5 @@
+E1278: Stray '}' without a matching '{'
+
+test/error/E1278_1.vim:1:13
+ 1 | echo $'hello}'
+   |             ^

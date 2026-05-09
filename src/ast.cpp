@@ -1,11 +1,17 @@
+#include <iterator>
+
 #include "ast.h"
 
 using namespace ast;
 
-//
-// Node
-//
+// Tip 1-4: The final "Sink". Store the vector as the destination type. The move is
+// completed here into the class member.
+Node::Node(std::vector<Node*>&& alChildren) :
+    m_lChildren { std::move(alChildren) }
+{
+}
 
+// Tip 1-5: delete on Node* relies on Tip 1-6.
 Node::~Node()
 {
     for (ast::Node* pNode : m_lChildren)
@@ -21,9 +27,10 @@ const std::vector<Node*>& Node::children() const
     return m_lChildren;
 }
 
-//
-// Stmt
-//
+Stmt::Stmt(std::vector<Node*>&& alChildren) :
+    Node { std::move(alChildren) }
+{
+}
 
 std::string Stmt::toString() const
 {
@@ -33,14 +40,6 @@ std::string Stmt::toString() const
 std::string Stmt::str_b() const
 {
     return "";
-}
-
-//
-// EmptyStmt
-//
-
-EmptyStmt::~EmptyStmt()
-{
 }
 
 void EmptyStmt::accept(ASTVisitor& acASTVisitor) const
@@ -53,17 +52,14 @@ std::string EmptyStmt::str_a() const
     return "EmptyStmt";
 }
 
-//
-// GroupExpr
-//
+Expr::Expr(std::vector<Node*>&& alChildren) :
+    Node { std::move(alChildren) }
+{
+}
 
 GroupExpr::GroupExpr(Expr* apExpr)
 {
     m_lChildren.push_back(apExpr);
-}
-
-GroupExpr::~GroupExpr()
-{
 }
 
 const Expr* GroupExpr::expr() const
@@ -81,21 +77,9 @@ void GroupExpr::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// ExprList
-//
-
 void ExprList::push(Expr* apExpr)
 {
     m_lChildren.push_back(apExpr);
-}
-
-//
-// StmtList
-//
-
-StmtList::~StmtList()
-{
 }
 
 void StmtList::push(Stmt* apStmt)
@@ -129,28 +113,28 @@ void StmtList::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// ExprCmd
-//
-
-ExprCmd::ExprCmd(Token* apCmd, Expr* apExpr) :
-    m_pCmd { apCmd }
+ExprCmd::ExprCmd(Token* apCount, Token* apCmd, Expr* apExpr) :
+    m_pCount { apCount },
+    m_pExCmd { apCmd }
 {
     m_lChildren.push_back(apExpr);
 }
 
-ExprCmd::~ExprCmd()
+ExprCmd::ExprCmd(Token* apCount, Token* apCmd, std::vector<Expr*>&& alExprs) :
+    Stmt({ std::make_move_iterator(alExprs.begin()), std::make_move_iterator(alExprs.end()) }),
+    m_pCount { apCount },
+    m_pExCmd { apCmd }
 {
 }
 
-const Token* ExprCmd::cmd() const
+const Token* ExprCmd::count() const
 {
-    return m_pCmd;
+    return m_pCount;
 }
 
-const Expr* ExprCmd::expr() const
+const Token* ExprCmd::ex_cmd() const
 {
-    return static_cast<Expr*>(m_lChildren[0]);
+    return m_pExCmd;
 }
 
 void ExprCmd::accept(ASTVisitor& acASTVisitor) const
@@ -160,20 +144,17 @@ void ExprCmd::accept(ASTVisitor& acASTVisitor) const
 
 std::string ExprCmd::str_a() const
 {
-    return "ExprCmd " + m_pCmd->str();
+    std::string tmp = "ExprCmd";
+    tmp += " ";
+    tmp += m_pExCmd->str();
+    tmp += " ";
+    tmp += m_pCount == nullptr ? "-count" : "+count:" + m_pCount->str();
+    return tmp;
 }
-
-//
-// Program
-//
 
 Program::Program(ast::StmtList* apStmtList)
 {
     m_lChildren.push_back(apStmtList);
-}
-
-Program::~Program()
-{
 }
 
 std::string Program::toString() const
@@ -186,19 +167,11 @@ void Program::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// IfBranch
-//
-
 IfBranch::IfBranch(Token* apToken, ast::Expr* apCondition, ast::StmtList* apBody) :
     m_pToken { apToken }
 {
     m_lChildren.push_back(apCondition);
     m_lChildren.push_back(apBody);
-}
-
-IfBranch::~IfBranch()
-{
 }
 
 const Token* IfBranch::token() const
@@ -226,33 +199,18 @@ void IfBranch::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// IfStmt
-//
-
-IfStmt::IfStmt()
+IfStmt::IfStmt(const std::vector<IfBranch*>& alIfBranches, Token* apExEndIf) :
+    m_pExEndIf { apExEndIf }
 {
-}
-
-IfStmt::~IfStmt()
-{
-}
-
-void IfStmt::push(ast::IfBranch* apIfBranch)
-{
-    m_lChildren.push_back(apIfBranch);
-}
-
-std::vector<const IfBranch*> IfStmt::branches() const
-{
-    std::vector<const IfBranch*> lBranches;
-
-    for (Node* pNode : m_lChildren)
+    for (IfBranch* pIfBranch : alIfBranches)
     {
-        lBranches.push_back(static_cast<IfBranch*>(pNode));
+        m_lChildren.push_back(pIfBranch);
     }
+}
 
-    return lBranches;
+const Token* IfStmt::ex_endif() const
+{
+    return m_pExEndIf;
 }
 
 void IfStmt::accept(ASTVisitor& acASTVisitor) const
@@ -265,23 +223,30 @@ std::string IfStmt::str_a() const
     return "IfStmt";
 }
 
-//
-// WhileStmt
-//
-
-WhileStmt::WhileStmt(ast::Expr* apCondition, ast::StmtList* apStmtList)
+WhileStmt::WhileStmt(Token* apExWhile,
+                     Token* apExEndWhile,
+                     ast::Expr* apCondition,
+                     ast::StmtList* apStmtList) :
+    m_pExWhile { apExWhile },
+    m_pExEndWhile { apExEndWhile }
 {
     m_lChildren.push_back(apCondition);
     m_lChildren.push_back(apStmtList);
 }
 
-WhileStmt::~WhileStmt()
-{
-}
-
 const Expr* WhileStmt::condition() const
 {
     return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Token* WhileStmt::ex_cmd_while() const
+{
+    return m_pExWhile;
+}
+
+const Token* WhileStmt::ex_cmd_endwile() const
+{
+    return m_pExEndWhile;
 }
 
 const StmtList* WhileStmt::stmts() const
@@ -299,19 +264,12 @@ std::string WhileStmt::str_a() const
     return "WhileStmt";
 }
 
-//
-// ForStmt
-//
-
-ForStmt::ForStmt(ast::Expr* apItem, ast::Expr* apItems, ast::StmtList* apStmts)
+ForStmt::ForStmt(ast::Expr* apItem, ast::Expr* apItems, ast::StmtList* apStmts, Token* apExEndFo) :
+    m_pExEndFo { apExEndFo }
 {
     m_lChildren.push_back(apItem);
     m_lChildren.push_back(apItems);
     m_lChildren.push_back(apStmts);
-}
-
-ForStmt::~ForStmt()
-{
 }
 
 const Expr* ForStmt::item() const
@@ -329,6 +287,11 @@ const StmtList* ForStmt::stmts() const
     return static_cast<StmtList*>(m_lChildren[2]);
 }
 
+const Token* ForStmt::ex_endfo() const
+{
+    return m_pExEndFo;
+}
+
 void ForStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
@@ -339,23 +302,15 @@ std::string ForStmt::str_a() const
     return "ForStmt";
 }
 
-//
-// JumpStmt
-//
-
 JumpStmt::JumpStmt(Token* apToken, Expr* apExpr) :
-    m_pToken { apToken }
+    m_pExCmd { apToken }
 {
     m_lChildren.push_back(apExpr);
 }
 
-JumpStmt::~JumpStmt()
+const Token* JumpStmt::ex_cmd() const
 {
-}
-
-const Token* JumpStmt::token() const
-{
-    return m_pToken;
+    return m_pExCmd;
 }
 
 const Expr* JumpStmt::expr() const
@@ -370,15 +325,7 @@ void JumpStmt::accept(ASTVisitor& acASTVisitor) const
 
 std::string JumpStmt::str_a() const
 {
-    return "JumpStmt " + m_pToken->str();
-}
-
-//
-// FnParamList
-//
-
-FnParamList::~FnParamList()
-{
+    return "JumpStmt " + m_pExCmd->str();
 }
 
 std::string FnParamList::toString() const
@@ -391,14 +338,6 @@ void FnParamList::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// FnArgList
-//
-
-FnArgList::~FnArgList()
-{
-}
-
 std::string FnArgList::toString() const
 {
     return "FnArgList";
@@ -409,18 +348,10 @@ void FnArgList::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// FnParam
-//
-
 FnParam::FnParam(Var* apName, Expr* apDefaultExpr)
 {
     m_lChildren.push_back(apName);
     m_lChildren.push_back(apDefaultExpr);
-}
-
-FnParam::~FnParam()
-{
 }
 
 const Var* FnParam::name() const
@@ -443,25 +374,31 @@ void FnParam::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// FnStmt
-//
-
-FnStmt::FnStmt(Token* apName,
+FnStmt::FnStmt(Token* apExFu,
+               Token* apExEndFu,
+               Token* apName,
                Token* apBang,
                FnParamList* apFnParamList,
                const std::vector<Token*>& alModifiers,
                StmtList* apBody) :
+    m_pExFu { apExFu },
     m_pName { apName },
     m_pBang { apBang },
+    m_pExEndFu { apExEndFu },
     m_lModifiers { alModifiers }
 {
     m_lChildren.push_back(apFnParamList);
     m_lChildren.push_back(apBody);
 }
 
-FnStmt::~FnStmt()
+const Token* FnStmt::ex_fu() const
 {
+    return m_pExFu;
+}
+
+const Token* FnStmt::ex_endfu() const
+{
+    return m_pExEndFu;
 }
 
 const Token* FnStmt::name() const
@@ -511,19 +448,11 @@ void FnStmt::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// BinaryOp
-//
-
 BinaryOp::BinaryOp(Token* apOp, Expr* apLeft, Expr* apRight) :
     m_pOp { apOp }
 {
     m_lChildren.push_back(apLeft);
     m_lChildren.push_back(apRight);
-}
-
-BinaryOp::~BinaryOp()
-{
 }
 
 const Token* BinaryOp::op() const
@@ -551,17 +480,9 @@ void BinaryOp::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// CasedBinaryOp
-//
-
 CasedBinaryOp::CasedBinaryOp(Token* apOp, Expr* apLeft, Expr* apRight, Token* apCaseSensitivity) :
     BinaryOp(apOp, apLeft, apRight),
     m_pCaseSensitivity { apCaseSensitivity }
-{
-}
-
-CasedBinaryOp::~CasedBinaryOp()
 {
 }
 
@@ -587,18 +508,10 @@ void CasedBinaryOp::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// DictEntry
-//
-
 DictEntry::DictEntry(Expr* apKey, Expr* apValue)
 {
     m_lChildren.push_back(apKey);
     m_lChildren.push_back(apValue);
-}
-
-DictEntry::~DictEntry()
-{
 }
 
 const Expr* DictEntry::key() const
@@ -621,29 +534,9 @@ void DictEntry::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// DictExpr
-//
-
-DictExpr::~DictExpr()
+DictExpr::DictExpr(std::vector<DictEntry*>&& alEntries) :
+    Expr({ std::make_move_iterator(alEntries.begin()), std::make_move_iterator(alEntries.end()) })
 {
-}
-
-void DictExpr::push(DictEntry* apEntry)
-{
-    m_lChildren.push_back(apEntry);
-}
-
-std::vector<const DictEntry*> DictExpr::entries() const
-{
-    std::vector<const DictEntry*> lEntries;
-
-    for (Node* pNode : m_lChildren)
-    {
-        lEntries.push_back(static_cast<DictEntry*>(pNode));
-    }
-
-    return lEntries;
 }
 
 std::string DictExpr::toString() const
@@ -656,29 +549,28 @@ void DictExpr::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// ListExpr
-//
-
-ListExpr::~ListExpr()
+// Tip 1-2: Accept by r-value reference (&&) to enforce the "Move-Only" contract.
+ListExpr::ListExpr(std::vector<Expr*>&& alExprs) :
+    //  Tip 1-3: Use a "converting move".
+    //
+    //  1.  Iterator-range construction. Call std::vector constructor that takes 2
+    //      iterators.
+    //
+    //  2.  Move-iterators. Use std::make_move_iterator to return an r-value reference to
+    //      each member. That is, returns Expr*&&.
+    //
+    //  3.  Implicit upcasting. Expr* implicitly converts to Node*
+    //
+    //  Note: "moving" a pointer is the same operation as copying. The purpose of move
+    //  here is semantic - signalling that this vector is empty and Node owns the
+    //  addresses.
+    Expr({ std::make_move_iterator(alExprs.begin()), std::make_move_iterator(alExprs.end()) })
 {
 }
 
 void ListExpr::push(Expr* apExpr)
 {
     m_lChildren.push_back(apExpr);
-}
-
-std::vector<const Expr*> ListExpr::exprs() const
-{
-    std::vector<const Expr*> lExprs;
-
-    for (Node* pNode : m_lChildren)
-    {
-        lExprs.push_back(static_cast<Expr*>(pNode));
-    }
-
-    return lExprs;
 }
 
 std::string ListExpr::toString() const
@@ -691,18 +583,38 @@ void ListExpr::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// CallExpr
-//
+ListAssignExpr::ListAssignExpr(std::vector<Expr*>&& alNames, Token* apSemi) :
+    Expr({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) }),
+    m_pSemi { apSemi }
+{
+}
+
+const Token* ListAssignExpr::semi() const
+{
+    return m_pSemi;
+}
+
+std::string ListAssignExpr::toString() const
+{
+    std::string tmp = "ListAssignExpr";
+
+    if (m_pSemi != nullptr)
+    {
+        tmp += " with lastname";
+    }
+
+    return tmp;
+}
+
+void ListAssignExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
 
 CallExpr::CallExpr(ast::Expr* apCallable, FnArgList* apFnArgList)
 {
     m_lChildren.push_back(apCallable);
     m_lChildren.push_back(apFnArgList);
-}
-
-CallExpr::~CallExpr()
-{
 }
 
 const Expr* CallExpr::callable() const
@@ -725,19 +637,11 @@ void CallExpr::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// MethodCallExpr
-//
-
 MethodCallExpr::MethodCallExpr(Token* apOp, Expr* apReceiver, Expr* apCallExpr) :
     m_pOp { apOp }
 {
     m_lChildren.push_back(apReceiver);
     m_lChildren.push_back(apCallExpr);
-}
-
-MethodCallExpr::~MethodCallExpr()
-{
 }
 
 const Token* MethodCallExpr::op() const
@@ -765,16 +669,99 @@ void MethodCallExpr::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// Literal
-//
+void InterpStr::push(Expr* apExpr)
+{
+    m_lChildren.push_back(apExpr);
+}
 
-Literal::Literal(Token* apToken) :
-    m_pToken { apToken }
+std::string InterpStr::toString() const
+{
+    return "InterpStr";
+}
+
+void InterpStr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+StrExpr::StrExpr(Token* apStr, Token* apLeftDelim, Token* apRightDelim) :
+    m_pStr { apStr },
+    m_pLDelim { apLeftDelim },
+    m_pRDelim { apRightDelim }
 {
 }
 
-Literal::~Literal()
+const Token* StrExpr::str() const
+{
+    return m_pStr;
+}
+
+const Token* StrExpr::ldelim() const
+{
+    return m_pLDelim;
+}
+
+const Token* StrExpr::rdelim() const
+{
+    return m_pRDelim;
+}
+
+std::string StrExpr::toString(const std::string& asName) const
+{
+    std::string tmp = asName + " ";
+    tmp += ";" + str_repr(m_pLDelim) + ";";
+    tmp += str_repr(m_pStr);
+    tmp += ";" + str_repr(m_pRDelim) + ";";
+    return tmp;
+}
+
+std::string StrExpr::str_repr(Token* apStr) const
+{
+    if (apStr == nullptr)
+    {
+        return "";
+    }
+
+    if (apStr->str() == "\n")
+    {
+        return "\\n";
+    }
+
+    return apStr->str();
+}
+
+std::string LiteralStr::toString() const
+{
+    return StrExpr::toString("LiteralStr");
+}
+
+void LiteralStr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string StrConst::toString() const
+{
+    return StrExpr::toString("StrConst");
+}
+
+void StrConst::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string Pattern::toString() const
+{
+    return StrExpr::toString("Pattern");
+}
+
+void Pattern::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+Literal::Literal(Token* apToken) :
+    m_pToken { apToken }
 {
 }
 
@@ -793,19 +780,11 @@ void Literal::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// SliceExpr
-//
-
 SliceExpr::SliceExpr(Expr* apSliceable, Expr* apStart, Expr* apStop)
 {
     m_lChildren.push_back(apSliceable);
     m_lChildren.push_back(apStart);
     m_lChildren.push_back(apStop);
-}
-
-SliceExpr::~SliceExpr()
-{
 }
 
 std::string SliceExpr::toString() const
@@ -833,18 +812,10 @@ void SliceExpr::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// IndexExpr
-//
-
 IndexExpr::IndexExpr(Expr* apIndexable, Expr* apIndex)
 {
     m_lChildren.push_back(apIndexable);
     m_lChildren.push_back(apIndex);
-}
-
-IndexExpr::~IndexExpr()
-{
 }
 
 const Expr* IndexExpr::indexable() const
@@ -867,10 +838,6 @@ void IndexExpr::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// TernaryOp
-//
-
 TernaryOp::TernaryOp(Token* apLeftOp,
                      Token* apRightOp,
                      Expr* apLeftExpr,
@@ -882,10 +849,6 @@ TernaryOp::TernaryOp(Token* apLeftOp,
     m_lChildren.push_back(apLeftExpr);
     m_lChildren.push_back(apMiddleExpr);
     m_lChildren.push_back(apRightExpr);
-}
-
-TernaryOp::~TernaryOp()
-{
 }
 
 const Token* TernaryOp::lop() const
@@ -923,18 +886,10 @@ void TernaryOp::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// UnaryOp
-//
-
 UnaryOp::UnaryOp(Token* apOp, Expr* apRight) :
     m_pOp { apOp }
 {
     m_lChildren.push_back(apRight);
-}
-
-UnaryOp::~UnaryOp()
-{
 }
 
 const Token* UnaryOp::op() const
@@ -957,18 +912,16 @@ void UnaryOp::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// Var
-//
-
-Var::Var(Token* apScope, Token* apName) :
+Var::Var(Token* apSigil, Token* apScope, Token* apName) :
+    m_pSigil { apSigil },
     m_pScope { apScope },
     m_pName { apName }
 {
 }
 
-Var::~Var()
+const Token* Var::sigil() const
 {
+    return m_pSigil;
 }
 
 const Token* Var::scope() const
@@ -983,14 +936,12 @@ const Token* Var::name() const
 
 std::string Var::toString() const
 {
-    if (m_pScope != nullptr)
-    {
-        return "Var " + m_pScope->str() + ":" + m_pName->str();
-    }
-    else
-    {
-        return "Var " + m_pName->str();
-    }
+    std::string tmp = "Var";
+    tmp += " ";
+    tmp += m_pSigil == nullptr ? "" : m_pSigil->str();
+    tmp += m_pScope == nullptr ? "" : m_pScope->str();
+    tmp += m_pName == nullptr ? "" : m_pName->str();
+    return tmp;
 }
 
 void Var::accept(ASTVisitor& acASTVisitor) const
@@ -998,19 +949,17 @@ void Var::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-//
-// AssignStmt
-//
-
-AssignStmt::AssignStmt(Token* apOp, Var* apVar, Expr* apExpr) :
+AssignStmt::AssignStmt(Token* apExCmd, Token* apOp, Expr* apLeft, Expr* apRight) :
+    m_pExCmd { apExCmd },
     m_pOp { apOp }
 {
-    m_lChildren.push_back(apVar);
-    m_lChildren.push_back(apExpr);
+    m_lChildren.push_back(apLeft);
+    m_lChildren.push_back(apRight);
 }
 
-AssignStmt::~AssignStmt()
+const Token* AssignStmt::ex_cmd() const
 {
+    return m_pExCmd;
 }
 
 const Token* AssignStmt::op() const
@@ -1018,12 +967,12 @@ const Token* AssignStmt::op() const
     return m_pOp;
 }
 
-const Var* AssignStmt::var() const
+const Expr* AssignStmt::lexpr() const
 {
-    return static_cast<Var*>(m_lChildren[0]);
+    return static_cast<Expr*>(m_lChildren[0]);
 }
 
-const Expr* AssignStmt::expr() const
+const Expr* AssignStmt::rexpr() const
 {
     return static_cast<Expr*>(m_lChildren[1]);
 }
@@ -1035,12 +984,105 @@ void AssignStmt::accept(ASTVisitor& acASTVisitor) const
 
 std::string AssignStmt::str_a() const
 {
-    return "AssignStmt " + m_pOp->str();
+    return "AssignStmt " + m_pExCmd->str() + " " + m_pOp->str();
 }
 
-//
-// CommentStmt
-//
+VarQueryStmt::VarQueryStmt(Token* apExCmd, std::vector<Expr*>&& alNames) :
+    Stmt({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) }),
+    m_pExCmd { apExCmd }
+{
+}
+
+const Token* VarQueryStmt::ex_cmd() const
+{
+    return m_pExCmd;
+}
+
+void VarQueryStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string VarQueryStmt::str_a() const
+{
+    return "VarQueryStmt " + m_pExCmd->str();
+}
+
+HereDocExpr::HereDocExpr(std::vector<Expr*>&& alLines,
+                         std::vector<Token*>&& alModifiers,
+                         Token* apEndMarker) :
+    Expr({ std::make_move_iterator(alLines.begin()), std::make_move_iterator(alLines.end()) }),
+    m_pEndMarker { apEndMarker },
+    m_lModifiers { alModifiers }
+{
+}
+
+const std::vector<Token*>& HereDocExpr::modifiers() const
+{
+    return m_lModifiers;
+}
+
+const Token* HereDocExpr::endmarker() const
+{
+    return m_pEndMarker;
+};
+
+std::string HereDocExpr::toString() const
+{
+    std::string tmp = "HereDocExpr";
+
+    for (const Token* pModifier : m_lModifiers)
+    {
+        tmp += " " + pModifier->str();
+    }
+
+    tmp += " " + m_pEndMarker->str();
+    return tmp;
+}
+
+void HereDocExpr::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+UnletStmt::UnletStmt(Token* apExUnlet, Token* apBang, Expr* apExpr) :
+    m_pExUnlet { apExUnlet },
+    m_pBang { apBang }
+{
+    m_lChildren.push_back(apExpr);
+}
+
+const Token* UnletStmt::ex_unlet() const
+{
+    return m_pExUnlet;
+}
+
+const Token* UnletStmt::bang() const
+{
+    return m_pBang;
+}
+
+const Expr* UnletStmt::expr() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+void UnletStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string UnletStmt::str_a() const
+{
+    std::string lsStr = "UnletStmt";
+
+    if (m_pBang != nullptr)
+    {
+        lsStr += " " + m_pBang->str();
+    }
+
+    return lsStr;
+}
 
 CommentStmt::CommentStmt(Token* apComment, bool abTrailing) :
     m_bTrailing { abTrailing },
@@ -1056,10 +1098,6 @@ bool CommentStmt::trailing() const
 const Token* CommentStmt::comment() const
 {
     return m_pComment;
-}
-
-CommentStmt::~CommentStmt()
-{
 }
 
 std::string CommentStmt::str_a() const
@@ -1085,4 +1123,99 @@ std::string CommentStmt::str_b() const
 void CommentStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
+}
+
+LockVarStmt::LockVarStmt(Token* apExCmd, Token* apBang, Token* apDepth, std::vector<Expr*>&& alNames) :
+    Stmt({ std::make_move_iterator(alNames.begin()), std::make_move_iterator(alNames.end()) }),
+    m_pExCmd { apExCmd },
+    m_pBang { apBang },
+    m_pDepth { apDepth }
+{
+}
+
+const Token* LockVarStmt::ex_cmd() const
+{
+    return m_pExCmd;
+}
+
+const Token* LockVarStmt::bang() const
+{
+    return m_pBang;
+}
+
+const Token* LockVarStmt::depth() const
+{
+    return m_pDepth;
+}
+
+void LockVarStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string LockVarStmt::str_a() const
+{
+    std::string tmp = "LockVarStmt";
+    tmp += " ";
+    tmp += m_pExCmd->str();
+    tmp += " ";
+    tmp += m_pBang == nullptr ? "-bang" : "+bang";
+    tmp += " ";
+    tmp += m_pDepth == nullptr ? "-depth" : "+depth:" + m_pDepth->str();
+    return tmp;
+}
+
+TryBranch::TryBranch(Token* apExCmd, Pattern* apPattern, StmtList* apBody) :
+    m_pExCmd { apExCmd }
+{
+    m_lChildren.push_back(apPattern);
+    m_lChildren.push_back(apBody);
+}
+
+const Token* TryBranch::ex_cmd() const
+{
+    return m_pExCmd;
+}
+
+const Pattern* TryBranch::pattern() const
+{
+    return static_cast<Pattern*>(m_lChildren[0]);
+};
+
+const StmtList* TryBranch::body() const
+{
+    return static_cast<StmtList*>(m_lChildren[1]);
+};
+
+std::string TryBranch::toString() const
+{
+    std::string tmp = "TryBranch";
+    tmp += m_pExCmd == nullptr ? "" : " " + m_pExCmd->str();
+    return tmp;
+}
+
+void TryBranch::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+TryStmt::TryStmt(std::vector<TryBranch*>&& alTryBranches, Token* apExEndTry) :
+    Stmt({ std::make_move_iterator(alTryBranches.begin()), std::make_move_iterator(alTryBranches.end()) }),
+    m_pExEndTry { apExEndTry }
+{
+}
+
+const Token* TryStmt::ex_endtry() const
+{
+    return m_pExEndTry;
+}
+
+void TryStmt::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
+std::string TryStmt::str_a() const
+{
+    return "TryStmt";
 }

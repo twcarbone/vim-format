@@ -1,4 +1,6 @@
 let g:abort = [1, 2, 3]
+let g:abort[0] = 3 + 2
+let g:abort[1:2] = [6, 6]
 let bb = 10
 let bb += 2
 let bb -= 2
@@ -8,7 +10,44 @@ let bb %= 2
 let bb .= 2
 let bb ..= 2
 let cc = g:abort
+let [dd, ee, ff] = ['a', 'b', 'c']
+let [a, b; c] = [1, 2, 3, 4]
 let is = bb
+let $envvar = 'something'
+let @a = 'foo'
+let @@ = 'bar'
+let &tpm = 10
+let &g:tpm = 10
+let &l:tpm = 10
+unlet cc
+unlet! cc
+unl! g:does_not_exist
+let heredoc_items =<< trim END
+
+    one
+        END
+
+        {a + b}
+
+END
+let heredoc_eval_items =<< eval END
+{&tpm + 2} is 12
+    END {c} is a list
+    echo {@@}
+END
+let gg = [0zaabb, 0Z, 0ZFFFF]
+echo bb dd ee
+echon bb dd ee
+echomsg bb dd ee
+echoconsole "console"
+echoerr "fail!"
+echohl Number
+1echowindow 'foo'
+1echow c[1]
+echowindow 'bar'
+execute 'echo gg[2]'
+exe 'echo 100'
+const zz_const = 101
 
 " for
 
@@ -56,6 +95,20 @@ elsei 2
 el
 en
 
+try
+    echo doesnotexist
+    throw "foo"
+    th ff
+catch
+catch //
+    try
+        echo 1
+    fina
+        echo 2
+    endt
+cat /^Vim(write):/
+endtry
+
 " expression-syntax
 
 " expr1
@@ -73,12 +126,13 @@ echo 1 == 2
 echo 1 ==? 2
 echo 1 ==# 2
 echo 1 != 2
-echo 6 >  4
+echo 6 > 4
 echo 1 >= 5
-echo 5 <  3
+echo 5 < 3
 echo 3 <= 2
 echo "foo" is "bar"
 echo "foo" isnot "bar"
+echo $HOME
 
 " expr5
 echo 1 << 1
@@ -104,11 +158,15 @@ echo +1
 echo [0, 1, 2, 3][0]
 echo [0, 1, 2, 3][:]
 echo [0, 1, 2, 3][:2]
+let b:items = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 echo b:items[2:]
 echo b:items[1:3]
 echo b:items[1 + 1:6 / 2]
+let g:dict = {'closure': 'banana'}
 echo g:dict.closure
-echo ReturnsFuncRef()("passed to returned FuncRef")
+function Add(a, b)
+    return a:a + a:b
+endfunction
 echo 2->Add(3)
 echo 3->Add(4)->Add(5)
 
@@ -118,7 +176,41 @@ let b:in = [0, 1, 2, 3]
 let dict_a = {"apple": 4, "banana": [1 * 2, 2], "cherry": "pie"}
 let dict_b = {"test": g:m_bar}
 let dict_c = {g:m_bar: 43}
-echo list_of_funcrefs[4](5)
 echo Add(1, 2)
 echo (1 + (3 + 4)) * 2 - (10)
+echo ''
 echo 'string with "embedded" double quote'
+echo $'Before {bb} after'
+echo $'{bb} after'
+echo $'Before {bb}'
+echo 'Before bb} after'
+echo '{bb} after'
+echo $'{bb} "after"'
+echo 'Before {bb}'
+echo '$var'
+echo ""
+echo $"Before {bb} after"
+echo $"{bb} after"
+echo $"Before {bb}"
+echo "Before {bb} after"
+echo "{bb} after"
+echo $"{bb} 'after'"
+echo "Before {bb}"
+echo "$var"
+
+finish
+fini
+let
+let bb
+let bb dd ee ff
+let g: bb
+let g: b: w:
+let g:abort
+let bb w:
+const
+const bb
+const bb dd ee ff
+const g: bb
+const g: b: w:
+const g:abort
+const bb w:

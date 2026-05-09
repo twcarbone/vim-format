@@ -6,10 +6,11 @@ add_executable(
     unittests
     AST_tests.cpp
     Lexer_tests.cpp
-    Parser_tests.cpp
     PrettyPrinter_tests.cpp
     Source_tests.cpp
     Unit_tests.cpp
+    Error_tests.cpp
+    Tokens_tests.cpp
 )
 
 target_link_libraries(

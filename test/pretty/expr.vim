@@ -57,7 +57,7 @@ endfunction
 " line
 " comment
 
-echo "foo"    ==#   "Foo"
+echo $HOME    ==#   "Foo"
   echo "foo" ==? "Foo"
 
 echo "hello"	->toupper(    )
