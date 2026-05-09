@@ -6,13 +6,13 @@ Program
       Var bar
       Var baz
     EmptyStmt <>
-    AssignStmt = <>
+    AssignStmt let = <>
       Var List
       ListExpr
         Literal 1
         Literal 2
         Literal 3
-    AssignStmt = <>
+    AssignStmt let = <>
       Var Dict
       DictExpr
         DictEntry

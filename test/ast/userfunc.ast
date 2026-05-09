@@ -58,7 +58,7 @@ Program
         FnArgList
           Literal 3
     EmptyStmt <>
-    AssignStmt = <>
+    AssignStmt let = <>
       Var is
       Literal 5
     EmptyStmt <>

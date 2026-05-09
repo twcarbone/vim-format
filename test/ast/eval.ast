@@ -1,19 +1,19 @@
 Program
   StmtList
-    AssignStmt = <>
+    AssignStmt let = <>
       Var g:abort
       ListExpr
         Literal 1
         Literal 2
         Literal 3
-    AssignStmt = <>
+    AssignStmt let = <>
       IndexExpr
         Var g:abort
         Literal 0
       BinaryOp +
         Literal 3
         Literal 2
-    AssignStmt = <>
+    AssignStmt let = <>
       SliceExpr
         Var g:abort
         Literal 1
@@ -21,34 +21,34 @@ Program
       ListExpr
         Literal 6
         Literal 6
-    AssignStmt = <>
+    AssignStmt let = <>
       Var bb
       Literal 10
-    AssignStmt += <>
+    AssignStmt let += <>
       Var bb
       Literal 2
-    AssignStmt -= <>
+    AssignStmt let -= <>
       Var bb
       Literal 2
-    AssignStmt *= <>
+    AssignStmt let *= <>
       Var bb
       Literal 2
-    AssignStmt /= <>
+    AssignStmt let /= <>
       Var bb
       Literal 2
-    AssignStmt %= <>
+    AssignStmt let %= <>
       Var bb
       Literal 2
-    AssignStmt .= <>
+    AssignStmt let .= <>
       Var bb
       Literal 2
-    AssignStmt ..= <>
+    AssignStmt let ..= <>
       Var bb
       Literal 2
-    AssignStmt = <>
+    AssignStmt let = <>
       Var cc
       Var g:abort
-    AssignStmt = <>
+    AssignStmt let = <>
       ListAssignExpr
         Var dd
         Var ee
@@ -57,7 +57,7 @@ Program
         LiteralStr ;';a;';
         LiteralStr ;';b;';
         LiteralStr ;';c;';
-    AssignStmt = <>
+    AssignStmt let = <>
       ListAssignExpr with lastname
         Var a
         Var b
@@ -67,25 +67,25 @@ Program
         Literal 2
         Literal 3
         Literal 4
-    AssignStmt = <>
+    AssignStmt let = <>
       Var is
       Var bb
-    AssignStmt = <>
+    AssignStmt let = <>
       Var $envvar
       LiteralStr ;';something;';
-    AssignStmt = <>
+    AssignStmt let = <>
       Var @a
       LiteralStr ;';foo;';
-    AssignStmt = <>
+    AssignStmt let = <>
       Var @@
       LiteralStr ;';bar;';
-    AssignStmt = <>
+    AssignStmt let = <>
       Var &tpm
       Literal 10
-    AssignStmt = <>
+    AssignStmt let = <>
       Var &g:tpm
       Literal 10
-    AssignStmt = <>
+    AssignStmt let = <>
       Var &l:tpm
       Literal 10
     UnletStmt <>
@@ -94,7 +94,7 @@ Program
       Var cc
     UnletStmt ! <>
       Var g:does_not_exist
-    AssignStmt =<< <>
+    AssignStmt let =<< <>
       Var heredoc_items
       HereDocExpr trim END
         InterpStr
@@ -109,7 +109,7 @@ Program
           LiteralStr ;;        {a + b};\n;
         InterpStr
           LiteralStr ;;;\n;
-    AssignStmt =<< <>
+    AssignStmt let =<< <>
       Var heredoc_eval_items
       HereDocExpr eval END
         InterpStr
@@ -126,7 +126,7 @@ Program
           LiteralStr ;;    echo ;{;
           Var @@
           LiteralStr ;};;\n;
-    AssignStmt = <>
+    AssignStmt let = <>
       Var gg
       ListExpr
         Literal 0zaabb
@@ -162,6 +162,9 @@ Program
       LiteralStr ;';echo gg[2];';
     ExprCmd exe -count <>
       LiteralStr ;';echo 100;';
+    AssignStmt const = <>
+      Var zz_const
+      Literal 101
     EmptyStmt <>
     CommentStmt " for <trailing = no>
     EmptyStmt <>
@@ -432,7 +435,7 @@ Program
           Literal 3
         NULL
         Literal 2
-    AssignStmt = <>
+    AssignStmt let = <>
       Var b:items
       ListExpr
         Literal 10
@@ -464,7 +467,7 @@ Program
         BinaryOp /
           Literal 6
           Literal 2
-    AssignStmt = <>
+    AssignStmt let = <>
       Var g:dict
       DictExpr
         DictEntry
@@ -508,17 +511,17 @@ Program
             Literal 5
     EmptyStmt <>
     CommentStmt " expr11 <trailing = no>
-    AssignStmt = <>
+    AssignStmt let = <>
       Var g:m_bar
       Literal 42
-    AssignStmt = <>
+    AssignStmt let = <>
       Var b:in
       ListExpr
         Literal 0
         Literal 1
         Literal 2
         Literal 3
-    AssignStmt = <>
+    AssignStmt let = <>
       Var dict_a
       DictExpr
         DictEntry
@@ -534,13 +537,13 @@ Program
         DictEntry
           StrConst ;";cherry;";
           StrConst ;";pie;";
-    AssignStmt = <>
+    AssignStmt let = <>
       Var dict_b
       DictExpr
         DictEntry
           StrConst ;";test;";
           Var g:m_bar
-    AssignStmt = <>
+    AssignStmt let = <>
       Var dict_c
       DictExpr
         DictEntry
@@ -632,23 +635,43 @@ Program
       NULL
     JumpStmt fini <>
       NULL
-    VarQueryStmt <>
-    VarQueryStmt <>
+    VarQueryStmt let <>
+    VarQueryStmt let <>
       Var bb
-    VarQueryStmt <>
+    VarQueryStmt let <>
       Var bb
       Var dd
       Var ee
       Var ff
-    VarQueryStmt <>
+    VarQueryStmt let <>
       Var g:
       Var bb
-    VarQueryStmt <>
+    VarQueryStmt let <>
       Var g:
       Var b:
       Var w:
-    VarQueryStmt <>
+    VarQueryStmt let <>
       Var g:abort
-    VarQueryStmt <>
+    VarQueryStmt let <>
+      Var bb
+      Var w:
+    VarQueryStmt const <>
+    VarQueryStmt const <>
+      Var bb
+    VarQueryStmt const <>
+      Var bb
+      Var dd
+      Var ee
+      Var ff
+    VarQueryStmt const <>
+      Var g:
+      Var bb
+    VarQueryStmt const <>
+      Var g:
+      Var b:
+      Var w:
+    VarQueryStmt const <>
+      Var g:abort
+    VarQueryStmt const <>
       Var bb
       Var w:

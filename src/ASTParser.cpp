@@ -254,6 +254,7 @@ ast::Stmt* ASTParser::stmt()
             pStmt = expr_cmd();
             break;
         case Token::Type::EX_LET:
+        case Token::Type::EX_CONST:
             ensure_no_range();
             pStmt = let_stmt();
             break;
@@ -671,9 +672,22 @@ ast::Stmt* ASTParser::let_stmt()
 
 // 3932339600
 // 2969427802
+// 1396436383
+// 2417506279
 ast::VarQueryStmt* ASTParser::var_query_stmt()
 {
-    consume(Token::Type::EX_LET);
+    Token* pExCmd = nullptr;
+
+    switch (curr()->type())
+    {
+        case Token::Type::EX_LET:
+        case Token::Type::EX_CONST:
+            pExCmd = curr();
+            consume(curr()->type());
+            break;
+        default:
+            throw_unexpected_token();
+    }
 
     std::vector<ast::Expr*> llNames;
 
@@ -686,7 +700,7 @@ ast::VarQueryStmt* ASTParser::var_query_stmt()
             llNames = names();
     }
 
-    return new ast::VarQueryStmt(std::move(llNames));
+    return new ast::VarQueryStmt(pExCmd, std::move(llNames));
 }
 
 // 2415878059
@@ -725,13 +739,27 @@ ast::LockVarStmt* ASTParser::lockvar_stmt()
 // 4035612700
 // 4254392411
 // 2818147631
+// 4268781155
+// 2303425390
+// 1611952212
+// 1754248955
 ast::AssignStmt* ASTParser::assign_stmt()
 {
+    Token* pExCmd = nullptr;
     Token* pOp = nullptr;
     ast::Expr* pLhs = nullptr;
     ast::Expr* pRhs = nullptr;
 
-    consume(Token::Type::EX_LET);
+    switch (curr()->type())
+    {
+        case Token::Type::EX_LET:
+        case Token::Type::EX_CONST:
+            pExCmd = curr();
+            consume(curr()->type());
+            break;
+        default:
+            throw_unexpected_token();
+    }
 
     m_bLhs = true;
     pLhs = expr();
@@ -760,7 +788,7 @@ ast::AssignStmt* ASTParser::assign_stmt()
             throw_unexpected_token();
     }
 
-    return new ast::AssignStmt(pOp, pLhs, pRhs);
+    return new ast::AssignStmt(pExCmd, pOp, pLhs, pRhs);
 }
 
 ast::HereDocExpr* ASTParser::heredoc_expr()
@@ -920,6 +948,9 @@ ast::ListAssignExpr* ASTParser::list_assign_expr()
 // 1408577583
 // 0348216287
 // 0703956562
+// 3317283107
+// 2769173961
+// 0330570849
 ast::ExprCmd* ASTParser::expr_cmd()
 {
     Token* pCmd = curr();
