@@ -1,3 +1,5 @@
+VIMFORMAT_BIN = ./build/src/vim-format
+
 .PHONY: first
 first: build
 
@@ -39,7 +41,7 @@ AST_FILES := $(VIM_FILES:.vim=.ast)
 ast: $(AST_FILES)
 
 test/ast/%.ast: test/ast/%.vim
-	./build/src/vim-format -p $< > $@
+	$(VIMFORMAT_BIN) -p $< > $@
 
 .PHONY: errors
 
@@ -52,4 +54,4 @@ errors: $(TEST_ERR_OUTFILES)
 # Append '|| true' to ensure the line evaluates to a zero exit status and doesn't crash
 # the Makefile.
 test/error/%.out: test/error/%.vim
-	./build/src/vim-format $< 2> $@ || true
+	$(VIMFORMAT_BIN) $< 2> $@ || true
