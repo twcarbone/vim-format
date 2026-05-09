@@ -765,6 +765,11 @@ bool Lexer::push_command()
 
 bool Lexer::push_keyword()
 {
+    if (m_cSource.column() == m_cSource.indent())
+    {
+        return false;
+    }
+
     for (const Keyword& lcKeyword : m_lKeywords)
     {
         if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
