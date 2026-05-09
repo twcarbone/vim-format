@@ -27,8 +27,17 @@ bool startswith(std::string_view str, std::string_view prefix, std::string_view 
 /**
  *  @brief
  *      Return true if `str` starts with a valid int and set `out` to the int.
+ *
+ *      If `base` is not nullptr and an integer is found, set `base`.
+ *
+ *  @example
+ *      ```
+ *      std::string_view out;
+ *      int base;
+ *      startswith_int("42abc", out, &base);    // true, out = "42", base = 10
+ *      ```
  */
-bool startswith_int(std::string_view str, std::string_view& out);
+bool startswith_int(std::string_view str, std::string_view& out, int* base = nullptr);
 
 /**
  *  @brief

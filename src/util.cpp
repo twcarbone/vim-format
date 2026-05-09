@@ -43,21 +43,19 @@ bool vf::startswith(std::string_view asStr, std::string_view asPrefix, std::stri
     return asStr.substr(0, lnEnd) == asPrefix;
 }
 
-bool vf::startswith_int(std::string_view asStr, std::string_view& asOut)
+bool vf::startswith_int(std::string_view asStr, std::string_view& asOut, int* apBase)
 {
-    // 1. Start by finding the end any leading digits. Save it for back-tracking.
+    // 1. Start by finding the end of any leading digits. Save it for back-tracking.
     const size_t lnDigitsEnd = asStr.find_first_not_of(DIGITS_BASE_10);
     asOut = asStr.substr(0, lnDigitsEnd);
 
-    // 2. Zero digits means this is not an integer. More than one digit means this is a
-    //    base-10 integer. We can return immediately in either case.
-    if (lnDigitsEnd != 1)
+    // 2. Zero digits means this is not an integer.
+    if (lnDigitsEnd == 0)
     {
-        return lnDigitsEnd > 0;
+        return false;
     }
 
-    // 3. Compute the base from the "base character". Return the leading digits if it's
-    //    not a valid base character.
+    // 3. Compute the base from the 2nd character.
     int lnBase;
     switch (asStr[1])
     {
@@ -74,7 +72,17 @@ bool vf::startswith_int(std::string_view asStr, std::string_view& asOut)
             lnBase = 2;
             break;
         default:
-            return true;
+            lnBase = 10;
+    }
+
+    if (apBase != nullptr)
+    {
+        *apBase = lnBase;
+    }
+
+    if (lnBase == 10)
+    {
+        return true;
     }
 
     // 4. Convert the "value" portion (example: 1234 from 0x1234).
@@ -84,7 +92,7 @@ bool vf::startswith_int(std::string_view asStr, std::string_view& asOut)
     char* pEnd = nullptr;
     long l = std::strtol(pStart, &pEnd, lnBase);
 
-    // 5. Zero valid characters, or one invalid character, followed the "base character".
+    // 5. Zero valid characters or one invalid character followed the "base character".
     //    Return the leading digits.
     if (pEnd == pStart || pEnd != lsValue.end())
     {
