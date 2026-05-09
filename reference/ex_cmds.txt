@@ -70,7 +70,7 @@
   Y  0611365865  3479  :echon        :echon {expr1} ..
   Y  3292911339  3502  :echohl       :echoh[l] {name}
   Y  1408577583  3510  :echomsg      :echom[sg] {expr1} ..
-     3317283107  3527  :echowindow   :[N]echow[indow] {expr1} ..
+  Y  3317283107  3527  :echowindow   :[N]echow[indow] {expr1} ..
   Y  0348216287  3542  :echoerr      :echoe[rr] {expr1} ..
   Y  0703956562  3555  :echoconsole  :echoc[onsole] {expr1} ..
      2769173961  3561  :eval         :eval {expr}

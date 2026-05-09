@@ -238,6 +238,7 @@ ast::Stmt* ASTParser::stmt()
         case Token::Type::EX_ECHOMSG:
         case Token::Type::EX_ECHOCONSOLE:
         case Token::Type::EX_THROW:
+        case Token::Type::EX_ECHOWINDOW:
             pStmt = expr_cmd();
             break;
         case Token::Type::EX_LET:
@@ -915,6 +916,7 @@ ast::ExprCmd* ASTParser::expr_cmd()
         case Token::Type::EX_ECHON:
         case Token::Type::EX_ECHOERR:
         case Token::Type::EX_ECHOMSG:
+        case Token::Type::EX_ECHOWINDOW:
         case Token::Type::EX_ECHOCONSOLE:
             return new ast::ExprCmd(m_pCount, pCmd, names());
         case Token::Type::EX_THROW:

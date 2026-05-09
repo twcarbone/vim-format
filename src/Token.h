@@ -16,6 +16,7 @@
         X(EX_ECHOHL)                                                                            \
         X(EX_ECHOMSG)                                                                           \
         X(EX_ECHON)                                                                             \
+        X(EX_ECHOWINDOW)                                                                        \
         X(EX_ELSE)                                                                              \
         X(EX_ELSEIF)                                                                            \
         X(EX_ENDFOR)                                                                            \

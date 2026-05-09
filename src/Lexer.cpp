@@ -62,6 +62,7 @@ Lexer::Lexer(const Context& acContext) :
         { "echomsg", "echom", Token::Type::EX_ECHOMSG },
         { "echoerr", "echoe", Token::Type::EX_ECHOERR },
         { "echoconsole", "echoc", Token::Type::EX_ECHOCONSOLE },
+        { "echowindow", "echow", Token::Type::EX_ECHOWINDOW },
     },
     m_lKeywords {
         // Keywords have no abbreviation, and can appear in any position.
