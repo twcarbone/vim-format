@@ -63,3 +63,14 @@ errors: $(TEST_ERR_OUTFILES)
 # the Makefile.
 test/error/%.out: test/error/%.vim
 	$(VIMFORMAT_BIN) $< 2> $@ || true
+
+
+.PHONY: pretty
+
+TEST_PRETTY_INFILES := $(wildcard test/pretty/*.vim)
+TEST_PRETTY_OUTFILES := $(TEST_PRETTY_INFILES:.vim=.pretty)
+
+pretty: $(TEST_PRETTY_OUTFILES)
+
+test/pretty/%.pretty: test/pretty/%.vim
+	$(VIMFORMAT_BIN) $< > $@
