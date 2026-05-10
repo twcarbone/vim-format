@@ -152,6 +152,7 @@ Lexer::Lexer(const Context& acContext) :
         { "@", Token::Type::SIG_REG },
         { "'", Token::Type::SQUOTE },
         { "\"", Token::Type::DQUOTE },
+        { "\\", Token::Type::LINE_CONTINUATION },
     },
     m_lReSpec {
         { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::IDENTIFIER },
@@ -724,6 +725,19 @@ bool Lexer::push_symbol()
 {
     for (const Symbol& lcSymbol : m_lSymbols)
     {
+        switch (lcSymbol.eTokenType)
+        {
+            case Token::Type::LINE_CONTINUATION:
+                if (m_cSource.column() != m_cSource.indent())
+                {
+                    continue;
+                }
+
+                break;
+            default:
+                break;
+        }
+
         if (vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
         {
             return push_token(lcSymbol.eTokenType, lcSymbol.sLexeme);
