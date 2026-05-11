@@ -88,6 +88,13 @@ TEST_F(UtilTest, test_startswithflost)
     test_startswithfloat("1.234E+03_", "1.234E+03");
 }
 
+TEST_F(UtilTest, test_sanitize)
+{
+    std::string lsIn = { 0, 2, 3, 9, 10, 32, 57, 80, 100, 123 };
+    std::string lsOut = R"(\0\x02\x03\t\n 9Pd{)";
+    EXPECT_EQ(lsOut, vf::sanitize(lsIn));
+}
+
 TEST_F(FilesystemTest, test_name)
 {
     EXPECT_EQ(vf::name(m_s1), "pkg.tar.gz");

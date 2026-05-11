@@ -1,4 +1,6 @@
 #include <fstream>
+#include <iomanip>
+#include <sstream>
 
 #include "util.h"
 
@@ -150,6 +152,39 @@ bool vf::startswith_float(std::string_view asStr, std::string_view& asOut)
     }
 
     return true;
+}
+
+std::string vf::sanitize(std::string_view input)
+{
+    std::ostringstream oss;
+
+    for (unsigned char c : input)
+    {
+        switch (c)
+        {
+            // clang-format off
+            case '\\': oss << "\\\\"; break;
+            case '\n': oss << "\\n";  break;
+            case '\r': oss << "\\r";  break;
+            case '\t': oss << "\\t";  break;
+            case '\v': oss << "\\v";  break;
+            case '\f': oss << "\\f";  break;
+            case '\0': oss << "\\0";  break;
+            // clang-format on
+            default:
+                if (c >= 32 && c <= 126)
+                {
+                    oss << c;
+                }
+                else
+                {
+                    oss << "\\x" << std::hex << std::uppercase << std::setw(2) << std::setfill('0');
+                    oss << static_cast<int>(c);
+                }
+        }
+    }
+
+    return oss.str();
 }
 
 std::string vf::name(const std::filesystem::path& acPath)
