@@ -32,6 +32,7 @@ TEST(SourceTest, text_test_01)
     //                                                                  EOF here
 
     EXPECT_EQ(lcSource.path(), "stdin");
+    EXPECT_EQ(lcSource.size(), 45);
 
     lcSource.advance(7);
 
@@ -130,6 +131,7 @@ TEST(SourceTest, text_test_02)
 {
     Source lcSource;
     lcSource.read_text("\n");
+    EXPECT_EQ(lcSource.size(), 1);
 
     EXPECT_EQ(lcSource.path(), "stdin");
 
@@ -156,6 +158,7 @@ TEST(SourceTest, file_test_01)
     lcSource.read_file("test/sample/05.vim");
 
     EXPECT_EQ(lcSource.path(), "test/sample/05.vim");
+    EXPECT_EQ(lcSource.size(), 7);
 
     lcSource.advance(2);
 

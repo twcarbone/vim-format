@@ -28,6 +28,11 @@ int Source::line() const
     return lnLine;
 }
 
+int Source::size() const
+{
+    return m_sText.size();
+}
+
 int Source::column() const
 {
     int lnColumn = 0;
@@ -208,4 +213,9 @@ void Source::read_file(const fs::path& acPath)
 {
     m_cPath = acPath;
     m_sText = vf::read_file(acPath);
+}
+
+char Source::operator[](size_t n)
+{
+    return m_sText[n];
 }
