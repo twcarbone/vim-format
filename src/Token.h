@@ -90,7 +90,6 @@
         X(SCOPE_A)                                                                              \
         X(SCOPE_V)                                                                              \
         X(REGISTER)                                                                             \
-        X(LINE_CONTINUATION)                                                                    \
         X(ASSIGN_ADD)                                                                           \
         X(ASSIGN_MINUS)                                                                         \
         X(ASSIGN_MUL)                                                                           \

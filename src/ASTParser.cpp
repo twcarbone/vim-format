@@ -1460,17 +1460,6 @@ void ASTParser::consume(const Token::Type aeType)
     }
 
     m_lTokens.advance(1, Flags::skipws);
-
-    if (curr()->type() == Token::Type::NEWLINE)
-    {
-        Token* pPeeked = m_lTokens.peek(1, Flags::skipws);
-
-        if (pPeeked->type() == Token::Type::LINE_CONTINUATION)
-        {
-            m_lTokens.advance(1, Flags::skipws | Flags::skipnewline);
-            consume(Token::Type::LINE_CONTINUATION);
-        }
-    }
 }
 
 bool ASTParser::consume_optional(const Token::Type aeType)
