@@ -91,7 +91,9 @@ TEST_F(UtilTest, test_startswithflost)
 TEST_F(UtilTest, test_sanitize)
 {
     std::string lsIn = { 0, 2, 3, 9, 10, 32, 57, 80, 100, 123 };
+    // clang-format off
     std::string lsOut = R"(\0\x02\x03\t\n 9Pd{)";
+    // clang-format on
     EXPECT_EQ(lsOut, vf::sanitize(lsIn));
 }
 
