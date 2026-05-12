@@ -112,6 +112,7 @@ private:
     bool push_register();
     bool push_number();
     bool push_blob();
+    bool push_continuation();
 };
 
 #endif  // TOKENIZER_H

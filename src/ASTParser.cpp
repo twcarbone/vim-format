@@ -1459,7 +1459,20 @@ void ASTParser::consume(const Token::Type aeType)
         return;
     }
 
-    m_lTokens.advance(1, Flags::skipws);
+    while (true)
+    {
+        m_lTokens.advance(1);
+
+        switch (curr()->type())
+        {
+            case Token::Type::SPACE:
+            case Token::Type::TAB:
+            case Token::Type::CONTINUATION:
+                break;
+            default:
+                return;
+        }
+    }
 }
 
 bool ASTParser::consume_optional(const Token::Type aeType)
