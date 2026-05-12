@@ -125,6 +125,7 @@
         X(OPTION)                                                                               \
         X(IDENTIFIER)                                                                           \
         X(STRING)                                                                               \
+        X(CONTINUATION)             /* From '\n' to '\' */                                      \
         X(STR_INTERP_DQUOTE)                                                                    \
         X(STR_INTERP_SQUOTE)                                                                    \
         X(DQUOTE)                                                                               \

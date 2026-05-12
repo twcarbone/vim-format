@@ -1451,7 +1451,7 @@ void ASTParser::consume(const Token::Type aeType)
 {
     if (curr()->type() != aeType)
     {
-        throw_unexpected_token();
+        throw_unexpected_token(aeType);
     }
 
     if (curr()->type() == Token::Type::END)
@@ -1459,7 +1459,20 @@ void ASTParser::consume(const Token::Type aeType)
         return;
     }
 
-    m_lTokens.advance(1, Flags::skipws);
+    while (true)
+    {
+        m_lTokens.advance(1);
+
+        switch (curr()->type())
+        {
+            case Token::Type::SPACE:
+            case Token::Type::TAB:
+            case Token::Type::CONTINUATION:
+                break;
+            default:
+                return;
+        }
+    }
 }
 
 bool ASTParser::consume_optional(const Token::Type aeType)
@@ -1533,7 +1546,15 @@ void ASTParser::ensure_no_range()
 void ASTParser::throw_unexpected_token()
 {
     m_cSource.seek(curr()->source_pos());
-    throw std::runtime_error("Unexpected token.\n\n" + m_cSource.context());
+    throw std::runtime_error("Unexpected " + Token::TypeToStr(curr()->type()) + ".\n\n"
+                             + m_cSource.context());
+}
+
+void ASTParser::throw_unexpected_token(Token::Type aeTokenType)
+{
+    m_cSource.seek(curr()->source_pos());
+    throw std::runtime_error("Expected " + Token::TypeToStr(aeTokenType) + ", got "
+                             + Token::TypeToStr(curr()->type()) + ".\n\n" + m_cSource.context());
 }
 
 void ASTParser::throw_vim_error(std::string asCode)

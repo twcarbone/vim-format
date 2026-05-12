@@ -36,12 +36,12 @@ protected:
 
 TEST_F(PrettyPrinterTest, expr)
 {
-    test_file("test/pretty/expr.vim", "test/pretty/expr.pretty.vim");
+    test_file("test/pretty/expr.vim", "test/pretty/expr.pretty");
 }
 
 TEST_F(PrettyPrinterTest, expr_pretty)
 {
-    test_file("test/pretty/expr.pretty.vim", "test/pretty/expr.pretty.vim");
+    test_file("test/pretty/expr.pretty", "test/pretty/expr.pretty");
 }
 
 TEST_F(PrettyPrinterTest, ast_eval)

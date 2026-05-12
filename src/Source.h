@@ -20,6 +20,9 @@ public:
     // 0-based index of current line.
     int line() const;
 
+    // Size of current file.
+    int size() const;
+
     // 0-based index within current line.
     // Does not increment when on newline or EOF.
     int column() const;
@@ -71,6 +74,8 @@ public:
 
     void read_text(const std::string& text);
     void read_file(const fs::path& path);
+
+    char operator[](size_t n);
 
 private:
     int m_nPos = 0;

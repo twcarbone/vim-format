@@ -63,6 +63,16 @@ inline bool is_one_of(std::string_view str, std::string_view any)
 
 /**
  *  @brief
+ *      Return `text` with non-printable characters replaced by a printable equivalent.
+ *
+ *      Common non-printables (eg, newline, tab) are replaced by a literal backslash and
+ *      single character (newline -> \n, tab -> \t). Others are printed as hex (eg, EOT
+ *      -> \x04).
+ */
+std::string sanitize(std::string_view text);
+
+/**
+ *  @brief
  *      The last slash-separated portion of the path.
  */
 std::string name(const std::filesystem::path& path);

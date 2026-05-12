@@ -1,6 +1,7 @@
 #include <string>
 
 #include "Token.h"
+#include "util.h"
 
 Token::Token() :
     Token(Type::NONE, "null", 0)
@@ -99,17 +100,7 @@ std::string Token::toString() const
 {
     std::string tmp = "<Token";
     tmp += " type=" + TypeToStr(m_eType);
-    tmp += " lexeme=";
-
-    switch (m_eType)
-    {
-        case Type::SPACE:
-        case Type::TAB:
-        case Type::NEWLINE:
-            break;
-        default:
-            tmp += m_sStr;
-    }
+    tmp += " lexeme=" + vf::sanitize(m_sStr);
 
     tmp += " pos=" + std::to_string(m_nSourcePos);
     tmp += ">";
