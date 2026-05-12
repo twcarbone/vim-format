@@ -289,7 +289,7 @@ bool Lexer::match()
 
             [[fallthrough]];
         case State::NONE:
-            if (push_register() || push_comment())
+            if (push_register() || push_comment() || push_continuation())
             {
                 return true;
             }
@@ -439,6 +439,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 {
                     case Token::Type::TAB:
                     case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
                         continue;
                     case Token::Type::FLOAT:
                     case Token::Type::STRING:
@@ -457,6 +458,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 {
                     case Token::Type::TAB:
                     case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
                         continue;
                     case Token::Type::FLOAT:
                     case Token::Type::STRING:
@@ -475,6 +477,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 {
                     case Token::Type::TAB:
                     case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
                         continue;
                     case Token::Type::OP_EQUAL:
                     case Token::Type::OP_NEQUAL:
@@ -504,6 +507,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                     case Token::Type::EX_UNLET:
                     case Token::Type::EX_LOCKVAR:
                     case Token::Type::EX_UNLOCKVAR:
+                    case Token::Type::CONTINUATION:
                         apCurrentToken->setType(Token::Type::OP_BANG);
                         break;
                     default:
@@ -527,6 +531,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
                 {
                     case Token::Type::TAB:
                     case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
                         continue;
                     case Token::Type::EX_CATCH:
                         apCurrentToken->setType(Token::Type::SLASH);
@@ -585,6 +590,7 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                 {
                     case Token::Type::TAB:
                     case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
                     case Token::Type::FN_ABORT:
                     case Token::Type::FN_CLOSURE:
                     case Token::Type::FN_DICT:
@@ -608,6 +614,7 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                 {
                     case Token::Type::TAB:
                     case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
                         continue;
                     case Token::Type::R_BRACKET:
                     case Token::Type::IDENTIFIER:
@@ -629,6 +636,7 @@ void Lexer::retype_keyword(Token* apCurrentToken)
                 {
                     case Token::Type::TAB:
                     case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
                         continue;
                     case Token::Type::IDENTIFIER:
                     case Token::Type::INTEGER:
@@ -720,6 +728,33 @@ bool Lexer::push_register()
     throw VimError("E354", m_cSource.context());
 }
 
+bool Lexer::push_continuation()
+{
+    if (m_cSource.remaining_text().at(0) != '\n')
+    {
+        return false;
+    }
+
+    for (size_t i = m_cSource.pos() + 1; i < m_cSource.size(); i++)
+    {
+        switch (m_cSource[i])
+        {
+            case ' ':
+            case '\t':
+                continue;
+            case '\\':
+            {
+                std::string_view lsText = m_cSource.remaining_text().substr(0, i - m_cSource.pos() + 1);
+                return push_token(Token::Type::CONTINUATION, lsText);
+            }
+            default:
+                return false;
+        }
+    }
+
+    return false;
+}
+
 bool Lexer::push_symbol()
 {
     for (const Symbol& lcSymbol : m_lSymbols)
@@ -735,6 +770,24 @@ bool Lexer::push_symbol()
 
 bool Lexer::push_command()
 {
+    for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+    {
+        const Token* pPrevToken = *rit;
+
+        switch (pPrevToken->type())
+        {
+            case Token::Type::CONTINUATION:
+            case Token::Type::INTEGER:
+            case Token::Type::NEWLINE:
+                goto loop_end;
+            default:
+                return false;
+        }
+    }
+
+loop_end:
+
+#if 0
     if (m_cSource.column() == m_cSource.indent())
     {
     }
@@ -746,6 +799,7 @@ bool Lexer::push_command()
     {
         return false;
     }
+#endif
 
     for (const Command& lcCommand : m_lCommands)
     {

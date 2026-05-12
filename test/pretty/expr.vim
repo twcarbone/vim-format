@@ -62,3 +62,18 @@ echo $HOME    ==#   "Foo"
 
 echo "hello"	->toupper(    )
 
+echo
+	\"line continuation"
+echo
+	\
+	\"line continuation"
+
+function
+            \!
+\ Continued(
+            \               
+        \ a				
+            \)
+    return a:a
+        
+                \endfunction

@@ -1,6 +1,7 @@
 #include <string>
 
 #include "Token.h"
+#include "util.h"
 
 Token::Token() :
     Token(Type::NONE, "null", 0)
