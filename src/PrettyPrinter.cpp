@@ -9,6 +9,11 @@ Indent::Indent(size_t anTabStop) :
 {
 }
 
+size_t Indent::column() const
+{
+    return m_nLevel * m_nTabStop;
+}
+
 Indent Indent::operator++(int)
 {
     Indent temp = *this;
@@ -25,12 +30,13 @@ Indent Indent::operator--(int)
 
 std::ostream& operator<<(std::ostream& os, const Indent& acIndent)
 {
-    return os << std::string(acIndent.m_nLevel * acIndent.m_nTabStop, ' ');
+    return os << std::string(acIndent.column(), ' ');
 }
 
 PrettyPrinter::PrettyPrinter(std::ostream& acOutStream) :
     ASTVisitor(acOutStream),
     m_bNewlinePending { false },
+    m_nColumn { 0 },
     m_cIndent { Settings::IndentWidth }
 {
 }
@@ -288,10 +294,13 @@ void PrettyPrinter::visit(const ast::HereDocExpr* apHereDocExpr)
     }
 
     write(apHereDocExpr->endmarker()->str());
-    write('\n');
+    write_eol();
+    write_bol();
 
     for (const ast::Node* pChildNode : apHereDocExpr->children())
     {
+        // TASK (gh-83): ensure HereDocExpr strings are not split
+
         pChildNode->accept(*this);
     }
 
@@ -649,6 +658,14 @@ void PrettyPrinter::visit(const ast::WhileStmt* apWhileStmt)
     write_eol();
 }
 
+void PrettyPrinter::write_continuation()
+{
+    write_eol();
+    write_bol();
+    write(' ', 8);
+    write('\\');
+}
+
 void PrettyPrinter::write_bol()
 {
     if (m_bNewlinePending)
@@ -656,6 +673,7 @@ void PrettyPrinter::write_bol()
         m_bNewlinePending = false;
         m_cOutStream << std::endl;
         m_cOutStream << m_cIndent;
+        m_nColumn = m_cIndent.column();
     }
 }
 
@@ -666,7 +684,13 @@ void PrettyPrinter::write_eol()
 
 void PrettyPrinter::write(const std::string& asText)
 {
+    if (m_nColumn + asText.size() > Settings::ColumnLimit)
+    {
+        write_continuation();
+    }
+
     m_cOutStream << asText;
+    m_nColumn += asText.size();
 }
 
 void PrettyPrinter::write(char anChar, size_t anCount)
@@ -676,5 +700,11 @@ void PrettyPrinter::write(char anChar, size_t anCount)
         return;
     }
 
+    if (m_nColumn + anCount > Settings::ColumnLimit)
+    {
+        write_continuation();
+    }
+
     m_cOutStream << std::string(anCount, anChar);
+    m_nColumn += anCount;
 }

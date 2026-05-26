@@ -82,6 +82,11 @@ void ExprList::push(Expr* apExpr)
     m_lChildren.push_back(apExpr);
 }
 
+size_t StmtList::size() const
+{
+    return m_lChildren.size();
+}
+
 void StmtList::push(Stmt* apStmt)
 {
     m_lChildren.push_back(apStmt);

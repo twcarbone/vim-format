@@ -9,6 +9,8 @@ class Indent
 public:
     Indent(size_t tabstop);
 
+    size_t column() const;
+
     Indent operator++(int);
     Indent operator--(int);
     friend std::ostream& operator<<(std::ostream& os, const Indent& indent);
@@ -30,11 +32,13 @@ public:
 #undef X
 
 private:
+    void write_continuation();
     void write_bol();
     void write_eol();
     void write(const std::string& text);
     void write(char c, size_t count = 1);
 
     bool m_bNewlinePending;
+    size_t m_nColumn;
     Indent m_cIndent;
 };

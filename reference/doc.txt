@@ -1,0 +1,79 @@
+let my_settings = {
+    \ 'width': 80,
+    \ 'colors': ['red', 'blue']
+    \ }
+
+Group (Root - The whole assignment)
+├── Text("let my_settings = ")
+└── Group (The Dictionary)
+    ├── Text("{")
+    ├── Nest(4)
+    │   └── Group (Dictionary Contents)
+    │       ├── Line("")              <-- (Newline + \ + indent if Dictionary breaks)
+    │       ├── Text("'width': 80")
+    │       ├── Text(",")
+    │       ├── Line(" ")             <-- (Space or Newline before 'colors')
+    │       └── Group (The Color Pair)
+    │           ├── Text("'colors': ")
+    │           └── Group (The List)
+    │               ├── Text("[")
+    │               ├── Nest(4)
+    │               │   └── Group (List Contents)
+    │               │       ├── Line("")       <-- (Newline if List breaks)
+    │               │       ├── Text("'red'")
+    │               │       ├── Text(",")
+    │               │       ├── Line(" ")      <-- (Space if List is flat)
+    │               │       └── Text("'blue'")
+    │               ├── Line("")
+    │               └── Text("]")
+    ├── Line("")              <-- (Newline before closing '}')
+    └── Text("}")
+
+Notes:
+
+    `Text` is always printed as-is, and cannot break.
+
+    `Line` is a potential break.
+
+        FLAT mode makes a `Line` print as a space.
+
+        BREAK mode makes a `Line` print as a newline, indent, and backslash.
+
+    `Break` is a forced line break.
+
+        Print newline and indent.
+
+    `Group` is a container, and determines if the mode is FLAT or BREAK.
+
+        If the cumulative width of all children exceeds the maximum line width, the mode
+        changes to BREAK. Note that this does *not* increase the nest count. Consider
+        this example that breaks, but with no `Nest`:
+
+            let x = [
+            \ 1,
+            \ 2
+            \ ]
+
+    `Nest` is another container, and potentially indents the children.
+
+        Increments a global nest counter.
+
+        Tells the `Line` node the indent to print once if has moved to a new line.
+
+        If the structure has a header like "[" or "func(" and a footer like "]" or ")",
+        wrap the stuff in between the header and footer in an `Nest`.
+
+
+Concepts:
+
+    Nest
+
+        Space between the margin and start of text.
+
+    Tab
+
+        A single character used to advance the cursor.
+
+    Tab stop
+
+        A column to stop the cursor when <Tab> is pressed.

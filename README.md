@@ -39,3 +39,7 @@ make build
 1. Hand-written lexer/tokenizer
 2. Hybrid recursive descent and top-down operator precedence (ie, Pratt) parser
 3. AST based pretty-printing
+
+# References
+1. [A prettier printer](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf)
+2. [A twist on Wadler's Printer](https://justinpombrio.net/2024/02/23/a-twist-on-Wadlers-printer.html)

@@ -6,6 +6,8 @@
 #include "ASTVisitor.h"
 #include "Token.h"
 
+// TODO (gh-xx): Rename stmts() to body()
+
 namespace ast
 {
 
@@ -81,6 +83,8 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
+// TODO (gh-154): Remove ast containers, use vector instead (ExprList)
+
 class ExprList : public Node
 {
 public:
@@ -108,12 +112,15 @@ private:
     Token* m_pExCmd;
 };
 
+// TODO (gh-154): Remove ast containers, use vector instead (StmtList)
+
 class StmtList : public Node
 {
 public:
     StmtList() = default;
     virtual ~StmtList() = default;
 
+    size_t size() const;
     void push(Stmt* stmt);
     void take(StmtList* stmts);
     void insert(size_t pos, Stmt* stmt);
@@ -222,6 +229,8 @@ private:
     Token* m_pExCmd;
 };
 
+// TODO (gh-154): Remove ast containers, use vector instead (FnParamList)
+
 class FnParamList : public ExprList
 {
 public:
@@ -232,7 +241,10 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
+// TODO (gh-154): Remove ast containers, use vector instead (FnArgList)
+
 // TODO (gh-37): Rename xxList to xxSeq to distinguish from a ListExpr
+
 class FnArgList : public ExprList
 {
 public:

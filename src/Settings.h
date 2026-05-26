@@ -2,13 +2,22 @@
 #define SETTINGS_H
 
 #include <cstddef>
+#include <string>
 
 class Settings
 {
 public:
+    enum class Style
+    {
+        KR,
+        Allman,
+    };
+
     static bool StopAfterTokenizing;
     static bool StopAfterParsing;
+    static bool StopAfterDocBuilding;
 
+    static Style BreakStyle;
     static size_t ControlStmtPadding;
     static size_t CurlyBracePadding;
     static size_t DefaultFnParamPadding;
@@ -28,6 +37,7 @@ public:
     static size_t SpaceBeforeTrailingComment;
     static size_t SquareBracketPadding;
     static size_t SpaceAfterRange;
+    static size_t ColumnLimit;
 };
 
 #endif  // SETTINGS_H
