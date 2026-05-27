@@ -53,3 +53,8 @@ TEST_F(PrettyPrinterTest, ast_userfunc)
 {
     test_file("test/ast/userfunc.vim", "test/ast/userfunc.vim");
 }
+
+TEST_F(PrettyPrinterTest, ast_lockvar)
+{
+    test_file("test/ast/lockvar.vim", "test/ast/lockvar.vim");
+}
