@@ -469,10 +469,14 @@ void PrettyPrinter::visit(const ast::LockVarStmt* apLockVarStmt)
 
     write(' ', Settings::SpaceAfterExprCmd);
 
-    for (const ast::Node* pChildNode : apLockVarStmt->children())
+    for (auto it = apLockVarStmt->children().cbegin(); it != apLockVarStmt->children().cend(); it++)
     {
-        pChildNode->accept(*this);
-        write(' ', Settings::SpaceAfterListSeparator);
+        (*it)->accept(*this);
+
+        if (std::next(it) != apLockVarStmt->children().cend())
+        {
+            write(' ', Settings::SpaceAfterListSeparator);
+        }
     }
 
     write_eol();
