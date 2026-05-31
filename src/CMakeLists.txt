@@ -8,6 +8,7 @@ add_library(
     Analyzer.cpp
     Context.cpp
     Controller.cpp
+    DocBuilder.cpp
     DocVisitor.cpp
     Exceptions.cpp
     Lexer.cpp
