@@ -28,6 +28,7 @@ public:
     static size_t SpaceBeforeTrailingComment;
     static size_t SquareBracketPadding;
     static size_t SpaceAfterRange;
+    static size_t ColumnLimit;
 };
 
 #endif  // SETTINGS_H
