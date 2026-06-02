@@ -118,6 +118,7 @@ public:
     StmtList() = default;
     virtual ~StmtList() = default;
 
+    size_t size() const;
     void push(Stmt* stmt);
     void take(StmtList* stmts);
     void insert(size_t pos, Stmt* stmt);
