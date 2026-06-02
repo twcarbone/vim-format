@@ -8,6 +8,7 @@ class Settings
 public:
     static bool StopAfterTokenizing;
     static bool StopAfterParsing;
+    static bool StopAfterDocBuilding;
 
     static size_t ControlStmtPadding;
     static size_t CurlyBracePadding;

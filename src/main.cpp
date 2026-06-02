@@ -18,7 +18,8 @@ void usage()
 
               << "  -h, --help       Display this help.\n"
               << "  -t               Stop after tokenizing.\n"
-              << "  -p               Stop after parsing." << std::endl;
+              << "  -p               Stop after parsing.\n"
+              << "  -d               Stop after doc building." << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -47,6 +48,10 @@ int main(int argc, char** argv)
         else if (lsArg == "-p")
         {
             lcContext.settings().StopAfterParsing = true;
+        }
+        else if (lsArg == "-d")
+        {
+            lcContext.settings().StopAfterDocBuilding = true;
         }
         else if (i == argc - 1)
         {

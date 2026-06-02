@@ -2,6 +2,7 @@
 
 bool Settings::StopAfterTokenizing = false;
 bool Settings::StopAfterParsing = false;
+bool Settings::StopAfterDocBuilding = false;
 
 size_t Settings::ControlStmtPadding = 1;
 size_t Settings::CurlyBracePadding = 0;
