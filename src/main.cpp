@@ -16,6 +16,7 @@ void usage()
 
               << "\n\nOPTIONS:\n\n"
 
+              << " --column-limit    Column limit (default:" + std::to_string(Settings::ColumnLimit) + ")\n"
               << "  -h, --help       Display this help.\n"
               << "  -t               Stop after tokenizing.\n"
               << "  -p               Stop after parsing.\n"
@@ -52,6 +53,11 @@ int main(int argc, char** argv)
         else if (lsArg == "-d")
         {
             lcContext.settings().StopAfterDocBuilding = true;
+        }
+        else if (lsArg == "--column-limit")
+        {
+            i++;
+            lcContext.settings().ColumnLimit = std::stoi(argv[i]);
         }
         else if (i == argc - 1)
         {
