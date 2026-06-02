@@ -81,6 +81,8 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
+// TODO (gh-154): Remove ast containers, use vector instead (ExprList)
+
 class ExprList : public Node
 {
 public:
@@ -107,6 +109,8 @@ private:
     Token* m_pCount;
     Token* m_pExCmd;
 };
+
+// TODO (gh-154): Remove ast containers, use vector instead (StmtList)
 
 class StmtList : public Node
 {
@@ -222,6 +226,8 @@ private:
     Token* m_pExCmd;
 };
 
+// TODO (gh-154): Remove ast containers, use vector instead (FnParamList)
+
 class FnParamList : public ExprList
 {
 public:
@@ -232,7 +238,10 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
+// TODO (gh-154): Remove ast containers, use vector instead (FnArgList)
+
 // TODO (gh-37): Rename xxList to xxSeq to distinguish from a ListExpr
+
 class FnArgList : public ExprList
 {
 public:
