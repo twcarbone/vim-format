@@ -1,0 +1,36 @@
+Notes:
+
+    `Break` is a forced line break.
+
+        Print newline and indent according to the indent/nest level.
+
+    `Text` is always printed as-is, and cannot break.
+
+    `Group` is a container, and determines if the mode is FLAT or BREAK.
+
+        If the cumulative width of all children exceeds the column limit, the mode
+        is BREAK. Otherwise the mode is FLAT.
+
+    `Line` is a potential break.
+
+        FLAT mode prints a `Line` as whitespace.
+
+        BREAK mode (ie, if the parent `Group` exceeds the column limit) prints a `Line`
+        as a newline, indent (only if the current indent/nest level is non-zero), and a
+        backslash. A BREAK-mode `Line` with no `Nest` is not indented:
+
+            let i = [
+            \1,
+            \2,
+            \3
+            \]
+
+    `Nest` is another container, and increases/decreases the indent level.
+
+        A `Break` prints a newline and the current indent level.
+
+        A `Line` while in BREAK mode prints a newline and current indent level.
+
+        If the structure has opening and closing ceremony like "[ ... ]" or "function
+        Foo( ... )", wrap the stuff in between the opening and closing tokens in a
+        `Nest`.
