@@ -18,7 +18,7 @@ private:
     void push_text(const std::string& text);
     void push_text(char c, size_t count = 1);
     void push_line(size_t width = 0);
-    void push_deferred_line(size_t width = 0);
+    void push_deferred_line();
     void push_break();
 
     void push_nest();
