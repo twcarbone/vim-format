@@ -382,11 +382,13 @@ void DocBuilder::visit(const ast::IndexExpr* apNode)
 
 void DocBuilder::visit(const ast::InterpStr* apInterpStr)
 {
-    // FIXME: InterpStr needs to set the Line spacing for between curly braces
-
     for (ast::Node* pChildNode : apInterpStr->children())
     {
         pChildNode->accept(*this);
+
+        // Reset the deferred line width so the expression parts of interpolated strings
+        // don't get extra spaces printed.
+        m_nDeferredLine = 0;
     }
 }
 
