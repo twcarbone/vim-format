@@ -772,8 +772,6 @@ void DocBuilder::push_text(char aText, size_t anCount)
 
 void DocBuilder::push_line(size_t anWidth)
 {
-    // FIXME: Can m_nDeferredLine be here instead of an argument?
-
     doc::Line* pLine = new doc::Line(anWidth);
     m_lDocStack.back()->push(pLine);
 }
