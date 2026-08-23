@@ -365,6 +365,8 @@ public:
     virtual void accept(ASTVisitor& visitor) const;
 };
 
+// let [a, b; c] = [1, 2, 3, 4]
+//     ^~~~~~~~~
 class ListAssignExpr : public Expr
 {
 public:

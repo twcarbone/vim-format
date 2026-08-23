@@ -11,13 +11,24 @@ void DocBuilder::visit(const ast::AssignStmt* apAssignStmt)
 {
     push_group();
     {
-        push_text(apAssignStmt->ex_cmd()->str());
-        m_nDeferredLine = Settings::SpaceAfterExprCmd;
-        apAssignStmt->lexpr()->accept(*this);
-        push_line(Settings::OperatorPadding);
-        push_text(apAssignStmt->op()->str());
-        m_nDeferredLine = Settings::OperatorPadding;
-        apAssignStmt->rexpr()->accept(*this);
+        // 'let <expression>'
+        push_group();
+        {
+            push_text(apAssignStmt->ex_cmd()->str());
+            m_nDeferredLine = Settings::SpaceAfterExprCmd;
+            apAssignStmt->lexpr()->accept(*this);
+        }
+        pop();
+
+        // ' = <expression>'
+        push_group();
+        {
+            push_line(Settings::OperatorPadding);
+            push_text(apAssignStmt->op()->str());
+            m_nDeferredLine = Settings::OperatorPadding;
+            apAssignStmt->rexpr()->accept(*this);
+        }
+        pop();
     }
     pop();
 }
@@ -297,8 +308,6 @@ void DocBuilder::visit(const ast::GroupExpr* apGroupExpr)
 
 void DocBuilder::visit(const ast::HereDocExpr* apHereDocExpr)
 {
-    // FIXME: HereDocExpr makes the enclosing AssignStmt enter BREAK mode
-
     push_deferred_line();
     for (const Token* pModifier : apHereDocExpr->modifiers())
     {
@@ -308,6 +317,8 @@ void DocBuilder::visit(const ast::HereDocExpr* apHereDocExpr)
 
     push_text(apHereDocExpr->endmarker()->str());
     push_break();
+
+    m_nDeferredLine = 0;
 
     push_group();
     {
