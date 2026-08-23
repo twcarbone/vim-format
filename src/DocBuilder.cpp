@@ -225,27 +225,28 @@ void DocBuilder::visit(const ast::FnStmt* apFnStmt)
         pop();
         push_line(Settings::ParenPadding);
         push_text(")");
+
+        for (const Token* pModifier : apFnStmt->modifiers())
+        {
+            if (pModifier != nullptr)
+            {
+                push_line(Settings::ExCmdModifierPadding);
+                push_text(pModifier->str());
+            }
+        }
     }
     pop();
 
-    for (const Token* pModifier : apFnStmt->modifiers())
-    {
-        if (pModifier != nullptr)
-        {
-            push_line(Settings::ExCmdModifierPadding);
-            push_text(pModifier->str());
-        }
-    }
-
-    if (!apFnStmt->children().empty())
+    if (apFnStmt->body()->size() > 0)
     {
         push_nest();
         {
             push_break();
             apFnStmt->body()->accept(*this);
         }
+        pop();
     }
-    pop();
+
     push_break();
     push_text(apFnStmt->ex_endfu()->str());
 }
