@@ -6,7 +6,6 @@
 #include "DocBuilder.h"
 #include "DocVisitor.h"
 #include "Lexer.h"
-#include "PrettyPrinter.h"
 #include "Renderer.h"
 
 Controller::Controller(Context acContext) :
@@ -53,7 +52,7 @@ void Controller::compile()
     }
 
     //
-    // Pretty-printing
+    // Rendering
     //
 
     DocBuilder lcDocBuilder;

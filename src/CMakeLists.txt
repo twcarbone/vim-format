@@ -14,7 +14,6 @@ add_library(
     Lexer.cpp
     Node.cpp
     NodeVisitor.cpp
-    PrettyPrinter.cpp
     Renderer.cpp
     Scope.cpp
     Settings.cpp
