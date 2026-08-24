@@ -4,8 +4,9 @@
 #include <string>
 
 #include "ASTParser.h"
+#include "DocBuilder.h"
 #include "Lexer.h"
-#include "PrettyPrinter.h"
+#include "Renderer.h"
 #include "util.h"
 
 class PrettyPrinterTest : public testing::Test
@@ -24,9 +25,12 @@ protected:
         ASTParser lcParser(lcContext, lcLexer.take_tokens());
         lcParser.parse();
 
+        DocBuilder lcDocBuilder;
+        lcParser.root()->accept(lcDocBuilder);
+
         std::stringstream lcPrettyStrStream;
-        PrettyPrinter lcPrettyPrinter(lcPrettyStrStream);
-        lcParser.root()->accept(lcPrettyPrinter);
+        Renderer lcRenderer(lcPrettyStrStream);
+        lcDocBuilder.root()->accept(lcRenderer);
 
         std::string lsPrettyStr = vf::read_file(asOutPath);
 
