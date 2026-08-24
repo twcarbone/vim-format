@@ -146,7 +146,8 @@ void DocBuilder::visit(const ast::DictExpr* apNode)
 
 void DocBuilder::visit(const ast::EmptyStmt* apNode)
 {
-    push_break();
+    // A Break renders leading whitespace inside a Nest. Use a literal newline instead.
+    push_text('\n');
 }
 
 void DocBuilder::visit(const ast::ExprCmd* apExprCmd)
