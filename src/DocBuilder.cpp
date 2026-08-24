@@ -39,8 +39,6 @@ void DocBuilder::visit(const ast::BinaryOp* apNode)
 {
     size_t lnPadding = apNode->op()->type() == Token::Type::OP_DOT ? 0 : Settings::OperatorPadding;
 
-    // FIXME: The current system does not allow for indenting all '<op> + <rhs>' lines.
-
     apNode->lexpr()->accept(*this);
     push_line(lnPadding);
     push_group();
