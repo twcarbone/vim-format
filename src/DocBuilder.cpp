@@ -9,6 +9,8 @@ doc::Doc* DocBuilder::root() const
 
 void DocBuilder::visit(const ast::AssignStmt* apAssignStmt)
 {
+    push_break();
+
     push_group();
     {
         // 'let <expression>'
@@ -90,9 +92,12 @@ void DocBuilder::visit(const ast::CommentStmt* apCommentStmt)
 {
     if (apCommentStmt->trailing())
     {
-        // FIXME: Trailing comments are not supported.
-
-        throw std::runtime_error("Trailing comments are not supported");
+        // Force the trailing comment to be on the same line by not using a Break.
+        push_text(' ', Settings::SpaceBeforeTrailingComment);
+    }
+    else
+    {
+        push_break();
     }
 
     push_text(apCommentStmt->comment()->str());
@@ -141,10 +146,13 @@ void DocBuilder::visit(const ast::DictExpr* apNode)
 
 void DocBuilder::visit(const ast::EmptyStmt* apNode)
 {
+    push_break();
 }
 
 void DocBuilder::visit(const ast::ExprCmd* apExprCmd)
 {
+    push_break();
+
     push_group();
     {
         if (apExprCmd->count() != nullptr)
@@ -173,7 +181,7 @@ void DocBuilder::visit(const ast::FnArgList* apNode)
         if (i < apNode->children().size() - 1)
         {
             push_text(",");
-            push_line(Settings::SpaceAfterFnArgSeparator);
+            m_nDeferredLine = Settings::SpaceAfterFnArgSeparator;
         }
     }
 }
@@ -211,6 +219,8 @@ void DocBuilder::visit(const ast::FnParamList* apNode)
 
 void DocBuilder::visit(const ast::FnStmt* apFnStmt)
 {
+    push_break();
+
     push_group();
     {
         push_text(apFnStmt->ex_fu()->str());
@@ -252,7 +262,6 @@ void DocBuilder::visit(const ast::FnStmt* apFnStmt)
     {
         push_nest();
         {
-            push_break();
             apFnStmt->body()->accept(*this);
         }
         pop();
@@ -264,6 +273,8 @@ void DocBuilder::visit(const ast::FnStmt* apFnStmt)
 
 void DocBuilder::visit(const ast::ForStmt* apForStmt)
 {
+    push_break();
+
     push_group();
     {
         push_text("for");
@@ -281,7 +292,6 @@ void DocBuilder::visit(const ast::ForStmt* apForStmt)
         {
             push_nest();
             {
-                push_break();
                 apForStmt->stmts()->accept(*this);
             }
             pop();
@@ -352,7 +362,6 @@ void DocBuilder::visit(const ast::IfBranch* apIfBranch)
     {
         push_nest();
         {
-            push_break();
             apIfBranch->body()->accept(*this);
         }
         pop();
@@ -362,6 +371,8 @@ void DocBuilder::visit(const ast::IfBranch* apIfBranch)
 
 void DocBuilder::visit(const ast::IfStmt* apIfStmt)
 {
+    push_break();
+
     push_group();
     {
         for (const ast::Node* pChildNode : apIfStmt->children())
@@ -406,6 +417,8 @@ void DocBuilder::visit(const ast::InterpStr* apInterpStr)
 
 void DocBuilder::visit(const ast::JumpStmt* apJumpStmt)
 {
+    push_break();
+
     push_group();
     {
         push_text(apJumpStmt->ex_cmd()->str());
@@ -503,6 +516,8 @@ void DocBuilder::visit(const ast::LiteralStr* apNode)
 
 void DocBuilder::visit(const ast::LockVarStmt* apLockVarStmt)
 {
+    push_break();
+
     push_group();
     {
         push_text(apLockVarStmt->ex_cmd()->str());
@@ -557,6 +572,7 @@ void DocBuilder::visit(const ast::Program* apNode)
         }
     }
 
+    // Newline at end of file
     push_break();
 }
 
@@ -606,11 +622,6 @@ void DocBuilder::visit(const ast::StmtList* apNode)
     for (size_t i = 0; i < apNode->children().size(); i++)
     {
         apNode->children().at(i)->accept(*this);
-
-        if (i < apNode->children().size() - 1)
-        {
-            push_break();
-        }
     }
 }
 
@@ -660,7 +671,6 @@ void DocBuilder::visit(const ast::TryBranch* apTryBranch)
     {
         push_nest();
         {
-            push_break();
             apTryBranch->body()->accept(*this);
         }
         pop();
@@ -670,6 +680,8 @@ void DocBuilder::visit(const ast::TryBranch* apTryBranch)
 
 void DocBuilder::visit(const ast::TryStmt* apTryStmt)
 {
+    push_break();
+
     push_group();
     {
         for (const ast::Node* pChildNode : apTryStmt->children())
@@ -696,6 +708,8 @@ void DocBuilder::visit(const ast::UnaryOp* apUnaryOp)
 
 void DocBuilder::visit(const ast::UnletStmt* apUnletStmt)
 {
+    push_break();
+
     push_group();
     {
         push_text(apUnletStmt->ex_unlet()->str());
@@ -736,6 +750,8 @@ void DocBuilder::visit(const ast::Var* apNode)
 
 void DocBuilder::visit(const ast::VarQueryStmt* apNode)
 {
+    push_break();
+
     push_group();
     {
         push_text(apNode->ex_cmd()->str());
@@ -751,6 +767,8 @@ void DocBuilder::visit(const ast::VarQueryStmt* apNode)
 
 void DocBuilder::visit(const ast::WhileStmt* apWhileStmt)
 {
+    push_break();
+
     push_group();
     {
         push_text(apWhileStmt->ex_cmd_while()->str());
@@ -762,7 +780,6 @@ void DocBuilder::visit(const ast::WhileStmt* apWhileStmt)
     {
         push_nest();
         {
-            push_break();
             apWhileStmt->stmts()->accept(*this);
         }
         pop();
@@ -795,8 +812,14 @@ void DocBuilder::push_deferred_line()
 
 void DocBuilder::push_break()
 {
-    doc::Break* pBreak = new doc::Break();
-    m_lDocStack.back()->push(pBreak);
+    if (m_bBreakPending)
+    {
+        doc::Break* pBreak = new doc::Break();
+        m_lDocStack.back()->push(pBreak);
+    }
+
+    // Start adding breaks after the first statement of the file.
+    m_bBreakPending = true;
 }
 
 void DocBuilder::push_group()

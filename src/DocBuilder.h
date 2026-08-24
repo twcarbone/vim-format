@@ -29,6 +29,7 @@ private:
 
     void visit_children(const ast::Node* parent, const std::string& delimiter = "");
 
+    bool m_bBreakPending = false;
     size_t m_nDeferredLine = 0;
     std::vector<doc::Doc*> m_lDocStack;
 };
