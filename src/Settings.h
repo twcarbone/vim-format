@@ -8,6 +8,7 @@ class Settings
 public:
     static bool StopAfterTokenizing;
     static bool StopAfterParsing;
+    static bool StopAfterDocBuilding;
 
     static size_t ControlStmtPadding;
     static size_t CurlyBracePadding;
@@ -28,6 +29,7 @@ public:
     static size_t SpaceBeforeTrailingComment;
     static size_t SquareBracketPadding;
     static size_t SpaceAfterRange;
+    static size_t ColumnLimit;
 };
 
 #endif  // SETTINGS_H

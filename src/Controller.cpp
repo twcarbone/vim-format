@@ -3,8 +3,10 @@
 #include "ASTParser.h"
 #include "ASTVisitor.h"
 #include "Controller.h"
+#include "DocBuilder.h"
+#include "DocVisitor.h"
 #include "Lexer.h"
-#include "PrettyPrinter.h"
+#include "Renderer.h"
 
 Controller::Controller(Context acContext) :
     m_cContext(acContext)
@@ -50,9 +52,20 @@ void Controller::compile()
     }
 
     //
-    // Pretty-printing
+    // Rendering
     //
 
-    PrettyPrinter lcPrettyPrinter;
-    lcParser.root()->accept(lcPrettyPrinter);
+    DocBuilder lcDocBuilder;
+    lcParser.root()->accept(lcDocBuilder);
+
+    if (m_cContext.settings().StopAfterDocBuilding)
+    {
+        DocVisitor lcDocVisitor;
+        lcDocBuilder.root()->accept(lcDocVisitor);
+
+        return;
+    }
+
+    Renderer lcRenderer;
+    lcDocBuilder.root()->accept(lcRenderer);
 }

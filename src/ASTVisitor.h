@@ -55,6 +55,7 @@ namespace ast
 VISITED_AST_NODES
 #undef X
 class Node;
+class StrExpr;
 };
 
 struct VisitedNode

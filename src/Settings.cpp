@@ -2,6 +2,7 @@
 
 bool Settings::StopAfterTokenizing = false;
 bool Settings::StopAfterParsing = false;
+bool Settings::StopAfterDocBuilding = false;
 
 size_t Settings::ControlStmtPadding = 1;
 size_t Settings::CurlyBracePadding = 0;
@@ -22,3 +23,4 @@ size_t Settings::SpaceBeforeFunctionName = 1;
 size_t Settings::SpaceBeforeTrailingComment = 2;
 size_t Settings::SquareBracketPadding = 0;
 size_t Settings::SpaceAfterRange = 0;
+size_t Settings::ColumnLimit = 80;

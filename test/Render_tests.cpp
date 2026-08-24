@@ -4,11 +4,12 @@
 #include <string>
 
 #include "ASTParser.h"
+#include "DocBuilder.h"
 #include "Lexer.h"
-#include "PrettyPrinter.h"
+#include "Renderer.h"
 #include "util.h"
 
-class PrettyPrinterTest : public testing::Test
+class RenderTest : public testing::Test
 {
 protected:
     void test_file(const std::string& asInPath, const std::string& asOutPath)
@@ -24,9 +25,12 @@ protected:
         ASTParser lcParser(lcContext, lcLexer.take_tokens());
         lcParser.parse();
 
+        DocBuilder lcDocBuilder;
+        lcParser.root()->accept(lcDocBuilder);
+
         std::stringstream lcPrettyStrStream;
-        PrettyPrinter lcPrettyPrinter(lcPrettyStrStream);
-        lcParser.root()->accept(lcPrettyPrinter);
+        Renderer lcRenderer(lcPrettyStrStream);
+        lcDocBuilder.root()->accept(lcRenderer);
 
         std::string lsPrettyStr = vf::read_file(asOutPath);
 
@@ -34,27 +38,27 @@ protected:
     }
 };
 
-TEST_F(PrettyPrinterTest, expr)
+TEST_F(RenderTest, expr)
 {
     test_file("test/pretty/expr.vim", "test/pretty/expr.pretty");
 }
 
-TEST_F(PrettyPrinterTest, expr_pretty)
+TEST_F(RenderTest, expr_pretty)
 {
     test_file("test/pretty/expr.pretty", "test/pretty/expr.pretty");
 }
 
-TEST_F(PrettyPrinterTest, ast_eval)
+TEST_F(RenderTest, ast_eval)
 {
     test_file("test/ast/eval.vim", "test/ast/eval.vim");
 }
 
-TEST_F(PrettyPrinterTest, ast_userfunc)
+TEST_F(RenderTest, ast_userfunc)
 {
     test_file("test/ast/userfunc.vim", "test/ast/userfunc.vim");
 }
 
-TEST_F(PrettyPrinterTest, ast_lockvar)
+TEST_F(RenderTest, ast_lockvar)
 {
     test_file("test/ast/lockvar.vim", "test/ast/lockvar.vim");
 }
