@@ -40,7 +40,7 @@ void Renderer::visit(const doc::Group* apDoc)
 {
     Mode eOldMode = m_eMode;
 
-    if (fits(apDoc))
+    if (m_nColumn + apDoc->nWidth < Settings::ColumnLimit)
     {
         m_eMode = Mode::FLAT;
     }
@@ -71,13 +71,15 @@ void Renderer::visit(const doc::Nest* apDoc)
 
 bool Renderer::fits(const doc::Doc* apDoc)
 {
-    return apDoc->nWidth < Settings::ColumnLimit;
+    return m_nColumn + apDoc->nWidth < Settings::ColumnLimit;
 }
 
 void Renderer::write(const std::string_view asText)
 {
-    m_cOutStream << asText;
-    m_nColumn += asText.size();
+    for (const char c : asText)
+    {
+        write(c);
+    }
 }
 
 void Renderer::write(char anChar, size_t anCount)

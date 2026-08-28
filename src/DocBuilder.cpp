@@ -13,20 +13,20 @@ void DocBuilder::visit(const ast::AssignStmt* apAssignStmt)
 
     push_group();
     {
-        // 'let <expression>'
+        // 'let <expression> ='
         push_group();
         {
             push_text(apAssignStmt->ex_cmd()->str());
             m_nDeferredLine = Settings::SpaceAfterExprCmd;
             apAssignStmt->lexpr()->accept(*this);
+            push_line(Settings::OperatorPadding);
+            push_text(apAssignStmt->op()->str());
         }
         pop();
 
-        // ' = <expression>'
+        // ' <expression>'
         push_group();
         {
-            push_line(Settings::OperatorPadding);
-            push_text(apAssignStmt->op()->str());
             m_nDeferredLine = Settings::OperatorPadding;
             apAssignStmt->rexpr()->accept(*this);
         }
@@ -727,24 +727,21 @@ void DocBuilder::visit(const ast::UnletStmt* apUnletStmt)
 void DocBuilder::visit(const ast::Var* apNode)
 {
     push_deferred_line();
-    push_group();
+
+    if (apNode->sigil() != nullptr)
     {
-        if (apNode->sigil() != nullptr)
-        {
-            push_text(apNode->sigil()->str());
-        }
-
-        if (apNode->scope() != nullptr)
-        {
-            push_text(apNode->scope()->str());
-        }
-
-        if (apNode->name() != nullptr)
-        {
-            push_text(apNode->name()->str());
-        }
+        push_text(apNode->sigil()->str());
     }
-    pop();
+
+    if (apNode->scope() != nullptr)
+    {
+        push_text(apNode->scope()->str());
+    }
+
+    if (apNode->name() != nullptr)
+    {
+        push_text(apNode->name()->str());
+    }
 }
 
 void DocBuilder::visit(const ast::VarQueryStmt* apNode)
