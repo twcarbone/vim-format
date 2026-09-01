@@ -71,7 +71,7 @@ void Renderer::visit(const doc::Nest* apDoc)
 
 bool Renderer::fits(const doc::Doc* apDoc)
 {
-    return apDoc->nWidth < Settings::ColumnLimit;
+    return m_nColumn + apDoc->nWidth < Settings::ColumnLimit;
 }
 
 void Renderer::write(const std::string_view asText)
