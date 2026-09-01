@@ -315,33 +315,44 @@ void DocBuilder::visit(const ast::GroupExpr* apGroupExpr)
     push_text(")");
 }
 
-void DocBuilder::visit(const ast::HereDocExpr* apHereDocExpr)
+void DocBuilder::visit(const ast::HereDocStmt* apHereDocStmt)
 {
-    push_deferred_line();
-    for (const Token* pModifier : apHereDocExpr->modifiers())
-    {
-        push_text(pModifier->str());
-        push_line(Settings::ExCmdModifierPadding);
-    }
+    push_break();
 
-    push_text(apHereDocExpr->endmarker()->str());
+    push_group();
+    {
+        push_text(apHereDocStmt->ex_cmd()->str());
+        m_nDeferredLine = Settings::SpaceAfterExprCmd;
+        apHereDocStmt->lexpr()->accept(*this);
+        push_line(Settings::OperatorPadding);
+        push_text(apHereDocStmt->op()->str());
+
+        push_line(Settings::OperatorPadding);
+        for (const Token* pModifier : apHereDocStmt->modifiers())
+        {
+            push_text(pModifier->str());
+            push_line(Settings::ExCmdModifierPadding);
+        }
+
+        push_text(apHereDocStmt->endmarker()->str());
+    }
+    pop();
+
     push_break();
 
     m_nDeferredLine = 0;
 
     push_group();
     {
-        for (const ast::Node* pChildNode : apHereDocExpr->children())
+        // Child 0 is left-hand side of =<<
+        for (int i = 1; i < apHereDocStmt->children().size(); i++)
         {
-            push_group();
-            {
-                pChildNode->accept(*this);
-            }
-            pop();
+            apHereDocStmt->children().at(i)->accept(*this);
         }
     }
     pop();
-    push_text(apHereDocExpr->endmarker()->str());
+
+    push_text(apHereDocStmt->endmarker()->str());
 }
 
 void DocBuilder::visit(const ast::IfBranch* apIfBranch)

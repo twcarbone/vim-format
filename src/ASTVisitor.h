@@ -21,7 +21,7 @@
     X(FnStmt)               \
     X(ForStmt)              \
     X(GroupExpr)            \
-    X(HereDocExpr)          \
+    X(HereDocStmt)          \
     X(IfBranch)             \
     X(IfStmt)               \
     X(IndexExpr)            \

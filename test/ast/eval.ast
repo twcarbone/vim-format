@@ -94,38 +94,36 @@ Program
       Var cc
     UnletStmt ! <>
       Var g:does_not_exist
-    AssignStmt let =<< <>
+    HereDocStmt let =<< trim END <>
       Var heredoc_items
-      HereDocExpr trim END
-        InterpStr
-          LiteralStr ;;;\n;
-        InterpStr
-          LiteralStr ;;    one;\n;
-        InterpStr
-          LiteralStr ;;        END;\n;
-        InterpStr
-          LiteralStr ;;;\n;
-        InterpStr
-          LiteralStr ;;        {a + b};\n;
-        InterpStr
-          LiteralStr ;;;\n;
-    AssignStmt let =<< <>
+      InterpStr
+        LiteralStr ;;;\n;
+      InterpStr
+        LiteralStr ;;    one;\n;
+      InterpStr
+        LiteralStr ;;        END;\n;
+      InterpStr
+        LiteralStr ;;;\n;
+      InterpStr
+        LiteralStr ;;        {a + b};\n;
+      InterpStr
+        LiteralStr ;;;\n;
+    HereDocStmt let =<< eval END <>
       Var heredoc_eval_items
-      HereDocExpr eval END
-        InterpStr
-          LiteralStr ;;;{;
-          BinaryOp +
-            Var &tpm
-            Literal 2
-          LiteralStr ;}; is 12;\n;
-        InterpStr
-          LiteralStr ;;    END ;{;
-          Var c
-          LiteralStr ;}; is a list;\n;
-        InterpStr
-          LiteralStr ;;    echo ;{;
-          Var @@
-          LiteralStr ;};;\n;
+      InterpStr
+        LiteralStr ;;;{;
+        BinaryOp +
+          Var &tpm
+          Literal 2
+        LiteralStr ;}; is 12;\n;
+      InterpStr
+        LiteralStr ;;    END ;{;
+        Var c
+        LiteralStr ;}; is a list;\n;
+      InterpStr
+        LiteralStr ;;    echo ;{;
+        Var @@
+        LiteralStr ;};;\n;
     AssignStmt let = <>
       Var gg
       ListExpr

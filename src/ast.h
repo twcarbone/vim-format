@@ -606,19 +606,30 @@ private:
     Token* m_pExCmd;
 };
 
-class HereDocExpr : public Expr
+class HereDocStmt : public Stmt
 {
 public:
-    HereDocExpr(std::vector<Expr*>&& lines, std::vector<Token*>&& modifiers, Token* endmarker);
-    virtual ~HereDocExpr() = default;
+    HereDocStmt(Token* ex_cmd,
+                Expr* left,
+                Token* op,
+                std::vector<Token*>&& modifiers,
+                Token* endmarker,
+                std::vector<InterpStr*>&& lines);
+    virtual ~HereDocStmt() = default;
 
+    const Token* ex_cmd() const;
+    const Expr* lexpr() const;
+    const Token* op() const;
     const std::vector<Token*>& modifiers() const;
     const Token* endmarker() const;
 
-    virtual std::string toString() const;
     virtual void accept(ASTVisitor& visitor) const;
 
 private:
+    virtual std::string str_a() const;
+
+    Token* m_pExCmd;
+    Token* m_pOp;
     Token* m_pEndMarker;
     std::vector<Token*> m_lModifiers;
 };

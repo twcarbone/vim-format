@@ -667,6 +667,11 @@ ast::Stmt* ASTParser::let_stmt()
         return var_query_stmt();
     }
 
+    if (chk_heredoc_assign())
+    {
+        return heredoc_stmt();
+    }
+
     return assign_stmt();
 }
 
@@ -779,11 +784,6 @@ ast::AssignStmt* ASTParser::assign_stmt()
             consume(curr()->type());
             pRhs = expr();
             break;
-        case Token::Type::ASSIGN_HEREDOC:
-            pOp = curr();
-            consume(curr()->type());
-            pRhs = heredoc_expr();
-            break;
         default:
             throw_unexpected_token();
     }
@@ -791,11 +791,49 @@ ast::AssignStmt* ASTParser::assign_stmt()
     return new ast::AssignStmt(pExCmd, pOp, pLhs, pRhs);
 }
 
-ast::HereDocExpr* ASTParser::heredoc_expr()
+ast::HereDocStmt* ASTParser::heredoc_stmt()
 {
+    // TODO: HereDocStmt left hand side must be identifier?
+    // TODO: HereDocStmt modifier parsing allows repeated [trim] and [eval]
+
+    /*
+     *  :let|cons[t] {var-name} =<< [trim] [eval] {endmarker}
+     *  text...
+     *  text...
+     *  {endmarker}
+     */
+
+    /*
+     *  :let|cons[t]
+     */
+    Token* pExCmd = nullptr;
+    switch (curr()->type())
+    {
+        case Token::Type::EX_LET:
+        case Token::Type::EX_CONST:
+            pExCmd = curr();
+            consume(curr()->type());
+            break;
+        default:
+            throw_unexpected_token();
+    }
+
+    /*
+     *  {var-name}
+     */
+    ast::Expr* pLhs = expr();
+
+    /*
+     *  =<<
+     */
+    Token* pOp = curr();
+    consume(curr()->type());
+
+    /*
+     *  [trim] [eval] {endmarker}
+     */
     std::vector<Token*> lModifiers;
     Token* pEndMarker = nullptr;
-
     while (true)
     {
         switch (curr()->type())
@@ -809,13 +847,18 @@ ast::HereDocExpr* ASTParser::heredoc_expr()
                 pEndMarker = curr();
                 consume(Token::Type::ENDMARKER);
                 consume(Token::Type::NEWLINE);
-                goto args_end;
+                goto begin_lines;
         }
     }
 
-args_end:
+begin_lines:
 
-    std::vector<ast::Expr*> llLines;
+    /*
+     *  text...
+     *  text...
+     *  {endmarker}
+     */
+    std::vector<ast::InterpStr*> llLines;
     ast::LiteralStr* pLiteralStr = nullptr;
     ast::InterpStr* pInterpStr = new ast::InterpStr();
     Token* pLDelim = nullptr;
@@ -859,15 +902,15 @@ args_end:
                 break;
             case Token::Type::ENDMARKER:
                 consume(Token::Type::ENDMARKER);
-                goto lines_end;
+                goto end_stmt;
             default:
                 break;
         }
     }
 
-lines_end:
+end_stmt:
 
-    return new ast::HereDocExpr(std::move(llLines), std::move(lModifiers), pEndMarker);
+    return new ast::HereDocStmt(pExCmd, pLhs, pOp, std::move(lModifiers), pEndMarker, std::move(llLines));
 }
 
 ast::CommentStmt* ASTParser::comment_stmt()
@@ -1528,6 +1571,39 @@ bool ASTParser::chk_let_query()
 loop_end:
     m_lTokens.seek(lnInitialPosition);
     return bIsLetQuery;
+}
+
+bool ASTParser::chk_heredoc_assign()
+{
+    // TODO: chk_heredoc_assign() does not look ahead past newlines. Should it?
+
+    bool bIsHereDocAssign = false;
+    size_t lnInitialPosition = m_lTokens.pos();
+
+    while (m_lTokens.pos() < m_lTokens.size() - 1)
+    {
+        switch (m_lTokens.advance(1, Flags::skipws)->type())
+        {
+            case Token::Type::ASSIGN_ADD:
+            case Token::Type::ASSIGN_MINUS:
+            case Token::Type::ASSIGN_MUL:
+            case Token::Type::ASSIGN_DIV:
+            case Token::Type::ASSIGN_EQ:
+            case Token::Type::ASSIGN_MODULO:
+            case Token::Type::ASSIGN_CAT_NEW:
+            case Token::Type::ASSIGN_CAT_OLD:
+                goto loop_end;
+            case Token::Type::ASSIGN_HEREDOC:
+                bIsHereDocAssign = true;
+                goto loop_end;
+            default:
+                break;
+        }
+    }
+
+loop_end:
+    m_lTokens.seek(lnInitialPosition);
+    return bIsHereDocAssign;
 }
 
 Token* ASTParser::curr() const

@@ -1013,28 +1013,51 @@ std::string VarQueryStmt::str_a() const
     return "VarQueryStmt " + m_pExCmd->str();
 }
 
-HereDocExpr::HereDocExpr(std::vector<Expr*>&& alLines,
+HereDocStmt::HereDocStmt(Token* apExCmd,
+                         Expr* apLeft,
+                         Token* apOp,
                          std::vector<Token*>&& alModifiers,
-                         Token* apEndMarker) :
-    Expr({ std::make_move_iterator(alLines.begin()), std::make_move_iterator(alLines.end()) }),
+                         Token* apEndMarker,
+                         std::vector<InterpStr*>&& alLines) :
+    Stmt({ std::make_move_iterator(alLines.begin()), std::make_move_iterator(alLines.end()) }),
+    m_pExCmd { apExCmd },
+    m_pOp { apOp },
     m_pEndMarker { apEndMarker },
     m_lModifiers { alModifiers }
 {
+    // TODO: Inserting LHS of HereDocStmt at front of children may impact performance
+
+    m_lChildren.insert(m_lChildren.begin(), apLeft);
 }
 
-const std::vector<Token*>& HereDocExpr::modifiers() const
+const Token* HereDocStmt::ex_cmd() const
+{
+    return m_pExCmd;
+}
+
+const Expr* HereDocStmt::lexpr() const
+{
+    return static_cast<Expr*>(m_lChildren[0]);
+}
+
+const Token* HereDocStmt::op() const
+{
+    return m_pOp;
+}
+
+const std::vector<Token*>& HereDocStmt::modifiers() const
 {
     return m_lModifiers;
 }
 
-const Token* HereDocExpr::endmarker() const
+const Token* HereDocStmt::endmarker() const
 {
     return m_pEndMarker;
 };
 
-std::string HereDocExpr::toString() const
+std::string HereDocStmt::str_a() const
 {
-    std::string tmp = "HereDocExpr";
+    std::string tmp = "HereDocStmt " + m_pExCmd->str() + " " + m_pOp->str();
 
     for (const Token* pModifier : m_lModifiers)
     {
@@ -1045,7 +1068,7 @@ std::string HereDocExpr::toString() const
     return tmp;
 }
 
-void HereDocExpr::accept(ASTVisitor& acASTVisitor) const
+void HereDocStmt::accept(ASTVisitor& acASTVisitor) const
 {
     acASTVisitor.visit(this);
 }

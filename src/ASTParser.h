@@ -50,8 +50,8 @@ private:
     ast::WhileStmt* while_stmt();
     ast::UnletStmt* unlet_stmt();
     ast::AssignStmt* assign_stmt();
+    ast::HereDocStmt* heredoc_stmt();
     ast::FnParamList* fn_param_list();
-    ast::HereDocExpr* heredoc_expr();
     ast::CommentStmt* comment_stmt();
     ast::LockVarStmt* lockvar_stmt();
     ast::VarQueryStmt* var_query_stmt();
@@ -66,6 +66,7 @@ private:
     bool consume_optional(const Token::Type type);
 
     bool chk_let_query();
+    bool chk_heredoc_assign();
 
     Token* curr() const;
 
