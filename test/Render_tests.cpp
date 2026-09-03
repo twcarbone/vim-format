@@ -12,17 +12,18 @@
 class RenderTest : public testing::Test
 {
 protected:
+    Context m_cContext;
+
     void test_file(const std::string& asInPath, const std::string& asOutPath)
     {
         std::filesystem::path lcSrcPath { asInPath };
 
-        Context lcContext;
-        lcContext.add_path(asInPath);
+        m_cContext.add_path(asInPath);
 
-        Lexer lcLexer(lcContext);
+        Lexer lcLexer(m_cContext);
         lcLexer.tokenize();
 
-        ASTParser lcParser(lcContext, lcLexer.take_tokens());
+        ASTParser lcParser(m_cContext, lcLexer.take_tokens());
         lcParser.parse();
 
         DocBuilder lcDocBuilder;
@@ -61,4 +62,10 @@ TEST_F(RenderTest, ast_userfunc)
 TEST_F(RenderTest, ast_lockvar)
 {
     test_file("test/ast/lockvar.vim", "test/ast/lockvar.vim");
+}
+
+TEST_F(RenderTest, column_simple_list)
+{
+    m_cContext.settings().ColumnLimit = 20;
+    test_file("test/column/simple_list.in.vim", "test/column/simple_list.out.vim");
 }

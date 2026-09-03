@@ -13,24 +13,18 @@ void DocBuilder::visit(const ast::AssignStmt* apAssignStmt)
 
     push_group();
     {
-        // 'let <expression>'
-        push_group();
-        {
-            push_text(apAssignStmt->ex_cmd()->str());
-            m_nDeferredLine = Settings::SpaceAfterExprCmd;
-            apAssignStmt->lexpr()->accept(*this);
-        }
-        pop();
+        push_text(apAssignStmt->ex_cmd()->str());
+        m_nDeferredLine = Settings::SpaceAfterExprCmd;
+        apAssignStmt->lexpr()->accept(*this);
+        push_line(Settings::OperatorPadding);
+        push_text(apAssignStmt->op()->str());
+    }
+    pop();
 
-        // ' = <expression>'
-        push_group();
-        {
-            push_line(Settings::OperatorPadding);
-            push_text(apAssignStmt->op()->str());
-            m_nDeferredLine = Settings::OperatorPadding;
-            apAssignStmt->rexpr()->accept(*this);
-        }
-        pop();
+    push_group();
+    {
+        m_nDeferredLine = Settings::OperatorPadding;
+        apAssignStmt->rexpr()->accept(*this);
     }
     pop();
 }

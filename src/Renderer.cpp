@@ -23,7 +23,6 @@ void Renderer::visit(const doc::Line* apLine)
             write(' ', apLine->nWidth);
             break;
         case Mode::BREAK:
-            write(' ');  // Intentionally add trailing whitespace before newline
             write('\n');
             write(' ', m_nLevel * 4);
             write('\\');
