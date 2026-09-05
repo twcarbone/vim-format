@@ -336,15 +336,15 @@ void DocBuilder::visit(const ast::HereDocStmt* apHereDocStmt)
 
     m_nDeferredLine = 0;
 
-    push_group();
+    // Child 0 is left-hand side of =<<
+    for (int i = 1; i < apHereDocStmt->children().size(); i++)
     {
-        // Child 0 is left-hand side of =<<
-        for (int i = 1; i < apHereDocStmt->children().size(); i++)
+        push_group();
         {
             apHereDocStmt->children().at(i)->accept(*this);
         }
+        pop();
     }
-    pop();
 
     push_text(apHereDocStmt->endmarker()->str());
 }
