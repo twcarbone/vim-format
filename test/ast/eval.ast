@@ -97,7 +97,7 @@ Program
     HereDocStmt let =<< trim END <>
       Var heredoc_items
       InterpStr
-        LiteralStr ;;;\n;
+        LiteralStr ;;first line that is very long to intentionally exceed the testing column limit... more text;\n;
       InterpStr
         LiteralStr ;;    one;\n;
       InterpStr

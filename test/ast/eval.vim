@@ -23,7 +23,7 @@ unlet cc
 unlet! cc
 unl! g:does_not_exist
 let heredoc_items =<< trim END
-
+first line that is very long to intentionally exceed the testing column limit... more text
     one
         END
 

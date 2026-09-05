@@ -332,9 +332,7 @@ void DocBuilder::visit(const ast::HereDocStmt* apHereDocStmt)
     }
     pop();
 
-    push_break();
-
-    m_pDeferredDoc = new doc::Line(0);
+    m_pDeferredDoc = new doc::Break();
 
     // Child 0 is left-hand side of =<<
     for (int i = 1; i < apHereDocStmt->children().size(); i++)
