@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "util.h"
 
 #include "DocVisitor.h"
 
@@ -35,7 +36,7 @@ struct Doc
 protected:
     std::string width_str() const
     {
-        return "+width:" + std::to_string(nWidth);
+        return "width=" + std::to_string(nWidth);
     }
 };
 
@@ -51,7 +52,7 @@ struct Text : Doc
 
     virtual std::string to_string() const override
     {
-        return "Text " + sText + " " + width_str();
+        return "Text '" + vf::sanitize(sText) + "' " + width_str();
     }
 
     virtual void accept(DocVisitor& visitor) const override
