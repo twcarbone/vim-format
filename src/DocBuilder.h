@@ -18,7 +18,7 @@ private:
     void push_text(const std::string& text);
     void push_text(char c, size_t count = 1);
     void push_line(size_t width = 0);
-    void push_deferred_line();
+    void push_deferred_doc();
     void push_break();
 
     void push_nest();
@@ -30,6 +30,6 @@ private:
     void visit_children(const ast::Node* parent, const std::string& delimiter = "");
 
     bool m_bBreakPending = false;
-    size_t m_nDeferredLine = 0;
+    doc::Doc* m_pDeferredDoc = nullptr;
     std::vector<doc::Doc*> m_lDocStack;
 };
