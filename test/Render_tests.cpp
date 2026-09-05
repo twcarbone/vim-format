@@ -67,6 +67,8 @@ TEST_F(RenderTest, ast_lockvar)
 TEST_F(RenderTest, column_simple)
 {
     m_cContext.settings().ColumnLimit = 20;
+
+    test_file("test/column/simple_dict.in.vim", "test/column/simple_dict.out.vim");
     test_file("test/column/simple_list.in.vim", "test/column/simple_list.out.vim");
     test_file("test/column/simple_op.in.vim", "test/column/simple_op.out.vim");
 }

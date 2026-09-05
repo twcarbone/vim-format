@@ -97,8 +97,14 @@ void DocBuilder::visit(const ast::CommentStmt* apCommentStmt)
 
 void DocBuilder::visit(const ast::DictEntry* apNode)
 {
+    // Push the deferred Line *outside* the group surrounding the dictionary entry. Set
+    // the deferred doc to nullptr so we don't get a double Line when the key is visited.
+
+    push_deferred_doc();
+
     push_group();
     {
+        m_pDeferredDoc = nullptr;
         apNode->key()->accept(*this);
         push_line(Settings::SpaceAfterDictKey);
         push_text(":");
@@ -110,11 +116,11 @@ void DocBuilder::visit(const ast::DictEntry* apNode)
 
 void DocBuilder::visit(const ast::DictExpr* apNode)
 {
-    push_deferred_doc();
+    push_text(' ', m_pDeferredDoc->nWidth);
     push_text("{");
+    m_pDeferredDoc = new doc::Line(Settings::CurlyBracePadding);
     push_nest();
     {
-        m_pDeferredDoc = new doc::Line(Settings::CurlyBracePadding);
         push_group();
         {
             for (size_t i = 0; i < apNode->children().size(); i++)
@@ -129,10 +135,9 @@ void DocBuilder::visit(const ast::DictExpr* apNode)
             }
         }
         pop();
-        push_line(Settings::CurlyBracePadding);
     }
     pop();
-    push_line();
+    push_line(Settings::CurlyBracePadding);
     push_text("}");
 }
 
@@ -809,6 +814,11 @@ void DocBuilder::push_line(size_t anWidth)
 
 void DocBuilder::push_deferred_doc()
 {
+    if (m_pDeferredDoc == nullptr)
+    {
+        return;
+    }
+
     m_lDocStack.back()->push(m_pDeferredDoc);
 }
 
