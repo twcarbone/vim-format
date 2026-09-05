@@ -1025,8 +1025,6 @@ HereDocStmt::HereDocStmt(Token* apExCmd,
     m_pEndMarker { apEndMarker },
     m_lModifiers { alModifiers }
 {
-    // TODO: Inserting LHS of HereDocStmt at front of children may impact performance
-
     m_lChildren.insert(m_lChildren.begin(), apLeft);
 }
 

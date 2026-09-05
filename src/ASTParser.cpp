@@ -793,8 +793,7 @@ ast::AssignStmt* ASTParser::assign_stmt()
 
 ast::HereDocStmt* ASTParser::heredoc_stmt()
 {
-    // TODO: HereDocStmt left hand side must be identifier?
-    // TODO: HereDocStmt modifier parsing allows repeated [trim] and [eval]
+    // TODO (gh-161): HereDocStmt parsing allows multiple 'trim' and 'eval' modifiers
 
     /*
      *  :let|cons[t] {var-name} =<< [trim] [eval] {endmarker}
@@ -901,6 +900,7 @@ begin_lines:
                 consume(Token::Type::STRING);
                 break;
             case Token::Type::ENDMARKER:
+                // TODO (gh-160): Parsing HereDocStmt can hang forever if ENDMARKER is missing
                 consume(Token::Type::ENDMARKER);
                 goto end_stmt;
             default:
@@ -1529,6 +1529,8 @@ bool ASTParser::consume_optional(const Token::Type aeType)
     return false;
 }
 
+// TODO (gh-159): 'let' qualifier lookaheads do not look past continuations
+
 bool ASTParser::chk_let_query()
 {
     bool bIsLetQuery = true;
@@ -1575,8 +1577,6 @@ loop_end:
 
 bool ASTParser::chk_heredoc_assign()
 {
-    // TODO: chk_heredoc_assign() does not look ahead past newlines. Should it?
-
     bool bIsHereDocAssign = false;
     size_t lnInitialPosition = m_lTokens.pos();
 
