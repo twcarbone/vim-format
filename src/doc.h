@@ -50,6 +50,12 @@ struct Text : Doc
         nWidth = sText.size();
     }
 
+    Text(char c, size_t count) :
+        sText(count, c)
+    {
+        nWidth = count;
+    }
+
     virtual std::string to_string() const override
     {
         return "Text '" + vf::sanitize(sText) + "' " + width_str();
