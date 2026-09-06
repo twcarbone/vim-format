@@ -203,6 +203,8 @@ void DocBuilder::visit(const ast::FnParam* apNode)
 
 void DocBuilder::visit(const ast::FnParamList* apNode)
 {
+    m_pDeferredDoc = nullptr;
+
     for (size_t i = 0; i < apNode->children().size(); i++)
     {
         apNode->children().at(i)->accept(*this);
@@ -230,21 +232,26 @@ void DocBuilder::visit(const ast::FnStmt* apFnStmt)
 
         push_line(Settings::SpaceBeforeFunctionName);
         push_text(apFnStmt->name()->str());
-
         push_text("(");
-        m_pDeferredDoc = new doc::Line(Settings::ParenPadding);
+    }
+    pop();
+
+    push_group();
+    {
         push_nest();
         {
-            push_group();
-            {
-                apFnStmt->params()->accept(*this);
-            }
-            pop();
+            push_line(Settings::ParenPadding);
+            apFnStmt->params()->accept(*this);
         }
         pop();
+
         push_line(Settings::ParenPadding);
         push_text(")");
+    }
+    pop();
 
+    push_group();
+    {
         for (const Token* pModifier : apFnStmt->modifiers())
         {
             if (pModifier != nullptr)
