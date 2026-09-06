@@ -813,9 +813,9 @@ void DocBuilder::push_text(char aText, size_t anCount)
     push_text(std::string(anCount, aText));
 }
 
-void DocBuilder::push_line(size_t anWidth)
+void DocBuilder::push_line(size_t anWidth, bool abTrailingWhitespace)
 {
-    doc::Line* pLine = new doc::Line(anWidth);
+    doc::Line* pLine = new doc::Line(anWidth, abTrailingWhitespace);
     m_lDocStack.back()->push(pLine);
 }
 

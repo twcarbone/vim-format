@@ -23,6 +23,13 @@ void Renderer::visit(const doc::Line* apLine)
             write(' ', apLine->nWidth);
             break;
         case Mode::BREAK:
+            if (apLine->bAddTrailingWhitespace && m_nLevel == 0)
+            {
+                // Only add trailing whitespace if the Line requires it and there is no
+                // indent on the next line.
+                write(' ');
+            }
+
             write('\n');
             write(' ', m_nLevel * 4);
             write('\\');

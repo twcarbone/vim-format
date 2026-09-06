@@ -2,9 +2,9 @@
 
 #include <string>
 #include <vector>
-#include "util.h"
 
 #include "DocVisitor.h"
+#include "util.h"
 
 namespace doc
 {
@@ -67,20 +67,30 @@ struct Line : Doc
 {
     virtual ~Line() = default;
 
-    Line(size_t width)
+    Line(size_t width, bool add_trailing_whitespace = false)
     {
         nWidth = width;
+        bAddTrailingWhitespace = add_trailing_whitespace;
     }
 
     virtual std::string to_string() const override
     {
-        return "Line " + width_str();
+        std::string tmp = "Line " + width_str();
+
+        if (bAddTrailingWhitespace)
+        {
+            tmp += " +trailing_ws";
+        }
+
+        return tmp;
     }
 
     virtual void accept(DocVisitor& visitor) const override
     {
         visitor.visit(this);
     }
+
+    bool bAddTrailingWhitespace = false;
 };
 
 struct Break : Doc

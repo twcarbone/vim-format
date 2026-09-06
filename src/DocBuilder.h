@@ -17,12 +17,12 @@ public:
 private:
     void push_text(const std::string& text);
     void push_text(char c, size_t count = 1);
-    void push_line(size_t width = 0);
+    void push_line(size_t width, bool trailing_ws = false);
     void push_deferred_doc();
     void push_break();
-
     void push_nest();
     void push_group();
+
     void pop();
 
     void push_str_expr(const ast::StrExpr* str_expr);
