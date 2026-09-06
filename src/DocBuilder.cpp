@@ -283,16 +283,22 @@ void DocBuilder::visit(const ast::ForStmt* apForStmt)
     push_group();
     {
         push_text("for");
-        push_group();
-        {
-            m_pDeferredDoc = new doc::Line(Settings::ControlStmtPadding);
-            apForStmt->item()->accept(*this);
-            push_line(Settings::ControlStmtPadding);
-            push_text("in");
-            m_pDeferredDoc = new doc::Line(Settings::ControlStmtPadding);
-            apForStmt->items()->accept(*this);
-        }
-        pop();
+        m_pDeferredDoc = new doc::Line(Settings::ControlStmtPadding);
+        apForStmt->item()->accept(*this);
+        push_line(Settings::ControlStmtPadding);
+        push_text("in");
+    }
+    pop();
+
+    push_group();
+    {
+        m_pDeferredDoc = new doc::Line(Settings::ControlStmtPadding, true);
+        apForStmt->items()->accept(*this);
+    }
+    pop();
+
+    push_group();
+    {
         if (apForStmt->stmts()->size() > 0)
         {
             push_nest();
