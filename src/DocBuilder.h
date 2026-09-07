@@ -23,12 +23,15 @@ private:
     void push_nest();
     void push_group();
 
+    doc::Doc* line_or_space(size_t width, bool trailing_ws = false);
+
     void pop();
 
     void push_str_expr(const ast::StrExpr* str_expr);
 
     void visit_children(const ast::Node* parent, const std::string& delimiter = "");
 
+    bool m_bNonBreakingLine = false;
     bool m_bBreakPending = false;
     doc::Doc* m_pDeferredDoc = nullptr;
     std::vector<doc::Doc*> m_lDocStack;
