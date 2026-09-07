@@ -58,7 +58,7 @@ void DocBuilder::visit(const ast::CallExpr* apNode)
                 apNode->args()->accept(*this);
             }
             pop();
-            m_pDeferredDoc = new doc::Line(Settings::ParenPadding);
+            push_line(Settings::ParenPadding);
         }
         pop();
         push_text(")");
