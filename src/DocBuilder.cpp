@@ -354,7 +354,7 @@ void DocBuilder::visit(const ast::HereDocStmt* apHereDocStmt)
 
     // heredoc lines shouldn't break. Strings don't break anyway, but expression portions
     // of interpolated strings would break otherwise.
-    m_bNonBreakingLine = true;
+    m_context.bInsideHereDoc = true;
 
     // Child 0 is left-hand side of =<<
     for (int i = 1; i < apHereDocStmt->children().size(); i++)
@@ -366,7 +366,7 @@ void DocBuilder::visit(const ast::HereDocStmt* apHereDocStmt)
         pop();
     }
 
-    m_bNonBreakingLine = false;
+    m_context.bInsideHereDoc = false;
     push_text(apHereDocStmt->endmarker()->str());
 }
 
@@ -833,7 +833,7 @@ doc::Doc* DocBuilder::line_or_space(size_t anWidth, bool abTrailingWhitespace)
 {
     doc::Doc* pDoc;
 
-    if (m_bNonBreakingLine)
+    if (m_context.bInsideHereDoc)
     {
         pDoc = new doc::Text(' ', anWidth);
     }
@@ -857,14 +857,22 @@ void DocBuilder::push_deferred_doc()
 
 void DocBuilder::push_break()
 {
-    if (m_bBreakPending)
+    // Breaks are added at the beginning of a statement. The alternative is to simply add
+    // a break at the end of each statement automatically. However, this causes trailing
+    // comments to be rendered on a new line. By deferring the Break to the beginning of
+    // the next statement, we give a trailing comment AST node a chance to be visited
+    // without the previous statement adding a Break prematurely. We don't add a break
+    // before the first line of the program.
+
+    if (m_context.bBeginningOfProgram)
+    {
+        m_context.bBeginningOfProgram = false;
+    }
+    else
     {
         doc::Break* pBreak = new doc::Break();
         m_lDocStack.back()->push(pBreak);
     }
-
-    // Start adding breaks after the first statement of the file.
-    m_bBreakPending = true;
 }
 
 void DocBuilder::push_group()

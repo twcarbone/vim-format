@@ -15,6 +15,12 @@ public:
     doc::Doc* root() const;
 
 private:
+    struct AstNodeContext
+    {
+        bool bInsideHereDoc = false;
+        bool bBeginningOfProgram = true;
+    };
+
     void push_text(const std::string& text);
     void push_text(char c, size_t count = 1);
     void push_line(size_t width, bool trailing_ws = false);
@@ -31,8 +37,7 @@ private:
 
     void visit_children(const ast::Node* parent, const std::string& delimiter = "");
 
-    bool m_bNonBreakingLine = false;
-    bool m_bBreakPending = false;
+    AstNodeContext m_context;
     doc::Doc* m_pDeferredDoc = nullptr;
     std::vector<doc::Doc*> m_lDocStack;
 };
