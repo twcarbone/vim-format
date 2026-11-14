@@ -42,6 +42,15 @@ SYMLINK_INSTALL     ?= 0
 #
 #       All assignments (=, :=, ?=) in the Makefile are overridden by the CLI value.
 
+# Tip 9-1: MAKEFLAGS env var
+#
+#   The MAKEFLAGS env var is a special variable managed by 'make'. It can be defined on
+#   the CLI before or after the 'make' command and is automatically passed to sub-make
+#   commands using $(MAKE).
+#
+#   Generally, do NOT define a MAKEFLAGS variable in the Makefile itself, except for rare
+#   cases (eg, 'MAKEFLAGS += --no-print-directory').
+
 ifeq ($(SYMLINK_INSTALL),0)
 	INSTALL_CMD = cp
 else ifeq ($(SYMLINK_INSTALL),1)
