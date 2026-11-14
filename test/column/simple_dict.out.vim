@@ -1,0 +1,5 @@
+let fruits = {
+    \"apple": 1,
+    \"banana": 2,
+    \"cherry": 3
+\}

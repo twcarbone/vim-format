@@ -15,21 +15,29 @@ public:
     doc::Doc* root() const;
 
 private:
+    struct AstNodeContext
+    {
+        bool bInsideHereDoc = false;
+        bool bBeginningOfProgram = true;
+    };
+
     void push_text(const std::string& text);
     void push_text(char c, size_t count = 1);
-    void push_line(size_t width = 0);
-    void push_deferred_line();
+    void push_line(size_t width, bool trailing_ws = false);
+    void push_deferred_doc();
     void push_break();
-
     void push_nest();
     void push_group();
+
+    doc::Doc* line_or_space(size_t width, bool trailing_ws = false);
+
     void pop();
 
     void push_str_expr(const ast::StrExpr* str_expr);
 
     void visit_children(const ast::Node* parent, const std::string& delimiter = "");
 
-    bool m_bBreakPending = false;
-    size_t m_nDeferredLine = 0;
+    AstNodeContext m_context;
+    doc::Doc* m_pDeferredDoc = nullptr;
     std::vector<doc::Doc*> m_lDocStack;
 };

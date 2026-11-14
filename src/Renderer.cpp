@@ -23,7 +23,13 @@ void Renderer::visit(const doc::Line* apLine)
             write(' ', apLine->nWidth);
             break;
         case Mode::BREAK:
-            write(' ');  // Intentionally add trailing whitespace before newline
+            if (apLine->bAddTrailingWhitespace && m_nLevel == 0)
+            {
+                // Only add trailing whitespace if the Line requires it and there is no
+                // indent on the next line.
+                write(' ');
+            }
+
             write('\n');
             write(' ', m_nLevel * 4);
             write('\\');
@@ -71,13 +77,18 @@ void Renderer::visit(const doc::Nest* apDoc)
 
 bool Renderer::fits(const doc::Doc* apDoc)
 {
-    return apDoc->nWidth < Settings::ColumnLimit;
+    return m_nColumn + apDoc->nWidth < Settings::ColumnLimit;
 }
 
 void Renderer::write(const std::string_view asText)
 {
-    m_cOutStream << asText;
-    m_nColumn += asText.size();
+    // Use write(char, size_t) to make sure string_view doesn't accidentally contain a \n
+    // that wouldn't otherwise reset the column counter.
+
+    for (const char c : asText)
+    {
+        write(c);
+    }
 }
 
 void Renderer::write(char anChar, size_t anCount)

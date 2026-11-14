@@ -13,24 +13,18 @@ void DocBuilder::visit(const ast::AssignStmt* apAssignStmt)
 
     push_group();
     {
-        // 'let <expression>'
-        push_group();
-        {
-            push_text(apAssignStmt->ex_cmd()->str());
-            m_nDeferredLine = Settings::SpaceAfterExprCmd;
-            apAssignStmt->lexpr()->accept(*this);
-        }
-        pop();
+        push_text(apAssignStmt->ex_cmd()->str());
+        m_pDeferredDoc = line_or_space(Settings::SpaceAfterExprCmd);
+        apAssignStmt->lexpr()->accept(*this);
+        push_line(Settings::OperatorPadding);
+        push_text(apAssignStmt->op()->str());
+    }
+    pop();
 
-        // ' = <expression>'
-        push_group();
-        {
-            push_line(Settings::OperatorPadding);
-            push_text(apAssignStmt->op()->str());
-            m_nDeferredLine = Settings::OperatorPadding;
-            apAssignStmt->rexpr()->accept(*this);
-        }
-        pop();
+    push_group();
+    {
+        m_pDeferredDoc = line_or_space(Settings::OperatorPadding);
+        apAssignStmt->rexpr()->accept(*this);
     }
     pop();
 }
@@ -44,7 +38,7 @@ void DocBuilder::visit(const ast::BinaryOp* apNode)
     push_group();
     {
         push_text(apNode->op()->str());
-        m_nDeferredLine = lnPadding;
+        m_pDeferredDoc = line_or_space(lnPadding);
         apNode->rexpr()->accept(*this);
     }
     pop();
@@ -58,13 +52,13 @@ void DocBuilder::visit(const ast::CallExpr* apNode)
         push_text("(");
         push_nest();
         {
-            m_nDeferredLine = Settings::ParenPadding;
+            m_pDeferredDoc = line_or_space(Settings::ParenPadding);
             push_group();
             {
                 apNode->args()->accept(*this);
             }
             pop();
-            m_nDeferredLine = Settings::ParenPadding;
+            push_line(Settings::ParenPadding);
         }
         pop();
         push_text(")");
@@ -80,7 +74,7 @@ void DocBuilder::visit(const ast::CasedBinaryOp* apNode)
         push_line(Settings::OperatorPadding);
         push_text(apNode->op()->str());
         push_text(apNode->case_sensitivity()->str());
-        m_nDeferredLine = Settings::OperatorPadding;
+        m_pDeferredDoc = line_or_space(Settings::OperatorPadding);
         apNode->rexpr()->accept(*this);
     }
     pop();
@@ -103,12 +97,18 @@ void DocBuilder::visit(const ast::CommentStmt* apCommentStmt)
 
 void DocBuilder::visit(const ast::DictEntry* apNode)
 {
+    // Push the deferred Line *outside* the group surrounding the dictionary entry. Set
+    // the deferred doc to nullptr so we don't get a double Line when the key is visited.
+
+    push_deferred_doc();
+
     push_group();
     {
+        m_pDeferredDoc = nullptr;
         apNode->key()->accept(*this);
         push_line(Settings::SpaceAfterDictKey);
         push_text(":");
-        m_nDeferredLine = Settings::SpaceBeforeDictValue;
+        m_pDeferredDoc = line_or_space(Settings::SpaceBeforeDictValue);
         apNode->value()->accept(*this);
     }
     pop();
@@ -116,11 +116,11 @@ void DocBuilder::visit(const ast::DictEntry* apNode)
 
 void DocBuilder::visit(const ast::DictExpr* apNode)
 {
-    push_deferred_line();
+    push_text(' ', m_pDeferredDoc->nWidth);
     push_text("{");
+    m_pDeferredDoc = line_or_space(Settings::CurlyBracePadding);
     push_nest();
     {
-        m_nDeferredLine = Settings::CurlyBracePadding;
         push_group();
         {
             for (size_t i = 0; i < apNode->children().size(); i++)
@@ -130,15 +130,14 @@ void DocBuilder::visit(const ast::DictExpr* apNode)
                 if (i < apNode->children().size() - 1)
                 {
                     push_text(",");
-                    m_nDeferredLine = Settings::SpaceAfterDictSeparator;
+                    m_pDeferredDoc = line_or_space(Settings::SpaceAfterDictSeparator);
                 }
             }
         }
         pop();
-        push_line(Settings::CurlyBracePadding);
     }
     pop();
-    push_line();
+    push_line(Settings::CurlyBracePadding);
     push_text("}");
 }
 
@@ -164,7 +163,7 @@ void DocBuilder::visit(const ast::ExprCmd* apExprCmd)
 
         for (ast::Node* pChildNode : apExprCmd->children())
         {
-            m_nDeferredLine = Settings::SpaceAfterExprCmd;
+            m_pDeferredDoc = line_or_space(Settings::SpaceAfterExprCmd);
             pChildNode->accept(*this);
         }
     }
@@ -180,7 +179,7 @@ void DocBuilder::visit(const ast::FnArgList* apNode)
         if (i < apNode->children().size() - 1)
         {
             push_text(",");
-            m_nDeferredLine = Settings::SpaceAfterFnArgSeparator;
+            m_pDeferredDoc = line_or_space(Settings::SpaceAfterFnArgSeparator);
         }
     }
 }
@@ -195,7 +194,7 @@ void DocBuilder::visit(const ast::FnParam* apNode)
         {
             push_line(Settings::DefaultFnParamPadding);
             push_text("=");
-            m_nDeferredLine = Settings::DefaultFnParamPadding;
+            m_pDeferredDoc = line_or_space(Settings::DefaultFnParamPadding);
             apNode->default_value()->accept(*this);
         }
     }
@@ -204,6 +203,8 @@ void DocBuilder::visit(const ast::FnParam* apNode)
 
 void DocBuilder::visit(const ast::FnParamList* apNode)
 {
+    m_pDeferredDoc = nullptr;
+
     for (size_t i = 0; i < apNode->children().size(); i++)
     {
         apNode->children().at(i)->accept(*this);
@@ -231,21 +232,26 @@ void DocBuilder::visit(const ast::FnStmt* apFnStmt)
 
         push_line(Settings::SpaceBeforeFunctionName);
         push_text(apFnStmt->name()->str());
-
         push_text("(");
-        m_nDeferredLine = Settings::ParenPadding;
+    }
+    pop();
+
+    push_group();
+    {
         push_nest();
         {
-            push_group();
-            {
-                apFnStmt->params()->accept(*this);
-            }
-            pop();
+            push_line(Settings::ParenPadding);
+            apFnStmt->params()->accept(*this);
         }
         pop();
+
         push_line(Settings::ParenPadding);
         push_text(")");
+    }
+    pop();
 
+    push_group();
+    {
         for (const Token* pModifier : apFnStmt->modifiers())
         {
             if (pModifier != nullptr)
@@ -277,16 +283,22 @@ void DocBuilder::visit(const ast::ForStmt* apForStmt)
     push_group();
     {
         push_text("for");
-        push_group();
-        {
-            m_nDeferredLine = Settings::ControlStmtPadding;
-            apForStmt->item()->accept(*this);
-            push_line(Settings::ControlStmtPadding);
-            push_text("in");
-            m_nDeferredLine = Settings::ControlStmtPadding;
-            apForStmt->items()->accept(*this);
-        }
-        pop();
+        m_pDeferredDoc = line_or_space(Settings::ControlStmtPadding);
+        apForStmt->item()->accept(*this);
+        push_line(Settings::ControlStmtPadding);
+        push_text("in");
+    }
+    pop();
+
+    push_group();
+    {
+        m_pDeferredDoc = line_or_space(Settings::ControlStmtPadding, true);
+        apForStmt->items()->accept(*this);
+    }
+    pop();
+
+    push_group();
+    {
         if (apForStmt->stmts()->size() > 0)
         {
             push_nest();
@@ -303,9 +315,9 @@ void DocBuilder::visit(const ast::ForStmt* apForStmt)
 
 void DocBuilder::visit(const ast::GroupExpr* apGroupExpr)
 {
-    push_text(' ', m_nDeferredLine);
+    push_deferred_doc();
     push_text("(");
-    m_nDeferredLine = Settings::ParenPadding;
+    m_pDeferredDoc = line_or_space(Settings::ParenPadding);
     push_group();
     {
         apGroupExpr->expr()->accept(*this);
@@ -315,33 +327,47 @@ void DocBuilder::visit(const ast::GroupExpr* apGroupExpr)
     push_text(")");
 }
 
-void DocBuilder::visit(const ast::HereDocExpr* apHereDocExpr)
+void DocBuilder::visit(const ast::HereDocStmt* apHereDocStmt)
 {
-    push_deferred_line();
-    for (const Token* pModifier : apHereDocExpr->modifiers())
-    {
-        push_text(pModifier->str());
-        push_line(Settings::ExCmdModifierPadding);
-    }
-
-    push_text(apHereDocExpr->endmarker()->str());
     push_break();
-
-    m_nDeferredLine = 0;
 
     push_group();
     {
-        for (const ast::Node* pChildNode : apHereDocExpr->children())
+        push_text(apHereDocStmt->ex_cmd()->str());
+        m_pDeferredDoc = line_or_space(Settings::SpaceAfterExprCmd);
+        apHereDocStmt->lexpr()->accept(*this);
+        push_line(Settings::OperatorPadding);
+        push_text(apHereDocStmt->op()->str());
+
+        push_line(Settings::OperatorPadding);
+        for (const Token* pModifier : apHereDocStmt->modifiers())
         {
-            push_group();
-            {
-                pChildNode->accept(*this);
-            }
-            pop();
+            push_text(pModifier->str());
+            push_line(Settings::ExCmdModifierPadding);
         }
+
+        push_text(apHereDocStmt->endmarker()->str());
     }
     pop();
-    push_text(apHereDocExpr->endmarker()->str());
+
+    m_pDeferredDoc = new doc::Break();
+
+    // heredoc lines shouldn't break. Strings don't break anyway, but expression portions
+    // of interpolated strings would break otherwise.
+    m_context.bInsideHereDoc = true;
+
+    // Child 0 is left-hand side of =<<
+    for (int i = 1; i < apHereDocStmt->children().size(); i++)
+    {
+        push_group();
+        {
+            apHereDocStmt->children().at(i)->accept(*this);
+        }
+        pop();
+    }
+
+    m_context.bInsideHereDoc = false;
+    push_text(apHereDocStmt->endmarker()->str());
 }
 
 void DocBuilder::visit(const ast::IfBranch* apIfBranch)
@@ -352,7 +378,7 @@ void DocBuilder::visit(const ast::IfBranch* apIfBranch)
 
         if (apIfBranch->condition() != nullptr)
         {
-            m_nDeferredLine = Settings::ControlStmtPadding;
+            m_pDeferredDoc = line_or_space(Settings::ControlStmtPadding);
             apIfBranch->condition()->accept(*this);
         }
     }
@@ -388,7 +414,7 @@ void DocBuilder::visit(const ast::IndexExpr* apNode)
 {
     apNode->indexable()->accept(*this);
     push_text("[");
-    m_nDeferredLine = Settings::SquareBracketPadding;
+    m_pDeferredDoc = line_or_space(Settings::SquareBracketPadding);
     push_nest();
     {
         push_group();
@@ -410,7 +436,7 @@ void DocBuilder::visit(const ast::InterpStr* apInterpStr)
 
         // Reset the deferred line width so the expression parts of interpolated strings
         // don't get extra spaces printed.
-        m_nDeferredLine = 0;
+        m_pDeferredDoc = line_or_space(0);
     }
 }
 
@@ -424,7 +450,7 @@ void DocBuilder::visit(const ast::JumpStmt* apJumpStmt)
 
         if (apJumpStmt->expr() != nullptr)
         {
-            m_nDeferredLine = Settings::ReturnStmtPadding;
+            m_pDeferredDoc = line_or_space(Settings::ReturnStmtPadding);
             apJumpStmt->expr()->accept(*this);
         }
     }
@@ -433,9 +459,9 @@ void DocBuilder::visit(const ast::JumpStmt* apJumpStmt)
 
 void DocBuilder::visit(const ast::ListAssignExpr* apListAssignExpr)
 {
-    push_text(' ', m_nDeferredLine);
+    push_text(' ', m_pDeferredDoc->nWidth);
     push_text("[");
-    m_nDeferredLine = Settings::SquareBracketPadding;
+    m_pDeferredDoc = line_or_space(Settings::SquareBracketPadding);
     push_nest();
     {
         push_group();
@@ -449,7 +475,7 @@ void DocBuilder::visit(const ast::ListAssignExpr* apListAssignExpr)
                     if (i < apListAssignExpr->children().size() - 1)
                     {
                         push_text(",");
-                        m_nDeferredLine = Settings::SpaceAfterListSeparator;
+                        m_pDeferredDoc = line_or_space(Settings::SpaceAfterListSeparator);
                     }
                 }
                 else
@@ -457,12 +483,12 @@ void DocBuilder::visit(const ast::ListAssignExpr* apListAssignExpr)
                     if (i < apListAssignExpr->children().size() - 2)
                     {
                         push_text(",");
-                        m_nDeferredLine = Settings::SpaceAfterListSeparator;
+                        m_pDeferredDoc = line_or_space(Settings::SpaceAfterListSeparator);
                     }
                     else if (i == apListAssignExpr->children().size() - 2)
                     {
                         push_text(";");
-                        m_nDeferredLine = 1;
+                        m_pDeferredDoc = line_or_space(1);
                     }
                 }
             }
@@ -476,9 +502,9 @@ void DocBuilder::visit(const ast::ListAssignExpr* apListAssignExpr)
 
 void DocBuilder::visit(const ast::ListExpr* apNode)
 {
-    push_text(' ', m_nDeferredLine);
+    push_text(' ', m_pDeferredDoc->nWidth);
     push_text("[");
-    m_nDeferredLine = Settings::SquareBracketPadding;
+    m_pDeferredDoc = line_or_space(Settings::SquareBracketPadding);
     push_nest();
     {
         push_group();
@@ -490,7 +516,7 @@ void DocBuilder::visit(const ast::ListExpr* apNode)
                 if (i < apNode->children().size() - 1)
                 {
                     push_text(",");
-                    m_nDeferredLine = Settings::SpaceAfterListSeparator;
+                    m_pDeferredDoc = line_or_space(Settings::SpaceAfterListSeparator);
                 }
             }
         }
@@ -503,13 +529,13 @@ void DocBuilder::visit(const ast::ListExpr* apNode)
 
 void DocBuilder::visit(const ast::Literal* apNode)
 {
-    push_deferred_line();
+    push_deferred_doc();
     push_text(apNode->token()->str());
 }
 
 void DocBuilder::visit(const ast::LiteralStr* apNode)
 {
-    push_deferred_line();
+    push_deferred_doc();
     push_str_expr(apNode);
 }
 
@@ -532,12 +558,12 @@ void DocBuilder::visit(const ast::LockVarStmt* apLockVarStmt)
             push_text(apLockVarStmt->depth()->str());
         }
 
-        m_nDeferredLine = Settings::SpaceAfterExprCmd;
+        m_pDeferredDoc = line_or_space(Settings::SpaceAfterExprCmd);
 
         for (const ast::Node* pChildNode : apLockVarStmt->children())
         {
             pChildNode->accept(*this);
-            m_nDeferredLine = Settings::SpaceAfterListSeparator;
+            m_pDeferredDoc = line_or_space(Settings::SpaceAfterListSeparator);
         }
     }
     pop();
@@ -549,7 +575,7 @@ void DocBuilder::visit(const ast::MethodCallExpr* apMethodCallExpr)
     {
         apMethodCallExpr->receiver()->accept(*this);
         push_text(apMethodCallExpr->op()->str());
-        m_nDeferredLine = 0;
+        m_pDeferredDoc = line_or_space(0);
         apMethodCallExpr->call()->accept(*this);
     }
     pop();
@@ -557,7 +583,7 @@ void DocBuilder::visit(const ast::MethodCallExpr* apMethodCallExpr)
 
 void DocBuilder::visit(const ast::Pattern* apNode)
 {
-    push_deferred_line();
+    push_deferred_doc();
     push_str_expr(apNode);
 }
 
@@ -580,7 +606,7 @@ void DocBuilder::visit(const ast::SliceExpr* apNode)
     apNode->sliceable()->accept(*this);
 
     push_text("[");
-    m_nDeferredLine = Settings::SquareBracketPadding;
+    m_pDeferredDoc = line_or_space(Settings::SquareBracketPadding);
 
     if (apNode->start() != nullptr)
     {
@@ -597,7 +623,7 @@ void DocBuilder::visit(const ast::SliceExpr* apNode)
     }
 
     push_text(":");
-    m_nDeferredLine = 0;
+    m_pDeferredDoc = line_or_space(0);
 
     if (apNode->stop() != nullptr)
     {
@@ -626,7 +652,7 @@ void DocBuilder::visit(const ast::StmtList* apNode)
 
 void DocBuilder::visit(const ast::StrConst* apNode)
 {
-    push_deferred_line();
+    push_deferred_doc();
     push_str_expr(apNode);
 }
 
@@ -638,7 +664,7 @@ void DocBuilder::visit(const ast::TernaryOp* apTernaryOp)
     push_group();
     {
         push_text(apTernaryOp->lop()->str());
-        m_nDeferredLine = Settings::OperatorPadding;
+        m_pDeferredDoc = line_or_space(Settings::OperatorPadding);
         apTernaryOp->mexpr()->accept(*this);
         push_line(Settings::OperatorPadding);
     }
@@ -647,7 +673,7 @@ void DocBuilder::visit(const ast::TernaryOp* apTernaryOp)
     push_group();
     {
         push_text(apTernaryOp->rop()->str());
-        m_nDeferredLine = Settings::OperatorPadding;
+        m_pDeferredDoc = line_or_space(Settings::OperatorPadding);
         apTernaryOp->rexpr()->accept(*this);
     }
     pop();
@@ -661,7 +687,7 @@ void DocBuilder::visit(const ast::TryBranch* apTryBranch)
 
         if (apTryBranch->pattern() != nullptr)
         {
-            m_nDeferredLine = Settings::ControlStmtPadding;
+            m_pDeferredDoc = line_or_space(Settings::ControlStmtPadding);
             apTryBranch->pattern()->accept(*this);
         }
     }
@@ -697,9 +723,9 @@ void DocBuilder::visit(const ast::UnaryOp* apUnaryOp)
 {
     push_group();
     {
-        push_deferred_line();
+        push_deferred_doc();
         push_text(apUnaryOp->op()->str());
-        m_nDeferredLine = 0;
+        m_pDeferredDoc = line_or_space(0);
         apUnaryOp->rexpr()->accept(*this);
     }
     pop();
@@ -718,7 +744,7 @@ void DocBuilder::visit(const ast::UnletStmt* apUnletStmt)
             push_text(apUnletStmt->bang()->str());
         }
 
-        m_nDeferredLine = Settings::SpaceAfterExprCmd;
+        m_pDeferredDoc = line_or_space(Settings::SpaceAfterExprCmd);
         apUnletStmt->expr()->accept(*this);
     }
     pop();
@@ -726,7 +752,7 @@ void DocBuilder::visit(const ast::UnletStmt* apUnletStmt)
 
 void DocBuilder::visit(const ast::Var* apNode)
 {
-    push_deferred_line();
+    push_deferred_doc();
     push_group();
     {
         if (apNode->sigil() != nullptr)
@@ -757,7 +783,7 @@ void DocBuilder::visit(const ast::VarQueryStmt* apNode)
 
         for (ast::Node* pChildNode : apNode->children())
         {
-            m_nDeferredLine = Settings::SpaceAfterExprCmd;
+            m_pDeferredDoc = line_or_space(Settings::SpaceAfterExprCmd);
             pChildNode->accept(*this);
         }
         pop();
@@ -771,7 +797,7 @@ void DocBuilder::visit(const ast::WhileStmt* apWhileStmt)
     push_group();
     {
         push_text(apWhileStmt->ex_cmd_while()->str());
-        m_nDeferredLine = Settings::ControlStmtPadding;
+        m_pDeferredDoc = line_or_space(Settings::ControlStmtPadding);
         apWhileStmt->condition()->accept(*this);
     }
     pop();
@@ -798,27 +824,55 @@ void DocBuilder::push_text(char aText, size_t anCount)
     push_text(std::string(anCount, aText));
 }
 
-void DocBuilder::push_line(size_t anWidth)
+void DocBuilder::push_line(size_t anWidth, bool abTrailingWhitespace)
 {
-    doc::Line* pLine = new doc::Line(anWidth);
-    m_lDocStack.back()->push(pLine);
+    m_lDocStack.back()->push(line_or_space(anWidth, abTrailingWhitespace));
 }
 
-void DocBuilder::push_deferred_line()
+doc::Doc* DocBuilder::line_or_space(size_t anWidth, bool abTrailingWhitespace)
 {
-    push_line(m_nDeferredLine);
+    doc::Doc* pDoc;
+
+    if (m_context.bInsideHereDoc)
+    {
+        pDoc = new doc::Text(' ', anWidth);
+    }
+    else
+    {
+        pDoc = new doc::Line(anWidth, abTrailingWhitespace);
+    }
+
+    return pDoc;
+}
+
+void DocBuilder::push_deferred_doc()
+{
+    if (m_pDeferredDoc == nullptr)
+    {
+        return;
+    }
+
+    m_lDocStack.back()->push(m_pDeferredDoc);
 }
 
 void DocBuilder::push_break()
 {
-    if (m_bBreakPending)
+    // Breaks are added at the beginning of a statement. The alternative is to simply add
+    // a break at the end of each statement automatically. However, this causes trailing
+    // comments to be rendered on a new line. By deferring the Break to the beginning of
+    // the next statement, we give a trailing comment AST node a chance to be visited
+    // without the previous statement adding a Break prematurely. We don't add a break
+    // before the first line of the program.
+
+    if (m_context.bBeginningOfProgram)
+    {
+        m_context.bBeginningOfProgram = false;
+    }
+    else
     {
         doc::Break* pBreak = new doc::Break();
         m_lDocStack.back()->push(pBreak);
     }
-
-    // Start adding breaks after the first statement of the file.
-    m_bBreakPending = true;
 }
 
 void DocBuilder::push_group()

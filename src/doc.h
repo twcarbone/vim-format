@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "DocVisitor.h"
+#include "util.h"
 
 namespace doc
 {
@@ -35,7 +36,7 @@ struct Doc
 protected:
     std::string width_str() const
     {
-        return "+width:" + std::to_string(nWidth);
+        return "width=" + std::to_string(nWidth);
     }
 };
 
@@ -49,9 +50,15 @@ struct Text : Doc
         nWidth = sText.size();
     }
 
+    Text(char c, size_t count) :
+        sText(count, c)
+    {
+        nWidth = count;
+    }
+
     virtual std::string to_string() const override
     {
-        return "Text " + sText + " " + width_str();
+        return "Text '" + vf::sanitize(sText) + "' " + width_str();
     }
 
     virtual void accept(DocVisitor& visitor) const override
@@ -66,20 +73,30 @@ struct Line : Doc
 {
     virtual ~Line() = default;
 
-    Line(size_t width)
+    Line(size_t width, bool add_trailing_whitespace = false)
     {
         nWidth = width;
+        bAddTrailingWhitespace = add_trailing_whitespace;
     }
 
     virtual std::string to_string() const override
     {
-        return "Line " + width_str();
+        std::string tmp = "Line " + width_str();
+
+        if (bAddTrailingWhitespace)
+        {
+            tmp += " +trailing_ws";
+        }
+
+        return tmp;
     }
 
     virtual void accept(DocVisitor& visitor) const override
     {
         visitor.visit(this);
     }
+
+    bool bAddTrailingWhitespace = false;
 };
 
 struct Break : Doc
