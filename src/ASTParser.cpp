@@ -900,11 +900,11 @@ begin_lines:
                 consume(Token::Type::STRING);
                 break;
             case Token::Type::ENDMARKER:
-                // TODO (gh-160): Parsing HereDocStmt can hang forever if ENDMARKER is missing
                 consume(Token::Type::ENDMARKER);
                 goto end_stmt;
             default:
-                break;
+                // test/error/E990_1.out
+                throw_vim_error("E990");
         }
     }
 
