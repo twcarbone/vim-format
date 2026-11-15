@@ -900,6 +900,9 @@ begin_lines:
                 consume(Token::Type::STRING);
                 break;
             case Token::Type::ENDMARKER:
+                // The algorithm anticipates that there is another line of text to parse
+                // and allocates memory. If we got here, there wasn't.
+                delete pInterpStr;
                 consume(Token::Type::ENDMARKER);
                 goto end_stmt;
             default:
