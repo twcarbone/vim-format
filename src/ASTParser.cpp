@@ -793,8 +793,6 @@ ast::AssignStmt* ASTParser::assign_stmt()
 
 ast::HereDocStmt* ASTParser::heredoc_stmt()
 {
-    // TODO (gh-161): HereDocStmt parsing allows multiple 'trim' and 'eval' modifiers
-
     /*
      *  :let|cons[t] {var-name} =<< [trim] [eval] {endmarker} \n
      *  text... \n
@@ -835,6 +833,8 @@ ast::HereDocStmt* ASTParser::heredoc_stmt()
     Token* pEndMarker = nullptr;
     while (true)
     {
+        // Intentionally allow multiple 'trim' and 'eval' modifiers.
+        // Vim allows this (tested with version 9.1.618).
         switch (curr()->type())
         {
             case Token::Type::HD_TRIM:
