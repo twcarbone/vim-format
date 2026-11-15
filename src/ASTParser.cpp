@@ -796,9 +796,9 @@ ast::HereDocStmt* ASTParser::heredoc_stmt()
     // TODO (gh-161): HereDocStmt parsing allows multiple 'trim' and 'eval' modifiers
 
     /*
-     *  :let|cons[t] {var-name} =<< [trim] [eval] {endmarker}
-     *  text...
-     *  text...
+     *  :let|cons[t] {var-name} =<< [trim] [eval] {endmarker} \n
+     *  text... \n
+     *  text... \n
      *  {endmarker}
      */
 
@@ -829,7 +829,7 @@ ast::HereDocStmt* ASTParser::heredoc_stmt()
     consume(curr()->type());
 
     /*
-     *  [trim] [eval] {endmarker}
+     *  [trim] [eval] {endmarker} \n
      */
     std::vector<Token*> lModifiers;
     Token* pEndMarker = nullptr;
@@ -853,8 +853,8 @@ ast::HereDocStmt* ASTParser::heredoc_stmt()
 begin_lines:
 
     /*
-     *  text...
-     *  text...
+     *  text... \n
+     *  text... \n
      *  {endmarker}
      */
     std::vector<ast::InterpStr*> llLines;
