@@ -1532,8 +1532,6 @@ bool ASTParser::consume_optional(const Token::Type aeType)
     return false;
 }
 
-// TODO (gh-159): 'let' qualifier lookaheads do not look past continuations
-
 bool ASTParser::chk_let_query()
 {
     bool bIsLetQuery = true;
@@ -1543,6 +1541,8 @@ bool ASTParser::chk_let_query()
     {
         switch (m_lTokens.advance(1, Flags::skipws)->type())
         {
+            case Token::Type::CONTINUATION:
+                continue;
             case Token::Type::COMMENT:
             case Token::Type::NEWLINE:
                 goto loop_end;
