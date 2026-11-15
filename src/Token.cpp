@@ -81,12 +81,10 @@ std::string Token::str() const
 
 std::string Token::toString() const
 {
-    std::string tmp = "<Token";
-    tmp += " type=" + TypeToStr(m_eType);
-    tmp += " lexeme=" + vf::sanitize(m_sStr);
-
-    tmp += " pos=" + std::to_string(m_nSourcePos);
-    tmp += ">";
+    std::string tmp = "Token";
+    tmp += " " + TypeToStr(m_eType);
+    tmp += " ;" + vf::sanitize(m_sStr);
+    tmp += "; pos=" + std::to_string(m_nSourcePos);
     return tmp;
 }
 
