@@ -653,6 +653,29 @@ void Lexer::retype_keyword(Token* apCurrentToken)
             }
 
             [[fallthrough]];
+        case Token::Type::HD_EVAL:
+        case Token::Type::HD_TRIM:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                    case Token::Type::HD_EVAL:
+                    case Token::Type::HD_TRIM:
+                        continue;
+                    case Token::Type::ASSIGN_HEREDOC:
+                        return;
+                    default:
+                        apCurrentToken->setType(Token::Type::IDENTIFIER);
+                        return;
+                }
+            }
+
+            [[fallthrough]];
         default:
             throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
     }

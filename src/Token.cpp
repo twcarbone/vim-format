@@ -30,6 +30,8 @@ bool Token::is_keyword() const
         case Token::Type::IN:
         case Token::Type::OP_IS:
         case Token::Type::OP_ISNOT:
+        case Token::Type::HD_EVAL:
+        case Token::Type::HD_TRIM:
             return true;
         default:
             return false;
