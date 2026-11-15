@@ -850,10 +850,16 @@ bool Lexer::push_keyword()
 
     for (const Keyword& lcKeyword : m_lKeywords)
     {
-        if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
+        if (!vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
         {
-            return push_token(lcKeyword.eTokenType, lcKeyword.sFull);
+            continue;
         }
+
+        push_token(lcKeyword.eTokenType, lcKeyword.sFull);
+
+        retype_keyword(m_pCurrToken);
+
+        return true;
     }
 
     return false;
@@ -945,11 +951,6 @@ bool Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
     if (m_pCurrToken->is_ambiguous() && !disambiguate(m_pCurrToken))
     {
         throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
-    }
-
-    if (m_pCurrToken->is_keyword())
-    {
-        retype_keyword(m_pCurrToken);
     }
 
     return true;

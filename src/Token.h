@@ -152,7 +152,6 @@ public:
 
     ~Token();
 
-    bool is_keyword() const;
     bool is_ambiguous() const;
     bool is_assignment() const;
     bool is_horizontal_wp() const;
