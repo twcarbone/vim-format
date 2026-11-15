@@ -1,0 +1,5 @@
+E990: Missing end marker
+
+test/error/E990_1.vim:3:9
+ 3 | 
+   |         ^

@@ -81,7 +81,7 @@ install: build
 
 .PHONY: test
 test: build
-	$(GTEST_BIN)
+	ctest --output-on-failure --test-dir build/test
 
 
 .PHONY: clean
