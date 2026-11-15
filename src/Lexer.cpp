@@ -31,41 +31,41 @@ Lexer::Lexer(const Context& acContext) :
         //
         //  let item = 1
         //  ^~~
-        { "break", "brea", Token::Type::EX_BREAK },
-        { "continue", "con", Token::Type::EX_CONTINUE },
-        { "finish", "fini", Token::Type::EX_FINISH },
-        { "echo", "ec", Token::Type::EX_ECHO },
-        { "else", "el", Token::Type::EX_ELSE },
-        { "elseif", "elsei", Token::Type::EX_ELSEIF },
-        { "endfor", "endfo", Token::Type::EX_ENDFOR },
-        { "endfunction", "endf", Token::Type::EX_ENDFUNCTION },
-        { "endif", "en", Token::Type::EX_ENDIF },
-        { "endwhile", "endwh", Token::Type::EX_ENDWHILE },
-        { "function", "fu", Token::Type::EX_FUNCTION },
-        { "return", "retu", Token::Type::EX_RETURN },
-        { "set", "se", Token::Type::EX_SET },
-        { "while", "wh", Token::Type::EX_WHILE },
-        { "for", "", Token::Type::EX_FOR },
-        { "if", "", Token::Type::EX_IF },
-        { "in", "", Token::Type::IN },
-        { "let", "", Token::Type::EX_LET },
-        { "unlet", "unl", Token::Type::EX_UNLET },
-        { "lockvar", "lockv", Token::Type::EX_LOCKVAR },
-        { "unlockvar", "unlo", Token::Type::EX_UNLOCKVAR },
-        { "try", "", Token::Type::EX_TRY },
-        { "endtry", "endt", Token::Type::EX_ENDTRY },
-        { "catch", "cat", Token::Type::EX_CATCH },
-        { "finally", "fina", Token::Type::EX_FINALLY },
-        { "throw", "th", Token::Type::EX_THROW },
-        { "echon", "", Token::Type::EX_ECHON },
-        { "echohl", "echoh", Token::Type::EX_ECHOHL },
-        { "echomsg", "echom", Token::Type::EX_ECHOMSG },
-        { "echoerr", "echoe", Token::Type::EX_ECHOERR },
-        { "echoconsole", "echoc", Token::Type::EX_ECHOCONSOLE },
-        { "echowindow", "echow", Token::Type::EX_ECHOWINDOW },
-        { "eval", "", Token::Type::EX_EVAL },
-        { "execute", "exe", Token::Type::EX_EXECUTE },
-        { "const", "cons", Token::Type::EX_CONST },
+        { "break", Token::Type::EX_BREAK , "brea"},
+        { "continue", Token::Type::EX_CONTINUE , "con"},
+        { "finish", Token::Type::EX_FINISH , "fini"},
+        { "echo", Token::Type::EX_ECHO , "ec"},
+        { "else", Token::Type::EX_ELSE , "el"},
+        { "elseif", Token::Type::EX_ELSEIF , "elsei"},
+        { "endfor", Token::Type::EX_ENDFOR , "endfo"},
+        { "endfunction", Token::Type::EX_ENDFUNCTION , "endf"},
+        { "endif", Token::Type::EX_ENDIF , "en"},
+        { "endwhile", Token::Type::EX_ENDWHILE , "endwh"},
+        { "function", Token::Type::EX_FUNCTION , "fu"},
+        { "return", Token::Type::EX_RETURN , "retu"},
+        { "set", Token::Type::EX_SET , "se"},
+        { "while", Token::Type::EX_WHILE , "wh"},
+        { "for", Token::Type::EX_FOR},
+        { "if", Token::Type::EX_IF },
+        { "in", Token::Type::IN },
+        { "let", Token::Type::EX_LET },
+        { "unlet", Token::Type::EX_UNLET , "unl"},
+        { "lockvar", Token::Type::EX_LOCKVAR , "lockv"},
+        { "unlockvar", Token::Type::EX_UNLOCKVAR , "unlo"},
+        { "try", Token::Type::EX_TRY },
+        { "endtry", Token::Type::EX_ENDTRY , "endt"},
+        { "catch", Token::Type::EX_CATCH , "cat"},
+        { "finally", Token::Type::EX_FINALLY , "fina"},
+        { "throw", Token::Type::EX_THROW , "th"},
+        { "echon", Token::Type::EX_ECHON },
+        { "echohl", Token::Type::EX_ECHOHL , "echoh"},
+        { "echomsg", Token::Type::EX_ECHOMSG , "echom"},
+        { "echoerr", Token::Type::EX_ECHOERR , "echoe"},
+        { "echoconsole", Token::Type::EX_ECHOCONSOLE , "echoc"},
+        { "echowindow", Token::Type::EX_ECHOWINDOW , "echow"},
+        { "eval", Token::Type::EX_EVAL },
+        { "execute", Token::Type::EX_EXECUTE , "exe"},
+        { "const", Token::Type::EX_CONST , "cons"},
     },
     m_lKeywords {
         // Keywords have no abbreviation, and can appear in any position.
@@ -77,15 +77,15 @@ Lexer::Lexer(const Context& acContext) :
         //
         //  let items =<< trim END
         //                ^~~~
-        { "abort", "", Token::Type::FN_ABORT },
-        { "closure", "", Token::Type::FN_CLOSURE },
-        { "dict", "", Token::Type::FN_DICT },
-        { "in", "", Token::Type::IN },
-        { "is", "", Token::Type::OP_IS },
-        { "isnot", "", Token::Type::OP_ISNOT },
-        { "range", "", Token::Type::FN_RANGE },
-        { "trim", "", Token::Type::HD_TRIM },
-        { "eval", "", Token::Type::HD_EVAL },
+        { "abort", Token::Type::FN_ABORT },
+        { "closure", Token::Type::FN_CLOSURE },
+        { "dict", Token::Type::FN_DICT },
+        { "in", Token::Type::IN },
+        { "is", Token::Type::OP_IS },
+        { "isnot", Token::Type::OP_ISNOT },
+        { "range", Token::Type::FN_RANGE },
+        { "trim", Token::Type::HD_TRIM },
+        { "eval", Token::Type::HD_EVAL },
     },
     m_lSymbols {
         // These symbols should appear most often. Put them first.
@@ -653,6 +653,29 @@ void Lexer::retype_keyword(Token* apCurrentToken)
             }
 
             [[fallthrough]];
+        case Token::Type::HD_EVAL:
+        case Token::Type::HD_TRIM:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                    case Token::Type::HD_EVAL:
+                    case Token::Type::HD_TRIM:
+                        continue;
+                    case Token::Type::ASSIGN_HEREDOC:
+                        return;
+                    default:
+                        apCurrentToken->setType(Token::Type::IDENTIFIER);
+                        return;
+                }
+            }
+
+            [[fallthrough]];
         default:
             throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
     }
@@ -827,18 +850,16 @@ bool Lexer::push_keyword()
 
     for (const Keyword& lcKeyword : m_lKeywords)
     {
-        if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
-        {
-            return push_token(lcKeyword.eTokenType, lcKeyword.sFull);
-        }
-        else if (lcKeyword.sAbrv.empty())
+        if (!vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
         {
             continue;
         }
-        else if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sAbrv, g_sKeyWordDelimiters))
-        {
-            return push_token(lcKeyword.eTokenType, lcKeyword.sAbrv);
-        }
+
+        push_token(lcKeyword.eTokenType, lcKeyword.sFull);
+
+        retype_keyword(m_pCurrToken);
+
+        return true;
     }
 
     return false;
@@ -930,11 +951,6 @@ bool Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
     if (m_pCurrToken->is_ambiguous() && !disambiguate(m_pCurrToken))
     {
         throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
-    }
-
-    if (m_pCurrToken->is_keyword())
-    {
-        retype_keyword(m_pCurrToken);
     }
 
     return true;

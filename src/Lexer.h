@@ -14,16 +14,15 @@
 class Lexer
 {
 public:
-    // TODO (gh-107): Keywords may not require an abbreviation
     struct Keyword
     {
         std::string sFull = "";
-        std::string sAbrv = "";
         Token::Type eTokenType = Token::Type::NONE;
     };
 
     struct Command : Keyword
     {
+        std::string sAbrv = "";
     };
 
     // Punctuators, operators, or other fixed-width symbols

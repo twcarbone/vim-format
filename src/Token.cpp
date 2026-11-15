@@ -19,23 +19,6 @@ Token::~Token()
 {
 }
 
-bool Token::is_keyword() const
-{
-    switch (m_eType)
-    {
-        case Token::Type::FN_ABORT:
-        case Token::Type::FN_CLOSURE:
-        case Token::Type::FN_DICT:
-        case Token::Type::FN_RANGE:
-        case Token::Type::IN:
-        case Token::Type::OP_IS:
-        case Token::Type::OP_ISNOT:
-            return true;
-        default:
-            return false;
-    }
-}
-
 bool Token::is_ambiguous() const
 {
     return TypeToStr(m_eType).substr(0, 4) == "GEN_";
