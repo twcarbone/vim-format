@@ -104,6 +104,25 @@ tags:
 	./scripts/cmds.py > ./reference/ex_cmds.txt
 
 
+.PHONY: lex
+
+# Tip 10-1: $(wildcard ...) expands all matched files in to sorted, space-separated list.
+VIM_FILES := $(wildcard test/lex/*.vim)
+# Tip 10-2: Shorthand of $(patsubst <from>,<to>,<text>) is $(<text>:<from>=<to>)
+LEX_FILES := $(VIM_FILES:.vim=.lex)
+
+lex: $(LEX_FILES)
+
+# Tip 10-3: Automatic variables and expansions
+#
+#   %   The target/prerequisite stem (eg, somefile)
+#   $<  The first prerequisite (eg, test/lex/somefile.vim)
+#   $@  The target file name (eg, test/lex/somefile.lex)
+
+test/lex/%.lex: test/lex/%.vim
+	$(VIMFORMAT_BIN) -t $< > $@
+
+
 .PHONY: ast
 
 VIM_FILES := $(wildcard test/ast/*.vim)
