@@ -7,6 +7,7 @@
 #include "Context.h"
 #include "Lexer.h"
 #include "Token.h"
+#include "util.h"
 
 class LexerTest : public testing::Test
 {
@@ -35,6 +36,28 @@ protected:
 
         m_pLexer = new Lexer(lcContext);
         m_pLexer->tokenize();
+    }
+
+    void test_file(const std::string& asPath)
+    {
+        std::filesystem::path lcSrcPath { asPath };
+
+        Context lcContext;
+        lcContext.add_path(asPath);
+
+        Lexer lcLexer(lcContext);
+        lcLexer.tokenize();
+
+        std::stringstream lcTokensStrStream;
+
+        for (const Token* pToken : lcLexer.tokens())
+        {
+            lcTokensStrStream << pToken->toString() << "\n";
+        }
+
+        std::string lsTokensStr = vf::read_file(lcSrcPath.replace_extension("lex"));
+
+        EXPECT_EQ(lsTokensStr, lcTokensStrStream.str());
     }
 
     void expect_tokens(size_t anCount)
