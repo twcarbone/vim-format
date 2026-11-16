@@ -402,7 +402,6 @@ bool Lexer::match()
                 return push_token(Token::Type::DQUOTE, c);
             }
 
-            // TODO (gh-4): Add support for escaped quotes within a string token
             return push_string();
         case State::PATTERN:
             if (c == '/')
@@ -974,8 +973,36 @@ bool Lexer::push_string()
             lsRightDelimiters = "{}\"";
             break;
         case State::LITERAL_STRING:
-            lsRightDelimiters = "'";
-            break;
+        {
+            // Leading ' has been consumed. We are here:
+            //
+            // :echo 'hello world'
+            //        ^
+
+            for (size_t i = 0; i < m_cSource.remaining_text().size(); i++)
+            {
+                std::string_view lsRemainingText = m_cSource.remaining_text();
+
+                const char c = lsRemainingText[i];
+
+                if (c != '\'')
+                {
+                    continue;
+                }
+
+                // We are at a '. Complete the string if we are at the last character of
+                // the text, or if the next character is not a '.
+                if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != '\'')
+                {
+                    return push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                }
+
+                // Advance past the 2nd '.
+                i++;
+            }
+
+            throw VimError("E115", m_cSource.context());
+        }
         case State::STRING_CONSTANT:
             lsRightDelimiters = "\"";
             break;
