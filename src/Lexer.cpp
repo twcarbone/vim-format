@@ -985,14 +985,14 @@ bool Lexer::push_string()
 
                 const char c = lsRemainingText[i];
 
-                if (c != '\'')
+                if (c != SQUOTE)
                 {
                     continue;
                 }
 
                 // We are at a '. Complete the string if we are at the last character of
                 // the text, or if the next character is not a '.
-                if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != '\'')
+                if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != SQUOTE)
                 {
                     return push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
                 }
