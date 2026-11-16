@@ -1,5 +1,7 @@
 #include "Exceptions.h"
 
+// TODO (gh-165): Some errors do not include contextual information
+
 // Intended to match Vim src/errors.h exactly
 const std::unordered_map<std::string, std::string> VimError::s_mErrors {
     // clang-format off
@@ -11,7 +13,6 @@ const std::unordered_map<std::string, std::string> VimError::s_mErrors {
     { "E481", "No range allowed" },
     { "E973", "Blob literal should have an even number of hex characters" },
     { "E989", "Non-default argument follows default argument" },
-    // TODO (gh-165): E990 should append expected end marker text
     { "E990", "Missing end marker" },
     { "E354", "Invalid register name" },
     { "E1278", "Stray '}' without a matching '{'" },
