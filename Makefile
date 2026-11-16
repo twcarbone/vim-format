@@ -104,14 +104,14 @@ tags:
 	./scripts/cmds.py > ./reference/ex_cmds.txt
 
 
-.PHONY: lex
+.PHONY: out/lex
 
 # Tip 10-1: $(wildcard ...) expands all matched files in to sorted, space-separated list.
 VIM_FILES := $(wildcard test/lex/*.vim)
 # Tip 10-2: Shorthand of $(patsubst <from>,<to>,<text>) is $(<text>:<from>=<to>)
 LEX_FILES := $(VIM_FILES:.vim=.lex)
 
-lex: $(LEX_FILES)
+out/lex: $(LEX_FILES)
 
 # Tip 10-3: Automatic variables and expansions
 #
@@ -123,23 +123,23 @@ test/lex/%.lex: test/lex/%.vim
 	$(VIMFORMAT_BIN) -t $< > $@
 
 
-.PHONY: ast
+.PHONY: out/ast
 
 VIM_FILES := $(wildcard test/ast/*.vim)
 AST_FILES := $(VIM_FILES:.vim=.ast)
 
-ast: $(AST_FILES)
+out/ast: $(AST_FILES)
 
 test/ast/%.ast: test/ast/%.vim
 	$(VIMFORMAT_BIN) -p $< > $@
 
 
-.PHONY: errors
+.PHONY: out/error
 
 TEST_ERR_INFILES := $(wildcard test/error/*.vim)
 TEST_ERR_OUTFILES := $(TEST_ERR_INFILES:.vim=.out)
 
-errors: $(TEST_ERR_OUTFILES)
+out/error: $(TEST_ERR_OUTFILES)
 
 
 # Append '|| true' to ensure the line evaluates to a zero exit status and doesn't crash
@@ -148,12 +148,12 @@ test/error/%.out: test/error/%.vim
 	$(VIMFORMAT_BIN) $< 2> $@ || true
 
 
-.PHONY: pretty
+.PHONY: out/pretty
 
 TEST_PRETTY_INFILES := $(wildcard test/pretty/*.vim)
 TEST_PRETTY_OUTFILES := $(TEST_PRETTY_INFILES:.vim=.pretty)
 
-pretty: $(TEST_PRETTY_OUTFILES)
+out/pretty: $(TEST_PRETTY_OUTFILES)
 
 test/pretty/%.pretty: test/pretty/%.vim
 	$(VIMFORMAT_BIN) $< > $@
