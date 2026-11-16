@@ -571,6 +571,8 @@ Program
     ExprCmd echo -count <>
       LiteralStr ;';string with "embedded" double quote;';
     ExprCmd echo -count <>
+      LiteralStr ;';''string with'''' various ''escaped ''single'' quotes'''';';
+    ExprCmd echo -count <>
       InterpStr
         LiteralStr ;$';Before ;{;
         Var bb

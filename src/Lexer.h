@@ -75,8 +75,11 @@ private:
         INTERP_EXP_SQUOTE = 8,
         INTERP_EXP_DQUOTE = 9,
         STRING_CONSTANT = 10,
-        LITERAL_STRING = 11,
-        PATTERN = 12,
+        // Cursor is one past the leading ' of a literal string, but has not yet consumed.
+        LITERAL_STRING_BEGIN = 11,
+        // Cursor is at the trailing ' or a literal string, but has not yet consumed.
+        LITERAL_STRING_END = 12,
+        PATTERN = 13,
     };
 
     State m_eState;

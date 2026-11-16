@@ -157,19 +157,20 @@ Lexer::Lexer(const Context& acContext) :
         { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::IDENTIFIER },
     },
     m_gStateTransitions { {
-        { State::NONE,                  State::NONE },
-        { State::HEREDOC_START,         State::HEREDOC },
-        { State::HEREDOC,               State::NONE },
-        { State::HEREDOC_EVAL_START,    State::HEREDOC_EVAL_STR },
-        { State::HEREDOC_EVAL_STR,      State::HEREDOC_EVAL_EXP },
-        { State::HEREDOC_EVAL_EXP,      State::HEREDOC_EVAL_STR },
-        { State::INTERP_STR_SQUOTE,     State::INTERP_EXP_SQUOTE },
-        { State::INTERP_STR_DQUOTE,     State::INTERP_EXP_DQUOTE },
-        { State::INTERP_EXP_SQUOTE,     State::INTERP_STR_SQUOTE },
-        { State::INTERP_EXP_DQUOTE,     State::INTERP_STR_DQUOTE },
-        { State::STRING_CONSTANT,       State::NONE },
-        { State::LITERAL_STRING,        State::NONE },
-        { State::PATTERN,               State::NONE },
+        { State::NONE,                      State::NONE },
+        { State::HEREDOC_START,             State::HEREDOC },
+        { State::HEREDOC,                   State::NONE },
+        { State::HEREDOC_EVAL_START,        State::HEREDOC_EVAL_STR },
+        { State::HEREDOC_EVAL_STR,          State::HEREDOC_EVAL_EXP },
+        { State::HEREDOC_EVAL_EXP,          State::HEREDOC_EVAL_STR },
+        { State::INTERP_STR_SQUOTE,         State::INTERP_EXP_SQUOTE },
+        { State::INTERP_STR_DQUOTE,         State::INTERP_EXP_DQUOTE },
+        { State::INTERP_EXP_SQUOTE,         State::INTERP_STR_SQUOTE },
+        { State::INTERP_EXP_DQUOTE,         State::INTERP_STR_DQUOTE },
+        { State::STRING_CONSTANT,           State::NONE },
+        { State::LITERAL_STRING_BEGIN,      State::LITERAL_STRING_END },
+        { State::LITERAL_STRING_END,        State::NONE },
+        { State::PATTERN,                   State::NONE },
     } }
 // clang-format on
 {
@@ -305,7 +306,7 @@ bool Lexer::match()
                         m_eState = State::STRING_CONSTANT;
                         break;
                     case Token::Type::SQUOTE:
-                        m_eState = State::LITERAL_STRING;
+                        m_eState = State::LITERAL_STRING_BEGIN;
                         break;
                     case Token::Type::STR_INTERP_DQUOTE:
                         m_eState = State::INTERP_STR_DQUOTE;
@@ -387,14 +388,13 @@ bool Lexer::match()
             }
 
             return push_string();
-        case State::LITERAL_STRING:
-            if (c == SQUOTE)
-            {
-                next_state();
-                return push_token(Token::Type::SQUOTE, c);
-            }
-
-            return push_string();
+        case State::LITERAL_STRING_BEGIN:
+            push_string();
+            next_state();
+            return true;
+        case State::LITERAL_STRING_END:
+            next_state();
+            return push_token(Token::Type::SQUOTE, c);
         case State::STRING_CONSTANT:
             if (c == DQUOTE)
             {
@@ -972,7 +972,7 @@ bool Lexer::push_string()
         case State::INTERP_STR_DQUOTE:
             lsRightDelimiters = "{}\"";
             break;
-        case State::LITERAL_STRING:
+        case State::LITERAL_STRING_BEGIN:
         {
             // Leading ' has been consumed. We are here:
             //

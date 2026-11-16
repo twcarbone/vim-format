@@ -180,6 +180,7 @@ echo Add(1, 2)
 echo (1 + (3 + 4)) * 2 - (10)
 echo ''
 echo 'string with "embedded" double quote'
+echo '''string with'''' various ''escaped ''single'' quotes'''''
 echo $'Before {bb} after'
 echo $'{bb} after'
 echo $'Before {bb}'
