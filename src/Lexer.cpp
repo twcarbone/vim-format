@@ -974,11 +974,6 @@ bool Lexer::push_string()
             break;
         case State::LITERAL_STRING_BEGIN:
         {
-            // Leading ' has been consumed. We are here:
-            //
-            // :echo 'hello world'
-            //        ^
-
             for (size_t i = 0; i < m_cSource.remaining_text().size(); i++)
             {
                 std::string_view lsRemainingText = m_cSource.remaining_text();
