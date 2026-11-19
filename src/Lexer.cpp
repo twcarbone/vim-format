@@ -958,58 +958,100 @@ bool Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
 
 bool Lexer::push_string()
 {
-    std::string lsRightDelimiters;
+    // A hard delimiter ends a string unconditionally.
+    std::string lsHardDelimiters = "";
+
+    // A soft delimiter ends a string only if some other conditions are satisfied. For
+    // example, and " ends a string constant, but only if it isn't preceded by a \.
+    std::string lsSoftDelimiters = "";
+
+    std::string lsVimErrorUnclosed = "";
+
     switch (m_eState)
     {
         case State::HEREDOC:
-            lsRightDelimiters = "\n";
+            lsHardDelimiters = "\n";
             break;
         case State::HEREDOC_EVAL_STR:
-            lsRightDelimiters = "{}\n";
+            lsHardDelimiters = "{}\n";
             break;
         case State::INTERP_STR_SQUOTE:
-            lsRightDelimiters = "{}'";
+            lsHardDelimiters = "{}";
+            lsSoftDelimiters = "'";
+            lsVimErrorUnclosed = "E115";
             break;
         case State::INTERP_STR_DQUOTE:
-            lsRightDelimiters = "{}\"";
+            lsHardDelimiters = "{}";
+            lsSoftDelimiters = "\"";
             break;
         case State::LITERAL_STRING_BEGIN:
-        {
-            for (size_t i = 0; i < m_cSource.remaining_text().size(); i++)
-            {
-                std::string_view lsRemainingText = m_cSource.remaining_text();
-
-                const char c = lsRemainingText[i];
-
-                if (c != SQUOTE)
-                {
-                    continue;
-                }
-
-                // We are at a '. Complete the string if we are at the last character of
-                // the text, or if the next character is not a '.
-                if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != SQUOTE)
-                {
-                    return push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
-                }
-
-                // Advance past the 2nd '.
-                i++;
-            }
-
-            throw VimError("E115", m_cSource.context());
-        }
+            lsSoftDelimiters = "'";
+            lsVimErrorUnclosed = "E115";
+            break;
         case State::STRING_CONSTANT:
-            lsRightDelimiters = "\"";
+            lsSoftDelimiters = "\"";
             break;
         case State::PATTERN:
-            lsRightDelimiters = "/";
+            lsHardDelimiters = "/";
             break;
         default:
             throw std::runtime_error("attempted call to Lexer::push_string when not in string state");
     }
 
-    size_t lnSize = m_cSource.remaining_text().find_first_of(lsRightDelimiters, 1);
-    std::string_view lsStr = m_cSource.remaining_text().substr(0, lnSize);
-    return push_token(Token::Type::STRING, lsStr);
+    std::string_view lsRemaining = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemaining.size(); i++)
+    {
+        const char c = lsRemaining[i];
+
+        if (lsHardDelimiters.find(c) != std::string::npos)
+        {
+            // At hard delimiter. End the string.
+            return push_token(Token::Type::STRING, lsRemaining.substr(0, i));
+        }
+        else if (lsSoftDelimiters.find(c) == std::string::npos)
+        {
+            // Not at hard or soft delimiter. Keep going.
+            continue;
+        }
+
+        // At a soft delimiter. Check preceding/following characters.
+        switch (m_eState)
+        {
+            case State::INTERP_STR_DQUOTE:
+            case State::STRING_CONSTANT:
+                if (i == 0 || lsRemaining[i - 1] != '\\')
+                {
+                    // Here:   echo ""      or here:    echo "hello"
+                    //               ^                             ^
+                    return push_token(Token::Type::STRING, lsRemaining.substr(0, i));
+                }
+
+                break;
+            case State::INTERP_STR_SQUOTE:
+            case State::LITERAL_STRING_BEGIN:
+                if (lsRemaining.size() == i + 1 || lsRemaining[i + 1] != SQUOTE)
+                {
+                    // At end of text, or preceding is not a '. End the string.
+                    return push_token(Token::Type::STRING, lsRemaining.substr(0, i));
+                }
+                else
+                {
+                    i++;
+                }
+
+                break;
+            default:
+                return push_token(Token::Type::STRING, lsRemaining.substr(0, i));
+        }
+    }
+
+    if (lsVimErrorUnclosed.empty())
+    {
+        throw std::runtime_error("unreachable");
+    }
+    else
+    {
+        throw VimError(lsVimErrorUnclosed, m_cSource.context());
+    }
 }
