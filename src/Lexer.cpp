@@ -315,6 +315,7 @@ bool Lexer::match()
                         m_eState = State::INTERP_STR_SQUOTE;
                         break;
                     case Token::Type::SLASH:
+                        // TODO (gh-170): :catch /{pattern}/ can be delimited with any character
                         m_eState = State::PATTERN;
                         break;
                     default:
