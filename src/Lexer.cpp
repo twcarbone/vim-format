@@ -366,6 +366,7 @@ bool Lexer::match()
                     next_state();
                     return push_token(Token::Type::L_BRACE, c);
                 case '}':
+                    // test/error/E1278_1.out
                     throw VimError("E1278", m_cSource.context());
             }
 
