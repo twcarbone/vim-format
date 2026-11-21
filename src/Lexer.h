@@ -37,20 +37,11 @@ public:
 
     /**
      *  @brief
-     *      Return the next Token. Returns 'END' Token at EOF.
+     *      Fill buffer of with all Tokens.
      *
      *  @throws
      *      std::runtime_error if Token is unrecognized.
      *      std::runtime_error if Token cannot be disambiguated.
-     */
-    void next();
-
-    /**
-     *  @brief
-     *      Fill buffer of with all Tokens.
-     *
-     *  @throws
-     *      See Lexer::next().
      */
     void tokenize();
 
@@ -83,7 +74,6 @@ private:
     };
 
     State m_eState;
-    Token* m_pCurrToken;
     Token* m_pEndMarker;
     Token* m_pCount;
     size_t m_nBraceLevel;
@@ -98,10 +88,10 @@ private:
 
     void next_state();
 
-    void match();
+    void extract_tokens();
     bool disambiguate(Token* token);
-    void retype_keyword(Token* token);
 
+    bool push_token(Token* token);
     bool push_token(Token::Type type, char lexeme);
     bool push_token(Token::Type type, std::string_view lexeme);
     bool push_token(Token::Type type, const std::string& lexeme);

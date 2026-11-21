@@ -16,7 +16,6 @@ const char SQUOTE = '\'';
 Lexer::Lexer(const Context& acContext) :
     // clang-format off
     m_eState { State::NONE },
-    m_pCurrToken { nullptr },
     m_pEndMarker { nullptr },
     m_pCount { nullptr },
     m_nBraceLevel { 0 },
@@ -186,7 +185,7 @@ void Lexer::tokenize()
 
     while (true)
     {
-        next();
+        extract_tokens();
 
         if (m_lTokens.back()->type() == Token::Type::END)
         {
@@ -216,24 +215,18 @@ Token Lexer::token(size_t anIdx) const
     return *m_lTokens.at(anIdx);
 }
 
-void Lexer::next()
+/**
+ *  Extract one or many tokens.
+ */
+void Lexer::extract_tokens()
 {
     if (m_cSource.eof())
     {
         // TODO (gh-6): throw exception if EOF has already been returned
         push_token(Token::Type::END, std::string { "EOF" });
-    }
-    else
-    {
-        match();
-        m_cSource.advance(m_pCurrToken->str().size());
+        return;
     }
 
-    m_lTokens.push_back(m_pCurrToken);
-}
-
-void Lexer::match()
-{
     const char c = m_cSource.remaining_text().at(0);
 
     switch (m_eState)
@@ -243,7 +236,7 @@ void Lexer::match()
             if (std::isupper(c))
             {
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
-                m_pEndMarker = m_pCurrToken;
+                m_pEndMarker = m_lTokens.back();
                 next_state();
                 return;
             }
@@ -297,7 +290,7 @@ void Lexer::match()
 
             if (push_symbol())
             {
-                switch (m_pCurrToken->type())
+                switch (m_lTokens.back()->type())
                 {
                     case Token::Type::ASSIGN_HEREDOC:
                         m_eState = State::HEREDOC_START;
@@ -327,7 +320,7 @@ void Lexer::match()
 
             if (push_keyword())
             {
-                switch (m_pCurrToken->type())
+                switch (m_lTokens.back()->type())
                 {
                     case Token::Type::HD_EVAL:
                         m_eState = State::HEREDOC_EVAL_START;
@@ -335,9 +328,11 @@ void Lexer::match()
                     default:
                         break;
                 }
+
+                return;
             }
 
-            if (push_blob() || push_number() || push_command() || push_keyword() || push_regex())
+            if (push_blob() || push_number() || push_command() || push_regex())
             {
                 return;
             }
@@ -586,113 +581,6 @@ bool Lexer::disambiguate(Token* apCurrentToken)
     return !apCurrentToken->is_ambiguous();
 }
 
-void Lexer::retype_keyword(Token* apCurrentToken)
-{
-    switch (apCurrentToken->type())
-    {
-        case Token::Type::FN_ABORT:
-        case Token::Type::FN_CLOSURE:
-        case Token::Type::FN_DICT:
-        case Token::Type::FN_RANGE:
-            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
-            {
-                Token* pPrevToken = *rit;
-
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                    case Token::Type::CONTINUATION:
-                    case Token::Type::FN_ABORT:
-                    case Token::Type::FN_CLOSURE:
-                    case Token::Type::FN_DICT:
-                    case Token::Type::FN_RANGE:
-                        continue;
-                    case Token::Type::R_PAREN:
-                        return;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        return;
-                }
-            }
-
-            [[fallthrough]];
-        case Token::Type::IN:
-            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
-            {
-                Token* pPrevToken = *rit;
-
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                    case Token::Type::CONTINUATION:
-                        continue;
-                    case Token::Type::R_BRACKET:
-                    case Token::Type::IDENTIFIER:
-                        return;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        return;
-                }
-            }
-
-            [[fallthrough]];
-        case Token::Type::OP_IS:
-        case Token::Type::OP_ISNOT:
-            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
-            {
-                Token* pPrevToken = *rit;
-
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                    case Token::Type::CONTINUATION:
-                        continue;
-                    case Token::Type::IDENTIFIER:
-                    case Token::Type::INTEGER:
-                    case Token::Type::SQUOTE:
-                    case Token::Type::DQUOTE:
-                    case Token::Type::FLOAT:
-                    case Token::Type::R_BRACKET:
-                    case Token::Type::R_PAREN:
-                        return;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        return;
-                }
-            }
-
-            [[fallthrough]];
-        case Token::Type::HD_EVAL:
-        case Token::Type::HD_TRIM:
-            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
-            {
-                Token* pPrevToken = *rit;
-
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                    case Token::Type::CONTINUATION:
-                    case Token::Type::HD_EVAL:
-                    case Token::Type::HD_TRIM:
-                        continue;
-                    case Token::Type::ASSIGN_HEREDOC:
-                        return;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        return;
-                }
-            }
-
-            [[fallthrough]];
-        default:
-            throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
-    }
-}
-
 bool Lexer::push_comment()
 {
     if (m_cSource.remaining_text().at(0) != '"')
@@ -860,21 +748,137 @@ bool Lexer::push_keyword()
         return false;
     }
 
+    Token* pToken = nullptr;
+
     for (const Keyword& lcKeyword : m_lKeywords)
     {
-        if (!vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
+        if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
         {
-            continue;
+            pToken = new Token(lcKeyword.eTokenType, lcKeyword.sFull, m_cSource.pos());
+            break;
         }
-
-        push_token(lcKeyword.eTokenType, lcKeyword.sFull);
-
-        retype_keyword(m_pCurrToken);
-
-        return true;
     }
 
-    return false;
+    if (pToken == nullptr)
+    {
+        return false;
+    }
+
+    // We matched a keyword. Check the context to see if it stays a keyword.
+    //
+    // Example:
+    //
+    //  let is = 1     <-- 'is' is an identifier
+    //  echo a is b    <-- 'is' is a keyword
+
+    switch (pToken->type())
+    {
+        case Token::Type::FN_ABORT:
+        case Token::Type::FN_CLOSURE:
+        case Token::Type::FN_DICT:
+        case Token::Type::FN_RANGE:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                    case Token::Type::FN_ABORT:
+                    case Token::Type::FN_CLOSURE:
+                    case Token::Type::FN_DICT:
+                    case Token::Type::FN_RANGE:
+                        continue;
+                    case Token::Type::R_PAREN:
+                        goto end;
+                    default:
+                        pToken->setType(Token::Type::IDENTIFIER);
+                        goto end;
+                }
+            }
+
+            break;
+        case Token::Type::IN:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                        continue;
+                    case Token::Type::R_BRACKET:
+                    case Token::Type::IDENTIFIER:
+                        goto end;
+                    default:
+                        pToken->setType(Token::Type::IDENTIFIER);
+                        goto end;
+                }
+            }
+
+            break;
+        case Token::Type::OP_IS:
+        case Token::Type::OP_ISNOT:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                        continue;
+                    case Token::Type::IDENTIFIER:
+                    case Token::Type::INTEGER:
+                    case Token::Type::SQUOTE:
+                    case Token::Type::DQUOTE:
+                    case Token::Type::FLOAT:
+                    case Token::Type::R_BRACKET:
+                    case Token::Type::R_PAREN:
+                        goto end;
+                    default:
+                        pToken->setType(Token::Type::IDENTIFIER);
+                        goto end;
+                }
+            }
+
+            break;
+        case Token::Type::HD_EVAL:
+        case Token::Type::HD_TRIM:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                    case Token::Type::HD_EVAL:
+                    case Token::Type::HD_TRIM:
+                        continue;
+                    case Token::Type::ASSIGN_HEREDOC:
+                        goto end;
+                    default:
+                        pToken->setType(Token::Type::IDENTIFIER);
+                        goto end;
+                }
+            }
+
+            break;
+        default:
+            throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
+    }
+
+end:
+
+    push_token(pToken);
+    return true;
 }
 
 bool Lexer::push_regex()
@@ -914,7 +918,7 @@ bool Lexer::push_number()
         if (m_cSource.column() == m_cSource.indent() && lnBase == 10)
         {
             // This integer may be a [count] preceding an ex command (eg :4echow 'foo').
-            m_pCount = m_pCurrToken;
+            m_pCount = m_lTokens.back();
         }
 
         return true;
@@ -958,12 +962,22 @@ bool Lexer::push_token(Token::Type aeTokenType, std::string_view asLexeme)
 
 bool Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
 {
-    m_pCurrToken = new Token(aeTokenType, asLexeme, m_cSource.pos());
+    return push_token(new Token(aeTokenType, asLexeme, m_cSource.pos()));
+}
 
-    if (m_pCurrToken->is_ambiguous() && !disambiguate(m_pCurrToken))
+bool Lexer::push_token(Token* apToken)
+{
+    if (apToken->is_ambiguous() && !disambiguate(apToken))
     {
         throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
     }
+
+    if (apToken->type() != Token::Type::END)
+    {
+        m_cSource.advance(apToken->str().size());
+    }
+
+    m_lTokens.push_back(apToken);
 
     return true;
 }
