@@ -225,18 +225,14 @@ void Lexer::next()
     }
     else
     {
-        if (!match())
-        {
-            throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.context());
-        }
-
+        match();
         m_cSource.advance(m_pCurrToken->str().size());
     }
 
     m_lTokens.push_back(m_pCurrToken);
 }
 
-bool Lexer::match()
+void Lexer::match()
 {
     const char c = m_cSource.remaining_text().at(0);
 
@@ -249,7 +245,7 @@ bool Lexer::match()
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
                 m_pEndMarker = m_pCurrToken;
                 next_state();
-                return true;
+                return;
             }
 
             [[fallthrough]];
@@ -257,7 +253,8 @@ bool Lexer::match()
             if (c == SQUOTE)
             {
                 m_eState = State::NONE;
-                return push_token(Token::Type::SQUOTE, c);
+                push_token(Token::Type::SQUOTE, c);
+                return;
             }
 
             [[fallthrough]];
@@ -265,7 +262,8 @@ bool Lexer::match()
             if (c == DQUOTE)
             {
                 m_eState = State::NONE;
-                return push_token(Token::Type::DQUOTE, c);
+                push_token(Token::Type::DQUOTE, c);
+                return;
             }
 
             [[fallthrough]];
@@ -274,7 +272,8 @@ bool Lexer::match()
             {
                 case '{':
                     m_nBraceLevel++;
-                    return push_token(Token::Type::L_BRACE, c);
+                    push_token(Token::Type::L_BRACE, c);
+                    return;
                 case '}':
                     if (m_nBraceLevel == 0)
                     {
@@ -285,14 +284,15 @@ bool Lexer::match()
                         m_nBraceLevel--;
                     }
 
-                    return push_token(Token::Type::R_BRACE, c);
+                    push_token(Token::Type::R_BRACE, c);
+                    return;
             }
 
             [[fallthrough]];
         case State::NONE:
             if (push_register() || push_comment() || push_continuation())
             {
-                return true;
+                return;
             }
 
             if (push_symbol())
@@ -322,7 +322,7 @@ bool Lexer::match()
                         break;
                 }
 
-                return true;
+                return;
             }
 
             if (push_keyword())
@@ -339,7 +339,7 @@ bool Lexer::match()
 
             if (push_blob() || push_number() || push_command() || push_keyword() || push_regex())
             {
-                return true;
+                return;
             }
 
             break;
@@ -347,7 +347,8 @@ bool Lexer::match()
             if (c == SQUOTE)
             {
                 m_eState = State::NONE;
-                return push_token(Token::Type::SQUOTE, c);
+                push_token(Token::Type::SQUOTE, c);
+                return;
             }
 
             [[fallthrough]];
@@ -355,7 +356,8 @@ bool Lexer::match()
             if (c == DQUOTE)
             {
                 m_eState = State::NONE;
-                return push_token(Token::Type::DQUOTE, c);
+                push_token(Token::Type::DQUOTE, c);
+                return;
             }
 
             [[fallthrough]];
@@ -364,7 +366,8 @@ bool Lexer::match()
             {
                 case '{':
                     next_state();
-                    return push_token(Token::Type::L_BRACE, c);
+                    push_token(Token::Type::L_BRACE, c);
+                    return;
                 case '}':
                     // test/error/E1278_1.out
                     throw VimError("E1278", m_cSource.context());
@@ -377,48 +380,56 @@ bool Lexer::match()
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
                 m_pEndMarker = nullptr;
                 next_state();
-                return true;
+                return;
             }
             else if (c == '\n')
             {
                 if (m_lTokens.back()->type() == Token::Type::NEWLINE)
                 {
-                    return push_token(Token::Type::STRING, std::string { "" });
+                    push_token(Token::Type::STRING, std::string { "" });
+                    return;
                 }
 
-                return push_token(Token::Type::NEWLINE, '\n');
+                push_token(Token::Type::NEWLINE, '\n');
+                return;
             }
 
-            return push_string();
+            push_string();
+            return;
         case State::LITERAL_STRING_BEGIN:
             push_string();
             next_state();
-            return true;
+            return;
         case State::LITERAL_STRING_END:
             next_state();
-            return push_token(Token::Type::SQUOTE, c);
+            push_token(Token::Type::SQUOTE, c);
+            return;
         case State::STRING_CONSTANT:
             if (c == DQUOTE)
             {
                 next_state();
-                return push_token(Token::Type::DQUOTE, c);
+                push_token(Token::Type::DQUOTE, c);
+                return;
             }
 
-            return push_string();
+            push_string();
+            return;
         case State::PATTERN:
             if (c == '/')
             {
                 next_state();
-                return push_token(Token::Type::SLASH, c);
+                push_token(Token::Type::SLASH, c);
+                return;
             }
 
             // TODO (gh-141): Add support for escaped forward slash in patterns
-            return push_string();
+            push_string();
+            return;
         default:
             throw std::runtime_error("Lexer::match(): fall-thru to unknown state");
     }
 
-    return false;
+    throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.context());
 }
 
 void Lexer::next_state()

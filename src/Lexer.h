@@ -98,7 +98,7 @@ private:
 
     void next_state();
 
-    bool match();
+    void match();
     bool disambiguate(Token* token);
     void retype_keyword(Token* token);
 
