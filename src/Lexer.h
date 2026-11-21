@@ -91,20 +91,22 @@ private:
     void extract_tokens();
     bool disambiguate(Token* token);
 
-    bool push_token(Token* token);
-    bool push_token(Token::Type type, char lexeme);
-    bool push_token(Token::Type type, std::string_view lexeme);
-    bool push_token(Token::Type type, const std::string& lexeme);
-    bool push_regex();
-    bool push_symbol();
-    bool push_string();
-    bool push_command();
-    bool push_keyword();
-    bool push_comment();
-    bool push_register();
-    bool push_number();
-    bool push_blob();
-    bool push_continuation();
+    void push_token(Token* token);
+    void push_token(Token::Type type, char lexeme);
+    void push_token(Token::Type type, std::string_view lexeme);
+    void push_token(Token::Type type, const std::string& lexeme);
+
+    void push_string();
+
+    bool try_push_regex();
+    bool try_push_symbol();
+    bool try_push_command();
+    bool try_push_keyword();
+    bool try_push_comment();
+    bool try_push_register();
+    bool try_push_number();
+    bool try_push_blob();
+    bool try_push_continuation();
 };
 
 #endif  // TOKENIZER_H
