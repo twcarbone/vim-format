@@ -222,7 +222,6 @@ void Lexer::extract_tokens()
 {
     if (m_cSource.eof())
     {
-        // TODO (gh-6): throw exception if EOF has already been returned
         push_token(Token::Type::END, std::string { "EOF" });
         return;
     }
