@@ -211,7 +211,6 @@ const Source& Lexer::source() const
 
 Token Lexer::token(size_t anIdx) const
 {
-    // TODO (gh-7): throw IndexError
     return *m_lTokens.at(anIdx);
 }
 
