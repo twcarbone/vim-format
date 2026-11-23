@@ -6,6 +6,7 @@
 const std::unordered_map<std::string, std::string> VimError::s_mErrors {
     // clang-format off
     { "E15", "Invalid expression" },
+    { "E114", "Missing double quote" },
     { "E115", "Missing single quote" },
     { "E116", "Invalid arguments" },
     { "E121", "Undefined variable" },

@@ -243,18 +243,14 @@ void Lexer::extract_tokens()
         case State::INTERP_EXP_SQUOTE:
             if (c == SQUOTE)
             {
-                m_eState = State::NONE;
-                push_token(Token::Type::SQUOTE, c);
-                return;
+                throw VimError("E1279", m_cSource.context());
             }
 
             [[fallthrough]];
         case State::INTERP_EXP_DQUOTE:
             if (c == DQUOTE)
             {
-                m_eState = State::NONE;
-                push_token(Token::Type::DQUOTE, c);
-                return;
+                throw VimError("E1279", m_cSource.context());
             }
 
             [[fallthrough]];
@@ -294,23 +290,24 @@ void Lexer::extract_tokens()
                         m_eState = State::HEREDOC_START;
                         break;
                     case Token::Type::DQUOTE:
-                        m_eState = State::STRING_CONSTANT;
-                        break;
+                        push_string_constant();
+                        return;
                     case Token::Type::SQUOTE:
-                        m_eState = State::LITERAL_STRING_BEGIN;
-                        break;
+                        push_literal_string();
+                        return;
                     case Token::Type::STR_INTERP_DQUOTE:
-                        m_eState = State::INTERP_STR_DQUOTE;
-                        break;
+                        push_interp_string_constant();
+                        return;
                     case Token::Type::STR_INTERP_SQUOTE:
-                        m_eState = State::INTERP_STR_SQUOTE;
-                        break;
+                        push_interp_literal_string();
+                        return;
                     case Token::Type::SLASH:
+                        // TODO (gh-141): Add support for escaped forward slash in patterns
                         // TODO (gh-170): :catch /{pattern}/ can be delimited with any character
                         m_eState = State::PATTERN;
                         break;
                     default:
-                        break;
+                        return;
                 }
 
                 return;
@@ -336,87 +333,27 @@ void Lexer::extract_tokens()
             }
 
             break;
-        case State::INTERP_STR_SQUOTE:
-            if (c == SQUOTE)
-            {
-                m_eState = State::NONE;
-                push_token(Token::Type::SQUOTE, c);
-                return;
-            }
-
-            [[fallthrough]];
-        case State::INTERP_STR_DQUOTE:
-            if (c == DQUOTE)
-            {
-                m_eState = State::NONE;
-                push_token(Token::Type::DQUOTE, c);
-                return;
-            }
-
-            [[fallthrough]];
-        case State::HEREDOC_EVAL_STR:
-            switch (c)
-            {
-                case '{':
-                    next_state();
-                    push_token(Token::Type::L_BRACE, c);
-                    return;
-                case '}':
-                    // test/error/E1278_1.out
-                    throw VimError("E1278", m_cSource.context());
-            }
-
-            [[fallthrough]];
         case State::HEREDOC:
             if (m_pEndMarker != nullptr && (m_cSource.line_text() == m_pEndMarker->str()))
             {
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
                 m_pEndMarker = nullptr;
-                next_state();
-                return;
+                m_eState = State::NONE;
             }
-            else if (c == '\n')
+            else
             {
-                if (m_lTokens.back()->type() == Token::Type::NEWLINE)
-                {
-                    push_token(Token::Type::STRING, std::string { "" });
-                    return;
-                }
-
-                push_token(Token::Type::NEWLINE, '\n');
-                return;
+                push_heredoc_string();
             }
 
-            push_string();
             return;
-        case State::LITERAL_STRING_BEGIN:
-            push_string();
-            next_state();
+        case State::INTERP_STR_SQUOTE:
+            push_interp_literal_string();
             return;
-        case State::LITERAL_STRING_END:
-            next_state();
-            push_token(Token::Type::SQUOTE, c);
+        case State::INTERP_STR_DQUOTE:
+            push_interp_string_constant();
             return;
-        case State::STRING_CONSTANT:
-            if (c == DQUOTE)
-            {
-                next_state();
-                push_token(Token::Type::DQUOTE, c);
-                return;
-            }
-
-            push_string();
-            return;
-        case State::PATTERN:
-            if (c == '/')
-            {
-                next_state();
-                push_token(Token::Type::SLASH, c);
-                return;
-            }
-
-            // TODO (gh-141): Add support for escaped forward slash in patterns
-            push_string();
+        case State::HEREDOC_EVAL_STR:
+            push_heredoc_eval_string();
             return;
         default:
             throw std::runtime_error("Lexer::match(): fall-thru to unknown state");
@@ -989,106 +926,209 @@ void Lexer::push_token(Token* apToken)
     m_lTokens.push_back(apToken);
 }
 
-void Lexer::push_string()
+/**
+ *  KD 1: String tokenizing
+ *
+ *  String processing has a lot of shared functionality. For example, tokenizing a
+ *  literal string vs. interpolated literal string are essentially the same thing. In the
+ *  latter case, curly braces act as delimiters in addition to single quotes. At one
+ *  point (Nov 2026), string processing was handled by one giant function. It was nice
+ *  that the shared logic was co-located, but interleaving different states, delimiters,
+ *  and error conditions became too much to keep track of. It was decided to handle
+ *  string processing in separate functions, even though the logic is somewhat repeated.
+ */
+
+void Lexer::push_literal_string()
 {
-    // A hard delimiter ends a string unconditionally.
-    std::string lsHardDelimiters = "";
+    std::string_view lsRemainingText = m_cSource.remaining_text();
 
-    // A soft delimiter ends a string only if some other conditions are satisfied. For
-    // example, and " ends a string constant, but only if it isn't preceded by a \.
-    std::string lsSoftDelimiters = "";
-
-    std::string lsVimErrorUnclosed = "";
-
-    switch (m_eState)
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
     {
-        case State::HEREDOC:
-            lsHardDelimiters = "\n";
-            break;
-        case State::HEREDOC_EVAL_STR:
-            lsHardDelimiters = "{}\n";
-            break;
-        case State::INTERP_STR_SQUOTE:
-            lsHardDelimiters = "{}";
-            lsSoftDelimiters = "'";
-            lsVimErrorUnclosed = "E115";
-            break;
-        case State::INTERP_STR_DQUOTE:
-            lsHardDelimiters = "{}";
-            lsSoftDelimiters = "\"";
-            break;
-        case State::LITERAL_STRING_BEGIN:
-            lsSoftDelimiters = "'";
-            lsVimErrorUnclosed = "E115";
-            break;
-        case State::STRING_CONSTANT:
-            lsSoftDelimiters = "\"";
-            break;
-        case State::PATTERN:
-            lsHardDelimiters = "/";
-            break;
-        default:
-            throw std::runtime_error("attempted call to Lexer::push_string when not in string state");
-    }
+        const char c = lsRemainingText[i];
 
-    std::string_view lsRemaining = m_cSource.remaining_text();
-
-    for (size_t i = 0; i < lsRemaining.size(); i++)
-    {
-        const char c = lsRemaining[i];
-
-        if (lsHardDelimiters.find(c) != std::string::npos)
+        if (c != '\'')
         {
-            // At hard delimiter. End the string.
-            push_token(Token::Type::STRING, lsRemaining.substr(0, i));
+            continue;
+        }
+        else if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != c)
+        {
+            push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+            push_token(Token::Type::SQUOTE, c);
             return;
         }
-        else if (lsSoftDelimiters.find(c) == std::string::npos)
+        else
         {
-            // Not at hard or soft delimiter. Keep going.
+            i++;
+        }
+    }
+
+    throw VimError("E115", m_cSource.context());
+}
+
+void Lexer::push_interp_literal_string()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c != '\'' && c != '{' && c != '}')
+        {
             continue;
         }
 
-        // At a soft delimiter. Check preceding/following characters.
-        switch (m_eState)
+        if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != c)
         {
-            case State::INTERP_STR_DQUOTE:
-            case State::STRING_CONSTANT:
-                if (i == 0 || lsRemaining[i - 1] != '\\')
-                {
-                    // Here:   echo ""      or here:    echo "hello"
-                    //               ^                             ^
-                    push_token(Token::Type::STRING, lsRemaining.substr(0, i));
+            switch (c)
+            {
+                case '\'':
+                    push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                    push_token(Token::Type::SQUOTE, c);
+                    m_eState = State::NONE;
                     return;
-                }
-
-                break;
-            case State::INTERP_STR_SQUOTE:
-            case State::LITERAL_STRING_BEGIN:
-                if (lsRemaining.size() == i + 1 || lsRemaining[i + 1] != SQUOTE)
-                {
-                    // At end of text, or preceding is not a '. End the string.
-                    push_token(Token::Type::STRING, lsRemaining.substr(0, i));
+                case '{':
+                    push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                    push_token(Token::Type::L_BRACE, c);
+                    m_eState = State::INTERP_EXP_SQUOTE;
                     return;
-                }
-                else
-                {
-                    i++;
-                }
-
-                break;
-            default:
-                push_token(Token::Type::STRING, lsRemaining.substr(0, i));
-                return;
+                case '}':
+                    // test/error/E1278_1.out
+                    throw VimError("E1278", m_cSource.context());
+            }
+        }
+        else
+        {
+            i++;
         }
     }
 
-    if (lsVimErrorUnclosed.empty())
+    throw VimError("E115", m_cSource.context());
+}
+
+void Lexer::push_string_constant()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
     {
-        throw std::runtime_error("unreachable");
+        const char c = lsRemainingText[i];
+
+        if (c != DQUOTE)
+        {
+            continue;
+        }
+        if (i == 0 || lsRemainingText[i - 1] != '\\')
+        {
+            push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+            push_token(Token::Type::DQUOTE, c);
+            return;
+        }
     }
-    else
+
+    throw VimError("E114", m_cSource.context());
+}
+
+void Lexer::push_interp_string_constant()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
     {
-        throw VimError(lsVimErrorUnclosed, m_cSource.context());
+        const char c = lsRemainingText[i];
+
+        if (c == '"')
+        {
+            // " can only be escaped by a preceding \.
+
+            if (i == 0 || lsRemainingText[i - 1] != '\\')
+            {
+                push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                push_token(Token::Type::DQUOTE, c);
+                m_eState = State::NONE;
+                return;
+            }
+        }
+        else if (c == '{' || c == '}')
+        {
+            // { and } can be escaped by a preceding \ or doubling.
+
+            bool bBackSlashEscape = i > 0 && lsRemainingText[i - 1] == '\\';
+            bool bDoublingEscape = lsRemainingText.size() > i + 1 && lsRemainingText[i + 1] == c;
+
+            if (!bBackSlashEscape && !bDoublingEscape)
+            {
+                switch (c)
+                {
+                    case '{':
+                        push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                        push_token(Token::Type::L_BRACE, c);
+                        m_eState = State::INTERP_EXP_DQUOTE;
+                        return;
+                    case '}':
+                        // test/error/E1278_1.out
+                        throw VimError("E1278", m_cSource.context());
+                }
+            }
+            else if (bDoublingEscape)
+            {
+                i++;
+            }
+        }
+    }
+
+    throw VimError("E114", m_cSource.context());
+}
+
+void Lexer::push_heredoc_string()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        if (lsRemainingText[i] == '\n')
+        {
+            push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+            push_token(Token::Type::NEWLINE, lsRemainingText[i]);
+            return;
+        }
+    }
+}
+
+void Lexer::push_heredoc_eval_string()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c != '\n' && c != '{' && c != '}')
+        {
+            continue;
+        }
+
+        if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != c)
+        {
+            switch (c)
+            {
+                case '\n':
+                    push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                    push_token(Token::Type::NEWLINE, c);
+                    return;
+                case '{':
+                    push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                    push_token(Token::Type::L_BRACE, c);
+                    m_eState = State::HEREDOC_EVAL_EXP;
+                    return;
+                case '}':
+                    // test/error/E1278_1.out
+                    throw VimError("E1278", m_cSource.context());
+            }
+        }
+        else
+        {
+            i++;
+        }
     }
 }

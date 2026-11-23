@@ -96,7 +96,12 @@ private:
     void push_token(Token::Type type, std::string_view lexeme);
     void push_token(Token::Type type, const std::string& lexeme);
 
-    void push_string();
+    void push_literal_string();
+    void push_string_constant();
+    void push_interp_literal_string();
+    void push_interp_string_constant();
+    void push_heredoc_string();
+    void push_heredoc_eval_string();
 
     bool try_push_regex();
     bool try_push_symbol();
