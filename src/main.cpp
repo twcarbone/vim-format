@@ -162,6 +162,8 @@ int main(int argc, char** argv)
 
     Controller lcController(lcContext);
 
+    // TODO (gh-172): std::logic_error
+
     try
     {
         lcController.compile();
