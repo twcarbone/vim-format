@@ -229,6 +229,7 @@ void Lexer::extract_tokens()
         case State::INTERP_EXP_SQUOTE:
             if (c == SQUOTE)
             {
+                // test/error/E1279_1.out
                 throw VimError("E1279", m_cSource.context());
             }
 
@@ -237,6 +238,7 @@ void Lexer::extract_tokens()
         case State::INTERP_EXP_DQUOTE:
             if (c == DQUOTE)
             {
+                // test/error/E1279_2.out
                 throw VimError("E1279", m_cSource.context());
             }
 
