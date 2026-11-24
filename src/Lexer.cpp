@@ -303,10 +303,9 @@ void Lexer::extract_tokens()
                         push_interp_literal_string();
                         return;
                     case Token::Type::SLASH:
-                        // TODO (gh-141): Add support for escaped forward slash in patterns
                         // TODO (gh-170): :catch /{pattern}/ can be delimited with any character
-                        m_eState = State::PATTERN;
-                        break;
+                        push_pattern();
+                        return;
                     default:
                         return;
                 }
@@ -1152,5 +1151,26 @@ void Lexer::push_heredoc_eval_string()
         {
             i++;
         }
+    }
+}
+
+void Lexer::push_pattern()
+{
+    // TODO (gh-141): Add support for escaped forward slash in patterns
+
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c != '/')
+        {
+            continue;
+        }
+
+        push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+        push_token(Token::Type::SLASH, c);
+        return;
     }
 }

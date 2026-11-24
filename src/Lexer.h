@@ -104,6 +104,7 @@ private:
     void push_interp_string_constant();
     void push_heredoc_string();
     void push_heredoc_eval_string();
+    void push_pattern();
 
     bool try_push_regex();
     bool try_push_symbol();
