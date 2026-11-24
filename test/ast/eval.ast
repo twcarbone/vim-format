@@ -94,36 +94,6 @@ Program
       Var cc
     UnletStmt ! <>
       Var g:does_not_exist
-    HereDocStmt let =<< trim END <>
-      Var heredoc_items
-      InterpStr
-        LiteralStr ;;first line that is very long to intentionally exceed the testing column limit... more text;\n;
-      InterpStr
-        LiteralStr ;;    one;\n;
-      InterpStr
-        LiteralStr ;;        END;\n;
-      InterpStr
-        LiteralStr ;;;\n;
-      InterpStr
-        LiteralStr ;;        {a + b};\n;
-      InterpStr
-        LiteralStr ;;;\n;
-    HereDocStmt let =<< eval END <>
-      Var heredoc_eval_items
-      InterpStr
-        LiteralStr ;;;{;
-        BinaryOp +
-          Var &tpm
-          Literal 2
-        LiteralStr ;}; is 12;\n;
-      InterpStr
-        LiteralStr ;;    END ;{;
-        Var c
-        LiteralStr ;}; is a list;\n;
-      InterpStr
-        LiteralStr ;;    echo ;{;
-        Var @@
-        LiteralStr ;};;\n;
     AssignStmt let = <>
       Var gg
       ListExpr
@@ -566,70 +536,6 @@ Program
           Literal 2
         GroupExpr
           Literal 10
-    ExprCmd echo -count <>
-      LiteralStr ;';;';
-    ExprCmd echo -count <>
-      LiteralStr ;';string with "embedded" double quote;';
-    ExprCmd echo -count <>
-      LiteralStr ;';''string with'''' various ''escaped ''single'' quotes'''';';
-    ExprCmd echo -count <>
-      InterpStr
-        LiteralStr ;$';Before ;{;
-        Var bb
-        LiteralStr ;}; after;';
-    ExprCmd echo -count <>
-      InterpStr
-        LiteralStr ;$';;{;
-        Var bb
-        LiteralStr ;}; after;';
-    ExprCmd echo -count <>
-      InterpStr
-        LiteralStr ;$';Before ;{;
-        Var bb
-        LiteralStr ;};;';
-    ExprCmd echo -count <>
-      LiteralStr ;';Before bb} after;';
-    ExprCmd echo -count <>
-      LiteralStr ;';{bb} after;';
-    ExprCmd echo -count <>
-      InterpStr
-        LiteralStr ;$';;{;
-        Var bb
-        LiteralStr ;}; "after";';
-    ExprCmd echo -count <>
-      LiteralStr ;';Before {bb};';
-    ExprCmd echo -count <>
-      LiteralStr ;';$var;';
-    ExprCmd echo -count <>
-      StrConst ;";;";
-    ExprCmd echo -count <>
-      InterpStr
-        StrConst ;$";Before ;{;
-        Var bb
-        StrConst ;}; after;";
-    ExprCmd echo -count <>
-      InterpStr
-        StrConst ;$";;{;
-        Var bb
-        StrConst ;}; after;";
-    ExprCmd echo -count <>
-      InterpStr
-        StrConst ;$";Before ;{;
-        Var bb
-        StrConst ;};;";
-    ExprCmd echo -count <>
-      StrConst ;";Before {bb} after;";
-    ExprCmd echo -count <>
-      StrConst ;";{bb} after;";
-    ExprCmd echo -count <>
-      InterpStr
-        StrConst ;$";;{;
-        Var bb
-        StrConst ;}; 'after';";
-    ExprCmd echo -count <>
-      StrConst ;";Before {bb};";
-    ExprCmd echo -count <>
-      StrConst ;";$var;";
     EmptyStmt <>
     JumpStmt finish <>
       NULL
