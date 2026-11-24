@@ -235,6 +235,7 @@ void Lexer::extract_tokens()
             {
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
                 m_pEndMarker = m_lTokens.back();
+                expect_token(Token::Type::NEWLINE, "\n");
                 next_state();
                 return;
             }
@@ -334,13 +335,7 @@ void Lexer::extract_tokens()
 
             break;
         case State::HEREDOC:
-            if (m_pEndMarker != nullptr && (m_cSource.line_text() == m_pEndMarker->str()))
-            {
-                push_token(Token::Type::ENDMARKER, m_cSource.word());
-                m_pEndMarker = nullptr;
-                m_eState = State::NONE;
-            }
-            else
+            if (!try_push_heredoc_endmarker())
             {
                 push_heredoc_string();
             }
@@ -353,7 +348,11 @@ void Lexer::extract_tokens()
             push_interp_string_constant();
             return;
         case State::HEREDOC_EVAL_STR:
-            push_heredoc_eval_string();
+            if (!try_push_heredoc_endmarker())
+            {
+                push_heredoc_eval_string();
+            }
+
             return;
         default:
             throw std::runtime_error("Lexer::match(): fall-thru to unknown state");
@@ -615,6 +614,19 @@ bool Lexer::try_push_continuation()
             default:
                 return false;
         }
+    }
+
+    return false;
+}
+
+bool Lexer::try_push_heredoc_endmarker()
+{
+    if (m_pEndMarker != nullptr && (m_cSource.line_text() == m_pEndMarker->str()))
+    {
+        push_token(Token::Type::ENDMARKER, m_cSource.word());
+        m_pEndMarker = nullptr;
+        m_eState = State::NONE;
+        return true;
     }
 
     return false;
@@ -924,6 +936,16 @@ void Lexer::push_token(Token* apToken)
     }
 
     m_lTokens.push_back(apToken);
+}
+
+void Lexer::expect_token(Token::Type aeTokenType, const std::string& asLexeme)
+{
+    if (!vf::startswith(m_cSource.remaining_text(), asLexeme))
+    {
+        throw std::runtime_error("Expected " + vf::sanitize(asLexeme) + ".\n\n" + m_cSource.context());
+    }
+
+    push_token(aeTokenType, asLexeme);
 }
 
 /**

@@ -96,6 +96,8 @@ private:
     void push_token(Token::Type type, std::string_view lexeme);
     void push_token(Token::Type type, const std::string& lexeme);
 
+    void expect_token(Token::Type type, const std::string& lexeme);
+
     void push_literal_string();
     void push_string_constant();
     void push_interp_literal_string();
@@ -112,6 +114,7 @@ private:
     bool try_push_number();
     bool try_push_blob();
     bool try_push_continuation();
+    bool try_push_heredoc_endmarker();
 };
 
 #endif  // TOKENIZER_H
