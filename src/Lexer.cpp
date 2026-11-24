@@ -154,23 +154,7 @@ Lexer::Lexer(const Context& acContext) :
     },
     m_lReSpec {
         { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::IDENTIFIER },
-    },
-    m_gStateTransitions { {
-        { State::NONE,                      State::NONE },
-        { State::HEREDOC_START,             State::HEREDOC },
-        { State::HEREDOC,                   State::NONE },
-        { State::HEREDOC_EVAL_START,        State::HEREDOC_EVAL_STR },
-        { State::HEREDOC_EVAL_STR,          State::HEREDOC_EVAL_EXP },
-        { State::HEREDOC_EVAL_EXP,          State::HEREDOC_EVAL_STR },
-        { State::INTERP_STR_SQUOTE,         State::INTERP_EXP_SQUOTE },
-        { State::INTERP_STR_DQUOTE,         State::INTERP_EXP_DQUOTE },
-        { State::INTERP_EXP_SQUOTE,         State::INTERP_STR_SQUOTE },
-        { State::INTERP_EXP_DQUOTE,         State::INTERP_STR_DQUOTE },
-        { State::STRING_CONSTANT,           State::NONE },
-        { State::LITERAL_STRING_BEGIN,      State::LITERAL_STRING_END },
-        { State::LITERAL_STRING_END,        State::NONE },
-        { State::PATTERN,                   State::NONE },
-    } }
+    }
 // clang-format on
 {
 }
@@ -240,6 +224,7 @@ void Lexer::extract_tokens()
                 return;
             }
 
+            // Fallthrough so we still process anything between '=<<' and '{endmarker}'.
             [[fallthrough]];
         case State::INTERP_EXP_SQUOTE:
             if (c == SQUOTE)
@@ -247,6 +232,7 @@ void Lexer::extract_tokens()
                 throw VimError("E1279", m_cSource.context());
             }
 
+            // Fallthrough so we still process regular tokens in the expression.
             [[fallthrough]];
         case State::INTERP_EXP_DQUOTE:
             if (c == DQUOTE)
@@ -254,6 +240,7 @@ void Lexer::extract_tokens()
                 throw VimError("E1279", m_cSource.context());
             }
 
+            // Fallthrough so we still process regular tokens in the expression.
             [[fallthrough]];
         case State::HEREDOC_EVAL_EXP:
             switch (c)
@@ -276,6 +263,7 @@ void Lexer::extract_tokens()
                     return;
             }
 
+            // Fallthrough so we still process regular tokens in the expression.
             [[fallthrough]];
         case State::NONE:
             if (try_push_register() || try_push_comment() || try_push_continuation())
@@ -362,7 +350,29 @@ void Lexer::extract_tokens()
 
 void Lexer::next_state()
 {
-    m_eState = m_gStateTransitions[static_cast<int>(m_eState)][1];
+    // Only state transitions that need to be looked up dynamically are here. Elsewhere,
+    // the next state is set directly.
+
+    switch (m_eState)
+    {
+        case State::HEREDOC_START:
+            m_eState = State::HEREDOC;
+            break;
+        case State::HEREDOC_EVAL_START:
+            m_eState = State::HEREDOC_EVAL_STR;
+            break;
+        case State::HEREDOC_EVAL_EXP:
+            m_eState = State::HEREDOC_EVAL_STR;
+            break;
+        case State::INTERP_EXP_SQUOTE:
+            m_eState = State::INTERP_STR_SQUOTE;
+            break;
+        case State::INTERP_EXP_DQUOTE:
+            m_eState = State::INTERP_STR_DQUOTE;
+            break;
+        default:
+            throw std::runtime_error("attempted Lexer::next_state from non-transitioning state");
+    }
 }
 
 bool Lexer::disambiguate(Token* apCurrentToken)
