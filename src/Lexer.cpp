@@ -16,7 +16,6 @@ const char SQUOTE = '\'';
 Lexer::Lexer(const Context& acContext) :
     // clang-format off
     m_eState { State::NONE },
-    m_pCurrToken { nullptr },
     m_pEndMarker { nullptr },
     m_pCount { nullptr },
     m_nBraceLevel { 0 },
@@ -155,22 +154,7 @@ Lexer::Lexer(const Context& acContext) :
     },
     m_lReSpec {
         { std::regex { "^[a-zA-Z_][a-zA-Z0-9_]*" }, Token::Type::IDENTIFIER },
-    },
-    m_gStateTransitions { {
-        { State::NONE,                  State::NONE },
-        { State::HEREDOC_START,         State::HEREDOC },
-        { State::HEREDOC,               State::NONE },
-        { State::HEREDOC_EVAL_START,    State::HEREDOC_EVAL_STR },
-        { State::HEREDOC_EVAL_STR,      State::HEREDOC_EVAL_EXP },
-        { State::HEREDOC_EVAL_EXP,      State::HEREDOC_EVAL_STR },
-        { State::INTERP_STR_SQUOTE,     State::INTERP_EXP_SQUOTE },
-        { State::INTERP_STR_DQUOTE,     State::INTERP_EXP_DQUOTE },
-        { State::INTERP_EXP_SQUOTE,     State::INTERP_STR_SQUOTE },
-        { State::INTERP_EXP_DQUOTE,     State::INTERP_STR_DQUOTE },
-        { State::STRING_CONSTANT,       State::NONE },
-        { State::LITERAL_STRING,        State::NONE },
-        { State::PATTERN,               State::NONE },
-    } }
+    }
 // clang-format on
 {
 }
@@ -185,7 +169,7 @@ void Lexer::tokenize()
 
     while (true)
     {
-        next();
+        extract_tokens();
 
         if (m_lTokens.back()->type() == Token::Type::END)
         {
@@ -211,32 +195,20 @@ const Source& Lexer::source() const
 
 Token Lexer::token(size_t anIdx) const
 {
-    // TODO (gh-7): throw IndexError
     return *m_lTokens.at(anIdx);
 }
 
-void Lexer::next()
+/**
+ *  Extract one or many tokens.
+ */
+void Lexer::extract_tokens()
 {
     if (m_cSource.eof())
     {
-        // TODO (gh-6): throw exception if EOF has already been returned
         push_token(Token::Type::END, std::string { "EOF" });
-    }
-    else
-    {
-        if (!match())
-        {
-            throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.context());
-        }
-
-        m_cSource.advance(m_pCurrToken->str().size());
+        return;
     }
 
-    m_lTokens.push_back(m_pCurrToken);
-}
-
-bool Lexer::match()
-{
     const char c = m_cSource.remaining_text().at(0);
 
     switch (m_eState)
@@ -246,34 +218,39 @@ bool Lexer::match()
             if (std::isupper(c))
             {
                 push_token(Token::Type::ENDMARKER, m_cSource.word());
-                m_pEndMarker = m_pCurrToken;
+                m_pEndMarker = m_lTokens.back();
+                expect_token(Token::Type::NEWLINE, "\n");
                 next_state();
-                return true;
+                return;
             }
 
+            // Fallthrough so we still process anything between '=<<' and '{endmarker}'.
             [[fallthrough]];
         case State::INTERP_EXP_SQUOTE:
             if (c == SQUOTE)
             {
-                m_eState = State::NONE;
-                return push_token(Token::Type::SQUOTE, c);
+                // test/error/E1279_1.out
+                throw VimError("E1279", m_cSource.context());
             }
 
+            // Fallthrough so we still process regular tokens in the expression.
             [[fallthrough]];
         case State::INTERP_EXP_DQUOTE:
             if (c == DQUOTE)
             {
-                m_eState = State::NONE;
-                return push_token(Token::Type::DQUOTE, c);
+                // test/error/E1279_2.out
+                throw VimError("E1279", m_cSource.context());
             }
 
+            // Fallthrough so we still process regular tokens in the expression.
             [[fallthrough]];
         case State::HEREDOC_EVAL_EXP:
             switch (c)
             {
                 case '{':
                     m_nBraceLevel++;
-                    return push_token(Token::Type::L_BRACE, c);
+                    push_token(Token::Type::L_BRACE, c);
+                    return;
                 case '}':
                     if (m_nBraceLevel == 0)
                     {
@@ -284,48 +261,51 @@ bool Lexer::match()
                         m_nBraceLevel--;
                     }
 
-                    return push_token(Token::Type::R_BRACE, c);
+                    push_token(Token::Type::R_BRACE, c);
+                    return;
             }
 
+            // Fallthrough so we still process regular tokens in the expression.
             [[fallthrough]];
         case State::NONE:
-            if (push_register() || push_comment() || push_continuation())
+            if (try_push_register() || try_push_comment() || try_push_continuation())
             {
-                return true;
+                return;
             }
 
-            if (push_symbol())
+            if (try_push_symbol())
             {
-                switch (m_pCurrToken->type())
+                switch (m_lTokens.back()->type())
                 {
                     case Token::Type::ASSIGN_HEREDOC:
                         m_eState = State::HEREDOC_START;
                         break;
                     case Token::Type::DQUOTE:
-                        m_eState = State::STRING_CONSTANT;
-                        break;
+                        push_string_constant();
+                        return;
                     case Token::Type::SQUOTE:
-                        m_eState = State::LITERAL_STRING;
-                        break;
+                        push_literal_string();
+                        return;
                     case Token::Type::STR_INTERP_DQUOTE:
-                        m_eState = State::INTERP_STR_DQUOTE;
-                        break;
+                        push_interp_string_constant();
+                        return;
                     case Token::Type::STR_INTERP_SQUOTE:
-                        m_eState = State::INTERP_STR_SQUOTE;
-                        break;
+                        push_interp_literal_string();
+                        return;
                     case Token::Type::SLASH:
-                        m_eState = State::PATTERN;
-                        break;
+                        // TODO (gh-170): :catch /{pattern}/ can be delimited with any character
+                        push_pattern();
+                        return;
                     default:
-                        break;
+                        return;
                 }
 
-                return true;
+                return;
             }
 
-            if (push_keyword())
+            if (try_push_keyword())
             {
-                switch (m_pCurrToken->type())
+                switch (m_lTokens.back()->type())
                 {
                     case Token::Type::HD_EVAL:
                         m_eState = State::HEREDOC_EVAL_START;
@@ -333,96 +313,68 @@ bool Lexer::match()
                     default:
                         break;
                 }
+
+                return;
             }
 
-            if (push_blob() || push_number() || push_command() || push_keyword() || push_regex())
+            if (try_push_blob() || try_push_number() || try_push_command() || try_push_regex())
             {
-                return true;
+                return;
             }
 
             break;
-        case State::INTERP_STR_SQUOTE:
-            if (c == SQUOTE)
-            {
-                m_eState = State::NONE;
-                return push_token(Token::Type::SQUOTE, c);
-            }
-
-            [[fallthrough]];
-        case State::INTERP_STR_DQUOTE:
-            if (c == DQUOTE)
-            {
-                m_eState = State::NONE;
-                return push_token(Token::Type::DQUOTE, c);
-            }
-
-            [[fallthrough]];
-        case State::HEREDOC_EVAL_STR:
-            switch (c)
-            {
-                case '{':
-                    next_state();
-                    return push_token(Token::Type::L_BRACE, c);
-                case '}':
-                    throw VimError("E1278", m_cSource.context());
-            }
-
-            [[fallthrough]];
         case State::HEREDOC:
-            if (m_pEndMarker != nullptr && (m_cSource.line_text() == m_pEndMarker->str()))
+            if (!try_push_heredoc_endmarker())
             {
-                push_token(Token::Type::ENDMARKER, m_cSource.word());
-                m_pEndMarker = nullptr;
-                next_state();
-                return true;
-            }
-            else if (c == '\n')
-            {
-                if (m_lTokens.back()->type() == Token::Type::NEWLINE)
-                {
-                    return push_token(Token::Type::STRING, std::string { "" });
-                }
-
-                return push_token(Token::Type::NEWLINE, '\n');
+                push_heredoc_string();
             }
 
-            return push_string();
-        case State::LITERAL_STRING:
-            if (c == SQUOTE)
+            return;
+        case State::INTERP_STR_SQUOTE:
+            push_interp_literal_string();
+            return;
+        case State::INTERP_STR_DQUOTE:
+            push_interp_string_constant();
+            return;
+        case State::HEREDOC_EVAL_STR:
+            if (!try_push_heredoc_endmarker())
             {
-                next_state();
-                return push_token(Token::Type::SQUOTE, c);
+                push_heredoc_eval_string();
             }
 
-            return push_string();
-        case State::STRING_CONSTANT:
-            if (c == DQUOTE)
-            {
-                next_state();
-                return push_token(Token::Type::DQUOTE, c);
-            }
-
-            // TODO (gh-4): Add support for escaped quotes within a string token
-            return push_string();
-        case State::PATTERN:
-            if (c == '/')
-            {
-                next_state();
-                return push_token(Token::Type::SLASH, c);
-            }
-
-            // TODO (gh-141): Add support for escaped forward slash in patterns
-            return push_string();
+            return;
         default:
             throw std::runtime_error("Lexer::match(): fall-thru to unknown state");
     }
 
-    return false;
+    throw std::runtime_error("Error: unrecognized token.\n\n" + m_cSource.context());
 }
 
 void Lexer::next_state()
 {
-    m_eState = m_gStateTransitions[static_cast<int>(m_eState)][1];
+    // Only state transitions that need to be looked up dynamically are here. Elsewhere,
+    // the next state is set directly.
+
+    switch (m_eState)
+    {
+        case State::HEREDOC_START:
+            m_eState = State::HEREDOC;
+            break;
+        case State::HEREDOC_EVAL_START:
+            m_eState = State::HEREDOC_EVAL_STR;
+            break;
+        case State::HEREDOC_EVAL_EXP:
+            m_eState = State::HEREDOC_EVAL_STR;
+            break;
+        case State::INTERP_EXP_SQUOTE:
+            m_eState = State::INTERP_STR_SQUOTE;
+            break;
+        case State::INTERP_EXP_DQUOTE:
+            m_eState = State::INTERP_STR_DQUOTE;
+            break;
+        default:
+            throw std::runtime_error("attempted Lexer::next_state from non-transitioning state");
+    }
 }
 
 bool Lexer::disambiguate(Token* apCurrentToken)
@@ -574,114 +526,7 @@ bool Lexer::disambiguate(Token* apCurrentToken)
     return !apCurrentToken->is_ambiguous();
 }
 
-void Lexer::retype_keyword(Token* apCurrentToken)
-{
-    switch (apCurrentToken->type())
-    {
-        case Token::Type::FN_ABORT:
-        case Token::Type::FN_CLOSURE:
-        case Token::Type::FN_DICT:
-        case Token::Type::FN_RANGE:
-            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
-            {
-                Token* pPrevToken = *rit;
-
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                    case Token::Type::CONTINUATION:
-                    case Token::Type::FN_ABORT:
-                    case Token::Type::FN_CLOSURE:
-                    case Token::Type::FN_DICT:
-                    case Token::Type::FN_RANGE:
-                        continue;
-                    case Token::Type::R_PAREN:
-                        return;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        return;
-                }
-            }
-
-            [[fallthrough]];
-        case Token::Type::IN:
-            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
-            {
-                Token* pPrevToken = *rit;
-
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                    case Token::Type::CONTINUATION:
-                        continue;
-                    case Token::Type::R_BRACKET:
-                    case Token::Type::IDENTIFIER:
-                        return;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        return;
-                }
-            }
-
-            [[fallthrough]];
-        case Token::Type::OP_IS:
-        case Token::Type::OP_ISNOT:
-            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
-            {
-                Token* pPrevToken = *rit;
-
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                    case Token::Type::CONTINUATION:
-                        continue;
-                    case Token::Type::IDENTIFIER:
-                    case Token::Type::INTEGER:
-                    case Token::Type::SQUOTE:
-                    case Token::Type::DQUOTE:
-                    case Token::Type::FLOAT:
-                    case Token::Type::R_BRACKET:
-                    case Token::Type::R_PAREN:
-                        return;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        return;
-                }
-            }
-
-            [[fallthrough]];
-        case Token::Type::HD_EVAL:
-        case Token::Type::HD_TRIM:
-            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
-            {
-                Token* pPrevToken = *rit;
-
-                switch (pPrevToken->type())
-                {
-                    case Token::Type::TAB:
-                    case Token::Type::SPACE:
-                    case Token::Type::CONTINUATION:
-                    case Token::Type::HD_EVAL:
-                    case Token::Type::HD_TRIM:
-                        continue;
-                    case Token::Type::ASSIGN_HEREDOC:
-                        return;
-                    default:
-                        apCurrentToken->setType(Token::Type::IDENTIFIER);
-                        return;
-                }
-            }
-
-            [[fallthrough]];
-        default:
-            throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
-    }
-}
-
-bool Lexer::push_comment()
+bool Lexer::try_push_comment()
 {
     if (m_cSource.remaining_text().at(0) != '"')
     {
@@ -691,7 +536,8 @@ bool Lexer::push_comment()
     if (m_cSource.column() == m_cSource.indent())
     {
         // If " is the first non-whitespace of a line, it's a comment
-        return push_token(Token::Type::COMMENT, m_cSource.remaining_line());
+        push_token(Token::Type::COMMENT, m_cSource.remaining_line());
+        return true;
     }
 
     for (size_t i = 1; i < m_cSource.remaining_text().size(); i++)
@@ -710,10 +556,11 @@ bool Lexer::push_comment()
         }
     }
 
-    return push_token(Token::Type::COMMENT, m_cSource.remaining_line());
+    push_token(Token::Type::COMMENT, m_cSource.remaining_line());
+    return true;
 }
 
-bool Lexer::push_register()
+bool Lexer::try_push_register()
 {
     if (m_lTokens.empty() || m_lTokens.back()->type() != Token::Type::SIG_REG)
     {
@@ -734,7 +581,8 @@ bool Lexer::push_register()
         case '_':
         case '/':
         case '@':
-            return push_token(Token::Type::REGISTER, c);
+            push_token(Token::Type::REGISTER, c);
+            return true;
         case ':':
         case '.':
         case '%':
@@ -743,7 +591,8 @@ bool Lexer::push_register()
         default:
             if (std::isalnum(c))
             {
-                return push_token(Token::Type::REGISTER, c);
+                push_token(Token::Type::REGISTER, c);
+                return true;
             }
     }
 
@@ -751,7 +600,7 @@ bool Lexer::push_register()
     throw VimError("E354", m_cSource.context());
 }
 
-bool Lexer::push_continuation()
+bool Lexer::try_push_continuation()
 {
     // A line continuation consists of a newline, optional whitespace, and a backslash.
 
@@ -770,7 +619,8 @@ bool Lexer::push_continuation()
             case '\\':
             {
                 std::string_view lsText = m_cSource.remaining_text().substr(0, i - m_cSource.pos() + 1);
-                return push_token(Token::Type::CONTINUATION, lsText);
+                push_token(Token::Type::CONTINUATION, lsText);
+                return true;
             }
             default:
                 return false;
@@ -780,20 +630,34 @@ bool Lexer::push_continuation()
     return false;
 }
 
-bool Lexer::push_symbol()
+bool Lexer::try_push_heredoc_endmarker()
+{
+    if (m_pEndMarker != nullptr && (m_cSource.line_text() == m_pEndMarker->str()))
+    {
+        push_token(Token::Type::ENDMARKER, m_cSource.word());
+        m_pEndMarker = nullptr;
+        m_eState = State::NONE;
+        return true;
+    }
+
+    return false;
+}
+
+bool Lexer::try_push_symbol()
 {
     for (const Symbol& lcSymbol : m_lSymbols)
     {
         if (vf::startswith(m_cSource.remaining_text(), lcSymbol.sLexeme))
         {
-            return push_token(lcSymbol.eTokenType, lcSymbol.sLexeme);
+            push_token(lcSymbol.eTokenType, lcSymbol.sLexeme);
+            return true;
         }
     }
 
     return false;
 }
 
-bool Lexer::push_command()
+bool Lexer::try_push_command()
 {
     // A command must appear either as the first non-whitespace of the line, or preceded
     // by optional whitespace plus a line continuation or integer (eg, [n]echow).
@@ -826,7 +690,8 @@ maybe_excmd:
     {
         if (vf::startswith(m_cSource.remaining_text(), lcCommand.sFull, g_sKeyWordDelimiters))
         {
-            return push_token(lcCommand.eTokenType, lcCommand.sFull);
+            push_token(lcCommand.eTokenType, lcCommand.sFull);
+            return true;
         }
         else if (lcCommand.sAbrv.empty())
         {
@@ -834,38 +699,155 @@ maybe_excmd:
         }
         else if (vf::startswith(m_cSource.remaining_text(), lcCommand.sAbrv, g_sKeyWordDelimiters))
         {
-            return push_token(lcCommand.eTokenType, lcCommand.sAbrv);
+            push_token(lcCommand.eTokenType, lcCommand.sAbrv);
+            return true;
         }
     }
 
     return false;
 }
 
-bool Lexer::push_keyword()
+bool Lexer::try_push_keyword()
 {
     if (m_cSource.column() == m_cSource.indent())
     {
         return false;
     }
 
+    Token* pToken = nullptr;
+
     for (const Keyword& lcKeyword : m_lKeywords)
     {
-        if (!vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
+        if (vf::startswith(m_cSource.remaining_text(), lcKeyword.sFull, g_sKeyWordDelimiters))
         {
-            continue;
+            pToken = new Token(lcKeyword.eTokenType, lcKeyword.sFull, m_cSource.pos());
+            break;
         }
-
-        push_token(lcKeyword.eTokenType, lcKeyword.sFull);
-
-        retype_keyword(m_pCurrToken);
-
-        return true;
     }
 
-    return false;
+    if (pToken == nullptr)
+    {
+        return false;
+    }
+
+    // We matched a keyword. Check the context to see if it stays a keyword.
+    //
+    // Example:
+    //
+    //  let is = 1     <-- 'is' is an identifier
+    //  echo a is b    <-- 'is' is a keyword
+
+    switch (pToken->type())
+    {
+        case Token::Type::FN_ABORT:
+        case Token::Type::FN_CLOSURE:
+        case Token::Type::FN_DICT:
+        case Token::Type::FN_RANGE:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                    case Token::Type::FN_ABORT:
+                    case Token::Type::FN_CLOSURE:
+                    case Token::Type::FN_DICT:
+                    case Token::Type::FN_RANGE:
+                        continue;
+                    case Token::Type::R_PAREN:
+                        goto end;
+                    default:
+                        pToken->setType(Token::Type::IDENTIFIER);
+                        goto end;
+                }
+            }
+
+            break;
+        case Token::Type::IN:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                        continue;
+                    case Token::Type::R_BRACKET:
+                    case Token::Type::IDENTIFIER:
+                        goto end;
+                    default:
+                        pToken->setType(Token::Type::IDENTIFIER);
+                        goto end;
+                }
+            }
+
+            break;
+        case Token::Type::OP_IS:
+        case Token::Type::OP_ISNOT:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                        continue;
+                    case Token::Type::IDENTIFIER:
+                    case Token::Type::INTEGER:
+                    case Token::Type::SQUOTE:
+                    case Token::Type::DQUOTE:
+                    case Token::Type::FLOAT:
+                    case Token::Type::R_BRACKET:
+                    case Token::Type::R_PAREN:
+                        goto end;
+                    default:
+                        pToken->setType(Token::Type::IDENTIFIER);
+                        goto end;
+                }
+            }
+
+            break;
+        case Token::Type::HD_EVAL:
+        case Token::Type::HD_TRIM:
+            for (auto rit = m_lTokens.crbegin(); rit != m_lTokens.crend(); rit++)
+            {
+                Token* pPrevToken = *rit;
+
+                switch (pPrevToken->type())
+                {
+                    case Token::Type::TAB:
+                    case Token::Type::SPACE:
+                    case Token::Type::CONTINUATION:
+                    case Token::Type::HD_EVAL:
+                    case Token::Type::HD_TRIM:
+                        continue;
+                    case Token::Type::ASSIGN_HEREDOC:
+                        goto end;
+                    default:
+                        pToken->setType(Token::Type::IDENTIFIER);
+                        goto end;
+                }
+            }
+
+            break;
+        default:
+            throw std::runtime_error("Error: cannot re-type.\n\n" + m_cSource.context());
+    }
+
+end:
+
+    push_token(pToken);
+    return true;
 }
 
-bool Lexer::push_regex()
+bool Lexer::try_push_regex()
 {
     for (auto it = m_lReSpec.cbegin(); it != m_lReSpec.cend(); ++it)
     {
@@ -876,21 +858,23 @@ bool Lexer::push_regex()
         std::string lsText { m_cSource.remaining_text() };
         if (std::regex_search(lsText, lcMatch, lcRe))
         {
-            return push_token(leTokenType, lcMatch.str());
+            push_token(leTokenType, lcMatch.str());
+            return true;
         }
     }
 
     return false;
 }
 
-bool Lexer::push_number()
+bool Lexer::try_push_number()
 {
     std::string_view lsLexeme;
 
     // float
     if (vf::startswith_float(m_cSource.remaining_text(), lsLexeme))
     {
-        return push_token(Token::Type::FLOAT, std::string { lsLexeme });
+        push_token(Token::Type::FLOAT, std::string { lsLexeme });
+        return true;
     }
 
     // integer
@@ -902,7 +886,7 @@ bool Lexer::push_number()
         if (m_cSource.column() == m_cSource.indent() && lnBase == 10)
         {
             // This integer may be a [count] preceding an ex command (eg :4echow 'foo').
-            m_pCount = m_pCurrToken;
+            m_pCount = m_lTokens.back();
         }
 
         return true;
@@ -911,7 +895,7 @@ bool Lexer::push_number()
     return false;
 }
 
-bool Lexer::push_blob()
+bool Lexer::try_push_blob()
 {
     if (!vf::startswith(m_cSource.remaining_text(), "0z")
         && !(vf::startswith(m_cSource.remaining_text(), "0Z")))
@@ -931,62 +915,274 @@ bool Lexer::push_blob()
         throw VimError("E973", m_cSource.context());
     }
 
-    return push_token(Token::Type::BLOB, m_cSource.remaining_text().substr(0, lnEnd));
+    push_token(Token::Type::BLOB, m_cSource.remaining_text().substr(0, lnEnd));
+    return true;
 }
 
-bool Lexer::push_token(Token::Type aeTokenType, char asLexeme)
+void Lexer::push_token(Token::Type aeTokenType, char asLexeme)
 {
-    return push_token(aeTokenType, std::string { asLexeme });
+    push_token(aeTokenType, std::string { asLexeme });
 }
 
-bool Lexer::push_token(Token::Type aeTokenType, std::string_view asLexeme)
+void Lexer::push_token(Token::Type aeTokenType, std::string_view asLexeme)
 {
-    return push_token(aeTokenType, std::string { asLexeme });
+    push_token(aeTokenType, std::string { asLexeme });
 }
 
-bool Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
+void Lexer::push_token(Token::Type aeTokenType, const std::string& asLexeme)
 {
-    m_pCurrToken = new Token(aeTokenType, asLexeme, m_cSource.pos());
+    push_token(new Token(aeTokenType, asLexeme, m_cSource.pos()));
+}
 
-    if (m_pCurrToken->is_ambiguous() && !disambiguate(m_pCurrToken))
+void Lexer::push_token(Token* apToken)
+{
+    if (apToken->is_ambiguous() && !disambiguate(apToken))
     {
         throw std::runtime_error("Error: cannot disambiguate.\n\n" + m_cSource.context());
     }
 
-    return true;
-}
-
-bool Lexer::push_string()
-{
-    std::string lsRightDelimiters;
-    switch (m_eState)
+    if (apToken->type() != Token::Type::END)
     {
-        case State::HEREDOC:
-            lsRightDelimiters = "\n";
-            break;
-        case State::HEREDOC_EVAL_STR:
-            lsRightDelimiters = "{}\n";
-            break;
-        case State::INTERP_STR_SQUOTE:
-            lsRightDelimiters = "{}'";
-            break;
-        case State::INTERP_STR_DQUOTE:
-            lsRightDelimiters = "{}\"";
-            break;
-        case State::LITERAL_STRING:
-            lsRightDelimiters = "'";
-            break;
-        case State::STRING_CONSTANT:
-            lsRightDelimiters = "\"";
-            break;
-        case State::PATTERN:
-            lsRightDelimiters = "/";
-            break;
-        default:
-            throw std::runtime_error("attempted call to Lexer::push_string when not in string state");
+        m_cSource.advance(apToken->str().size());
     }
 
-    size_t lnSize = m_cSource.remaining_text().find_first_of(lsRightDelimiters, 1);
-    std::string_view lsStr = m_cSource.remaining_text().substr(0, lnSize);
-    return push_token(Token::Type::STRING, lsStr);
+    m_lTokens.push_back(apToken);
+}
+
+void Lexer::expect_token(Token::Type aeTokenType, const std::string& asLexeme)
+{
+    if (!vf::startswith(m_cSource.remaining_text(), asLexeme))
+    {
+        throw std::runtime_error("Expected " + vf::sanitize(asLexeme) + ".\n\n" + m_cSource.context());
+    }
+
+    push_token(aeTokenType, asLexeme);
+}
+
+/**
+ *  KD 1: String tokenizing
+ *
+ *  String processing has a lot of shared functionality. For example, tokenizing a
+ *  literal string vs. interpolated literal string are essentially the same thing. In the
+ *  latter case, curly braces act as delimiters in addition to single quotes. At one
+ *  point (Nov 2026), string processing was handled by one giant function. It was nice
+ *  that the shared logic was co-located, but interleaving different states, delimiters,
+ *  and error conditions became too much to keep track of. It was decided to handle
+ *  string processing in separate functions, even though the logic is somewhat repeated.
+ */
+
+void Lexer::push_literal_string()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c != '\'')
+        {
+            continue;
+        }
+        else if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != c)
+        {
+            push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+            push_token(Token::Type::SQUOTE, c);
+            return;
+        }
+        else
+        {
+            i++;
+        }
+    }
+
+    throw VimError("E115", m_cSource.context());
+}
+
+void Lexer::push_interp_literal_string()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c != '\'' && c != '{' && c != '}')
+        {
+            continue;
+        }
+
+        if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != c)
+        {
+            switch (c)
+            {
+                case '\'':
+                    push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                    push_token(Token::Type::SQUOTE, c);
+                    m_eState = State::NONE;
+                    return;
+                case '{':
+                    push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                    push_token(Token::Type::L_BRACE, c);
+                    m_eState = State::INTERP_EXP_SQUOTE;
+                    return;
+                case '}':
+                    // test/error/E1278_1.out
+                    throw VimError("E1278", m_cSource.context());
+            }
+        }
+        else
+        {
+            i++;
+        }
+    }
+
+    throw VimError("E115", m_cSource.context());
+}
+
+void Lexer::push_string_constant()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c != DQUOTE)
+        {
+            continue;
+        }
+        if (i == 0 || lsRemainingText[i - 1] != '\\')
+        {
+            push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+            push_token(Token::Type::DQUOTE, c);
+            return;
+        }
+    }
+
+    throw VimError("E114", m_cSource.context());
+}
+
+void Lexer::push_interp_string_constant()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c == '"')
+        {
+            // " can only be escaped by a preceding \.
+
+            if (i == 0 || lsRemainingText[i - 1] != '\\')
+            {
+                push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                push_token(Token::Type::DQUOTE, c);
+                m_eState = State::NONE;
+                return;
+            }
+        }
+        else if (c == '{' || c == '}')
+        {
+            // { and } can be escaped by a preceding \ or doubling.
+
+            bool bBackSlashEscape = i > 0 && lsRemainingText[i - 1] == '\\';
+            bool bDoublingEscape = lsRemainingText.size() > i + 1 && lsRemainingText[i + 1] == c;
+
+            if (!bBackSlashEscape && !bDoublingEscape)
+            {
+                switch (c)
+                {
+                    case '{':
+                        push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                        push_token(Token::Type::L_BRACE, c);
+                        m_eState = State::INTERP_EXP_DQUOTE;
+                        return;
+                    case '}':
+                        // test/error/E1278_1.out
+                        throw VimError("E1278", m_cSource.context());
+                }
+            }
+            else if (bDoublingEscape)
+            {
+                i++;
+            }
+        }
+    }
+
+    throw VimError("E114", m_cSource.context());
+}
+
+void Lexer::push_heredoc_string()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        if (lsRemainingText[i] == '\n')
+        {
+            push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+            push_token(Token::Type::NEWLINE, lsRemainingText[i]);
+            return;
+        }
+    }
+}
+
+void Lexer::push_heredoc_eval_string()
+{
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c != '\n' && c != '{' && c != '}')
+        {
+            continue;
+        }
+
+        if (lsRemainingText.size() == i + 1 || lsRemainingText[i + 1] != c)
+        {
+            switch (c)
+            {
+                case '\n':
+                    push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                    push_token(Token::Type::NEWLINE, c);
+                    return;
+                case '{':
+                    push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+                    push_token(Token::Type::L_BRACE, c);
+                    m_eState = State::HEREDOC_EVAL_EXP;
+                    return;
+                case '}':
+                    // test/error/E1278_1.out
+                    throw VimError("E1278", m_cSource.context());
+            }
+        }
+        else
+        {
+            i++;
+        }
+    }
+}
+
+void Lexer::push_pattern()
+{
+    // TODO (gh-141): Add support for escaped forward slash in patterns
+
+    std::string_view lsRemainingText = m_cSource.remaining_text();
+
+    for (size_t i = 0; i < lsRemainingText.size(); i++)
+    {
+        const char c = lsRemainingText[i];
+
+        if (c != '/')
+        {
+            continue;
+        }
+
+        push_token(Token::Type::STRING, lsRemainingText.substr(0, i));
+        push_token(Token::Type::SLASH, c);
+        return;
+    }
 }

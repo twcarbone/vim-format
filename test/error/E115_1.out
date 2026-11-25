@@ -1,0 +1,5 @@
+E115: Missing single quote
+
+test/error/E115_1.vim:1:7
+ 1 | echo 'hello ''world''
+   |       ^

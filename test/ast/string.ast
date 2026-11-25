@@ -1,0 +1,110 @@
+Program
+  StmtList
+    CommentStmt " literal string <trailing = no>
+    ExprCmd echo -count <>
+      LiteralStr ;';test;';
+    ExprCmd echo -count <>
+      LiteralStr ;';''test;';
+    ExprCmd echo -count <>
+      LiteralStr ;';test'';';
+    ExprCmd echo -count <>
+      LiteralStr ;';te''st;';
+    ExprCmd echo -count <>
+      LiteralStr ;';te''''s''t;';
+    ExprCmd echo -count <>
+      LiteralStr ;';'';';
+    EmptyStmt <>
+    CommentStmt " interpolated literal string <trailing = no>
+    ExprCmd echo -count <>
+      InterpStr
+        LiteralStr ;$';hello'' world;';
+    ExprCmd echo -count <>
+      InterpStr
+        LiteralStr ;$';hello '';{;
+        BinaryOp +
+          Literal 1
+          Literal 1
+        LiteralStr ;};;';
+    ExprCmd echo -count <>
+      InterpStr
+        LiteralStr ;$';'';{;
+        BinaryOp +
+          Literal 1
+          Literal 1
+        LiteralStr ;};'' = 2;';
+    ExprCmd echo -count <>
+      InterpStr
+        LiteralStr ;$';;{;
+        BinaryOp *
+          Literal 2
+          Literal 4
+        LiteralStr ;}; ''=='' ;{;
+        BinaryOp +
+          Literal 7
+          Literal 1
+        LiteralStr ;};;';
+    ExprCmd echo -count <>
+      InterpStr
+        LiteralStr ;$';{{literal ;{;
+        BinaryOp +
+          Literal 1
+          Literal 1
+        LiteralStr ;};''{{curly braces}}}};';
+    EmptyStmt <>
+    CommentStmt " string constant <trailing = no>
+    ExprCmd echo -count <>
+      StrConst ;";test;";
+    ExprCmd echo -count <>
+      StrConst ;";\"test;";
+    ExprCmd echo -count <>
+      StrConst ;";test\";";
+    ExprCmd echo -count <>
+      StrConst ;";te\"st;";
+    ExprCmd echo -count <>
+      StrConst ;";te\"\"s\"t;";
+    ExprCmd echo -count <>
+      StrConst ;";\";";
+    EmptyStmt <>
+    CommentStmt " interpola\ed string constant <trailing = no>
+    ExprCmd echo -count <>
+      InterpStr
+        StrConst ;$";hello\" world;";
+    ExprCmd echo -count <>
+      InterpStr
+        StrConst ;$";hello \";{;
+        BinaryOp +
+          Literal 1
+          Literal 1
+        StrConst ;};;";
+    ExprCmd echo -count <>
+      InterpStr
+        StrConst ;$";\";{;
+        BinaryOp +
+          Literal 1
+          Literal 1
+        StrConst ;};\" = 2;";
+    ExprCmd echo -count <>
+      InterpStr
+        StrConst ;$";;{;
+        BinaryOp *
+          Literal 2
+          Literal 4
+        StrConst ;}; \"==\" ;{;
+        BinaryOp +
+          Literal 7
+          Literal 1
+        StrConst ;};;";
+    ExprCmd echo -count <>
+      InterpStr
+        StrConst ;$";\{literal ;{;
+        BinaryOp +
+          Literal 1
+          Literal 1
+        StrConst ;};\"\{curly braces\}\};";
+    ExprCmd echo -count <>
+      InterpStr
+        StrConst ;$";{{literal ;{;
+        BinaryOp +
+          Literal 1
+          Literal 1
+        StrConst ;};\"{{curly braces}}}};";

@@ -37,20 +37,11 @@ public:
 
     /**
      *  @brief
-     *      Return the next Token. Returns 'END' Token at EOF.
+     *      Fill buffer of with all Tokens.
      *
      *  @throws
      *      std::runtime_error if Token is unrecognized.
      *      std::runtime_error if Token cannot be disambiguated.
-     */
-    void next();
-
-    /**
-     *  @brief
-     *      Fill buffer of with all Tokens.
-     *
-     *  @throws
-     *      See Lexer::next().
      */
     void tokenize();
 
@@ -64,23 +55,19 @@ public:
 private:
     enum class State : int
     {
-        NONE = 0,
-        HEREDOC_START = 1,
-        HEREDOC = 2,
-        HEREDOC_EVAL_START = 3,
-        HEREDOC_EVAL_STR = 4,
-        HEREDOC_EVAL_EXP = 5,
-        INTERP_STR_SQUOTE = 6,
-        INTERP_STR_DQUOTE = 7,
-        INTERP_EXP_SQUOTE = 8,
-        INTERP_EXP_DQUOTE = 9,
-        STRING_CONSTANT = 10,
-        LITERAL_STRING = 11,
-        PATTERN = 12,
+        NONE,
+        HEREDOC_START,
+        HEREDOC,
+        HEREDOC_EVAL_START,
+        HEREDOC_EVAL_STR,
+        HEREDOC_EVAL_EXP,
+        INTERP_STR_SQUOTE,
+        INTERP_STR_DQUOTE,
+        INTERP_EXP_SQUOTE,
+        INTERP_EXP_DQUOTE,
     };
 
     State m_eState;
-    Token* m_pCurrToken;
     Token* m_pEndMarker;
     Token* m_pCount;
     size_t m_nBraceLevel;
@@ -91,27 +78,37 @@ private:
     const std::vector<Keyword> m_lKeywords;
     const std::vector<Symbol> m_lSymbols;
     const std::vector<std::pair<std::regex, Token::Type> > m_lReSpec;
-    const std::array<const std::array<State, 2>, 20> m_gStateTransitions;
 
     void next_state();
 
-    bool match();
+    void extract_tokens();
     bool disambiguate(Token* token);
-    void retype_keyword(Token* token);
 
-    bool push_token(Token::Type type, char lexeme);
-    bool push_token(Token::Type type, std::string_view lexeme);
-    bool push_token(Token::Type type, const std::string& lexeme);
-    bool push_regex();
-    bool push_symbol();
-    bool push_string();
-    bool push_command();
-    bool push_keyword();
-    bool push_comment();
-    bool push_register();
-    bool push_number();
-    bool push_blob();
-    bool push_continuation();
+    void push_token(Token* token);
+    void push_token(Token::Type type, char lexeme);
+    void push_token(Token::Type type, std::string_view lexeme);
+    void push_token(Token::Type type, const std::string& lexeme);
+
+    void expect_token(Token::Type type, const std::string& lexeme);
+
+    void push_literal_string();
+    void push_string_constant();
+    void push_interp_literal_string();
+    void push_interp_string_constant();
+    void push_heredoc_string();
+    void push_heredoc_eval_string();
+    void push_pattern();
+
+    bool try_push_regex();
+    bool try_push_symbol();
+    bool try_push_command();
+    bool try_push_keyword();
+    bool try_push_comment();
+    bool try_push_register();
+    bool try_push_number();
+    bool try_push_blob();
+    bool try_push_continuation();
+    bool try_push_heredoc_endmarker();
 };
 
 #endif  // TOKENIZER_H

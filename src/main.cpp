@@ -23,6 +23,72 @@ void usage()
               << "  -d               Stop after doc building." << std::endl;
 }
 
+/**
+ *  Tip 11-1: gdb
+ *
+ *  RUN & CONTROL
+ *
+ *      r[un] [<args>]          Start program with command-line arguments.
+ *      c[ontinue]              Execute until breakpoint, signal, or crash.
+ *      n[ext]                  Execute next line, stepping *over* function calls.
+ *      s[tep]                  Execute next line, stepping *into* function calls.
+ *      finish                  Execute until current function returns.
+ *      u[ntil] <line>          Run until <line>, or existing current loop.
+ *
+ *  INSPECT STATE
+ *
+ *      p <expr>                Print <expr>.
+ *      ptype <expr>            Print C/C++ type of <expr>.
+ *      l[ist]                  Show source lines around current line.
+ *      display <expr>          Print <expr> after every stop.
+ *      undisplay <expr>        Stopping printing <expr>.
+ *      i[nfo] locals           Show local variables
+ *      i[nfo] args             Show arguments passed to function.
+ *      i[nfo] variables        Show global and static variables across program.
+ *
+ *  CALL STACK
+ *
+ *      backtrace, bt           Print call stack.
+ *      up [<n>]                Go up <n> stack frames (default: 1).
+ *      down [<n>]              Go down <n> stack frames (default: 1).
+ *      f[rame] <num>           Go to stack frame <num> of stack trace.
+ *
+ *  MODIFICATION
+ *
+ *      return <expr>           Force the current function to immediately return <expr>.
+ *      set var <var> = <expr>  Modify <var> live in memory to <expr>.
+ *
+ *  BREAKPOINTS
+ *
+ *      b[reak] <func>          Pause when entering <func>.
+ *      b[reak] <file>:<line>   Pause at <line> of <file>.
+ *      tb[reak] <file>:<line>  Pause at <line> of <file>.
+ *      i[nfo] b[break]         List breakpoints.
+ *      delete <num>            Remove breakpoint <num>.
+ *      disable <num>           Disable breakpoint <num>.
+ *      condition <num> <expr>  Pause at breakpoint <num> only when <expr> is true.
+ *
+ *  WATCHPOINTS
+ *
+ *      watch <expr>            Pause when <expr> changes value.
+ *      i[nfo] watchpoints      List watchpoints.
+ *      delete <num>            Remove watchpoints <num>.
+ *      disable <num>           Disable watchpoints <num>.
+ *
+ *  CATCHPOINTS
+ *
+ *      catch throw <regex>     Pause when an exception matching <regex> is thrown.
+ *      catch catch <regex>     Pause when an exception matching <regex> is caught.
+ *
+ *  LAYOUT
+ *
+ *      layout src              Split screen to show source code and (gdb) prompt.
+ *
+ *  TIPS
+ *
+ *      Press <enter> on empty prompt to repeat previous command.
+ */
+
 int main(int argc, char** argv)
 {
     if (argc == 1)
@@ -95,6 +161,8 @@ int main(int argc, char** argv)
     }
 
     Controller lcController(lcContext);
+
+    // TODO (gh-172): std::logic_error
 
     try
     {

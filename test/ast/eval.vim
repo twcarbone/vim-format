@@ -22,19 +22,6 @@ let &l:tpm = 10
 unlet cc
 unlet! cc
 unl! g:does_not_exist
-let heredoc_items =<< trim END
-first line that is very long to intentionally exceed the testing column limit... more text
-    one
-        END
-
-        {a + b}
-
-END
-let heredoc_eval_items =<< eval END
-{&tpm + 2} is 12
-    END {c} is a list
-    echo {@@}
-END
 let gg = [0zaabb, 0Z, 0ZFFFF]
 echo bb dd ee
 echon bb dd ee
@@ -178,25 +165,6 @@ let dict_b = {"test": g:m_bar}
 let dict_c = {g:m_bar: 43}
 echo Add(1, 2)
 echo (1 + (3 + 4)) * 2 - (10)
-echo ''
-echo 'string with "embedded" double quote'
-echo $'Before {bb} after'
-echo $'{bb} after'
-echo $'Before {bb}'
-echo 'Before bb} after'
-echo '{bb} after'
-echo $'{bb} "after"'
-echo 'Before {bb}'
-echo '$var'
-echo ""
-echo $"Before {bb} after"
-echo $"{bb} after"
-echo $"Before {bb}"
-echo "Before {bb} after"
-echo "{bb} after"
-echo $"{bb} 'after'"
-echo "Before {bb}"
-echo "$var"
 
 finish
 fini

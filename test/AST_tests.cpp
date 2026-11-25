@@ -53,3 +53,13 @@ TEST_F(ASTTest, cmdline)
 {
     test_file("test/ast/cmdline.vim");
 }
+
+TEST_F(ASTTest, heredoc)
+{
+    test_file("test/ast/heredoc.vim");
+}
+
+TEST_F(ASTTest, string)
+{
+    test_file("test/ast/string.vim");
+}
