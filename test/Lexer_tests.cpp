@@ -70,7 +70,7 @@ protected:
     void expect_token(size_t anIdx,
                       const std::string& asTokenStr,
                       const Token::Type& aeTokenType,
-                      int anSourcePos)
+                      size_t anSourcePos)
     {
         const Token expected(aeTokenType, asTokenStr, anSourcePos);
         const Token& actual = m_pLexer->token(anIdx);

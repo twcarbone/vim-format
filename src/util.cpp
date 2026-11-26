@@ -29,7 +29,7 @@ std::string vf::read_file(const std::filesystem::path& acPath)
     std::streamsize lnFileSize = lcIfStream.tellg();
     lcIfStream.seekg(0, std::ios::beg);
 
-    std::string lsBuffer(lnFileSize, '\0');
+    std::string lsBuffer(static_cast<size_t>(lnFileSize), '\0');
 
     if (!lcIfStream.read(&lsBuffer[0], lnFileSize))
     {
@@ -158,7 +158,7 @@ std::string vf::sanitize(std::string_view input)
 {
     std::ostringstream oss;
 
-    for (unsigned char c : input)
+    for (char c : input)
     {
         switch (c)
         {

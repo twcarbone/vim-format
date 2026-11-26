@@ -2,6 +2,11 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+add_compile_options(
+    -Werror
+    -Wsign-conversion
+)
+
 add_executable(
     unittests
     AST_tests.cpp

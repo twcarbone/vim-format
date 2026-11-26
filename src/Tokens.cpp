@@ -12,7 +12,7 @@ Token* Tokens::at(size_t anPosition) const
 
 size_t Tokens::pos() const
 {
-    return m_nPos;
+    return static_cast<size_t>(m_nPos);
 }
 
 Token* Tokens::back() const
@@ -22,7 +22,7 @@ Token* Tokens::back() const
 
 Token* Tokens::head() const
 {
-    return m_lData[m_nPos];
+    return m_lData[static_cast<size_t>(m_nPos)];
 }
 
 Tokens::const_iterator Tokens::begin() const
@@ -98,20 +98,20 @@ void Tokens::seek(size_t anPos)
 
 Token* Tokens::peek(int anCount, int anFlags) const
 {
-    return m_lData[m_nPos + move(anCount, anFlags)];
+    return m_lData[static_cast<size_t>(m_nPos + move(anCount, anFlags))];
 }
 
 Token* Tokens::advance(int anCount, int anFlags)
 {
-    return m_lData[m_nPos += move(anCount, anFlags)];
+    return m_lData[static_cast<size_t>(m_nPos += move(anCount, anFlags))];
 }
 
 int Tokens::move(int anCount, int anFlags) const
 {
     Token* pToken = nullptr;
 
-    size_t i;
-    size_t lnSteps = std::abs(anCount);
+    int i;
+    int lnSteps = std::abs(anCount);
 
     for (i = 1; lnSteps > 0; i++)
     {
@@ -124,7 +124,7 @@ int Tokens::move(int anCount, int anFlags) const
                                      + " (size = " + std::to_string(m_lData.size()) + ")");
         }
 
-        Token* pToken = m_lData[lnPos];
+        Token* pToken = m_lData[static_cast<size_t>(lnPos)];
 
         switch (pToken->type())
         {

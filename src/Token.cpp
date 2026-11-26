@@ -8,7 +8,7 @@ Token::Token() :
 {
 }
 
-Token::Token(Token::Type aeType, const std::string& asStr, int anSourcePos) :
+Token::Token(Token::Type aeType, const std::string& asStr, size_t anSourcePos) :
     m_nSourcePos { anSourcePos },
     m_eType { aeType },
     m_sStr { asStr }
@@ -59,7 +59,7 @@ bool Token::is_vertical_wp() const
     return m_eType == Type::NEWLINE;
 }
 
-int Token::source_pos() const
+size_t Token::source_pos() const
 {
     return m_nSourcePos;
 }

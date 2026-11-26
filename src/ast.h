@@ -121,7 +121,7 @@ public:
     size_t size() const;
     void push(Stmt* stmt);
     void take(StmtList* stmts);
-    void insert(size_t pos, Stmt* stmt);
+    void insert(int pos, Stmt* stmt);
     void extend(const StmtList* stmts);
 
     virtual std::string toString() const;

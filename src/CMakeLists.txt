@@ -1,4 +1,8 @@
-add_compile_options(-Wimplicit-fallthrough)
+add_compile_options(
+    -Wimplicit-fallthrough
+    -Wsign-conversion
+    -Werror
+)
 
 add_library(
     vimformat

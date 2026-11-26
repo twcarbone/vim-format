@@ -357,7 +357,7 @@ void DocBuilder::visit(const ast::HereDocStmt* apHereDocStmt)
     m_context.bInsideHereDoc = true;
 
     // Child 0 is left-hand side of =<<
-    for (int i = 1; i < apHereDocStmt->children().size(); i++)
+    for (size_t i = 1; i < apHereDocStmt->children().size(); i++)
     {
         push_group();
         {

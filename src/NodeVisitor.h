@@ -1,6 +1,7 @@
 #ifndef NODEVISITOR_H
 #define NODEVISITOR_H
 
+#include <cstddef>
 #include <vector>
 
 class Node;
@@ -36,7 +37,7 @@ public:
      *  @brief
      *      Get the node at the given `path` index, starting from `root`.
      */
-    const Node* get_node(const Node* root, const std::vector<int>& path);
+    const Node* get_node(const Node* root, const std::vector<size_t>& path);
 
     void handle_node(const Node* node);
     virtual void visit(const NonTerminal* node);

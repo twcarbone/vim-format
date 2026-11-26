@@ -35,7 +35,7 @@ protected:
     std::ostream& m_cOutStream;
 
 private:
-    int m_nDepth;
+    size_t m_nDepth;
 
     void visit_doc(const doc::Doc* doc);
 };

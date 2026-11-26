@@ -27,11 +27,11 @@ std::vector<const Node*> NodeVisitor::accumulate(const Node* apNode, NodeVisitor
     return llNodes;
 }
 
-const Node* NodeVisitor::get_node(const Node* apRoot, const std::vector<int>& alPath)
+const Node* NodeVisitor::get_node(const Node* apRoot, const std::vector<size_t>& alPath)
 {
     const Node* pCurrent = apRoot;
 
-    for (int i : alPath)
+    for (size_t i : alPath)
     {
         pCurrent = pCurrent->children().at(i);
     }
