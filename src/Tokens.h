@@ -88,7 +88,7 @@ public:
 private:
     int move(int count, int flags) const;
 
-    size_t m_nPos = 0;
+    int m_nPos = 0;
     std::vector<Token*> m_lData;
 };
 

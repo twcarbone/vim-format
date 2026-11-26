@@ -91,4 +91,22 @@ std::string tail(const std::filesystem::path& path);
 
 std::filesystem::path with_tail(const std::filesystem::path& path, const std::string& tail);
 
+inline int to_int(size_t sz)
+{
+    if (sz > static_cast<size_t>(std::numeric_limits<int>::max()))
+    {
+        throw std::out_of_range("size exceeds int max");
+    }
+    return static_cast<int>(sz);
+}
+
+inline size_t to_sz(int value)
+{
+    if (value < 0)
+    {
+        throw std::out_of_range("Negative value cannot be converted to size_t");
+    }
+    return static_cast<size_t>(value);
+}
+
 };

@@ -98,7 +98,7 @@ void StmtList::take(StmtList* apStmtList)
     apStmtList->m_lChildren.clear();
 }
 
-void StmtList::insert(size_t anPos, Stmt* apStmt)
+void StmtList::insert(int anPos, Stmt* apStmt)
 {
     m_lChildren.insert(m_lChildren.begin() + anPos, apStmt);
 }

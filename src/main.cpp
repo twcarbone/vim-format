@@ -99,7 +99,7 @@ int main(int argc, char** argv)
 
     Context lcContext;
 
-    for (int i = 1; i < argc; i++)
+    for (size_t i = 1; i < argc; i++)
     {
         std::string lsArg = argv[i];
 
@@ -123,7 +123,7 @@ int main(int argc, char** argv)
         else if (lsArg == "--column-limit")
         {
             i++;
-            lcContext.settings().ColumnLimit = std::stoi(argv[i]);
+            lcContext.settings().ColumnLimit = std::stoul(argv[i]);
         }
         else if (i == argc - 1)
         {

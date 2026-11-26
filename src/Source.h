@@ -15,30 +15,30 @@ public:
 
     // 0-based index of cursor.
     // Can be equal to string size if at EOF.
-    [[nodiscard]] int pos() const;
+    [[nodiscard]] size_t pos() const;
 
     // 0-based index of current line.
-    int line() const;
+    size_t line() const;
 
     // Size of current file.
-    int size() const;
+    size_t size() const;
 
     // 0-based index within current line.
     // Does not increment when on newline or EOF.
-    int column() const;
+    size_t column() const;
 
     // Number of leading whitespace characters in current line.
-    int indent() const;
+    size_t indent() const;
 
     // True if cursor is at EOF.
     [[nodiscard]] bool eof() const;
 
     // 0-based index of the first character of the current line.
-    [[nodiscard]] int bol() const;
+    [[nodiscard]] size_t bol() const;
 
     // 0-based index of the next newline ahead of the cursor.
     // If on EOF, index of preceding character.
-    [[nodiscard]] int eol() const;
+    [[nodiscard]] size_t eol() const;
 
     // Path to source file.
     std::string path() const;
@@ -78,14 +78,14 @@ public:
     char operator[](size_t n);
 
 private:
-    int m_nPos = 0;
+    size_t m_nPos = 0;
     fs::path m_cPath;
     std::string m_sText;
 
     std::string_view view() const;
 };
 
-inline int Source::pos() const
+inline size_t Source::pos() const
 {
     return m_nPos;
 }

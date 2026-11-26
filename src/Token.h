@@ -148,7 +148,7 @@ public:
     };
 
     Token();
-    Token(Type type, const std::string& str, int source_pos);
+    Token(Type type, const std::string& str, size_t source_pos);
 
     ~Token();
 
@@ -160,7 +160,7 @@ public:
     Type type() const;
     void setType(Type type);
 
-    int source_pos() const;
+    size_t source_pos() const;
 
     std::string str() const;
 
@@ -173,7 +173,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Token& obj);
 
 private:
-    int m_nSourcePos;
+    size_t m_nSourcePos;
     Type m_eType;
     std::string m_sStr;
 };

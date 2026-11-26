@@ -11,7 +11,7 @@ Source::~Source()
 {
 }
 
-int Source::line() const
+size_t Source::line() const
 {
     int lnLine = 0;
 
@@ -19,24 +19,24 @@ int Source::line() const
     // need to start looking 2 behind.
     for (int i = eof() ? m_nPos - 2 : m_nPos - 1; i >= 0; i--)
     {
-        if (view().at(i) == '\n')
+        if (view().at(static_cast<size_t>(i)) == '\n')
         {
             lnLine++;
         }
     }
 
-    return lnLine;
+    return static_cast<size_t>(lnLine);
 }
 
-int Source::size() const
+size_t Source::size() const
 {
     return m_sText.size();
 }
 
-int Source::column() const
+size_t Source::column() const
 {
-    int lnColumn = 0;
-    for (int i = 1; i <= m_nPos; i++)
+    size_t lnColumn = 0;
+    for (size_t i = 1; i <= m_nPos; i++)
     {
         if (view().at(i - 1) == '\n' && i < view().size() - 1)
         {
@@ -52,14 +52,14 @@ int Source::column() const
     return lnColumn;
 }
 
-int Source::indent() const
+size_t Source::indent() const
 {
     if (line() == 0)
     {
         return view().find_first_not_of(" \t");
     }
 
-    size_t lnCurosrStart = m_nPos - 1;
+    size_t lnCurosrStart = static_cast<size_t>(m_nPos - 1);
 
     if (eof())
     {
@@ -71,7 +71,7 @@ int Source::indent() const
     return lnStartOfContent - lnStartOfLine;
 }
 
-int Source::bol() const
+size_t Source::bol() const
 {
     if (line() == 0)
     {
@@ -79,20 +79,20 @@ int Source::bol() const
     }
     else if (eof())
     {
-        return view().rfind('\n', m_nPos - 2) + 1;
+        return view().rfind('\n', static_cast<size_t>(m_nPos) - 2) + 1;
     }
 
-    return view().rfind('\n', m_nPos - 1) + 1;
+    return view().rfind('\n', static_cast<size_t>(m_nPos) - 1) + 1;
 }
 
-int Source::eol() const
+size_t Source::eol() const
 {
     if (eof())
     {
-        return m_nPos - 1;
+        return static_cast<size_t>(m_nPos) - 1;
     }
 
-    size_t lnEOL = view().find('\n', m_nPos);
+    size_t lnEOL = view().find('\n', static_cast<size_t>(m_nPos));
 
     if (lnEOL == std::string_view::npos)
     {
@@ -128,10 +128,10 @@ std::string Source::context() const
 
 std::string_view Source::word() const
 {
-    int i;
+    size_t i;
     for (i = m_nPos; i <= view().size(); i++)
     {
-        const unsigned char c = view().at(i);
+        const char c = view().at(i);
         if (!std::isalnum(c) && c != '_')
         {
             break;
@@ -187,12 +187,12 @@ void Source::seek(int anPos)
                                  + std::to_string(m_sText.size()));
     }
 
-    m_nPos = anPos;
+    m_nPos = static_cast<size_t>(anPos);
 }
 
 void Source::advance(int anCount)
 {
-    const int lnNewPos = m_nPos + anCount;
+    const int lnNewPos = static_cast<int>(m_nPos) + anCount;
 
     if (lnNewPos < 0 || lnNewPos > m_sText.size())
     {
@@ -201,7 +201,7 @@ void Source::advance(int anCount)
                                  + std::to_string(m_sText.size()));
     }
 
-    m_nPos = lnNewPos;
+    m_nPos = static_cast<size_t>(lnNewPos);
 }
 
 void Source::read_text(const std::string& asText)
