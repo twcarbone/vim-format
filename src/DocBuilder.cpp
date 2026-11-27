@@ -31,14 +31,25 @@ void DocBuilder::visit(const ast::AssignStmt* apAssignStmt)
 
 void DocBuilder::visit(const ast::BinaryOp* apNode)
 {
-    size_t lnPadding = apNode->op()->type() == Token::Type::OP_DOT ? 0 : Settings::OperatorPadding;
-
     apNode->lexpr()->accept(*this);
-    push_line(lnPadding);
+    push_line(Settings::OperatorPadding);
     push_group();
     {
         push_text(apNode->op()->str());
-        m_pDeferredDoc = line_or_space(lnPadding);
+        m_pDeferredDoc = line_or_space(Settings::OperatorPadding);
+        apNode->rexpr()->accept(*this);
+    }
+    pop();
+}
+
+void DocBuilder::visit(const ast::DictAccess* apNode)
+{
+    apNode->lexpr()->accept(*this);
+    push_line(0);
+    push_group();
+    {
+        push_text(apNode->op()->str());
+        m_pDeferredDoc = line_or_space(0);
         apNode->rexpr()->accept(*this);
     }
     pop();

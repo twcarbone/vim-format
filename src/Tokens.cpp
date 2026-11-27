@@ -143,6 +143,13 @@ int Tokens::move(int anCount, int anFlags) const
                 }
 
                 break;
+            case Token::Type::CONTINUATION:
+                if (anFlags & Flags::skipcontinuation)
+                {
+                    continue;
+                }
+
+                break;
             default:
                 break;
         }

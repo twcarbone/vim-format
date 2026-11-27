@@ -1457,6 +1457,10 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
 
                 break;
             }
+            case Token::Type::OP_DOT:
+                pRhs = expr(lnRhsOpBindingPower);
+                pLhs = new ast::DictAccess(pOp, pLhs, pRhs);
+                break;
             default:
                 pRhs = expr(lnRhsOpBindingPower);
                 pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);
@@ -1539,10 +1543,8 @@ bool ASTParser::chk_let_query()
 
     for (size_t offset = 1; offset < 4; offset++)
     {
-        switch (m_lTokens.advance(1, Flags::skipws)->type())
+        switch (m_lTokens.advance(1, Flags::skipws | Flags::skipcontinuation)->type())
         {
-            case Token::Type::CONTINUATION:
-                continue;
             case Token::Type::COMMENT:
             case Token::Type::NEWLINE:
                 goto loop_end;

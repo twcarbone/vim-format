@@ -485,6 +485,21 @@ void BinaryOp::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
+DictAccess::DictAccess(Token* apOp, Expr* apLeft, Expr* apRight) :
+    BinaryOp(apOp, apLeft, apRight)
+{
+}
+
+std::string DictAccess::toString() const
+{
+    return "DictAccess";
+}
+
+void DictAccess::accept(ASTVisitor& acASTVisitor) const
+{
+    acASTVisitor.visit(this);
+}
+
 CasedBinaryOp::CasedBinaryOp(Token* apOp, Expr* apLeft, Expr* apRight, Token* apCaseSensitivity) :
     BinaryOp(apOp, apLeft, apRight),
     m_pCaseSensitivity { apCaseSensitivity }

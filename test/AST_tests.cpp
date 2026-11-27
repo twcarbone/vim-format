@@ -63,3 +63,8 @@ TEST_F(ASTTest, string)
 {
     test_file("test/ast/string.vim");
 }
+
+TEST_F(ASTTest, repeat)
+{
+    test_file("test/ast/repeat.vim");
+}

@@ -315,6 +315,16 @@ protected:
     Token* m_pOp;
 };
 
+class DictAccess : public BinaryOp
+{
+public:
+    DictAccess(Token* op, Expr* left, Expr* right);
+    virtual ~DictAccess() = default;
+
+    virtual std::string toString() const;
+    virtual void accept(ASTVisitor& visitor) const;
+};
+
 class CasedBinaryOp : public BinaryOp
 {
 public:
