@@ -1457,6 +1457,10 @@ ast::Expr* ASTParser::expr(int anMinBindingPower)
 
                 break;
             }
+            case Token::Type::OP_DOT:
+                pRhs = expr(lnRhsOpBindingPower);
+                pLhs = new ast::DictAccess(pOp, pLhs, pRhs);
+                break;
             default:
                 pRhs = expr(lnRhsOpBindingPower);
                 pLhs = new ast::BinaryOp(pOp, pLhs, pRhs);

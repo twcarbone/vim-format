@@ -470,6 +470,8 @@ bool Lexer::disambiguate(Token* apCurrentToken)
             case Token::Type::GEN_DOT:
                 switch (pPrevToken->type())
                 {
+                    case Token::Type::CONTINUATION:
+                        continue;
                     case Token::Type::IDENTIFIER:
                         apCurrentToken->setType(Token::Type::OP_DOT);
                         break;

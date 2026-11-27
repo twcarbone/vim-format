@@ -11,6 +11,7 @@
     X(CallExpr)             \
     X(CasedBinaryOp)        \
     X(CommentStmt)          \
+    X(DictAccess)           \
     X(DictEntry)            \
     X(DictExpr)             \
     X(EmptyStmt)            \

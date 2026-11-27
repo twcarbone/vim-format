@@ -442,7 +442,7 @@ Program
           LiteralStr ;';closure;';
           LiteralStr ;';banana;';
     ExprCmd echo -count <>
-      BinaryOp .
+      DictAccess
         Var g:dict
         Var closure
     FnStmt Add <>
