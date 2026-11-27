@@ -1,0 +1,9 @@
+Program
+  StmtList
+    CommentStmt " :h line-continuation <trailing = no>
+    AssignStmt let = <>
+      Var a
+      Literal 1
+    VarQueryStmt let <>
+      Var b:
+      Var l:

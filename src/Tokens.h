@@ -9,6 +9,7 @@ enum Flags : uint8_t
 {
     skipws = 1U << 0,
     skipnewline = 1U << 1,
+    skipcontinuation = 1U << 2,
 };
 
 class Tokens

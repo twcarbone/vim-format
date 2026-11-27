@@ -1543,10 +1543,8 @@ bool ASTParser::chk_let_query()
 
     for (size_t offset = 1; offset < 4; offset++)
     {
-        switch (m_lTokens.advance(1, Flags::skipws)->type())
+        switch (m_lTokens.advance(1, Flags::skipws | Flags::skipcontinuation)->type())
         {
-            case Token::Type::CONTINUATION:
-                continue;
             case Token::Type::COMMENT:
             case Token::Type::NEWLINE:
                 goto loop_end;
