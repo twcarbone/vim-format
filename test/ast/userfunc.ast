@@ -11,7 +11,7 @@ Program
         JumpStmt retu <>
           Literal 2
     EmptyStmt <>
-    FnStmt Two ! <>
+    FnStmt s: Two ! <>
       FnParamList
         FnParam
           Var ...

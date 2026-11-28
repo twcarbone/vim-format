@@ -269,7 +269,8 @@ public:
 class FnStmt : public Stmt
 {
 public:
-    FnStmt(Token* ex_fu,
+    FnStmt(Token* scope,
+           Token* ex_fu,
            Token* ex_endf,
            Token* name,
            Token* bang,
@@ -278,6 +279,7 @@ public:
            StmtList* body);
     virtual ~FnStmt() = default;
 
+    const Token* scope() const;
     const Token* ex_fu() const;
     const Token* ex_endfu() const;
     const Token* name() const;
@@ -291,6 +293,7 @@ public:
 private:
     virtual std::string str_a() const;
 
+    Token* m_pScope;
     Token* m_pExFu;
     Token* m_pName;
     Token* m_pBang;
