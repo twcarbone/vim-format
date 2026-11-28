@@ -479,6 +479,10 @@ ast::FnParamList* ASTParser::fn_param_list()
             case Token::Type::SIG_ENV:
             case Token::Type::SIG_REG:
             case Token::Type::SIG_OPT:
+                // test/error/E125_2.out
+                // test/error/E125_3.out
+                // test/error/E125_4.out
+                throw_vim_error("E125");
             case Token::Type::SCOPE_B:
             case Token::Type::SCOPE_W:
             case Token::Type::SCOPE_T:
@@ -487,8 +491,9 @@ ast::FnParamList* ASTParser::fn_param_list()
             case Token::Type::SCOPE_S:
             case Token::Type::SCOPE_A:
             case Token::Type::SCOPE_V:
+                // test/error/E475_4.out
+                throw_vim_error("E475");
             case Token::Type::IDENTIFIER:
-                // TODO (gh-112): FnParamList allows scoped variable parameters
                 pVar = var();
 
                 if (consume_optional(Token::Type::ASSIGN_EQ))

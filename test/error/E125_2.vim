@@ -1,0 +1,2 @@
+function Func($HOME)
+endfunction

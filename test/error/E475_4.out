@@ -1,0 +1,5 @@
+E475: Invalid argument
+
+test/error/E475_4.vim:1:15
+ 1 | function Func(a:var)
+   |               ^
