@@ -1,0 +1,2 @@
+function Func(&colorcolumn)
+endfunction
