@@ -379,13 +379,15 @@ void FnParam::accept(ASTVisitor& acASTVisitor) const
     acASTVisitor.visit(this);
 }
 
-FnStmt::FnStmt(Token* apExFu,
+FnStmt::FnStmt(Token* apScope,
+               Token* apExFu,
                Token* apExEndFu,
                Token* apName,
                Token* apBang,
                FnParamList* apFnParamList,
                const std::vector<Token*>& alModifiers,
                StmtList* apBody) :
+    m_pScope { apScope },
     m_pExFu { apExFu },
     m_pName { apName },
     m_pBang { apBang },
@@ -394,6 +396,11 @@ FnStmt::FnStmt(Token* apExFu,
 {
     m_lChildren.push_back(apFnParamList);
     m_lChildren.push_back(apBody);
+}
+
+const Token* FnStmt::scope() const
+{
+    return m_pScope;
 }
 
 const Token* FnStmt::ex_fu() const
@@ -433,7 +440,14 @@ const StmtList* FnStmt::body() const
 
 std::string FnStmt::str_a() const
 {
-    std::string lsStr = "FnStmt " + m_pName->str();
+    std::string lsStr = "FnStmt";
+
+    if (m_pScope != nullptr)
+    {
+        lsStr += " " + m_pScope->str();
+    }
+
+    lsStr += " " + m_pName->str();
 
     if (m_pBang != nullptr)
     {

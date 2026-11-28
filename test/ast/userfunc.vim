@@ -5,7 +5,7 @@ function! One() range abort dict
     retu 2
 endfunction
 
-fu! Two(...)
+fu! s:Two(...)
     return 1
 endf
 

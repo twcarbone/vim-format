@@ -557,9 +557,28 @@ ast::FnStmt* ASTParser::fn_stmt()
         consume(Token::Type::OP_BANG);
     }
 
-    // Identifier
-    Token* pName = curr();
-    consume(Token::Type::IDENTIFIER);
+    // Scope & Name
+    Token* pScope = nullptr;
+    Token* pName = nullptr;
+
+    switch (curr()->type())
+    {
+        case Token::Type::SCOPE_B:
+        case Token::Type::SCOPE_W:
+        case Token::Type::SCOPE_T:
+        case Token::Type::SCOPE_G:
+        case Token::Type::SCOPE_L:
+        case Token::Type::SCOPE_S:
+        case Token::Type::SCOPE_A:
+        case Token::Type::SCOPE_V:
+            pScope = curr();
+            consume(curr()->type());
+
+            [[fallthrough]];
+        default:
+            pName = curr();
+            consume(Token::Type::IDENTIFIER);
+    }
 
     consume(Token::Type::L_PAREN);
 
@@ -606,7 +625,7 @@ modifiers_end:
 
     // TODO (gh-105): endfunction does not support [argument]
 
-    return new ast::FnStmt(pExFu, pExEndFu, pName, pBang, pFnParamList, lModifiers, pBody);
+    return new ast::FnStmt(pScope, pExFu, pExEndFu, pName, pBang, pFnParamList, lModifiers, pBody);
 }
 
 // 2662856482

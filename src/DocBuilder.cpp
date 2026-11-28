@@ -242,7 +242,14 @@ void DocBuilder::visit(const ast::FnStmt* apFnStmt)
         }
 
         push_line(Settings::SpaceBeforeFunctionName);
+
+        if (apFnStmt->scope() != nullptr)
+        {
+            push_text(apFnStmt->scope()->str());
+        }
+
         push_text(apFnStmt->name()->str());
+
         push_text("(");
     }
     pop();
